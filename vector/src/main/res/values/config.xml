@@ -35,4 +35,7 @@
         <item>matrix.org</item>
     </string-array>
 
+    <!--Show the encryption UIs to the user-->
+    <!--Making it false, the encryption options will be hidden in the settings and room setting-->
+    <bool name="show_encryption_ui">true</bool>
 </resources>

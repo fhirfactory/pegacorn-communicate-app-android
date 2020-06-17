@@ -370,7 +370,7 @@
 
     </im.vector.preference.VectorPreferenceCategory>
 
-    <im.vector.preference.VectorPreferenceDivider />
+    <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_LABS_DIVIDER_PREFERENCE_KEY"/>
 
     <!-- ************ Cryptography section ************ -->
     <im.vector.preference.VectorPreferenceCategory

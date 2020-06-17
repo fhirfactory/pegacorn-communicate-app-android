@@ -1813,7 +1813,7 @@ public class VectorRoomSettingsFragment extends PreferenceFragmentCompat impleme
                 isEncryptedPreference.setIcon(ThemeUtils.INSTANCE.tintDrawable(getActivity(),
                         getResources().getDrawable(R.drawable.e2e_unencrypted), R.attr.vctr_settings_icon_tint_color));
                 mAdvancedSettingsCategory.addPreference(isEncryptedPreference);
-            } else if (mSession.isCryptoEnabled()) {
+            } else if (mSession.isCryptoEnabled() && getContext().getResources().getBoolean(R.bool.show_encryption_ui)) {
                 final SwitchPreference encryptSwitchPreference = new VectorSwitchPreference(getActivity());
                 encryptSwitchPreference.setTitle(R.string.room_settings_addresses_e2e_encryption_warning);
                 encryptSwitchPreference.setKey(key);
@@ -1861,7 +1861,6 @@ public class VectorRoomSettingsFragment extends PreferenceFragmentCompat impleme
                         return true;
                     }
                 });
-
             }
         }
     }
