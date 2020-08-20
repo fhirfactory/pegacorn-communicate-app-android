@@ -35,7 +35,7 @@
         <item>matrix.org</item>
     </string-array>
 
-    <bool name="settings_avatar_editable">false</bool>
+    <bool name="settings_avatar_editable">true</bool>
     <bool name="settings_password_changeable">false</bool>
     <bool name="settings_show_local_contacts">false</bool>
     <bool name="settings_display_name_editable">false</bool>
