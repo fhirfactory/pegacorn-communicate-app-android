@@ -87,6 +87,7 @@
         <im.vector.preference.VectorListPreference
             android:entries="@array/theme_entries"
             android:entryValues="@array/theme_values"
+            app:isPreferenceVisible="@bool/settings_theme_visible"
             android:key="APPLICATION_THEME_KEY"
             android:summary="%s"
             android:title="@string/settings_theme"
@@ -94,6 +95,7 @@
 
         <im.vector.preference.VectorPreference
             android:dialogTitle="@string/font_size"
+            app:isPreferenceVisible="@bool/settings_font_visible"
             android:key="SETTINGS_INTERFACE_TEXT_SIZE_KEY"
             android:title="@string/font_size" />
 
