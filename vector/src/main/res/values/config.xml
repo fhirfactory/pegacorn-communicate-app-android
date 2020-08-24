@@ -101,4 +101,7 @@
     <bool name="show_report_bug_navigation_bar">true</bool>
     <bool name="analytics_prompt_at_the_beginning">true</bool>
     <bool name="show_custom_url_login">true</bool>
+
+    <bool name="use_progressbar_original_background">false</bool>
+    <bool name="use_fab_color_as_accent_color">false</bool>
 </resources>
