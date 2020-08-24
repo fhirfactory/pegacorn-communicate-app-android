@@ -1043,7 +1043,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                                final int fabColor,
                                final int fabPressedColor) {
         // Apply primary color
-        mToolbar.setBackgroundColor(primaryColor);
+        mToolbar.setBackgroundResource(R.drawable.act_gradient);
+        //mToolbar.setBackgroundColor(primaryColor);
         mVectorPendingCallView.updateBackgroundColor(primaryColor);
         mSyncInProgressView.setBackgroundColor(primaryColor);
 
