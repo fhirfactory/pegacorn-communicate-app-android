@@ -157,10 +157,10 @@ class CommunicateHomeFragment : BaseCommunicateHomeFragment(), HomeRoomAdapter.O
     }
 
     enum class ROOM_FRAGMENTS {
-        INVITE,
         FAVORITE,
         NORMAL,
-        LOW_PRIORITY
+        LOW_PRIORITY,
+        INVITE,
     }
 }
 
