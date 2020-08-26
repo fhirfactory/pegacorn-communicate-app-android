@@ -1045,9 +1045,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         mToolbar.setBackgroundResource(R.drawable.act_gradient);
         //mToolbar.setBackgroundColor(primaryColor);
         mVectorPendingCallView.updateBackgroundColor(primaryColor);
-        if(!getResources().getBoolean(R.bool.use_progressbar_original_background))
+        if(!getResources().getBoolean(R.bool.use_progressbar_original_background)) {
             mSyncInProgressView.setBackgroundColor(primaryColor);
-
+        }
         // Apply secondary color
         int _secondaryColor = secondaryColor;
         if (_secondaryColor == -1) {
