@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="act_gradient_color2">#00828c</color>
+    <color name="act_gradient_color1">#002677</color>
+
+<!--    action bar status color-->
+    <color name="primary_color_dark_light">#011B51</color>
+
+    <color name="accent_color_light">#2db4f1</color>
+
+</resources>

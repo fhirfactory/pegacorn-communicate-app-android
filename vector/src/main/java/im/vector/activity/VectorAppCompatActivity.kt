@@ -298,6 +298,7 @@ abstract class VectorAppCompatActivity : BaseMvRxActivity() {
      */
     protected fun configureToolbar() {
         setSupportActionBar(toolbar)
+        toolbar.setBackgroundResource(R.drawable.act_gradient)
 
         supportActionBar?.let {
             it.setDisplayShowHomeEnabled(true)

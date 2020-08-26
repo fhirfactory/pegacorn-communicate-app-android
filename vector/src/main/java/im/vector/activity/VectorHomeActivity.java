@@ -126,7 +126,6 @@ import im.vector.fragments.AbsHomeFragment;
 import im.vector.fragments.FavouritesFragment;
 import im.vector.fragments.GroupsFragment;
 import im.vector.fragments.HomeFragment;
-import im.vector.fragments.PeopleFragment;
 import im.vector.fragments.RoomsFragment;
 import im.vector.fragments.signout.SignOutBottomSheetDialogFragment;
 import im.vector.fragments.signout.SignOutViewModel;
@@ -1042,51 +1041,60 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                                final int secondaryColor,
                                final int fabColor,
                                final int fabPressedColor) {
-        // Apply primary color
-        mToolbar.setBackgroundColor(primaryColor);
-        mVectorPendingCallView.updateBackgroundColor(primaryColor);
-        mSyncInProgressView.setBackgroundColor(primaryColor);
 
+        // Applying custom gradient instead of primary color
+        // primaryColor was originally applied to Riot app
+        //mToolbar.setBackgroundColor(primaryColor);
+        mToolbar.setBackgroundResource(R.drawable.act_gradient);
+
+        mVectorPendingCallView.updateBackgroundColor(primaryColor);
+        if(!getResources().getBoolean(R.bool.use_progressbar_original_background)) {
+            mSyncInProgressView.setBackgroundColor(primaryColor);
+        }
         // Apply secondary color
         int _secondaryColor = secondaryColor;
         if (_secondaryColor == -1) {
             _secondaryColor = primaryColor;
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mSyncInProgressView.setIndeterminateTintList(ColorStateList.valueOf(_secondaryColor));
-        } else {
-            mSyncInProgressView.getIndeterminateDrawable().setColorFilter(
-                    _secondaryColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        if (!getResources().getBoolean(R.bool.use_progressbar_original_background)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mSyncInProgressView.setIndeterminateTintList(ColorStateList.valueOf(_secondaryColor));
+            } else {
+                mSyncInProgressView.getIndeterminateDrawable().setColorFilter(
+                        _secondaryColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            }
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(_secondaryColor);
         }
 
         // FAB button
-        if (fabColor != -1) {
-            Class menuClass = FloatingActionsMenu.class;
-            try {
-                Field normal = menuClass.getDeclaredField("mAddButtonColorNormal");
-                normal.setAccessible(true);
-                Field pressed = menuClass.getDeclaredField("mAddButtonColorPressed");
-                pressed.setAccessible(true);
+        if(!getResources().getBoolean(R.bool.use_fab_color_as_accent_color)) {
+            if (fabColor != -1) {
+                Class menuClass = FloatingActionsMenu.class;
+                try {
+                    Field normal = menuClass.getDeclaredField("mAddButtonColorNormal");
+                    normal.setAccessible(true);
+                    Field pressed = menuClass.getDeclaredField("mAddButtonColorPressed");
+                    pressed.setAccessible(true);
 
-                normal.set(mFloatingActionsMenu, fabColor);
-                pressed.set(mFloatingActionsMenu, fabPressedColor);
+                    normal.set(mFloatingActionsMenu, fabColor);
+                    pressed.set(mFloatingActionsMenu, fabPressedColor);
 
-                mFabMain.setColorNormal(fabColor);
-                mFabMain.setColorPressed(fabPressedColor);
-            } catch (Exception ignored) {
+                    mFabMain.setColorNormal(fabColor);
+                    mFabMain.setColorPressed(fabPressedColor);
+                } catch (Exception ignored) {
 
+                }
+
+                mFabJoinRoom.setColorNormal(fabColor);
+                mFabJoinRoom.setColorPressed(fabPressedColor);
+                mFabCreateRoom.setColorNormal(fabColor);
+                mFabCreateRoom.setColorPressed(fabPressedColor);
+                mFabStartChat.setColorNormal(fabColor);
+                mFabStartChat.setColorPressed(fabPressedColor);
             }
-
-            mFabJoinRoom.setColorNormal(fabColor);
-            mFabJoinRoom.setColorPressed(fabPressedColor);
-            mFabCreateRoom.setColorNormal(fabColor);
-            mFabCreateRoom.setColorPressed(fabPressedColor);
-            mFabStartChat.setColorNormal(fabColor);
-            mFabStartChat.setColorPressed(fabPressedColor);
         }
 
         // Set color of toolbar search view
