@@ -5,9 +5,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.R
 import kotlinx.android.synthetic.main.fragment_home_individual.*
-import kotlinx.android.synthetic.main.vector_preference_bing_rule.view.*
 
-class FavoriteRoomFragment : BaseNewHomeIndividualFragment() {
+class FavoriteRoomFragment : BaseCommunicateHomeIndividualFragment() {
     override fun getLayoutResId(): Int {
         return R.layout.fragment_home_individual
     }

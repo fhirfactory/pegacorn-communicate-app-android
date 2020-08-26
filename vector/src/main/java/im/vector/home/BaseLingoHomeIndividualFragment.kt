@@ -16,8 +16,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-abstract class BaseNewHomeIndividualFragment : AbsHomeFragment(), UpDateListener {
-    private val LOG_TAG = BaseNewHomeIndividualFragment::class.java.simpleName
+abstract class BaseCommunicateHomeIndividualFragment : AbsHomeFragment(), UpDateListener {
+    private val LOG_TAG = BaseCommunicateHomeIndividualFragment::class.java.simpleName
 
     var registerListener: RegisterListener? = null
     var onSelectRoomListener: HomeRoomAdapter.OnSelectRoomListener? = null

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import im.vector.R
 import kotlinx.android.synthetic.main.fragment_home_individual.*
 
-class LowPriorityRoomFragment : BaseNewHomeIndividualFragment() {
+class LowPriorityRoomFragment : BaseCommunicateHomeIndividualFragment() {
     override fun getLayoutResId(): Int {
         return R.layout.fragment_home_individual
     }
