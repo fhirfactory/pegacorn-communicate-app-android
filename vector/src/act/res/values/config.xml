@@ -90,6 +90,8 @@
     <bool name="settings_acknowledgement_visible">true</bool>
     <bool name="settings_theme_visible">false</bool>
     <bool name="settings_font_visible">false</bool>
+    <bool name="settings_pin_missed_notification_visible">false</bool>
+    <bool name="settings_pin_missed_notification_default_value">false</bool>
 
     <bool name="show_custom_url_login">false</bool>
 

@@ -806,7 +806,7 @@ public class PreferencesManager {
      * @return true to move the missed notifications to the left side
      */
     public static boolean pinMissedNotifications(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY, true);
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY, context.getResources().getBoolean(R.bool.settings_pin_missed_notification_default_value));
     }
 
     /**
