@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_view_pager_tab.*
 import org.matrix.androidsdk.data.Room
 import org.matrix.androidsdk.data.RoomTag
 
-class NewHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomListener, RegisterListener {
+class LingoHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomListener, RegisterListener {
     val dataUpdateListeners = ArrayList<UpDateListener>()
     var result: HomeRoomsViewModel.Result? = null
 
@@ -98,6 +98,9 @@ class NewHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomListener,
                 ROOM_FRAGMENTS.LOW_PRIORITY.ordinal -> {
                     listener.onUpdate(result?.lowPriorities, notificationComparator)
                 }
+                else -> {
+                    throw Exception("unknown listener has been added")
+                }
             }
         }
         mActivity.hideWaitingView()
@@ -129,43 +132,37 @@ class NewHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomListener,
         private val notificationComparator = RoomUtils.getNotifCountRoomsComparator(mSession, pinMissedNotifications, pinUnreadMessages)
 
         override fun getItem(position: Int): Fragment {
-            val fragment = when (position) {
+            return when (position) {
                 ROOM_FRAGMENTS.INVITE.ordinal -> {
                     val fragment = InviteRoomFragment()
                     fragment.onUpdate(mActivity.roomInvitations, notificationComparator)
-                    fragment.onSelectRoomListener = this@NewHomeFragment
-                    fragment.invitationListener = this@NewHomeFragment
-                    fragment.moreActionListener = null
+                    fragment.addListener(this@LingoHomeFragment, this@LingoHomeFragment, this@LingoHomeFragment, null)
                     fragment
                 }
                 ROOM_FRAGMENTS.FAVORITE.ordinal -> {
                     val fragment = FavoriteRoomFragment()
                     fragment.onUpdate(result?.favourites, notificationComparator)
-                    fragment.onSelectRoomListener = this@NewHomeFragment
-                    fragment.invitationListener = null
-                    fragment.moreActionListener = this@NewHomeFragment
+                    fragment.addListener(this@LingoHomeFragment, this@LingoHomeFragment, null, this@LingoHomeFragment)
                     fragment
                 }
                 ROOM_FRAGMENTS.NORMAL.ordinal -> {
                     val fragment = NormalRoomFragment()
                     fragment.onUpdate(result?.otherRooms, notificationComparator)
-                    fragment.onSelectRoomListener = this@NewHomeFragment
-                    fragment.invitationListener = null
-                    fragment.moreActionListener = this@NewHomeFragment
+                    fragment.addListener(this@LingoHomeFragment, this@LingoHomeFragment, null, this@LingoHomeFragment)
                     fragment
                 }
                 ROOM_FRAGMENTS.LOW_PRIORITY.ordinal -> {
                     val fragment = LowPriorityRoomFragment()
                     fragment.onUpdate(result?.lowPriorities, notificationComparator)
-                    fragment.onSelectRoomListener = this@NewHomeFragment
-                    fragment.invitationListener = null
-                    fragment.moreActionListener = this@NewHomeFragment
+                    fragment.addListener(this@LingoHomeFragment, this@LingoHomeFragment, null, this@LingoHomeFragment)
                     fragment
                 }
-                else -> InviteRoomFragment()
+                else -> {
+                    //This item is only to provide an else branch for when as its unavoidable to return null
+                    //it will never be called as it has only 4 segments
+                    InviteRoomFragment()
+                }
             }
-            fragment.registerListener = this@NewHomeFragment
-            return fragment
         }
 
         override fun getCount(): Int = titles.size

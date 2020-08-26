@@ -125,12 +125,10 @@ import im.vector.features.logout.ProposeLogout;
 import im.vector.fragments.AbsHomeFragment;
 import im.vector.fragments.FavouritesFragment;
 import im.vector.fragments.GroupsFragment;
-import im.vector.fragments.HomeFragment;
-import im.vector.fragments.PeopleFragment;
 import im.vector.fragments.RoomsFragment;
 import im.vector.fragments.signout.SignOutBottomSheetDialogFragment;
 import im.vector.fragments.signout.SignOutViewModel;
-import im.vector.home.NewHomeFragment;
+import im.vector.home.LingoHomeFragment;
 import im.vector.push.PushManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamServiceX;
@@ -955,7 +953,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 Log.d(LOG_TAG, "onNavigationItemSelected HOME");
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_HOME);
                 if (fragment == null) {
-                    fragment = new NewHomeFragment();
+                    fragment = new LingoHomeFragment();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_HOME;
                 mSearchView.setVisibility(View.VISIBLE);

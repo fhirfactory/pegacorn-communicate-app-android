@@ -40,7 +40,7 @@ abstract class BaseNewHomeIndividualFragment : AbsHomeFragment(), UpDateListener
     }
 
     override fun onUpdate(rooms: List<Room>?, comparator: Comparator<Room>) {
-        Log.d("zzzz", "called" + rooms?.size)
+        Log.d(LOG_TAG, "called" + rooms?.size)
         localRooms.clear()
         try {
             Collections.sort(rooms, comparator)
@@ -75,6 +75,13 @@ abstract class BaseNewHomeIndividualFragment : AbsHomeFragment(), UpDateListener
     override fun onDestroy() {
         super.onDestroy()
         registerListener?.onUnregister(this)
+    }
+
+    fun addListener(registerListener: RegisterListener?, selectionListener: HomeRoomAdapter.OnSelectRoomListener?, invitationListener: AbsAdapter.RoomInvitationListener?, moreActionListener: AbsAdapter.MoreRoomActionListener?){
+        this.registerListener = registerListener
+        this.onSelectRoomListener = selectionListener
+        this.invitationListener = invitationListener
+        this.moreActionListener = moreActionListener
     }
 }
 
