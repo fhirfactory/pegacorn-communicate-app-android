@@ -1585,7 +1585,7 @@ Why choose Riot.im?
 
     <string-array name="home_tabs">
         <item>Invites</item>
-        <item>Favorites</item>
+        <item>Favourites</item>
         <item>Normal</item>
         <item>Low Priority</item>
     </string-array>
