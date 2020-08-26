@@ -16,7 +16,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-abstract class BaseCommunicateHomeIndividualFragment : AbsHomeFragment(), UpDateListener {
+abstract class BaseCommunicateHomeIndividualFragment : BaseCommunicateHomeFragment(), UpDateListener {
     private val LOG_TAG = BaseCommunicateHomeIndividualFragment::class.java.simpleName
 
     var registerListener: RegisterListener? = null
@@ -28,12 +28,6 @@ abstract class BaseCommunicateHomeIndividualFragment : AbsHomeFragment(), UpDate
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        activity?.let { activity ->
-            mPrimaryColor = ThemeUtils.getColor(activity, R.attr.vctr_tab_home)
-            mSecondaryColor = ThemeUtils.getColor(activity, R.attr.vctr_tab_home_secondary)
-            mFabColor = ContextCompat.getColor(activity, R.color.accent_color_light)
-            mFabPressedColor = ContextCompat.getColor(activity, R.color.tab_rooms_secondary)
-        }
         sectionView.mHeader.visibility = GONE
         sectionView.mBadge.visibility = GONE
         sectionView.setHideIfEmpty(true)
@@ -53,10 +47,6 @@ abstract class BaseCommunicateHomeIndividualFragment : AbsHomeFragment(), UpDate
                 sectionView.setRooms(localRooms)
             }
         }
-    }
-
-    override fun getRooms(): MutableList<Room> {
-        return ArrayList(mSession.dataHandler.store?.rooms)
     }
 
     override fun onFilter(pattern: String?, listener: OnFilterListener?) {

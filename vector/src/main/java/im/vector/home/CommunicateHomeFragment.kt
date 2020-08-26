@@ -21,19 +21,12 @@ import org.matrix.androidsdk.data.Room
 import org.matrix.androidsdk.data.RoomTag
 import java.lang.IllegalArgumentException
 
-class CommunicateHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomListener, RegisterListener {
+class CommunicateHomeFragment : BaseCommunicateHomeFragment(), HomeRoomAdapter.OnSelectRoomListener, RegisterListener {
     val dataUpdateListeners = ArrayList<UpDateListener>()
     var result: HomeRoomsViewModel.Result? = null
 
     override fun getLayoutResId(): Int {
         return R.layout.fragment_view_pager_tab
-    }
-
-    override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(getLayoutResId(), container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -43,15 +36,7 @@ class CommunicateHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomL
         tabLayout.setupWithViewPager(pager)
         activity?.let { activity ->
             setTabLayoutTheme(activity, tabLayout)
-            mPrimaryColor = getColor(activity, R.attr.vctr_tab_home)
-            mSecondaryColor = getColor(activity, R.attr.vctr_tab_home_secondary)
-            mFabColor = ContextCompat.getColor(activity, R.color.tab_rooms)
-            mFabPressedColor = ContextCompat.getColor(activity, R.color.tab_rooms_secondary)
         }
-    }
-
-    override fun getRooms(): MutableList<Room> {
-        return ArrayList(mSession.dataHandler.store?.rooms)
     }
 
     override fun onFilter(pattern: String?, listener: OnFilterListener?) {
