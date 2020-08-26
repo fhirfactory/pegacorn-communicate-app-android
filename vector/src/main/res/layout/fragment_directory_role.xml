@@ -17,49 +17,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageButton
+            <Button
                 android:id="@+id/advancedSearchButton"
-                android:layout_width="24dp"
-                android:layout_height="0dp"
-                android:src="@drawable/ic_more_vert"
-                app:layout_constraintBottom_toBottomOf="@+id/searchInputLayout"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/searchInputLayout" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/searchInputLayout"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/layout_horizontal_margin"
-                android:layout_marginLeft="@dimen/layout_horizontal_margin"
-                android:layout_marginTop="@dimen/layout_vertical_margin"
-                android:hint="@string/search_role"
-                android:textColorHint="?attr/vctr_default_text_hint_color"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/advancedSearchButton"
-                app:layout_constraintTop_toTopOf="parent">
+                android:text="@string/advanced_search"
+                android:layout_marginEnd="@dimen/layout_horizontal_margin"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginRight="@dimen/layout_horizontal_margin" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/searchEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionNext"
-                    android:inputType="text"
-                    android:maxLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/categoryLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/layout_horizontal_margin"
-                android:layout_marginTop="@dimen/layout_vertical_margin_half"
                 android:layout_marginEnd="@dimen/layout_horizontal_margin"
                 android:hint="@string/category"
                 android:textColorHint="?attr/vctr_default_text_hint_color"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/searchInputLayout">
+                app:layout_constraintTop_toBottomOf="@+id/advancedSearchButton">
 
                 <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                     android:id="@+id/categoryEditText"
@@ -154,7 +133,6 @@
                 android:id="@+id/roleRecyclerview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:layout_marginBottom="@dimen/layout_vertical_margin"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"

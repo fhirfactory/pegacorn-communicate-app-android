@@ -133,6 +133,7 @@
     <string name="bottom_action_people">People</string>
     <string name="bottom_action_rooms">Rooms</string>
     <string name="bottom_action_groups">Communities</string>
+    <string name="bottom_action_roles">Roles</string>
 
     <!-- Home screen -->
     <string name="home_filter_placeholder_home">Filter room names</string>
@@ -1582,6 +1583,8 @@ Why choose Riot.im?
         <item>Roles</item>
         <item>People</item>
     </string-array>
+
+    <string name="advanced_search">advanced</string>
     <string name="search_role">Search for a role</string>
     <string name="category">Category</string>
     <string name="organisation_unit">Organisation Unit</string>
