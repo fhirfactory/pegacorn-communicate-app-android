@@ -31,7 +31,7 @@ abstract class BaseCommunicateHomeIndividualFragment : AbsHomeFragment(), UpDate
         activity?.let { activity ->
             mPrimaryColor = ThemeUtils.getColor(activity, R.attr.vctr_tab_home)
             mSecondaryColor = ThemeUtils.getColor(activity, R.attr.vctr_tab_home_secondary)
-            mFabColor = ContextCompat.getColor(activity, R.color.tab_rooms)
+            mFabColor = ContextCompat.getColor(activity, R.color.accent_color_light)
             mFabPressedColor = ContextCompat.getColor(activity, R.color.tab_rooms_secondary)
         }
         sectionView.mHeader.visibility = GONE
@@ -48,7 +48,7 @@ abstract class BaseCommunicateHomeIndividualFragment : AbsHomeFragment(), UpDate
             org.matrix.androidsdk.core.Log.e(LOG_TAG, "## sortAndDisplay() failed " + e.message, e)
         }
         rooms?.let {
-            localRooms.addAll(it)
+            localRooms.addAll(rooms)
             if (sectionView != null) {
                 sectionView.setRooms(localRooms)
             }
