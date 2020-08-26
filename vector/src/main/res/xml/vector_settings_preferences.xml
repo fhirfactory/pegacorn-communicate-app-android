@@ -144,6 +144,8 @@
             android:title="@string/settings_show_avatar_display_name_changes_messages" />
 
         <im.vector.preference.VectorSwitchPreference
+            android:defaultValue="@bool/settings_vibrate_mention_user_default_value"
+            app:isPreferenceVisible="@bool/settings_vibrate_mention_user_visible"
             android:key="SETTINGS_VIBRATE_ON_MENTION_KEY"
             android:title="@string/settings_vibrate_on_mention" />
 

@@ -826,7 +826,7 @@ public class PreferencesManager {
      * @return true
      */
     public static boolean vibrateWhenMentioning(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_VIBRATE_ON_MENTION_KEY, false);
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(SETTINGS_VIBRATE_ON_MENTION_KEY, context.getResources().getBoolean(R.bool.settings_vibrate_mention_user_default_value));
     }
 
     /**
