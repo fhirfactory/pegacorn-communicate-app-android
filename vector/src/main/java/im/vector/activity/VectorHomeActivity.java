@@ -1041,9 +1041,12 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                                final int secondaryColor,
                                final int fabColor,
                                final int fabPressedColor) {
-        // Apply primary color
-        mToolbar.setBackgroundResource(R.drawable.act_gradient);
+
+        // Applying custom gradient instead of primary color
+        // primaryColor was originally applied to Riot app
         //mToolbar.setBackgroundColor(primaryColor);
+        mToolbar.setBackgroundResource(R.drawable.act_gradient);
+
         mVectorPendingCallView.updateBackgroundColor(primaryColor);
         if(!getResources().getBoolean(R.bool.use_progressbar_original_background)) {
             mSyncInProgressView.setBackgroundColor(primaryColor);
