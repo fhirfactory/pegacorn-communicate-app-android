@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_view_pager_tab.*
 import org.matrix.androidsdk.data.Room
 import org.matrix.androidsdk.data.RoomTag
 
-class LingoHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomListener, RegisterListener {
+class CommunicateHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomListener, RegisterListener {
     val dataUpdateListeners = ArrayList<UpDateListener>()
     var result: HomeRoomsViewModel.Result? = null
 
@@ -136,25 +136,25 @@ class LingoHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomListene
                 ROOM_FRAGMENTS.INVITE.ordinal -> {
                     val fragment = InviteRoomFragment()
                     fragment.onUpdate(mActivity.roomInvitations, notificationComparator)
-                    fragment.addListener(this@LingoHomeFragment, this@LingoHomeFragment, this@LingoHomeFragment, null)
+                    fragment.addListener(this@CommunicateHomeFragment, this@CommunicateHomeFragment, this@CommunicateHomeFragment, null)
                     fragment
                 }
                 ROOM_FRAGMENTS.FAVORITE.ordinal -> {
                     val fragment = FavoriteRoomFragment()
                     fragment.onUpdate(result?.favourites, notificationComparator)
-                    fragment.addListener(this@LingoHomeFragment, this@LingoHomeFragment, null, this@LingoHomeFragment)
+                    fragment.addListener(this@CommunicateHomeFragment, this@CommunicateHomeFragment, null, this@CommunicateHomeFragment)
                     fragment
                 }
                 ROOM_FRAGMENTS.NORMAL.ordinal -> {
                     val fragment = NormalRoomFragment()
                     fragment.onUpdate(result?.otherRooms, notificationComparator)
-                    fragment.addListener(this@LingoHomeFragment, this@LingoHomeFragment, null, this@LingoHomeFragment)
+                    fragment.addListener(this@CommunicateHomeFragment, this@CommunicateHomeFragment, null, this@CommunicateHomeFragment)
                     fragment
                 }
                 ROOM_FRAGMENTS.LOW_PRIORITY.ordinal -> {
                     val fragment = LowPriorityRoomFragment()
                     fragment.onUpdate(result?.lowPriorities, notificationComparator)
-                    fragment.addListener(this@LingoHomeFragment, this@LingoHomeFragment, null, this@LingoHomeFragment)
+                    fragment.addListener(this@CommunicateHomeFragment, this@CommunicateHomeFragment, null, this@CommunicateHomeFragment)
                     fragment
                 }
                 else -> {
