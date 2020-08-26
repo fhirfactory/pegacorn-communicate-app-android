@@ -19,6 +19,7 @@ import im.vector.util.RoomUtils
 import kotlinx.android.synthetic.main.fragment_view_pager_tab.*
 import org.matrix.androidsdk.data.Room
 import org.matrix.androidsdk.data.RoomTag
+import java.lang.IllegalArgumentException
 
 class CommunicateHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomListener, RegisterListener {
     val dataUpdateListeners = ArrayList<UpDateListener>()
@@ -158,9 +159,7 @@ class CommunicateHomeFragment : AbsHomeFragment(), HomeRoomAdapter.OnSelectRoomL
                     fragment
                 }
                 else -> {
-                    //This item is only to provide an else branch for when as its unavoidable to return null
-                    //it will never be called as it has only 4 segments
-                    InviteRoomFragment()
+                    throw IllegalArgumentException("No fragment is found for that position.")
                 }
             }
         }
