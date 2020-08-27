@@ -125,6 +125,7 @@ import im.vector.features.logout.ProposeLogout;
 import im.vector.fragments.AbsHomeFragment;
 import im.vector.fragments.FavouritesFragment;
 import im.vector.fragments.GroupsFragment;
+import im.vector.fragments.HomeFragment;
 import im.vector.fragments.RoomsFragment;
 import im.vector.fragments.signout.SignOutBottomSheetDialogFragment;
 import im.vector.fragments.signout.SignOutViewModel;
