@@ -1585,6 +1585,14 @@ Why choose Riot.im?
     </string-array>
 
     <string name="advanced_search">advanced</string>
+    <string-array name="home_tabs">
+        <item>Invites</item>
+        <item>Favourites</item>
+        <item>Normal</item>
+        <item>Low Priority</item>
+    </string-array>
+
+    <string name="total_notification">Total Notifications</string>
     <string name="search_role">Search for a role</string>
     <string name="category">Category</string>
     <string name="organisation_unit">Organisation Unit</string>
