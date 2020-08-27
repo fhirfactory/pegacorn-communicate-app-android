@@ -26,6 +26,10 @@ abstract class BaseCommunicateHomeIndividualFragment : BaseCommunicateHomeFragme
 
     val localRooms = ArrayList<Room>()
 
+    override fun getLayoutResId(): Int {
+        return R.layout.fragment_home_individual
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         sectionView.mHeader.visibility = GONE

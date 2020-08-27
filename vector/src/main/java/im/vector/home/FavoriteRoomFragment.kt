@@ -7,9 +7,6 @@ import im.vector.R
 import kotlinx.android.synthetic.main.fragment_home_individual.*
 
 class FavoriteRoomFragment : BaseCommunicateHomeIndividualFragment() {
-    override fun getLayoutResId(): Int {
-        return R.layout.fragment_home_individual
-    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
