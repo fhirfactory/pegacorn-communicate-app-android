@@ -153,5 +153,8 @@
     <!-- Notification (do not depends on theme) -->
     <color name="notification_accent_color">#368BD6</color>
     <color name="key_share_req_accent_color">#ff812d</color>
-
+    
+    <!--  act gradient  -->
+    <color name="act_gradient_color2">#00828c</color>
+    <color name="act_gradient_color1">#002677</color>
 </resources>
