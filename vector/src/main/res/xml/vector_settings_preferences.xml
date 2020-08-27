@@ -87,6 +87,7 @@
         <im.vector.preference.VectorListPreference
             android:entries="@array/theme_entries"
             android:entryValues="@array/theme_values"
+            app:isPreferenceVisible="@bool/settings_theme_visible"
             android:key="APPLICATION_THEME_KEY"
             android:summary="%s"
             android:title="@string/settings_theme"
@@ -94,6 +95,7 @@
 
         <im.vector.preference.VectorPreference
             android:dialogTitle="@string/font_size"
+            app:isPreferenceVisible="@bool/settings_font_visible"
             android:key="SETTINGS_INTERFACE_TEXT_SIZE_KEY"
             android:title="@string/font_size" />
 
@@ -142,6 +144,8 @@
             android:title="@string/settings_show_avatar_display_name_changes_messages" />
 
         <im.vector.preference.VectorSwitchPreference
+            android:defaultValue="@bool/settings_vibrate_mention_user_default_value"
+            app:isPreferenceVisible="@bool/settings_vibrate_mention_user_visible"
             android:key="SETTINGS_VIBRATE_ON_MENTION_KEY"
             android:title="@string/settings_vibrate_on_mention" />
 
@@ -168,6 +172,7 @@
 
         <im.vector.preference.VectorSwitchPreference
             android:defaultValue="true"
+            app:isPreferenceVisible="@bool/settings_pin_missed_notification_visible"
             android:key="SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY"
             android:title="@string/settings_pin_missed_notifications" />
 
