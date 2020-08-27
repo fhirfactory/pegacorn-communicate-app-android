@@ -120,6 +120,8 @@ import im.vector.VectorApp;
 import im.vector.adapters.RolesInNavigationBarAdapter;
 import im.vector.adapters.model.UserRole;
 import im.vector.directory.DirectoryFragment;
+import im.vector.directory.people.DirectoryPeopleFragment;
+import im.vector.directory.role.DirectoryRoleFragment;
 import im.vector.extensions.ViewExtensionsKt;
 import im.vector.features.logout.ProposeLogout;
 import im.vector.fragments.AbsHomeFragment;
@@ -192,7 +194,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     public static final String BROADCAST_ACTION_STOP_WAITING_VIEW = "im.vector.activity.ACTION_STOP_WAITING_VIEW";
 
     private static final String TAG_FRAGMENT_HOME = "TAG_FRAGMENT_HOME";
-    private static final String TAG_FRAGMENT_FAVOURITES = "TAG_FRAGMENT_FAVOURITES";
+    private static final String TAG_FRAGMENT_ROLES = "TAG_FRAGMENT_ROLES";
     private static final String TAG_FRAGMENT_PEOPLE = "TAG_FRAGMENT_PEOPLE";
     private static final String TAG_FRAGMENT_ROOMS = "TAG_FRAGMENT_ROOMS";
     private static final String TAG_FRAGMENT_GROUPS = "TAG_FRAGMENT_GROUPS";
@@ -961,24 +963,24 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_home));
                 break;
             case R.id.bottom_action_favourites:
-                Log.d(LOG_TAG, "onNavigationItemSelected FAVOURITES");
-                fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_FAVOURITES);
+                Log.d(LOG_TAG, "onNavigationItemSelected ROLE");
+                fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_ROLES);
                 if (fragment == null) {
-                    fragment = FavouritesFragment.newInstance();
+                    fragment = new DirectoryRoleFragment();
                 }
-                mCurrentFragmentTag = TAG_FRAGMENT_FAVOURITES;
+                mCurrentFragmentTag = TAG_FRAGMENT_ROLES;
                 mSearchView.setVisibility(View.VISIBLE);
-                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_favorites));
+                mSearchView.setQueryHint(getString(R.string.search_role));
                 break;
             case R.id.bottom_action_people:
                 Log.d(LOG_TAG, "onNavigationItemSelected PEOPLE");
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_PEOPLE);
                 if (fragment == null) {
-                    fragment = new DirectoryFragment();
+                    fragment = new DirectoryPeopleFragment();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_PEOPLE;
                 mSearchView.setVisibility(View.VISIBLE);
-                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_people));
+                mSearchView.setQueryHint(getString(R.string.search_people));
                 break;
             case R.id.bottom_action_rooms:
                 Log.d(LOG_TAG, "onNavigationItemSelected ROOMS");
@@ -1258,7 +1260,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_HOME);
                 break;
             case R.id.bottom_action_favourites:
-                fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_FAVOURITES);
+                fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_ROLES);
                 break;
             case R.id.bottom_action_people:
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_PEOPLE);
