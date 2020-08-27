@@ -977,11 +977,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = new DirectoryFragment();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_PEOPLE;
-                mSearchView.setVisibility(View.GONE);
-                if (null != getSupportActionBar()) {
-                    getSupportActionBar().setTitle(getString(R.string.directory_title));
-                }
-                //mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_people));
+                mSearchView.setVisibility(View.VISIBLE);
+                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_people));
                 break;
             case R.id.bottom_action_rooms:
                 Log.d(LOG_TAG, "onNavigationItemSelected ROOMS");
