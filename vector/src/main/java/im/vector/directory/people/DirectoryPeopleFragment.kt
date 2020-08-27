@@ -9,16 +9,22 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.R
 import im.vector.directory.people.detail.PeopleDetailActivity
 import im.vector.directory.people.model.DirectoryPeople
+import im.vector.home.BaseCommunicateHomeFragment
 import kotlinx.android.synthetic.main.fragment_directory_people.*
 
-class DirectoryPeopleFragment : Fragment(), PeopleClickListener {
+class DirectoryPeopleFragment : BaseCommunicateHomeFragment(), PeopleClickListener {
     private lateinit var peopleDirectoryAdapter: PeopleDirectoryAdapter
 
-    override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_directory_people, container, false)
+    override fun onFilter(pattern: String?, listener: OnFilterListener?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onResetFilter() {
+        TODO("Not yet implemented")
+    }
+
+    override fun getLayoutResId(): Int {
+        return R.layout.fragment_directory_people
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -38,6 +44,7 @@ class DirectoryPeopleFragment : Fragment(), PeopleClickListener {
 
         peopleDirectoryAdapter.setData(testPeopleData)
     }
+
 
     override fun onPeopleClick(directoryPeople: DirectoryPeople) {
         startActivity(PeopleDetailActivity.intent(requireContext(), directoryPeople))

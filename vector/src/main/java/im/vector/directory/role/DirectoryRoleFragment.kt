@@ -16,10 +16,11 @@ import androidx.transition.TransitionManager
 import im.vector.R
 import im.vector.directory.role.detail.RoleDetailActivity
 import im.vector.directory.role.model.*
+import im.vector.home.BaseCommunicateHomeFragment
 import kotlinx.android.synthetic.main.fragment_directory_role.*
 
 
-class DirectoryRoleFragment : Fragment(), RoleClickListener {
+class DirectoryRoleFragment : BaseCommunicateHomeFragment(), RoleClickListener {
     private lateinit var viewModel: DirectoryRoleViewModel
     private lateinit var categoryAdapter: DropDownAdapter
     private lateinit var organisationUnitAdapter: DropDownAdapter
@@ -29,11 +30,16 @@ class DirectoryRoleFragment : Fragment(), RoleClickListener {
     private val constraintCollapsed = ConstraintSet()
     private val constraintExpanded = ConstraintSet()
 
-    override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_directory_role, container, false)
+    override fun getLayoutResId(): Int {
+        return R.layout.fragment_directory_role
+    }
+
+    override fun onFilter(pattern: String?, listener: OnFilterListener?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onResetFilter() {
+        TODO("Not yet implemented")
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
