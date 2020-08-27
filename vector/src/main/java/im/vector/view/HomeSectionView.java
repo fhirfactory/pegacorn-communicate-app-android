@@ -51,16 +51,16 @@ public class HomeSectionView extends RelativeLayout {
     private static final String LOG_TAG = HomeSectionView.class.getSimpleName();
 
     @BindView(R.id.section_header)
-    TextView mHeader;
+    public TextView mHeader;
 
     @BindView(R.id.section_badge)
-    TextView mBadge;
+    public TextView mBadge;
 
     @BindView(R.id.section_recycler_view)
-    RecyclerView mRecyclerView;
+    public RecyclerView mRecyclerView;
 
     @BindView(R.id.section_placeholder)
-    TextView mPlaceHolder;
+    public TextView mPlaceHolder;
 
     private HomeRoomAdapter mAdapter;
 
@@ -139,7 +139,9 @@ public class HomeSectionView extends RelativeLayout {
 
                     if (notificationCounter.getNotifications() == 0) {
                         mBadge.setVisibility(GONE);
+                        mHeader.setVisibility(GONE);
                     } else {
+                        mHeader.setVisibility(VISIBLE);
                         mBadge.setVisibility(VISIBLE);
                         mBadge.setText(RoomUtils.formatUnreadMessagesCounter(notificationCounter.getNotifications()));
 

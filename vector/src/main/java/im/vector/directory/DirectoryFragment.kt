@@ -14,7 +14,7 @@ import im.vector.directory.role.DirectoryRoleFragment
 import im.vector.fragments.AbsHomeFragment
 import im.vector.ui.themes.ThemeUtils.getColor
 import im.vector.ui.themes.ThemeUtils.setTabLayoutTheme
-import kotlinx.android.synthetic.main.fragment_directory.*
+import kotlinx.android.synthetic.main.fragment_view_pager_tab.*
 import org.matrix.androidsdk.data.Room
 
 class DirectoryFragment : AbsHomeFragment() {
@@ -44,7 +44,7 @@ class DirectoryFragment : AbsHomeFragment() {
     }
 
     override fun getLayoutResId(): Int {
-        return R.layout.fragment_directory
+        return R.layout.fragment_view_pager_tab
     }
 
     override fun onFilter(pattern: String?, listener: OnFilterListener?) {
