@@ -119,7 +119,7 @@ class DirectoryRoleFragment : Fragment(), RoleClickListener {
     private fun subscribeUI() {
         viewModel.advancedSearchVisibility.observe(viewLifecycleOwner, Observer {
             TransitionManager.beginDelayedTransition(innerConstraintLayout)
-            val constraint = if(it) constraintExpanded else constraintCollapsed
+            val constraint = if (it) constraintExpanded else constraintCollapsed
             constraint.applyTo(innerConstraintLayout)
         })
     }
