@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!--    action bar status color-->
+    <color name="primary_color_dark_light">#011B51</color>
+
+    <color name="accent_color_light">#2db4f1</color>
+
+</resources>
