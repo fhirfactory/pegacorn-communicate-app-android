@@ -789,7 +789,7 @@
     <string name="settings_contacts_phonebook_country">Phonebook country</string>
     <string name="settings_home_display">Home display</string>
     <string name="settings_pin_missed_notifications">Pin rooms with missed notifications</string>
-    <string name="settings_pin_unread_messages">Pin rooms with unread messages</string>
+    <string name="settings_pin_unread_messages">Show rooms with unread messages first</string>
     <string name="settings_devices_list">Sessions</string>
     <string name="settings_inline_url_preview">Inline URL preview</string>
     <string name="settings_inline_url_preview_summary">Preview links within the chat when your homeserver supports this feature.</string>
@@ -809,6 +809,13 @@
     <string name="settings_preview_media_before_sending">Preview media before sending</string>
     <string name="settings_send_message_with_enter">Send message with enter</string>
     <string name="settings_send_message_with_enter_summary">Enter button of the soft keyboard will send message instead of adding a line break</string>
+    <string name="settings_notification_enable_for_account_summary">Controls whether to show notifications for all user sessions.</string>
+    <string name="settings_notification_enable_for_session_summary">Controls whether to show notifications for this user session.</string>
+    <string name="settings_notification_troubleshoot_summary">Runs a series of notification tests.</string>
+    <string name="settings_notification_target_summary">Displays the lists of devices that will receive notifications.</string>
+    <string name="settings_unread_message_summary">Controls whether chats with missed messages are shown first.</string>
+    <string name="settings_compression_message_summary">Controls the media file size.</string>
+    <string name="settings_media_source_message_summary">Controls the default media source when sending media.</string>
 
     <string name="settings_deactivate_account_section">Deactivate account</string>
     <string name="settings_deactivate_my_account">Deactivate my account</string>
