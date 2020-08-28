@@ -969,8 +969,10 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = new DirectoryRoleFragment();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_ROLES;
-                mSearchView.setVisibility(View.VISIBLE);
-                mSearchView.setQueryHint(getString(R.string.search_role));
+                mSearchView.setVisibility(View.GONE);
+                if (null != getSupportActionBar()) {
+                    getSupportActionBar().setTitle(getString(R.string.roles_title));
+                }
                 break;
             case R.id.bottom_action_people:
                 Log.d(LOG_TAG, "onNavigationItemSelected PEOPLE");
@@ -979,8 +981,10 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = new DirectoryPeopleFragment();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_PEOPLE;
-                mSearchView.setVisibility(View.VISIBLE);
-                mSearchView.setQueryHint(getString(R.string.search_people));
+                mSearchView.setVisibility(View.GONE);
+                if (null != getSupportActionBar()) {
+                    getSupportActionBar().setTitle(getString(R.string.people_title));
+                }
                 break;
             case R.id.bottom_action_rooms:
                 Log.d(LOG_TAG, "onNavigationItemSelected ROOMS");

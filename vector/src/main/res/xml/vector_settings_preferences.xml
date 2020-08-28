@@ -178,6 +178,7 @@
 
         <im.vector.preference.VectorSwitchPreference
             android:defaultValue="true"
+            android:summary="@string/settings_unread_message_summary"
             android:key="SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY"
             android:title="@string/settings_pin_unread_messages" />
 
@@ -197,10 +198,12 @@
 
         <im.vector.preference.VectorSwitchPreference
             android:key="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
+            android:summary="@string/settings_notification_enable_for_account_summary"
             android:title="@string/settings_enable_all_notif" />
 
         <im.vector.preference.VectorSwitchPreference
             android:dependency="SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
+            android:summary="@string/settings_notification_enable_for_session_summary"
             android:key="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
             android:title="@string/settings_enable_this_device" />
 
@@ -224,6 +227,7 @@
 
         <im.vector.preference.VectorPreference
             android:key="SETTINGS_NOTIFICATION_TROUBLESHOOT_PREFERENCE_KEY"
+            android:summary="@string/settings_notification_troubleshoot_summary"
             android:title="@string/settings_notification_troubleshoot"
             app:fragment="im.vector.fragments.VectorSettingsNotificationsTroubleshootFragment" />
 
@@ -271,6 +275,7 @@
 
     <im.vector.preference.VectorPreferenceCategory
         android:key="SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY"
+        android:summary="@string/settings_notification_target_summary"
         android:title="@string/settings_notifications_targets" />
 
     <im.vector.preference.VectorPreferenceDivider android:key="SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY" />
@@ -285,7 +290,6 @@
         <im.vector.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:key="SETTINGS_PLAY_SHUTTER_SOUND_KEY"
-
             android:title="@string/settings_play_shutter_sound" />
 
         <im.vector.preference.VectorSwitchPreference
@@ -297,7 +301,7 @@
             android:entries="@array/compression_levels"
             android:entryValues="@array/compression_level_values"
             android:key="SETTINGS_DEFAULT_MEDIA_COMPRESSION_KEY"
-            android:summary="%s"
+            android:summary="@string/settings_compression_message_summary"
             android:title="@string/settings_default_compression" />
 
         <im.vector.preference.VectorListPreference
@@ -305,7 +309,7 @@
             android:entries="@array/media_sources"
             android:entryValues="@array/media_source_values"
             android:key="SETTINGS_DEFAULT_MEDIA_SOURCE_KEY"
-            android:summary="%s"
+            android:summary="@string/settings_media_source_message_summary"
             android:title="@string/settings_default_media_source" />
 
     </im.vector.preference.VectorPreferenceCategory>

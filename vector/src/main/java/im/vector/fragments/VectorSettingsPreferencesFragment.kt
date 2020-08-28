@@ -1148,8 +1148,28 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
         } else {
             removeDeactivateAccountPreference()
         }
+
+        addListPreferenceListener(mDefaultCompressionPreference, resources.getString(R.string.settings_compression_message_summary))
+        addListPreferenceListener(mDefaultMediaSourcePreference, resources.getString(R.string.settings_media_source_message_summary))
     }
 
+    private fun addListPreferenceListener(listPreference: ListPreference, defaultSummary: String){
+        listPreference.setOnPreferenceChangeListener { preference, newValue ->
+            changePreferenceSummary(listPreference, newValue.toString(), defaultSummary)
+            false
+        }
+        changePreferenceSummary(listPreference, listPreference.value, defaultSummary)
+    }
+
+    private fun changePreferenceSummary(listPreference: ListPreference, currentValue: String, defaultSummary: String){
+        listPreference.value = currentValue
+        // If the user select the first item which is "choose", set a different summary
+        if(currentValue == "0"){
+            listPreference.summary = defaultSummary // resources.getString(R.string.settings_compression_message_summary)
+        }else {
+            listPreference.summary = listPreference.entry
+        }
+    }
 
     private fun refreshIntegrationManagerSettings() {
         val integrationAllowed = mSession.integrationManager.integrationAllowed
