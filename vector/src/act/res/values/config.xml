@@ -35,7 +35,7 @@
         <item>matrix.org</item>
     </string-array>
 
-    <bool name="settings_avatar_editable">false</bool>
+    <bool name="settings_avatar_editable">true</bool>
     <bool name="settings_password_changeable">false</bool>
     <bool name="settings_show_local_contacts">false</bool>
     <bool name="settings_display_name_editable">false</bool>
@@ -88,6 +88,12 @@
     <bool name="settings_default_ringtone_visible">true</bool>
     <bool name="settings_set_ringtone_visible">true</bool>
     <bool name="settings_acknowledgement_visible">true</bool>
+    <bool name="settings_theme_visible">false</bool>
+    <bool name="settings_font_visible">false</bool>
+    <bool name="settings_pin_missed_notification_visible">false</bool>
+    <bool name="settings_pin_missed_notification_default_value">false</bool>
+    <bool name="settings_vibrate_mention_user_visible">false</bool>
+    <bool name="settings_vibrate_mention_user_default_value">false</bool>
 
     <bool name="show_custom_url_login">false</bool>
 
