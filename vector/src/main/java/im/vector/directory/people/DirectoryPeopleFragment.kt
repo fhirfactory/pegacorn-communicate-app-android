@@ -7,12 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.R
+import im.vector.directory.DirectoryFragment
 import im.vector.directory.people.detail.PeopleDetailActivity
 import im.vector.directory.people.model.DirectoryPeople
 import im.vector.home.BaseCommunicateHomeFragment
 import kotlinx.android.synthetic.main.fragment_directory_people.*
 
-class DirectoryPeopleFragment : BaseCommunicateHomeFragment(), PeopleClickListener {
+class DirectoryPeopleFragment : DirectoryFragment(), PeopleClickListener {
     private lateinit var peopleDirectoryAdapter: PeopleDirectoryAdapter
 
     override fun onFilter(pattern: String?, listener: OnFilterListener?) {

@@ -14,13 +14,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.transition.TransitionManager
 import im.vector.R
+import im.vector.directory.DirectoryFragment
 import im.vector.directory.role.detail.RoleDetailActivity
 import im.vector.directory.role.model.*
 import im.vector.home.BaseCommunicateHomeFragment
 import kotlinx.android.synthetic.main.fragment_directory_role.*
 
 
-class DirectoryRoleFragment : BaseCommunicateHomeFragment(), RoleClickListener {
+class DirectoryRoleFragment : DirectoryFragment(), RoleClickListener {
     private lateinit var viewModel: DirectoryRoleViewModel
     private lateinit var categoryAdapter: DropDownAdapter
     private lateinit var organisationUnitAdapter: DropDownAdapter
