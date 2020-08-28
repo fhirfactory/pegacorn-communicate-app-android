@@ -1,13 +1,12 @@
 package im.vector.directory.role
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintSet
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,7 +16,6 @@ import im.vector.R
 import im.vector.directory.DirectoryFragment
 import im.vector.directory.role.detail.RoleDetailActivity
 import im.vector.directory.role.model.*
-import im.vector.home.BaseCommunicateHomeFragment
 import kotlinx.android.synthetic.main.fragment_directory_role.*
 
 
@@ -47,7 +45,7 @@ class DirectoryRoleFragment : DirectoryFragment(), RoleClickListener {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(DirectoryRoleViewModel::class.java)
         subscribeUI()
-        advancedSearchButton.setOnClickListener {
+        cancelButton.setOnClickListener {
             viewModel.toggleSearchView()
         }
 
@@ -120,7 +118,25 @@ class DirectoryRoleFragment : DirectoryFragment(), RoleClickListener {
         testRoleData.add(DummyRole("1", "ED Acute North Nurse", "Emergency Department  Acute North Nurse", null, "ED {Emergency Department}", arrayListOf(Role("1", "Emergency Department Nurse", "Nursing and Midwifery")),
                 arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
 
+        testRoleData.add(DummyRole("1", "ED Acute North Nurse", "Emergency Department  Acute North Nurse", null, "ED {Emergency Department}", arrayListOf(Role("1", "Emergency Department Nurse", "Nursing and Midwifery")),
+                arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
+
         roleAdapter.setData(testRoleData)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.ic_action_advanced_search -> {
+                viewModel.toggleSearchView()
+                return true
+            }
+        }
+        return false
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.advanced_search, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     private fun subscribeUI() {

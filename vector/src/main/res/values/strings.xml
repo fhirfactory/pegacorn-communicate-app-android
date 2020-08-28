@@ -1592,6 +1592,7 @@ Why choose Riot.im?
     </string-array>
 
     <string name="advanced_search">advanced</string>
+    <string name="advanced_search_menu">Advanced Search</string>
     <string-array name="home_tabs">
         <item>Invites</item>
         <item>Favourites</item>
