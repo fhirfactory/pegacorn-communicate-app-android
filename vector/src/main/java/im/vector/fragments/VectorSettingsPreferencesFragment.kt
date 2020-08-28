@@ -1149,17 +1149,16 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             removeDeactivateAccountPreference()
         }
 
-        mDefaultCompressionPreference.setOnPreferenceChangeListener { preference, newValue ->
-            changePreferenceSummary(mDefaultCompressionPreference, newValue.toString(), resources.getString(R.string.settings_compression_message_summary))
-            false
-        }
-        changePreferenceSummary(mDefaultCompressionPreference, mDefaultCompressionPreference.value, resources.getString(R.string.settings_compression_message_summary))
+        addListPreferenceListener(mDefaultCompressionPreference, resources.getString(R.string.settings_compression_message_summary))
+        addListPreferenceListener(mDefaultMediaSourcePreference, resources.getString(R.string.settings_media_source_message_summary))
+    }
 
-        mDefaultMediaSourcePreference.setOnPreferenceChangeListener { preference, newValue ->
-            changePreferenceSummary(mDefaultMediaSourcePreference, newValue.toString(), resources.getString(R.string.settings_media_source_message_summary))
+    private fun addListPreferenceListener(listPreference: ListPreference, defaultSummary: String){
+        listPreference.setOnPreferenceChangeListener { preference, newValue ->
+            changePreferenceSummary(listPreference, newValue.toString(), defaultSummary)
             false
         }
-        changePreferenceSummary(mDefaultMediaSourcePreference, mDefaultMediaSourcePreference.value, resources.getString(R.string.settings_media_source_message_summary))
+        changePreferenceSummary(listPreference, listPreference.value, defaultSummary)
     }
 
     private fun changePreferenceSummary(listPreference: ListPreference, currentValue: String, defaultSummary: String){
