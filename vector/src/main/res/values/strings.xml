@@ -1608,6 +1608,8 @@ Why choose Riot.im?
     <string name="location">Location</string>
     <string name="apply">Apply</string>
     <string name="roles">Role</string>
+    <string name="roles_title">Roles</string>
+    <string name="people_title">People</string>
     <string name="title_activity_role_detail">Role Detail</string>
     <string name="search_people">Search for people</string>
     <string name="title_activity_people_detail">Person Detail</string>
