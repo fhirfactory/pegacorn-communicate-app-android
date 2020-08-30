@@ -1,5 +1,6 @@
 package im.vector.home
 
+import android.content.Context
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,5 +16,15 @@ class FavoriteRoomFragment : BaseCommunicateHomeIndividualFragment() {
         sectionView.setupRoomRecyclerView(LinearLayoutManager(activity, RecyclerView.VERTICAL, false),
                 R.layout.adapter_item_room_view, true, onSelectRoomListener, invitationListener, moreActionListener)
         sectionView.setRooms(localRooms)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        registerListener?.onRegister(CommunicateHomeFragment.ROOM_FRAGMENTS.FAVORITE, this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        registerListener?.onUnregister(CommunicateHomeFragment.ROOM_FRAGMENTS.FAVORITE)
     }
 }
