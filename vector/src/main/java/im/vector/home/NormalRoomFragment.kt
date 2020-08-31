@@ -16,4 +16,8 @@ class NormalRoomFragment : BaseCommunicateHomeIndividualFragment() {
                 R.layout.adapter_item_room_view, true, onSelectRoomListener, invitationListener, moreActionListener)
         sectionView.setRooms(localRooms)
     }
+
+    override fun getRoomFragmentType(): CommunicateHomeFragment.ROOM_FRAGMENTS {
+        return CommunicateHomeFragment.ROOM_FRAGMENTS.NORMAL
+    }
 }

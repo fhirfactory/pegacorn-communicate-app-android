@@ -14,4 +14,8 @@ class InviteRoomFragment : BaseCommunicateHomeIndividualFragment() {
                 R.layout.adapter_item_room_invite, false, onSelectRoomListener, invitationListener, moreActionListener)
         sectionView.setRooms(localRooms)
     }
+
+    override fun getRoomFragmentType(): CommunicateHomeFragment.ROOM_FRAGMENTS {
+        return CommunicateHomeFragment.ROOM_FRAGMENTS.INVITE
+    }
 }

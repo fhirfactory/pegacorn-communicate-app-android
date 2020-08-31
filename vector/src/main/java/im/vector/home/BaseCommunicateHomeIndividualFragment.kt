@@ -4,12 +4,10 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View.GONE
-import androidx.core.content.ContextCompat
 import im.vector.R
 import im.vector.adapters.AbsAdapter
 import im.vector.adapters.HomeRoomAdapter
 import im.vector.fragments.AbsHomeFragment
-import im.vector.ui.themes.ThemeUtils
 import kotlinx.android.synthetic.main.fragment_home_individual.*
 import org.matrix.androidsdk.data.Room
 import java.util.*
@@ -26,6 +24,8 @@ abstract class BaseCommunicateHomeIndividualFragment : BaseCommunicateHomeFragme
 
     val localRooms = ArrayList<Room>()
 
+    abstract fun getRoomFragmentType(): CommunicateHomeFragment.ROOM_FRAGMENTS
+
     override fun getLayoutResId(): Int {
         return R.layout.fragment_home_individual
     }
@@ -35,6 +35,16 @@ abstract class BaseCommunicateHomeIndividualFragment : BaseCommunicateHomeFragme
         sectionView.mHeader.visibility = GONE
         sectionView.mBadge.visibility = GONE
         sectionView.setHideIfEmpty(true)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        registerListener?.onRegister(getRoomFragmentType(), this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        registerListener?.onUnregister(getRoomFragmentType())
     }
 
     override fun onUpdate(rooms: List<Room>?, comparator: Comparator<Room>) {
@@ -61,17 +71,7 @@ abstract class BaseCommunicateHomeIndividualFragment : BaseCommunicateHomeFragme
         sectionView.onFilter("", null)
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        registerListener?.onRegister(this)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        registerListener?.onUnregister(this)
-    }
-
-    fun addListener(registerListener: RegisterListener?, selectionListener: HomeRoomAdapter.OnSelectRoomListener?, invitationListener: AbsAdapter.RoomInvitationListener?, moreActionListener: AbsAdapter.MoreRoomActionListener?){
+    fun addListener(registerListener: RegisterListener?, selectionListener: HomeRoomAdapter.OnSelectRoomListener?, invitationListener: AbsAdapter.RoomInvitationListener?, moreActionListener: AbsAdapter.MoreRoomActionListener?) {
         this.registerListener = registerListener
         this.onSelectRoomListener = selectionListener
         this.invitationListener = invitationListener
@@ -86,6 +86,6 @@ interface UpDateListener {
 }
 
 interface RegisterListener {
-    fun onRegister(listener: UpDateListener)
-    fun onUnregister(listener: UpDateListener)
+    fun onRegister(fragmentType: CommunicateHomeFragment.ROOM_FRAGMENTS, listener: UpDateListener)
+    fun onUnregister(fragmentType: CommunicateHomeFragment.ROOM_FRAGMENTS)
 }

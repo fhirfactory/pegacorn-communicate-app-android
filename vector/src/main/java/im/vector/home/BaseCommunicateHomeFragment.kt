@@ -7,7 +7,7 @@ import im.vector.fragments.AbsHomeFragment
 import im.vector.ui.themes.ThemeUtils
 import org.matrix.androidsdk.data.Room
 
-abstract class BaseCommunicateHomeFragment: AbsHomeFragment() {
+abstract class BaseCommunicateHomeFragment : AbsHomeFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
