@@ -1,6 +1,5 @@
 package im.vector.home
 
-import android.content.Context
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,13 +15,7 @@ class InviteRoomFragment : BaseCommunicateHomeIndividualFragment() {
         sectionView.setRooms(localRooms)
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        registerListener?.onRegister(CommunicateHomeFragment.ROOM_FRAGMENTS.INVITE, this)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        registerListener?.onUnregister(CommunicateHomeFragment.ROOM_FRAGMENTS.INVITE)
+    override fun getRoomFragmentType(): CommunicateHomeFragment.ROOM_FRAGMENTS {
+        return CommunicateHomeFragment.ROOM_FRAGMENTS.INVITE
     }
 }

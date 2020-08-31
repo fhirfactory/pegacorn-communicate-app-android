@@ -55,45 +55,10 @@ class CommunicateHomeFragment : BaseCommunicateHomeFragment(), HomeRoomAdapter.O
     private fun calculateRoomPosition() {
         var count = 0
         result?.let { result ->
-            if (mActivity.roomInvitations.isNotEmpty()) {
-                roomPositionMap[ROOM_FRAGMENTS.INVITE] = count++
-                if (result.favourites.isNotEmpty()) {
-                    roomPositionMap[ROOM_FRAGMENTS.FAVORITE] = count++
-                    roomPositionMap[ROOM_FRAGMENTS.NORMAL] = count++
-                    if (result.lowPriorities.isNotEmpty()) {
-                        roomPositionMap[ROOM_FRAGMENTS.LOW_PRIORITY] = count++
-                    } else {
-                        roomPositionMap[ROOM_FRAGMENTS.LOW_PRIORITY] = -1
-                    }
-                } else {
-                    roomPositionMap[ROOM_FRAGMENTS.FAVORITE] = -1
-                    roomPositionMap[ROOM_FRAGMENTS.NORMAL] = count++
-                    if (result.lowPriorities.isNotEmpty()) {
-                        roomPositionMap[ROOM_FRAGMENTS.LOW_PRIORITY] = count++
-                    } else {
-                        roomPositionMap[ROOM_FRAGMENTS.LOW_PRIORITY] = -1
-                    }
-                }
-            } else {
-                roomPositionMap[ROOM_FRAGMENTS.INVITE] = -1
-                if (result.favourites.isNotEmpty()) {
-                    roomPositionMap[ROOM_FRAGMENTS.FAVORITE] = count++
-                    roomPositionMap[ROOM_FRAGMENTS.NORMAL] = count++
-                    if (result.lowPriorities.isNotEmpty()) {
-                        roomPositionMap[ROOM_FRAGMENTS.LOW_PRIORITY] = count++
-                    } else {
-                        roomPositionMap[ROOM_FRAGMENTS.LOW_PRIORITY] = -1
-                    }
-                } else {
-                    roomPositionMap[ROOM_FRAGMENTS.FAVORITE] = -1
-                    roomPositionMap[ROOM_FRAGMENTS.NORMAL] = count++
-                    if (result.lowPriorities.isNotEmpty()) {
-                        roomPositionMap[ROOM_FRAGMENTS.LOW_PRIORITY] = count++
-                    } else {
-                        roomPositionMap[ROOM_FRAGMENTS.LOW_PRIORITY] = -1
-                    }
-                }
-            }
+            roomPositionMap[ROOM_FRAGMENTS.INVITE] = if (mActivity.roomInvitations.isEmpty()) -1 else count++
+            roomPositionMap[ROOM_FRAGMENTS.FAVORITE] = if (result.favourites.isEmpty()) -1 else count++
+            roomPositionMap[ROOM_FRAGMENTS.NORMAL] = count++
+            roomPositionMap[ROOM_FRAGMENTS.LOW_PRIORITY] = if (result.lowPriorities.isEmpty()) -1 else count++
         }
     }
     /*
@@ -196,8 +161,9 @@ class CommunicateHomeFragment : BaseCommunicateHomeFragment(), HomeRoomAdapter.O
         override fun getCount(): Int {
             var count = 0
             for ((_, value) in roomPositionMap) {
-                if (value != -1)
+                if (value != -1) {
                     count++
+                }
             }
             return count
         }

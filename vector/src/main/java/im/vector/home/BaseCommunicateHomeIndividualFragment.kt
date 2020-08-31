@@ -1,5 +1,6 @@
 package im.vector.home
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View.GONE
@@ -23,6 +24,8 @@ abstract class BaseCommunicateHomeIndividualFragment : BaseCommunicateHomeFragme
 
     val localRooms = ArrayList<Room>()
 
+    abstract fun getRoomFragmentType(): CommunicateHomeFragment.ROOM_FRAGMENTS
+
     override fun getLayoutResId(): Int {
         return R.layout.fragment_home_individual
     }
@@ -32,6 +35,16 @@ abstract class BaseCommunicateHomeIndividualFragment : BaseCommunicateHomeFragme
         sectionView.mHeader.visibility = GONE
         sectionView.mBadge.visibility = GONE
         sectionView.setHideIfEmpty(true)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        registerListener?.onRegister(getRoomFragmentType(), this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        registerListener?.onUnregister(getRoomFragmentType())
     }
 
     override fun onUpdate(rooms: List<Room>?, comparator: Comparator<Room>) {
