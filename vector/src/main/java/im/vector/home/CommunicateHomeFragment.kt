@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentStatePagerAdapter
 import im.vector.R
 import im.vector.adapters.HomeRoomAdapter
 import im.vector.ui.themes.ThemeUtils.setTabLayoutTheme
@@ -115,7 +116,7 @@ class CommunicateHomeFragment : BaseCommunicateHomeFragment(), HomeRoomAdapter.O
         dataUpdateListeners[fragmentType] = null
     }
 
-    inner class HomePagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+    inner class HomePagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
         private val pinMissedNotifications = PreferencesManager.pinMissedNotifications(activity)
         private val pinUnreadMessages = PreferencesManager.pinUnreadMessages(activity)
         private val notificationComparator = RoomUtils.getNotifCountRoomsComparator(mSession, pinMissedNotifications, pinUnreadMessages)
@@ -156,6 +157,10 @@ class CommunicateHomeFragment : BaseCommunicateHomeFragment(), HomeRoomAdapter.O
                 }
             }
             throw IllegalArgumentException("No fragment is found for that position.")
+        }
+
+        override fun getItemPosition(`object`: Any): Int {
+            return POSITION_NONE
         }
 
         override fun getCount(): Int {
