@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import im.vector.R
 import kotlinx.android.synthetic.main.fragment_home_individual.*
 
-class NormalRoomFragment : BaseCommunicateHomeIndividualFragment() {
+class NormalRoomFragment : BaseCommunicateHomeIndividualFragment(CommunicateHomeFragment.ROOM_FRAGMENTS.NORMAL) {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -15,13 +15,5 @@ class NormalRoomFragment : BaseCommunicateHomeIndividualFragment() {
         sectionView.setupRoomRecyclerView(LinearLayoutManager(activity, RecyclerView.VERTICAL, false),
                 R.layout.adapter_item_room_view, true, onSelectRoomListener, invitationListener, moreActionListener)
         sectionView.setRooms(localRooms)
-    }
-
-    override fun getRoomFragmentType(): CommunicateHomeFragment.ROOM_FRAGMENTS {
-        return CommunicateHomeFragment.ROOM_FRAGMENTS.NORMAL
-    }
-
-    override fun onBadgeUpdate(count: Int) {
-        communicateTabBadgeUpdateListener?.onBadgeUpdate(count, CommunicateHomeFragment.ROOM_FRAGMENTS.NORMAL)
     }
 }

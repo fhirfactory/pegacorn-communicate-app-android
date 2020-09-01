@@ -14,7 +14,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-abstract class BaseCommunicateHomeIndividualFragment : BaseCommunicateHomeFragment(), UpDateListener, BadgeUpdateListener {
+abstract class BaseCommunicateHomeIndividualFragment (private var fragmentType: CommunicateHomeFragment.ROOM_FRAGMENTS) : BaseCommunicateHomeFragment(), UpDateListener, BadgeUpdateListener {
     private val LOG_TAG = BaseCommunicateHomeIndividualFragment::class.java.simpleName
 
     var registerListener: RegisterListener? = null
@@ -25,10 +25,12 @@ abstract class BaseCommunicateHomeIndividualFragment : BaseCommunicateHomeFragme
 
     val localRooms = ArrayList<Room>()
 
-    abstract fun getRoomFragmentType(): CommunicateHomeFragment.ROOM_FRAGMENTS
-
     override fun getLayoutResId(): Int {
         return R.layout.fragment_home_individual
+    }
+
+    override fun onBadgeUpdate(count: Int) {
+        communicateTabBadgeUpdateListener?.onBadgeUpdate(count, fragmentType)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -41,12 +43,12 @@ abstract class BaseCommunicateHomeIndividualFragment : BaseCommunicateHomeFragme
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        registerListener?.onRegister(getRoomFragmentType(), this)
+        registerListener?.onRegister(fragmentType, this)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        registerListener?.onUnregister(getRoomFragmentType())
+        registerListener?.onUnregister(fragmentType)
     }
 
     override fun onUpdate(rooms: List<Room>?, comparator: Comparator<Room>) {
