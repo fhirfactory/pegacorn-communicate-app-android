@@ -18,4 +18,8 @@ class InviteRoomFragment : BaseCommunicateHomeIndividualFragment() {
     override fun getRoomFragmentType(): CommunicateHomeFragment.ROOM_FRAGMENTS {
         return CommunicateHomeFragment.ROOM_FRAGMENTS.INVITE
     }
+
+    override fun onBadgeUpdate(count: Int) {
+        communicateTabBadgeUpdateListener?.onBadgeUpdate(count, CommunicateHomeFragment.ROOM_FRAGMENTS.INVITE)
+    }
 }

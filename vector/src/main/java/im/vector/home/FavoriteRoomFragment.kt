@@ -17,6 +17,10 @@ class FavoriteRoomFragment : BaseCommunicateHomeIndividualFragment() {
         sectionView.setRooms(localRooms)
     }
 
+    override fun onBadgeUpdate(count: Int) {
+        communicateTabBadgeUpdateListener?.onBadgeUpdate(count, CommunicateHomeFragment.ROOM_FRAGMENTS.FAVORITE)
+    }
+
     override fun getRoomFragmentType(): CommunicateHomeFragment.ROOM_FRAGMENTS {
         return CommunicateHomeFragment.ROOM_FRAGMENTS.FAVORITE
     }

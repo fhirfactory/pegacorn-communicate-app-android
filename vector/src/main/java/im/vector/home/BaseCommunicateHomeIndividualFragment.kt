@@ -14,13 +14,14 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-abstract class BaseCommunicateHomeIndividualFragment : BaseCommunicateHomeFragment(), UpDateListener {
+abstract class BaseCommunicateHomeIndividualFragment : BaseCommunicateHomeFragment(), UpDateListener, BadgeUpdateListener {
     private val LOG_TAG = BaseCommunicateHomeIndividualFragment::class.java.simpleName
 
     var registerListener: RegisterListener? = null
     var onSelectRoomListener: HomeRoomAdapter.OnSelectRoomListener? = null
     var invitationListener: AbsAdapter.RoomInvitationListener? = null
     var moreActionListener: AbsAdapter.MoreRoomActionListener? = null
+    var communicateTabBadgeUpdateListener: CommunicateTabBadgeUpdateListener? = null
 
     val localRooms = ArrayList<Room>()
 
@@ -35,6 +36,7 @@ abstract class BaseCommunicateHomeIndividualFragment : BaseCommunicateHomeFragme
         sectionView.mHeader.visibility = GONE
         sectionView.mBadge.visibility = GONE
         sectionView.setHideIfEmpty(true)
+        sectionView.setBadgeUpdateListener(this)
     }
 
     override fun onAttach(context: Context) {
@@ -71,11 +73,12 @@ abstract class BaseCommunicateHomeIndividualFragment : BaseCommunicateHomeFragme
         sectionView.onFilter("", null)
     }
 
-    fun addListener(registerListener: RegisterListener?, selectionListener: HomeRoomAdapter.OnSelectRoomListener?, invitationListener: AbsAdapter.RoomInvitationListener?, moreActionListener: AbsAdapter.MoreRoomActionListener?) {
+    fun addListener(registerListener: RegisterListener?, selectionListener: HomeRoomAdapter.OnSelectRoomListener?, invitationListener: AbsAdapter.RoomInvitationListener?, moreActionListener: AbsAdapter.MoreRoomActionListener?, communicateTabBadgeUpdateListener: CommunicateTabBadgeUpdateListener) {
         this.registerListener = registerListener
         this.onSelectRoomListener = selectionListener
         this.invitationListener = invitationListener
         this.moreActionListener = moreActionListener
+        this.communicateTabBadgeUpdateListener = communicateTabBadgeUpdateListener
     }
 }
 

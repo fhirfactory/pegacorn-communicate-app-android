@@ -20,4 +20,8 @@ class NormalRoomFragment : BaseCommunicateHomeIndividualFragment() {
     override fun getRoomFragmentType(): CommunicateHomeFragment.ROOM_FRAGMENTS {
         return CommunicateHomeFragment.ROOM_FRAGMENTS.NORMAL
     }
+
+    override fun onBadgeUpdate(count: Int) {
+        communicateTabBadgeUpdateListener?.onBadgeUpdate(count, CommunicateHomeFragment.ROOM_FRAGMENTS.NORMAL)
+    }
 }

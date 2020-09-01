@@ -20,4 +20,8 @@ class LowPriorityRoomFragment : BaseCommunicateHomeIndividualFragment() {
     override fun getRoomFragmentType(): CommunicateHomeFragment.ROOM_FRAGMENTS {
         return CommunicateHomeFragment.ROOM_FRAGMENTS.LOW_PRIORITY
     }
+
+    override fun onBadgeUpdate(count: Int) {
+        communicateTabBadgeUpdateListener?.onBadgeUpdate(count, CommunicateHomeFragment.ROOM_FRAGMENTS.LOW_PRIORITY)
+    }
 }
