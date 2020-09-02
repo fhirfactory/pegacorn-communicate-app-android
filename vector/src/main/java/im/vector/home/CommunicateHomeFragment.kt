@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
 import androidx.fragment.app.FragmentStatePagerAdapter
 import im.vector.R
 import im.vector.adapters.HomeRoomAdapter
@@ -16,7 +15,7 @@ import kotlinx.android.synthetic.main.fragment_view_pager_tab.*
 import org.matrix.androidsdk.data.Room
 import org.matrix.androidsdk.data.RoomTag
 
-class CommunicateHomeFragment : BaseCommunicateHomeFragment(), HomeRoomAdapter.OnSelectRoomListener, RegisterListener {
+class CommunicateHomeFragment : BaseCommunicateHomeFragment(), HomeRoomAdapter.OnSelectRoomListener, RegisterListener, CommunicateTabBadgeUpdateListener {
     private val dataUpdateListeners = mutableMapOf<ROOM_FRAGMENTS, UpDateListener?>(ROOM_FRAGMENTS.INVITE to null, ROOM_FRAGMENTS.FAVORITE to null, ROOM_FRAGMENTS.NORMAL to null, ROOM_FRAGMENTS.LOW_PRIORITY to null)
     private var result: HomeRoomsViewModel.Result? = null
     private var roomPositionMap = mutableMapOf(ROOM_FRAGMENTS.INVITE to -1, ROOM_FRAGMENTS.FAVORITE to -1, ROOM_FRAGMENTS.NORMAL to -1, ROOM_FRAGMENTS.LOW_PRIORITY to -1)
@@ -62,6 +61,22 @@ class CommunicateHomeFragment : BaseCommunicateHomeFragment(), HomeRoomAdapter.O
             roomPositionMap[ROOM_FRAGMENTS.LOW_PRIORITY] = if (result.lowPriorities.isEmpty()) -1 else count++
         }
     }
+
+    override fun onBadgeUpdate(count: Int, roomFragmentType: ROOM_FRAGMENTS) {
+        roomPositionMap[roomFragmentType]?.let {position ->
+            if(position!=-1 && pager.adapter?.count ?: 0 > position)
+            tabLayout.getTabAt(position)?.apply {
+                if(count > 0) {
+                    orCreateBadge
+                    badge?.isVisible = true
+                    badge?.number = count
+                }else{
+                    removeBadge()
+                }
+            }
+        }
+    }
+
     /*
      * *********************************************************************************************
      * Data management
@@ -123,22 +138,22 @@ class CommunicateHomeFragment : BaseCommunicateHomeFragment(), HomeRoomAdapter.O
 
         private fun getFragmentForNormal() = NormalRoomFragment().also { fragment ->
             fragment.onUpdate(result?.directChats?.let { result?.otherRooms?.plus(it) }, notificationComparator)
-            fragment.addListener(this@CommunicateHomeFragment, this@CommunicateHomeFragment, null, this@CommunicateHomeFragment)
+            fragment.addListener(this@CommunicateHomeFragment, this@CommunicateHomeFragment, null, this@CommunicateHomeFragment, this@CommunicateHomeFragment)
         }
 
         private fun getFragmentForFavorite() = FavoriteRoomFragment().also { fragment ->
             fragment.onUpdate(result?.favourites, notificationComparator)
-            fragment.addListener(this@CommunicateHomeFragment, this@CommunicateHomeFragment, null, this@CommunicateHomeFragment)
+            fragment.addListener(this@CommunicateHomeFragment, this@CommunicateHomeFragment, null, this@CommunicateHomeFragment, this@CommunicateHomeFragment)
         }
 
         private fun getFragmentForLowPriority() = LowPriorityRoomFragment().also { fragment ->
             fragment.onUpdate(result?.lowPriorities, notificationComparator)
-            fragment.addListener(this@CommunicateHomeFragment, this@CommunicateHomeFragment, null, this@CommunicateHomeFragment)
+            fragment.addListener(this@CommunicateHomeFragment, this@CommunicateHomeFragment, null, this@CommunicateHomeFragment, this@CommunicateHomeFragment)
         }
 
         private fun getFragmentForInvitation() = InviteRoomFragment().also { fragment ->
             fragment.onUpdate(mActivity.roomInvitations, notificationComparator)
-            fragment.addListener(this@CommunicateHomeFragment, this@CommunicateHomeFragment, this@CommunicateHomeFragment, null)
+            fragment.addListener(this@CommunicateHomeFragment, this@CommunicateHomeFragment, this@CommunicateHomeFragment, null, this@CommunicateHomeFragment)
         }
 
         private fun getFragment(roomFragment: ROOM_FRAGMENTS): Fragment {

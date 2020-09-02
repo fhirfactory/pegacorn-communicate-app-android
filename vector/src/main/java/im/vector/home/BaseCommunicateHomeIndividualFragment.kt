@@ -14,20 +14,23 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-abstract class BaseCommunicateHomeIndividualFragment : BaseCommunicateHomeFragment(), UpDateListener {
+abstract class BaseCommunicateHomeIndividualFragment (private var fragmentType: CommunicateHomeFragment.ROOM_FRAGMENTS) : BaseCommunicateHomeFragment(), UpDateListener, BadgeUpdateListener {
     private val LOG_TAG = BaseCommunicateHomeIndividualFragment::class.java.simpleName
 
     var registerListener: RegisterListener? = null
     var onSelectRoomListener: HomeRoomAdapter.OnSelectRoomListener? = null
     var invitationListener: AbsAdapter.RoomInvitationListener? = null
     var moreActionListener: AbsAdapter.MoreRoomActionListener? = null
+    var communicateTabBadgeUpdateListener: CommunicateTabBadgeUpdateListener? = null
 
     val localRooms = ArrayList<Room>()
 
-    abstract fun getRoomFragmentType(): CommunicateHomeFragment.ROOM_FRAGMENTS
-
     override fun getLayoutResId(): Int {
         return R.layout.fragment_home_individual
+    }
+
+    override fun onBadgeUpdate(count: Int) {
+        communicateTabBadgeUpdateListener?.onBadgeUpdate(count, fragmentType)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -35,16 +38,17 @@ abstract class BaseCommunicateHomeIndividualFragment : BaseCommunicateHomeFragme
         sectionView.mHeader.visibility = GONE
         sectionView.mBadge.visibility = GONE
         sectionView.setHideIfEmpty(true)
+        sectionView.setBadgeUpdateListener(this)
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        registerListener?.onRegister(getRoomFragmentType(), this)
+        registerListener?.onRegister(fragmentType, this)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        registerListener?.onUnregister(getRoomFragmentType())
+        registerListener?.onUnregister(fragmentType)
     }
 
     override fun onUpdate(rooms: List<Room>?, comparator: Comparator<Room>) {
@@ -71,11 +75,12 @@ abstract class BaseCommunicateHomeIndividualFragment : BaseCommunicateHomeFragme
         sectionView.onFilter("", null)
     }
 
-    fun addListener(registerListener: RegisterListener?, selectionListener: HomeRoomAdapter.OnSelectRoomListener?, invitationListener: AbsAdapter.RoomInvitationListener?, moreActionListener: AbsAdapter.MoreRoomActionListener?) {
+    fun addListener(registerListener: RegisterListener?, selectionListener: HomeRoomAdapter.OnSelectRoomListener?, invitationListener: AbsAdapter.RoomInvitationListener?, moreActionListener: AbsAdapter.MoreRoomActionListener?, communicateTabBadgeUpdateListener: CommunicateTabBadgeUpdateListener) {
         this.registerListener = registerListener
         this.onSelectRoomListener = selectionListener
         this.invitationListener = invitationListener
         this.moreActionListener = moreActionListener
+        this.communicateTabBadgeUpdateListener = communicateTabBadgeUpdateListener
     }
 }
 
