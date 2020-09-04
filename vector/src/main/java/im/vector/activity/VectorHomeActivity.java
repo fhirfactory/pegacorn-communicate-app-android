@@ -125,6 +125,7 @@ import im.vector.features.logout.ProposeLogout;
 import im.vector.fragments.AbsHomeFragment;
 import im.vector.fragments.FavouritesFragment;
 import im.vector.fragments.GroupsFragment;
+import im.vector.fragments.PeopleFragment;
 import im.vector.fragments.RoomsFragment;
 import im.vector.fragments.signout.SignOutBottomSheetDialogFragment;
 import im.vector.fragments.signout.SignOutViewModel;
@@ -973,14 +974,10 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 Log.d(LOG_TAG, "onNavigationItemSelected PEOPLE");
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_PEOPLE);
                 if (fragment == null) {
-                    fragment = new DirectoryFragment();
+                    fragment = PeopleFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_PEOPLE;
-                mSearchView.setVisibility(View.GONE);
-                if (null != getSupportActionBar()) {
-                    getSupportActionBar().setTitle(getString(R.string.directory_title));
-                }
-                //mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_people));
+                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_people));
                 break;
             case R.id.bottom_action_rooms:
                 Log.d(LOG_TAG, "onNavigationItemSelected ROOMS");
