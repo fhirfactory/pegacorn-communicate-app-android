@@ -143,29 +143,9 @@ public class HomeSectionView extends RelativeLayout {
 
                     NotificationCounter notificationCounter = mAdapter.getBadgeCount();
                     if(badgeUpdateListener != null){
-                        badgeUpdateListener.onBadgeUpdate(notificationCounter.getNotifications());
+                        badgeUpdateListener.onBadgeUpdate(notificationCounter);
                     }
-                    if (notificationCounter.getNotifications() == 0) {
-                        mBadge.setVisibility(GONE);
-                        mHeader.setVisibility(GONE);
-                    } else {
-                        mHeader.setVisibility(VISIBLE);
-                        mBadge.setVisibility(VISIBLE);
-                        mBadge.setText(RoomUtils.formatUnreadMessagesCounter(notificationCounter.getNotifications()));
-
-                        int bingUnreadColor;
-
-                        // Badge background
-                        if (notificationCounter.getHighlights() > 0) {
-                            // Red
-                            bingUnreadColor = ContextCompat.getColor(getContext(), R.color.vector_fuchsia_color);
-                        } else {
-                            // Normal
-                            bingUnreadColor = ThemeUtils.INSTANCE.getColor(getContext(), R.attr.vctr_notice_secondary);
-                        }
-
-                        ViewUtilKt.setRoundBackground(mBadge, bingUnreadColor);
-                    }
+                    mHeader.setVisibility(VISIBLE);
 
                     if (mAdapter.hasNoResult()) {
                         mRecyclerView.setVisibility(GONE);
@@ -193,6 +173,15 @@ public class HomeSectionView extends RelativeLayout {
      * @param title new title
      */
     public void setTitle(@StringRes final int title) {
+        mHeader.setText(title);
+    }
+
+    /**
+     * Set the title of the section
+     *
+     * @param title new title
+     */
+    public void setTitle(final String title) {
         mHeader.setText(title);
     }
 
