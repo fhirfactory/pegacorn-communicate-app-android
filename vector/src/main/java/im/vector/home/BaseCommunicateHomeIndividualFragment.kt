@@ -34,10 +34,10 @@ abstract class BaseCommunicateHomeIndividualFragment(private var fragmentType: C
         communicateTabBadgeUpdateListener?.onBadgeUpdate(notificationCounter.unreadRoomCount, fragmentType)
         when(fragmentType){
             CommunicateHomeFragment.ROOM_FRAGMENTS.INVITE -> {
-                sectionView.setTitle(resources.getString(R.string.total_number_of_invite, notificationCounter.totalRoomCount))
+                sectionView.setTitle(R.string.total_number_of_invite, notificationCounter.totalRoomCount)
             }
             CommunicateHomeFragment.ROOM_FRAGMENTS.FAVORITE, CommunicateHomeFragment.ROOM_FRAGMENTS.NORMAL, CommunicateHomeFragment.ROOM_FRAGMENTS.LOW_PRIORITY -> {
-                sectionView.setTitle(resources.getString(R.string.total_number_of_room, notificationCounter.totalRoomCount))
+                sectionView.setTitle(R.string.total_number_of_room, notificationCounter.totalRoomCount)
             }
         }
     }

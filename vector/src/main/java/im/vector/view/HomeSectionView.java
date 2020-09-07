@@ -19,6 +19,9 @@ package im.vector.view;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -180,9 +183,14 @@ public class HomeSectionView extends RelativeLayout {
      * Set the title of the section
      *
      * @param title new title
+     * @param count number of item in section
      */
-    public void setTitle(final String title) {
-        mHeader.setText(title);
+    public void setTitle(@StringRes final int title, int count) {
+        String titleText = getResources().getString(title);
+        SpannableStringBuilder str = new SpannableStringBuilder(titleText);
+        str.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, titleText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        str.append(" ").append(String.valueOf(count));
+        mHeader.setText(str);
     }
 
     /**
