@@ -6,7 +6,7 @@ import im.vector.activity.SimpleFragmentActivity
 import im.vector.home.InviteRoomFragment
 
 class InviteActivity : SimpleFragmentActivity() {
-    override fun getTitleRes() = R.string.invite
+    override fun getTitleRes() = R.string.invite_title
 
     private lateinit var viewModel: InviteActivityViewModel
 
