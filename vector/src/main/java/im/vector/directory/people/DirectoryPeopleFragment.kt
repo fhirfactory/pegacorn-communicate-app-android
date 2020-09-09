@@ -1,14 +1,11 @@
 package im.vector.directory.people
 
 import android.os.Bundle
-import android.view.*
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.R
 import im.vector.directory.DirectoryFragment
 import im.vector.directory.people.detail.PeopleDetailActivity
 import im.vector.directory.people.model.DirectoryPeople
-import im.vector.home.BaseCommunicateHomeFragment
 import kotlinx.android.synthetic.main.fragment_directory_people.*
 
 class DirectoryPeopleFragment : DirectoryFragment(), PeopleClickListener {
@@ -42,11 +39,6 @@ class DirectoryPeopleFragment : DirectoryFragment(), PeopleClickListener {
         testPeopleData.add(DirectoryPeople("5", "James", "Test Analyst", null, "Emergency Department", "Hospital Department"))
 
         peopleDirectoryAdapter.setData(testPeopleData)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.only_search, menu)
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onPeopleClick(directoryPeople: DirectoryPeople) {
