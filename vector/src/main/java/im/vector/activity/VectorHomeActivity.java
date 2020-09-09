@@ -959,8 +959,11 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = new CommunicateHomeFragment();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_HOME;
-                mSearchView.setVisibility(View.VISIBLE);
-                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_home));
+                mSearchView.setVisibility(View.GONE);
+                //mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_home));
+                if (null != getSupportActionBar()) {
+                    getSupportActionBar().setTitle(getString(R.string.riot_app_name));
+                }
                 break;
             case R.id.bottom_action_favourites:
                 Log.d(LOG_TAG, "onNavigationItemSelected ROLE");
