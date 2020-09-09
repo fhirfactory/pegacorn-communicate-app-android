@@ -9,11 +9,4 @@
         android:icon="@drawable/ic_material_search_white"
         android:title="@string/advanced_search_menu"
         app:showAsAction="collapseActionView" />
-
-    <item
-        android:id="@+id/action_search"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
-        android:icon="@drawable/ic_material_search_white"
-        android:title="@string/search"
-        app:showAsAction="always" />
 </menu>
