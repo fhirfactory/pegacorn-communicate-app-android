@@ -111,6 +111,10 @@
         <item name="boxBackgroundColor">@android:color/background_light</item>
     </style>
 
+    <style name="HomeTabText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <!-- Styles for button -->
     <!--
         Widget.AppCompat.Button.Colored, which sets the button color to colorAccent,

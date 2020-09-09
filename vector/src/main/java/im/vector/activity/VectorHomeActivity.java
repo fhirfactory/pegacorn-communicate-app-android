@@ -132,6 +132,7 @@ import im.vector.fragments.RoomsFragment;
 import im.vector.fragments.signout.SignOutBottomSheetDialogFragment;
 import im.vector.fragments.signout.SignOutViewModel;
 import im.vector.home.CommunicateHomeFragment;
+import im.vector.invite.InviteActivity;
 import im.vector.push.PushManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamServiceX;
@@ -797,6 +798,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 return true;
             case R.id.ic_action_historical:
                 startActivity(new Intent(this, HistoricalRoomsActivity.class));
+                return true;
+            case R.id.ic_action_invite:
+                startActivity(new Intent(this, InviteActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -1771,6 +1775,62 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             showWaitingView();
             room.leave(createForgetLeaveCallback(roomId, onSuccessCallback));
         }
+    }
+
+    /**
+     * Trigger the room join / invitation accept.
+     *
+     * @param roomId            the room id
+     * @param onSuccessCallback the success asynchronous callback
+     */
+    public void onAcceptInvitation(final String roomId, final ApiCallback<Void> onSuccessCallback) {
+        showWaitingView();
+        mSession.joinRoom(roomId, new ApiCallback<String>() {
+            @Override
+            public void onSuccess(String roomId) {
+                hideWaitingView();
+
+                Map<String, Object> params = new HashMap<>();
+
+                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+
+                // clear the activity stack to home activity
+                //Intent intent = new Intent(VectorRoomActivity.this, VectorHomeActivity.class);
+                //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                //intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, (HashMap) params);
+                //startActivity(intent);
+
+                CommonActivityUtils.goToRoomPage(VectorHomeActivity.this, mSession, params);
+            }
+
+            private void onError(String errorMessage) {
+                Log.d(LOG_TAG, "re join failed " + errorMessage);
+                //Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                hideWaitingView();
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                onError(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                    hideWaitingView();
+                    getConsentNotGivenHelper().displayDialog(e);
+                } else {
+                    onError(e.getLocalizedMessage());
+                }
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                onError(e.getLocalizedMessage());
+            }
+        });
     }
 
     /*

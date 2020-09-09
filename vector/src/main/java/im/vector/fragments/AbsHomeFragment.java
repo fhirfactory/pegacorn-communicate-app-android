@@ -175,6 +175,12 @@ public abstract class AbsHomeFragment extends VectorBaseFragment implements
     }
 
     @Override
+    public void onAcceptInvitation(MXSession session, String roomId) {
+        Log.i(LOG_TAG, "onAcceptInvitation " + roomId);
+        mActivity.onAcceptInvitation(roomId, null);
+    }
+
+    @Override
     public void onMoreActionClick(View itemView, Room room) {
         // User clicked on the "more actions" area
         final Set<String> tags = room.getAccountData().getKeys();
