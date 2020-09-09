@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/login_main_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -44,15 +45,16 @@
                     android:visibility="gone"
                     tools:visibility="visible">
 
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/login_user_name_til"
                         android:layout_width="match_parent"
+                        style="@style/LoginEditTextStyle"
                         android:layout_height="wrap_content"
                         android:textColorHint="?attr/vctr_default_text_hint_color">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/login_user_name"
-                            style="@style/LoginEditTextStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/auth_user_id_placeholder"
@@ -78,11 +80,11 @@
 
                         <!-- Add marginTop for better alignment with TextInputLayout. Using baseline does not work -->
                         <EditText
+                            android:layout_gravity="center_vertical"
                             android:id="@+id/login_phone_number_country"
-                            style="@style/LoginEditTextStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="9dp"
+                            android:layout_marginTop="10dp"
                             android:layout_marginEnd="6dp"
                             android:layout_marginRight="6dp"
                             android:clickable="false"
@@ -91,7 +93,7 @@
                             android:drawableTint="?vctr_settings_icon_tint_color"
                             android:focusable="false"
                             android:maxLines="1"
-                            android:visibility="gone"
+                            android:visibility="visible"
                             tools:ignore="UnusedAttribute"
                             tools:text="FR"
                             tools:visibility="visible" />
@@ -100,11 +102,11 @@
                             android:id="@+id/login_phone_number_value_til"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            style="@style/LoginEditTextStyle"
                             android:textColorHint="?attr/vctr_default_text_hint_color">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/login_phone_number_value"
-                                style="@style/LoginEditTextStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/auth_phone_number_placeholder"
@@ -121,11 +123,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
+                        style="@style/LoginEditTextStyle"
                         android:textColorHint="?attr/vctr_default_text_hint_color">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/login_password"
-                            style="@style/LoginEditTextStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:ems="10"
@@ -153,11 +155,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
+                        style="@style/LoginEditTextStyle"
                         android:textColorHint="?attr/vctr_default_text_hint_color">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/forget_email_address"
-                            style="@style/LoginEditTextStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/auth_email_placeholder"
@@ -170,11 +172,11 @@
                         android:id="@+id/forget_new_password_til"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/LoginEditTextStyle"
                         android:textColorHint="?attr/vctr_default_text_hint_color">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/forget_new_password"
-                            style="@style/LoginEditTextStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:ems="10"
@@ -188,11 +190,11 @@
                         android:id="@+id/forget_confirm_new_password_til"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/LoginEditTextStyle"
                         android:textColorHint="?attr/vctr_default_text_hint_color">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/forget_confirm_new_password"
-                            style="@style/LoginEditTextStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:ems="10"
@@ -216,11 +218,11 @@
                         android:id="@+id/creation_your_name_til"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+
                         android:textColorHint="?attr/vctr_default_text_hint_color">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/creation_your_name"
-                            style="@style/LoginEditTextStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/auth_user_name_placeholder"
@@ -233,11 +235,11 @@
                         android:id="@+id/creation_password1_til"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/LoginEditTextStyle"
                         android:textColorHint="?attr/vctr_default_text_hint_color">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/creation_password1"
-                            style="@style/LoginEditTextStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:ems="10"
@@ -251,11 +253,11 @@
                         android:id="@+id/creation_password2_til"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/LoginEditTextStyle"
                         android:textColorHint="?attr/vctr_default_text_hint_color">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/creation_password2"
-                            style="@style/LoginEditTextStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:ems="10"
@@ -286,11 +288,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
+                        style="@style/LoginEditTextStyle"
                         android:textColorHint="?attr/vctr_default_text_hint_color">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/registration_email"
-                            style="@style/LoginEditTextStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/auth_email_placeholder"
@@ -308,7 +310,7 @@
                         <!-- Add marginTop for better alignment with TextInputLayout. Using baseline does not work -->
                         <EditText
                             android:id="@+id/registration_phone_number_country"
-                            style="@style/LoginEditTextStyle"
+
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="9dp"
@@ -329,11 +331,11 @@
                             android:id="@+id/registration_phone_number_value_til"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            style="@style/LoginEditTextStyle"
                             android:textColorHint="?attr/vctr_default_text_hint_color">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/registration_phone_number_value"
-                                style="@style/LoginEditTextStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/auth_phone_number_placeholder"
@@ -383,11 +385,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
+                            style="@style/LoginEditTextStyle"
                             android:textColorHint="?attr/vctr_default_text_hint_color">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/login_matrix_server_url"
-                                style="@style/LoginEditTextStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/hs_url"
@@ -401,6 +403,7 @@
                             android:id="@+id/login_identity_url_til"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            style="@style/LoginEditTextStyle"
                             android:layout_marginTop="10dp"
                             android:textColorHint="?attr/vctr_default_text_hint_color"
                             android:visibility="gone"
@@ -408,7 +411,6 @@
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/login_identity_url"
-                                style="@style/LoginEditTextStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/identity_url"

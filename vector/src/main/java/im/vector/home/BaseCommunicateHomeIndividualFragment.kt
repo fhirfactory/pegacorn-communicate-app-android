@@ -4,25 +4,24 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View.GONE
-import androidx.core.content.ContextCompat
 import im.vector.R
 import im.vector.adapters.AbsAdapter
 import im.vector.adapters.HomeRoomAdapter
 import im.vector.fragments.AbsHomeFragment
-import im.vector.ui.themes.ThemeUtils
 import kotlinx.android.synthetic.main.fragment_home_individual.*
 import org.matrix.androidsdk.data.Room
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-abstract class BaseCommunicateHomeIndividualFragment : BaseCommunicateHomeFragment(), UpDateListener {
+abstract class BaseCommunicateHomeIndividualFragment (private var fragmentType: CommunicateHomeFragment.ROOM_FRAGMENTS) : BaseCommunicateHomeFragment(), UpDateListener, BadgeUpdateListener {
     private val LOG_TAG = BaseCommunicateHomeIndividualFragment::class.java.simpleName
 
     var registerListener: RegisterListener? = null
     var onSelectRoomListener: HomeRoomAdapter.OnSelectRoomListener? = null
     var invitationListener: AbsAdapter.RoomInvitationListener? = null
     var moreActionListener: AbsAdapter.MoreRoomActionListener? = null
+    var communicateTabBadgeUpdateListener: CommunicateTabBadgeUpdateListener? = null
 
     val localRooms = ArrayList<Room>()
 
@@ -30,11 +29,26 @@ abstract class BaseCommunicateHomeIndividualFragment : BaseCommunicateHomeFragme
         return R.layout.fragment_home_individual
     }
 
+    override fun onBadgeUpdate(count: Int) {
+        communicateTabBadgeUpdateListener?.onBadgeUpdate(count, fragmentType)
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         sectionView.mHeader.visibility = GONE
         sectionView.mBadge.visibility = GONE
         sectionView.setHideIfEmpty(true)
+        sectionView.setBadgeUpdateListener(this)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        registerListener?.onRegister(fragmentType, this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        registerListener?.onUnregister(fragmentType)
     }
 
     override fun onUpdate(rooms: List<Room>?, comparator: Comparator<Room>) {
@@ -61,21 +75,12 @@ abstract class BaseCommunicateHomeIndividualFragment : BaseCommunicateHomeFragme
         sectionView.onFilter("", null)
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        registerListener?.onRegister(this)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        registerListener?.onUnregister(this)
-    }
-
-    fun addListener(registerListener: RegisterListener?, selectionListener: HomeRoomAdapter.OnSelectRoomListener?, invitationListener: AbsAdapter.RoomInvitationListener?, moreActionListener: AbsAdapter.MoreRoomActionListener?){
+    fun addListener(registerListener: RegisterListener?, selectionListener: HomeRoomAdapter.OnSelectRoomListener?, invitationListener: AbsAdapter.RoomInvitationListener?, moreActionListener: AbsAdapter.MoreRoomActionListener?, communicateTabBadgeUpdateListener: CommunicateTabBadgeUpdateListener) {
         this.registerListener = registerListener
         this.onSelectRoomListener = selectionListener
         this.invitationListener = invitationListener
         this.moreActionListener = moreActionListener
+        this.communicateTabBadgeUpdateListener = communicateTabBadgeUpdateListener
     }
 }
 
@@ -86,6 +91,6 @@ interface UpDateListener {
 }
 
 interface RegisterListener {
-    fun onRegister(listener: UpDateListener)
-    fun onUnregister(listener: UpDateListener)
+    fun onRegister(fragmentType: CommunicateHomeFragment.ROOM_FRAGMENTS, listener: UpDateListener)
+    fun onUnregister(fragmentType: CommunicateHomeFragment.ROOM_FRAGMENTS)
 }

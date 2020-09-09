@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import im.vector.R
 import kotlinx.android.synthetic.main.fragment_home_individual.*
 
-class NormalRoomFragment : BaseCommunicateHomeIndividualFragment() {
+class NormalRoomFragment : BaseCommunicateHomeIndividualFragment(CommunicateHomeFragment.ROOM_FRAGMENTS.NORMAL) {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

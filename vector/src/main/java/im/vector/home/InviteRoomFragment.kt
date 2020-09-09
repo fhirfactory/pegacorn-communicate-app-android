@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import im.vector.R
 import kotlinx.android.synthetic.main.fragment_home_individual.*
 
-class InviteRoomFragment : BaseCommunicateHomeIndividualFragment() {
+class InviteRoomFragment : BaseCommunicateHomeIndividualFragment(CommunicateHomeFragment.ROOM_FRAGMENTS.INVITE) {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
