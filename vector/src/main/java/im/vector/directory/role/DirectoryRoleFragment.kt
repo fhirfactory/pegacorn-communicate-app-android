@@ -64,7 +64,7 @@ class DirectoryRoleFragment : DirectoryFragment(), RoleClickListener {
         constraintExpanded.setVisibility(applyButton.id, VISIBLE)
         constraintExpanded.setVisibility(cancelButton.id, VISIBLE)
 
-        categoryAdapter = DropDownAdapter(requireContext(), R.layout.drop_down_item)
+/*        categoryAdapter = DropDownAdapter(requireContext(), R.layout.drop_down_item)
         categoryEditText.threshold = 1
         categoryEditText.setAdapter(categoryAdapter)
 
@@ -78,7 +78,7 @@ class DirectoryRoleFragment : DirectoryFragment(), RoleClickListener {
 
         locationAdapter = DropDownAdapter(requireContext(), R.layout.drop_down_item)
         locationEditText.threshold = 1
-        locationEditText.setAdapter(locationAdapter)
+        locationEditText.setAdapter(locationAdapter)*/
 
         roleAdapter = RolesDirectoryAdapter(requireContext(), this)
         (roleRecyclerview.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
@@ -86,6 +86,7 @@ class DirectoryRoleFragment : DirectoryFragment(), RoleClickListener {
         roleRecyclerview.adapter = roleAdapter
         roleRecyclerview.setHasFixedSize(true)
 
+/*
         //test data
         val testDropDownData = mutableListOf<DropDownItem>()
         for (i in 1..5) {
@@ -95,6 +96,7 @@ class DirectoryRoleFragment : DirectoryFragment(), RoleClickListener {
         organisationUnitAdapter.addData(testDropDownData)
         specialityAdapter.addData(testDropDownData)
         locationAdapter.addData(testDropDownData)
+*/
 
         val testRoleData = mutableListOf<DummyRole>()
         testRoleData.add(DummyRole("1", "ED Acute SRMO", "Emergency Department  Acute Senior Resident Medical Officer Medical Officer", null, "ED {Emergency Department}", arrayListOf(Role("1", "Senior Resident Medical Officer", "Doctor")),
