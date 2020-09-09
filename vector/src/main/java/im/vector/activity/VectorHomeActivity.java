@@ -2264,10 +2264,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         }
 
         Set<Integer> menuIndexes = new HashSet<>(mBadgeViewByIndex.keySet());
-
-        // the badges are not anymore displayed on the home tab
-        //menuIndexes.remove(R.id.bottom_action_home);
-
+        
         for (Integer id : menuIndexes) {
             int highlightCount = 0;
             int roomCount = 0;
@@ -2297,8 +2294,11 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 // Display number of groups invitation in the badge of groups
                 roomCount = mSession.getGroupsManager().getInvitedGroups().size();
             } else if (id == R.id.bottom_action_home) {
-                filterFavoriteRoomSet(filteredRoomIdsSet);
-                filterNormalRoomSet(filteredRoomIdsSet, directChatInvitations, roomSummaryByRoom);
+                for (Room room : roomSummaryByRoom.keySet()) {
+                    if (!room.isDirectChatInvitation()) {
+                        filteredRoomIdsSet.add(room.getRoomId());
+                    }
+                }
             }
 
             // compute the badge value and its displays
