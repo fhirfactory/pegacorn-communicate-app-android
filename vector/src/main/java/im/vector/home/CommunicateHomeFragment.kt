@@ -16,9 +16,9 @@ import org.matrix.androidsdk.data.Room
 import org.matrix.androidsdk.data.RoomTag
 
 class CommunicateHomeFragment : BaseCommunicateHomeFragment(), HomeRoomAdapter.OnSelectRoomListener, RegisterListener, CommunicateTabBadgeUpdateListener {
-    private val dataUpdateListeners = mutableMapOf<ROOM_FRAGMENTS, UpDateListener?>(ROOM_FRAGMENTS.INVITE to null, ROOM_FRAGMENTS.FAVORITE to null, ROOM_FRAGMENTS.NORMAL to null, ROOM_FRAGMENTS.LOW_PRIORITY to null)
+    private val dataUpdateListeners = mutableMapOf<ROOM_FRAGMENTS, UpDateListener?>(/*ROOM_FRAGMENTS.INVITE to null,*/ ROOM_FRAGMENTS.FAVORITE to null, ROOM_FRAGMENTS.NORMAL to null, ROOM_FRAGMENTS.LOW_PRIORITY to null)
     private var result: HomeRoomsViewModel.Result? = null
-    private var roomPositionMap = mutableMapOf(ROOM_FRAGMENTS.INVITE to -1, ROOM_FRAGMENTS.FAVORITE to -1, ROOM_FRAGMENTS.NORMAL to -1, ROOM_FRAGMENTS.LOW_PRIORITY to -1)
+    private var roomPositionMap = mutableMapOf(/*ROOM_FRAGMENTS.INVITE to -1,*/ ROOM_FRAGMENTS.FAVORITE to -1, ROOM_FRAGMENTS.NORMAL to -1, ROOM_FRAGMENTS.LOW_PRIORITY to -1)
 
     override fun getLayoutResId(): Int {
         return R.layout.fragment_view_pager_tab
@@ -55,7 +55,7 @@ class CommunicateHomeFragment : BaseCommunicateHomeFragment(), HomeRoomAdapter.O
     private fun calculateRoomPosition() {
         var count = 0
         result?.let { result ->
-            roomPositionMap[ROOM_FRAGMENTS.INVITE] = if (mActivity.roomInvitations.isEmpty()) -1 else count++
+            //roomPositionMap[ROOM_FRAGMENTS.INVITE] = if (mActivity.roomInvitations.isEmpty()) -1 else count++
             roomPositionMap[ROOM_FRAGMENTS.FAVORITE] = if (result.favourites.isEmpty()) -1 else count++
             roomPositionMap[ROOM_FRAGMENTS.NORMAL] = count++
             roomPositionMap[ROOM_FRAGMENTS.LOW_PRIORITY] = if (result.lowPriorities.isEmpty()) -1 else count++
@@ -94,9 +94,9 @@ class CommunicateHomeFragment : BaseCommunicateHomeFragment(), HomeRoomAdapter.O
         pager.adapter?.notifyDataSetChanged()
         dataUpdateListeners.forEach { listenerMap ->
             when (listenerMap.key) {
-                ROOM_FRAGMENTS.INVITE -> {
+                /*ROOM_FRAGMENTS.INVITE -> {
                     listenerMap.value?.onUpdate(mActivity.roomInvitations, notificationComparator)
-                }
+                }*/
                 ROOM_FRAGMENTS.FAVORITE -> {
                     listenerMap.value?.onUpdate(result?.favourites, notificationComparator)
                 }
@@ -151,14 +151,14 @@ class CommunicateHomeFragment : BaseCommunicateHomeFragment(), HomeRoomAdapter.O
             fragment.addListener(this@CommunicateHomeFragment, this@CommunicateHomeFragment, null, this@CommunicateHomeFragment, this@CommunicateHomeFragment)
         }
 
-        private fun getFragmentForInvitation() = InviteRoomFragment().also { fragment ->
+        /*private fun getFragmentForInvitation() = InviteRoomFragment().also { fragment ->
             fragment.onUpdate(mActivity.roomInvitations, notificationComparator)
             fragment.addListener(this@CommunicateHomeFragment, this@CommunicateHomeFragment, this@CommunicateHomeFragment, null, this@CommunicateHomeFragment)
-        }
+        }*/
 
         private fun getFragment(roomFragment: ROOM_FRAGMENTS): Fragment {
             return when (roomFragment) {
-                ROOM_FRAGMENTS.INVITE -> getFragmentForInvitation()
+                //ROOM_FRAGMENTS.INVITE -> getFragmentForInvitation()
                 ROOM_FRAGMENTS.FAVORITE -> getFragmentForFavorite()
                 ROOM_FRAGMENTS.NORMAL -> getFragmentForNormal()
                 ROOM_FRAGMENTS.LOW_PRIORITY -> getFragmentForLowPriority()
@@ -199,9 +199,9 @@ class CommunicateHomeFragment : BaseCommunicateHomeFragment(), HomeRoomAdapter.O
     }
 
     enum class ROOM_FRAGMENTS(val title: String) {
-        INVITE("Invite"),
-        FAVORITE("Favourite"),
-        NORMAL("Normal"),
+        //INVITE("Invite"),
+        FAVORITE("Favourites"),
+        NORMAL("Chats"),
         LOW_PRIORITY("Low Priority")
     }
 }

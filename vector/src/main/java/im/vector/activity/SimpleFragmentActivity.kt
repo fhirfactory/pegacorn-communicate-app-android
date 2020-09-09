@@ -27,7 +27,7 @@ import im.vector.activity.util.WaitingViewData
 /**
  * Simple activity with a toolbar, a waiting overlay, and a fragment container and a mxSession.
  */
-abstract class SimpleFragmentActivity : MXCActionBarActivity() {
+abstract class SimpleFragmentActivity : MXCActionBarActivity() , SimpleFragmentActivityListener{
 
     override fun getLayoutRes() = R.layout.activity
 
@@ -50,7 +50,7 @@ abstract class SimpleFragmentActivity : MXCActionBarActivity() {
      * Displays a progress indicator with a message to the user.
      * Blocks user interactions.
      */
-    fun updateWaitingView(data: WaitingViewData?) {
+    override fun updateWaitingView(data: WaitingViewData?) {
         data?.let {
             waitingStatusText.text = data.message
 

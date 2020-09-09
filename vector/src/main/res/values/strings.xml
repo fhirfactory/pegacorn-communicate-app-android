@@ -1597,6 +1597,8 @@ Why choose Riot.im?
         <item>Low Priority</item>
     </string-array>
 
+    <string name="rejecting">Declining the invitation</string>
+    <string name="accepting">Accepting the invitation</string>
     <string name="invite_menu_title">Invites</string>
     <string name="invite_title">Invites</string>
     <string name="total_notification">Total Notifications</string>
