@@ -43,6 +43,7 @@ import im.vector.adapters.AbsAdapter;
 import im.vector.adapters.HomeRoomAdapter;
 import im.vector.adapters.model.NotificationCounter;
 import im.vector.fragments.AbsHomeFragment;
+import im.vector.home.BadgeUpdateListener;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.RoomUtils;
 import im.vector.util.ViewUtilKt;
@@ -68,6 +69,7 @@ public class HomeSectionView extends RelativeLayout {
     private String mNoItemPlaceholder;
     private String mNoResultPlaceholder;
     private String mCurrentFilter;
+    private BadgeUpdateListener badgeUpdateListener;
 
     public HomeSectionView(Context context) {
         super(context);
@@ -120,6 +122,10 @@ public class HomeSectionView extends RelativeLayout {
         });
     }
 
+    public void setBadgeUpdateListener(BadgeUpdateListener badgeUpdateListener) {
+        this.badgeUpdateListener = badgeUpdateListener;
+    }
+
     /**
      * Update the views to reflect the new number of items
      */
@@ -136,7 +142,9 @@ public class HomeSectionView extends RelativeLayout {
                     setVisibility(VISIBLE);
 
                     NotificationCounter notificationCounter = mAdapter.getBadgeCount();
-
+                    if(badgeUpdateListener != null){
+                        badgeUpdateListener.onBadgeUpdate(notificationCounter.getNotifications());
+                    }
                     if (notificationCounter.getNotifications() == 0) {
                         mBadge.setVisibility(GONE);
                         mHeader.setVisibility(GONE);
