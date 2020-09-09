@@ -7,6 +7,7 @@ import android.view.View.GONE
 import im.vector.R
 import im.vector.adapters.AbsAdapter
 import im.vector.adapters.HomeRoomAdapter
+import im.vector.adapters.model.NotificationCounter
 import im.vector.fragments.AbsHomeFragment
 import kotlinx.android.synthetic.main.fragment_home_individual.*
 import org.matrix.androidsdk.data.Room
@@ -14,7 +15,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-abstract class BaseCommunicateHomeIndividualFragment (private var fragmentType: CommunicateHomeFragment.ROOM_FRAGMENTS) : BaseCommunicateHomeFragment(), UpDateListener, BadgeUpdateListener {
+abstract class BaseCommunicateHomeIndividualFragment(private var fragmentType: CommunicateHomeFragment.ROOM_FRAGMENTS) : BaseCommunicateHomeFragment(), UpDateListener, BadgeUpdateListener {
     private val LOG_TAG = BaseCommunicateHomeIndividualFragment::class.java.simpleName
 
     var registerListener: RegisterListener? = null
@@ -29,8 +30,16 @@ abstract class BaseCommunicateHomeIndividualFragment (private var fragmentType: 
         return R.layout.fragment_home_individual
     }
 
-    override fun onBadgeUpdate(count: Int) {
-        communicateTabBadgeUpdateListener?.onBadgeUpdate(count, fragmentType)
+    override fun onBadgeUpdate(notificationCounter: NotificationCounter) {
+        communicateTabBadgeUpdateListener?.onBadgeUpdate(notificationCounter.unreadRoomCount, fragmentType)
+        when(fragmentType){
+            /*CommunicateHomeFragment.ROOM_FRAGMENTS.INVITE -> {
+                sectionView.setTitle(R.string.total_number_of_invite, notificationCounter.totalRoomCount)
+            }*/
+            CommunicateHomeFragment.ROOM_FRAGMENTS.FAVORITE, CommunicateHomeFragment.ROOM_FRAGMENTS.NORMAL, CommunicateHomeFragment.ROOM_FRAGMENTS.LOW_PRIORITY -> {
+                sectionView.setTitle(R.string.total_number_of_room, notificationCounter.totalRoomCount)
+            }
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

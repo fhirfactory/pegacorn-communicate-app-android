@@ -8,11 +8,13 @@
     <TextView
         android:id="@+id/section_header"
         style="@style/ListHeader"
+        android:textAllCaps="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:text="Header" />
 
     <TextView
+        android:visibility="invisible"
         android:id="@+id/section_badge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

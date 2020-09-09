@@ -2266,7 +2266,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         Set<Integer> menuIndexes = new HashSet<>(mBadgeViewByIndex.keySet());
 
         // the badges are not anymore displayed on the home tab
-        menuIndexes.remove(R.id.bottom_action_home);
+        //menuIndexes.remove(R.id.bottom_action_home);
 
         for (Integer id : menuIndexes) {
             int highlightCount = 0;
@@ -2276,11 +2276,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             Set<String> filteredRoomIdsSet = new HashSet<>();
 
             if (id == R.id.bottom_action_favourites) {
-                List<Room> favRooms = mSession.roomsWithTag(RoomTag.ROOM_TAG_FAVOURITE);
-
-                for (Room room : favRooms) {
-                    filteredRoomIdsSet.add(room.getRoomId());
-                }
+                filterFavoriteRoomSet(filteredRoomIdsSet);
             } else if (id == R.id.bottom_action_people) {
                 filteredRoomIdsSet.addAll(mSession.getDataHandler().getDirectChatRoomIdsList());
                 // Add direct chat invitations
@@ -2296,21 +2292,13 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     filteredRoomIdsSet.remove(room.getRoomId());
                 }
             } else if (id == R.id.bottom_action_rooms) {
-                Set<String> directChatRoomIds = new HashSet<>(mSession.getDataHandler().getDirectChatRoomIdsList());
-                Set<String> lowPriorityRoomIds = new HashSet<>(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY));
-
-                directChatRoomIds.addAll(directChatInvitations);
-
-                for (Room room : roomSummaryByRoom.keySet()) {
-                    if (!room.isConferenceUserRoom() && // not a VOIP conference room
-                            !directChatRoomIds.contains(room.getRoomId()) && // not a direct chat
-                            !lowPriorityRoomIds.contains(room.getRoomId())) {
-                        filteredRoomIdsSet.add(room.getRoomId());
-                    }
-                }
+                filterNormalRoomSet(filteredRoomIdsSet, directChatInvitations, roomSummaryByRoom);
             } else if (id == R.id.bottom_action_groups) {
                 // Display number of groups invitation in the badge of groups
                 roomCount = mSession.getGroupsManager().getInvitedGroups().size();
+            } else if (id == R.id.bottom_action_home) {
+                filterFavoriteRoomSet(filteredRoomIdsSet);
+                filterNormalRoomSet(filteredRoomIdsSet, directChatInvitations, roomSummaryByRoom);
             }
 
             // compute the badge value and its displays
@@ -2343,6 +2331,29 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 mBadgeViewByIndex.get(id).updateText((roomCount > 0) ? "\u2022" : "", status);
             } else {
                 mBadgeViewByIndex.get(id).updateCounter(roomCount, status);
+            }
+        }
+    }
+
+    private void filterFavoriteRoomSet(Set<String> filteredRoomIdsSet){
+        List<Room> favRooms = mSession.roomsWithTag(RoomTag.ROOM_TAG_FAVOURITE);
+
+        for (Room room : favRooms) {
+            filteredRoomIdsSet.add(room.getRoomId());
+        }
+    }
+
+    private void filterNormalRoomSet(Set<String> filteredRoomIdsSet, Set<String> directChatInvitations, Map<Room, RoomSummary> roomSummaryByRoom){
+        Set<String> directChatRoomIds = new HashSet<>(mSession.getDataHandler().getDirectChatRoomIdsList());
+        Set<String> lowPriorityRoomIds = new HashSet<>(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY));
+
+        directChatRoomIds.addAll(directChatInvitations);
+
+        for (Room room : roomSummaryByRoom.keySet()) {
+            if (!room.isConferenceUserRoom() && // not a VOIP conference room
+                    !directChatRoomIds.contains(room.getRoomId()) && // not a direct chat
+                    !lowPriorityRoomIds.contains(room.getRoomId())) {
+                filteredRoomIdsSet.add(room.getRoomId());
             }
         }
     }

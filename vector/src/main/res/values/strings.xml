@@ -1605,6 +1605,10 @@ Why choose Riot.im?
     <string name="invite_menu_title">Invites</string>
     <string name="invite_title">Invites</string>
     <string name="total_notification">Total Notifications</string>
+
+    <string name="total_number_of_room"> Room(s): </string>
+    <string name="total_number_of_invite">Invite(s): </string>
+
     <string name="search_role">Search for a role</string>
     <string name="category">Category</string>
     <string name="organisation_unit">Organisation Unit</string>
