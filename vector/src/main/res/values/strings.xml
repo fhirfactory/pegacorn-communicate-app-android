@@ -396,9 +396,9 @@
 
     <!-- Actions -->
     <string name="remove">Remove</string>
-    <string name="join">Join</string>
+    <string name="join">Accept</string>
     <string name="preview">Preview</string>
-    <string name="reject">Reject</string>
+    <string name="reject">Decline</string>
 
     <!-- Room -->
     <string name="list_members">List members</string>

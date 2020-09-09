@@ -1791,6 +1791,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
                 //intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, (HashMap) params);
                 //startActivity(intent);
+
+                CommonActivityUtils.goToRoomPage(VectorHomeActivity.this, mSession, params);
             }
 
             private void onError(String errorMessage) {
