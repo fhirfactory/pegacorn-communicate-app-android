@@ -19,6 +19,9 @@ package im.vector.view;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -143,29 +146,9 @@ public class HomeSectionView extends RelativeLayout {
 
                     NotificationCounter notificationCounter = mAdapter.getBadgeCount();
                     if(badgeUpdateListener != null){
-                        badgeUpdateListener.onBadgeUpdate(notificationCounter.getNotifications());
+                        badgeUpdateListener.onBadgeUpdate(notificationCounter);
                     }
-                    if (notificationCounter.getNotifications() == 0) {
-                        mBadge.setVisibility(GONE);
-                        mHeader.setVisibility(GONE);
-                    } else {
-                        mHeader.setVisibility(VISIBLE);
-                        mBadge.setVisibility(VISIBLE);
-                        mBadge.setText(RoomUtils.formatUnreadMessagesCounter(notificationCounter.getNotifications()));
-
-                        int bingUnreadColor;
-
-                        // Badge background
-                        if (notificationCounter.getHighlights() > 0) {
-                            // Red
-                            bingUnreadColor = ContextCompat.getColor(getContext(), R.color.vector_fuchsia_color);
-                        } else {
-                            // Normal
-                            bingUnreadColor = ThemeUtils.INSTANCE.getColor(getContext(), R.attr.vctr_notice_secondary);
-                        }
-
-                        ViewUtilKt.setRoundBackground(mBadge, bingUnreadColor);
-                    }
+                    mHeader.setVisibility(VISIBLE);
 
                     if (mAdapter.hasNoResult()) {
                         mRecyclerView.setVisibility(GONE);
@@ -194,6 +177,20 @@ public class HomeSectionView extends RelativeLayout {
      */
     public void setTitle(@StringRes final int title) {
         mHeader.setText(title);
+    }
+
+    /**
+     * Set the title of the section
+     *
+     * @param title new title
+     * @param count number of item in section
+     */
+    public void setTitle(@StringRes final int title, int count) {
+        String titleText = getResources().getString(title);
+        SpannableStringBuilder str = new SpannableStringBuilder(titleText);
+        str.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, titleText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        str.append(" ").append(String.valueOf(count));
+        mHeader.setText(str);
     }
 
     /**
