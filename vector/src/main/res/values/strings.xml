@@ -1620,7 +1620,7 @@ Why choose Riot.im?
     <string name="roles_title">Roles</string>
     <string name="people_title">People</string>
     <string name="title_activity_role_detail">Role Detail</string>
-    <string name="search_people">Search for people</string>
+    <string name="search_people">Search people</string>
     <string name="title_activity_people_detail">Person Detail</string>
     <string name="short_text">Short text</string>
     <string name="long_text">very long text very long text very long text very long text very long text very long text very long text</string>
