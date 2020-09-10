@@ -1,7 +1,9 @@
 package im.vector.home
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -32,6 +34,13 @@ class CommunicateHomeFragment : BaseCommunicateHomeFragment(), HomeRoomAdapter.O
         activity?.let { activity ->
             setTabLayoutTheme(activity, tabLayout)
         }
+        activity?.invalidateOptionsMenu()
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val searchMenuItem = menu.findItem(R.id.action_search)
+        val searchView = searchMenuItem.actionView as SearchView
+        searchView.queryHint = getString(R.string.search_chats)
     }
 
     override fun onFilter(pattern: String?, listener: OnFilterListener?) {
@@ -63,7 +72,7 @@ class CommunicateHomeFragment : BaseCommunicateHomeFragment(), HomeRoomAdapter.O
     }
 
     override fun onBadgeUpdate(count: Int, roomFragmentType: ROOM_FRAGMENTS) {
-        roomPositionMap[roomFragmentType]?.let {position ->
+        roomPositionMap[roomFragmentType]?.let { position ->
             if(position!=-1 && pager.adapter?.count ?: 0 > position)
             tabLayout.getTabAt(position)?.apply {
                 if(count > 0) {
