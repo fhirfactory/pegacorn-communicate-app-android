@@ -1604,6 +1604,7 @@ Why choose Riot.im?
     <string name="accepting">Accepting the invitation</string>
     <string name="invite_menu_title">Invites</string>
     <string name="invite_title">Invites</string>
+    <string name="search_chats">Search Chats</string>
     <string name="total_notification">Total Notifications</string>
 
     <string name="total_number_of_room"> Rooms: </string>
