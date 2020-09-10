@@ -33,9 +33,6 @@ abstract class BaseCommunicateHomeIndividualFragment(private var fragmentType: C
     override fun onBadgeUpdate(notificationCounter: NotificationCounter) {
         communicateTabBadgeUpdateListener?.onBadgeUpdate(notificationCounter.unreadRoomCount, fragmentType)
         when(fragmentType){
-            CommunicateHomeFragment.ROOM_FRAGMENTS.INVITE -> {
-                sectionView.setTitle(R.string.total_number_of_invite, notificationCounter.totalRoomCount)
-            }
             CommunicateHomeFragment.ROOM_FRAGMENTS.FAVORITE, CommunicateHomeFragment.ROOM_FRAGMENTS.NORMAL, CommunicateHomeFragment.ROOM_FRAGMENTS.LOW_PRIORITY -> {
                 sectionView.setTitle(R.string.total_number_of_room, notificationCounter.totalRoomCount)
             }
