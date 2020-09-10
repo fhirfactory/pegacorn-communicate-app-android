@@ -9,7 +9,7 @@
         app:actionLayout="@layout/view_search"
         android:icon="@drawable/ic_material_search_white"
         android:title="@string/search"
-        app:showAsAction="collapseActionView|ifRoom" />
+        app:showAsAction="always|collapseActionView" />
 
     <item
         android:id="@+id/ic_action_invite"

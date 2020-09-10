@@ -34,14 +34,14 @@ class CommunicateHomeFragment : BaseCommunicateHomeFragment(), HomeRoomAdapter.O
         activity?.let { activity ->
             setTabLayoutTheme(activity, tabLayout)
         }
-        activity?.invalidateOptionsMenu()
+        //activity?.invalidateOptionsMenu()
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        val searchMenuItem = menu.findItem(R.id.action_search)
-        val searchView = searchMenuItem.actionView as SearchView
-        searchView.queryHint = getString(R.string.search_chats)
-    }
+//    override fun onPrepareOptionsMenu(menu: Menu) {
+//        val searchMenuItem = menu.findItem(R.id.action_search)
+//        val searchView = searchMenuItem.actionView as SearchView
+//        searchView.queryHint = getString(R.string.search_chats)
+//    }
 
     override fun onFilter(pattern: String?, listener: OnFilterListener?) {
         dataUpdateListeners.forEach { listenerMap ->
