@@ -119,7 +119,6 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.RolesInNavigationBarAdapter;
 import im.vector.adapters.model.UserRole;
-import im.vector.directory.DirectoryFragment;
 import im.vector.extensions.ViewExtensionsKt;
 import im.vector.features.logout.ProposeLogout;
 import im.vector.fragments.AbsHomeFragment;
@@ -256,7 +255,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     @BindView(R.id.home_recents_sync_in_progress)
     ProgressBar mSyncInProgressView;
 
-    @BindView(R.id.home_search_view)
+    //@BindView(R.id.home_search_view)
     SearchView mSearchView;
 
     @BindView(R.id.floating_action_menu_touch_guard)
@@ -776,6 +775,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         if (CommonActivityUtils.shouldRestartApp(this)) {
             return false;
         }
+        MenuItem searchMenuItem = menu.findItem(R.id.action_search);
+        mSearchView = (SearchView)searchMenuItem.getActionView();
+        setUpSearchView();
         return true;
     }
 
@@ -956,7 +958,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = new CommunicateHomeFragment();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_HOME;
-                mSearchView.setVisibility(View.GONE);
+                //mSearchView.setVisibility(View.VISIBLE);
                 //mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_home));
                 if (null != getSupportActionBar()) {
                     getSupportActionBar().setTitle(getString(R.string.riot_app_name));
@@ -969,8 +971,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = FavouritesFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_FAVOURITES;
-                mSearchView.setVisibility(View.VISIBLE);
-                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_favorites));
+                //mSearchView.setVisibility(View.VISIBLE);
+                //mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_favorites));
                 break;
             case R.id.bottom_action_people:
                 Log.d(LOG_TAG, "onNavigationItemSelected PEOPLE");
@@ -979,7 +981,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = PeopleFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_PEOPLE;
-                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_people));
+                //mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_people));
                 break;
             case R.id.bottom_action_rooms:
                 Log.d(LOG_TAG, "onNavigationItemSelected ROOMS");
@@ -988,8 +990,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = RoomsFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_ROOMS;
-                mSearchView.setVisibility(View.VISIBLE);
-                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_rooms));
+                //mSearchView.setVisibility(View.VISIBLE);
+                //mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_rooms));
                 break;
             case R.id.bottom_action_groups:
                 Log.d(LOG_TAG, "onNavigationItemSelected GROUPS");
@@ -998,8 +1000,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = GroupsFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_GROUPS;
-                mSearchView.setVisibility(View.VISIBLE);
-                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_groups));
+                //mSearchView.setVisibility(View.VISIBLE);
+                //mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_groups));
                 break;
         }
 
@@ -1097,9 +1099,25 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         }
 
         // Set color of toolbar search view
-        EditText edit = mSearchView.findViewById(com.google.android.material.R.id.search_src_text);
-        edit.setTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_toolbar_primary_text_color));
-        edit.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_primary_hint_text_color));
+        //EditText edit = mSearchView.findViewById(com.google.android.material.R.id.search_src_text);
+        //edit.setTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_toolbar_primary_text_color));
+        //edit.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_primary_hint_text_color));
+    }
+
+
+    private void setUpSearchView(){
+        // init the search view
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        // Remove unwanted left margin
+        ViewExtensionsKt.withoutLeftMargin(mSearchView);
+
+        mToolbar.setContentInsetStartWithNavigation(0);
+
+        mSearchView.setMaxWidth(Integer.MAX_VALUE);
+        mSearchView.setSubmitButtonEnabled(false);
+        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        //mSearchView.setIconifiedByDefault(false);
+        mSearchView.setOnQueryTextListener(this);
     }
 
     /**
@@ -1126,19 +1144,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         });
 
         addUnreadBadges();
-
-        // init the search view
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        // Remove unwanted left margin
-        ViewExtensionsKt.withoutLeftMargin(mSearchView);
-
-        mToolbar.setContentInsetStartWithNavigation(0);
-
-        mSearchView.setMaxWidth(Integer.MAX_VALUE);
-        mSearchView.setSubmitButtonEnabled(false);
-        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        mSearchView.setIconifiedByDefault(false);
-        mSearchView.setOnQueryTextListener(this);
 
         // Set here background of labels, cause we cannot set attr color in drawable on API < 21
         Class menuClass = FloatingActionsMenu.class;
@@ -1192,8 +1197,10 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
      * Reset the filter
      */
     private void resetFilter() {
-        mSearchView.setQuery("", false);
-        mSearchView.clearFocus();
+        if (mSearchView != null) {
+            mSearchView.setQuery("", false);
+            mSearchView.clearFocus();
+        }
         hideKeyboard();
     }
 
