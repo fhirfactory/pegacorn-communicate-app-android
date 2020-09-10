@@ -47,7 +47,15 @@ class InviteRoomFragment : BaseCommunicateHomeFragment(), AbsAdapter.RoomInvitat
 
         sectionView.setupRoomRecyclerView(LinearLayoutManager(activity, RecyclerView.VERTICAL, false),
                 R.layout.adapter_item_room_invite, false, null, this, null)
-        sectionView.setRooms(viewModel.getRoomInvitations())
+        val rooms = viewModel.getRoomInvitations()
+        sectionView.setRooms(rooms)
+        rooms?.size?.let {
+            if (rooms.isEmpty()){
+                sectionView.setTitle(R.string.no_invites)
+            }else {
+                sectionView.setTitle(R.string.total_number_of_invite, rooms.size)
+            }
+        }
     }
 
     override fun onRejectInvitation(session: MXSession?, roomId: String?){
