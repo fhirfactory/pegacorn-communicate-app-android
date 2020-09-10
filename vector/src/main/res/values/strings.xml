@@ -1610,7 +1610,7 @@ Why choose Riot.im?
     <string name="total_number_of_room"> Rooms: </string>
     <string name="total_number_of_invite">Invites: </string>
     <string name="no_invites">You do not have any invitations. </string>
-    <string name="search_role">Search for a role</string>
+    <string name="search_role">Search roles</string>
     <string name="category">Category</string>
     <string name="organisation_unit">Organisation Unit</string>
     <string name="speciality">Speciality</string>

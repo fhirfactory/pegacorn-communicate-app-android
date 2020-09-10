@@ -1,6 +1,8 @@
 package im.vector.directory.people
 
 import android.os.Bundle
+import android.view.Menu
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.R
 import im.vector.directory.DirectoryFragment
@@ -39,6 +41,13 @@ class DirectoryPeopleFragment : DirectoryFragment(), PeopleClickListener {
         testPeopleData.add(DirectoryPeople("5", "James", "Test Analyst", null, "Emergency Department", "Hospital Department"))
 
         peopleDirectoryAdapter.setData(testPeopleData)
+        activity?.invalidateOptionsMenu()
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val searchMenuItem = menu.findItem(R.id.action_search)
+        val searchView = searchMenuItem.actionView as SearchView
+        searchView.queryHint = getString(R.string.search_people)
     }
 
     override fun onPeopleClick(directoryPeople: DirectoryPeople) {
