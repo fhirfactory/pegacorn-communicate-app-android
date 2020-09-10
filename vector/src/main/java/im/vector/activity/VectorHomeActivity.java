@@ -776,7 +776,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         if (CommonActivityUtils.shouldRestartApp(this)) {
             return false;
         }
-
         return true;
     }
 
