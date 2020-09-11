@@ -2225,7 +2225,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 roomCount = mSession.getGroupsManager().getInvitedGroups().size();
             } else if (id == R.id.bottom_action_home) {
                 for (Room room : roomSummaryByRoom.keySet()) {
-                    if (!room.isDirectChatInvitation()) {
+                    if (!room.isInvited()) {
                         filteredRoomIdsSet.add(room.getRoomId());
                     }
                 }
