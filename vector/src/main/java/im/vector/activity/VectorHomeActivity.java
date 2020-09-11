@@ -119,7 +119,6 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.RolesInNavigationBarAdapter;
 import im.vector.adapters.model.UserRole;
-import im.vector.directory.DirectoryFragment;
 import im.vector.extensions.ViewExtensionsKt;
 import im.vector.features.logout.ProposeLogout;
 import im.vector.fragments.AbsHomeFragment;
@@ -262,6 +261,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     @BindView(R.id.floating_action_menu_touch_guard)
     View touchGuard;
+
+    TextView inviteItemCountTextView;
 
     // a shared files intent is waiting the store init
     private Intent mSharedFilesIntent = null;
@@ -772,13 +773,50 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        final MenuItem menuItem = menu.findItem(R.id.ic_action_invite);
+
+        View actionView = menuItem.getActionView();
+        inviteItemCountTextView = actionView.findViewById(R.id.invite_badge);
+
+        actionView.setOnClickListener(v -> onOptionsItemSelected(menuItem));
+
+        return true;
+    }
+
+    @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // the application is in a weird state
         if (CommonActivityUtils.shouldRestartApp(this)) {
             return false;
         }
 
+        int inviteCount = getRoomInvitations().size();
+        setupBadge(inviteCount);
+        if(inviteCount > 0){
+            menu.findItem(R.id.ic_action_invite).setVisible(true);
+            setupBadge(getRoomInvitations().size());
+        }else{
+            menu.findItem(R.id.ic_action_invite).setVisible(false);
+        }
         return true;
+    }
+
+
+    private void setupBadge(int inviteItemCount) {
+        if (inviteItemCountTextView != null) {
+            if (inviteItemCount == 0) {
+                if (inviteItemCountTextView.getVisibility() != View.GONE) {
+                    inviteItemCountTextView.setVisibility(View.GONE);
+                }
+            } else {
+                inviteItemCountTextView.setText(String.valueOf(Math.min(inviteItemCount, 99)));
+                if (inviteItemCountTextView.getVisibility() != View.VISIBLE) {
+                    inviteItemCountTextView.setVisibility(View.VISIBLE);
+                }
+            }
+        }
     }
 
     @Override
@@ -2422,6 +2460,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         if ((null != fragment) && (fragment instanceof AbsHomeFragment)) {
             ((AbsHomeFragment) fragment).onRoomResultUpdated(result);
         }
+        supportInvalidateOptionsMenu();
     }
 
     /**
