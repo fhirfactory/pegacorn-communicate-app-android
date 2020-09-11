@@ -186,7 +186,7 @@ abstract class VectorAppCompatActivity : BaseMvRxActivity() {
      * MENU MANAGEMENT
      * ========================================================================================== */
 
-    final override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    open override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val menuRes = getMenuRes()
 
         if (menuRes != -1) {

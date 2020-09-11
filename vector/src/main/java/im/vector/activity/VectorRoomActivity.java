@@ -3213,7 +3213,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 // hide the action bar header view and reset the arrow image (arrow reset to down)
                 mActionBarCustomArrowImageView.setImageResource(R.drawable.ic_arrow_drop_down_white);
                 mRoomHeaderView.setVisibility(View.GONE);
-                toolbar.setBackgroundColor(ThemeUtils.INSTANCE.getColor(this, R.attr.colorPrimary));
+                toolbar.setBackgroundResource(R.drawable.act_gradient);
             }
         }
     }
