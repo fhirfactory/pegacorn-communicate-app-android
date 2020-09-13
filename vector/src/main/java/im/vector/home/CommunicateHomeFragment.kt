@@ -2,6 +2,8 @@ package im.vector.home
 
 import android.os.Bundle
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -91,6 +93,11 @@ class CommunicateHomeFragment : BaseCommunicateHomeFragment(), HomeRoomAdapter.O
         val pinUnreadMessages = PreferencesManager.pinUnreadMessages(activity)
         val notificationComparator = RoomUtils.getNotifCountRoomsComparator(mSession, pinMissedNotifications, pinUnreadMessages)
         calculateRoomPosition()
+        if ((roomPositionMap[ROOM_FRAGMENTS.FAVORITE] ?: -1) + (roomPositionMap[ROOM_FRAGMENTS.LOW_PRIORITY] ?: -1) == -2){
+            tabLayout.visibility = GONE
+        }else{
+            tabLayout.visibility = VISIBLE
+        }
         pager.adapter?.notifyDataSetChanged()
         dataUpdateListeners.forEach { listenerMap ->
             when (listenerMap.key) {
