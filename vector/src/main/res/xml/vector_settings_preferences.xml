@@ -171,7 +171,6 @@
         android:title="@string/settings_home_display">
 
         <im.vector.preference.VectorSwitchPreference
-            android:defaultValue="true"
             app:isPreferenceVisible="@bool/settings_pin_missed_notification_visible"
             android:key="SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY"
             android:title="@string/settings_pin_missed_notifications" />

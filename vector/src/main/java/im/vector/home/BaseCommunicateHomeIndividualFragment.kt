@@ -63,7 +63,7 @@ abstract class BaseCommunicateHomeIndividualFragment(private var fragmentType: C
         try {
             Collections.sort(rooms, comparator)
         } catch (e: Exception) {
-            org.matrix.androidsdk.core.Log.e(LOG_TAG, "## sortAndDisplay() failed " + e.message, e)
+            Log.e(LOG_TAG, "## sortAndDisplay() failed " + e.message, e)
         }
         rooms?.let {
             localRooms.addAll(rooms)
