@@ -49,7 +49,7 @@ class InviteRoomViewModel : ViewModel() {
         }
 
         // the invitations are sorted from the oldest to the more recent one
-        val invitationComparator = RoomUtils.getRoomsDateComparator(session, true)
+        val invitationComparator = RoomUtils.getRoomsDateComparator(session, false)
         Collections.sort(directChatInvitations, invitationComparator)
         Collections.sort(roomInvitations, invitationComparator)
         val roomInvites: MutableList<Room?> = ArrayList()
