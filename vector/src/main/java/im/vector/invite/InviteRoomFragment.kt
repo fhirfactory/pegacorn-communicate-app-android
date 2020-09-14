@@ -2,7 +2,6 @@ package im.vector.invite
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,10 +27,12 @@ class InviteRoomFragment : BaseCommunicateHomeFragment(), AbsAdapter.RoomInvitat
     private var simpleFragmentActivityListener: SimpleFragmentActivityListener? = null
     override fun getLayoutResId(): Int = R.layout.fragment_home_individual
 
+    //Filter is not part of this view anymore
     override fun onFilter(pattern: String?, listener: OnFilterListener?) {
         TODO("Not yet implemented")
     }
 
+    //Filter is not part of this view anymore
     override fun onResetFilter() {
         TODO("Not yet implemented")
     }
@@ -50,15 +51,15 @@ class InviteRoomFragment : BaseCommunicateHomeFragment(), AbsAdapter.RoomInvitat
         val rooms = viewModel.getRoomInvitations()
         sectionView.setRooms(rooms)
         rooms?.size?.let {
-            if (rooms.isEmpty()){
+            if (rooms.isEmpty()) {
                 sectionView.setTitle(R.string.no_invites)
-            }else {
+            } else {
                 sectionView.setTitle(R.string.total_number_of_invite, rooms.size)
             }
         }
     }
 
-    override fun onRejectInvitation(session: MXSession?, roomId: String?){
+    override fun onRejectInvitation(session: MXSession?, roomId: String?) {
         roomId?.let { roomId ->
             val room = mSession?.dataHandler?.getRoom(roomId)
 
@@ -69,7 +70,7 @@ class InviteRoomFragment : BaseCommunicateHomeFragment(), AbsAdapter.RoomInvitat
         }
     }
 
-    override fun onAcceptInvitation(session: MXSession?, roomId: String?){
+    override fun onAcceptInvitation(session: MXSession?, roomId: String?) {
         simpleFragmentActivityListener?.updateWaitingView(WaitingViewData(getString(R.string.accepting)))
         mSession.joinRoom(roomId, object : ApiCallback<String?> {
             override fun onSuccess(roomId: String?) {

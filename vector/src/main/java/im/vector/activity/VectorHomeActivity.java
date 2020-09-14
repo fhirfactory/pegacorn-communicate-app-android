@@ -262,7 +262,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     @BindView(R.id.floating_action_menu_touch_guard)
     View touchGuard;
 
-    TextView inviteItemCountTextView;
+    private TextView inviteItemCountTextView;
 
     // a shared files intent is waiting the store init
     private Intent mSharedFilesIntent = null;
@@ -1822,13 +1822,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
                 params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
                 params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-
-                // clear the activity stack to home activity
-                //Intent intent = new Intent(VectorRoomActivity.this, VectorHomeActivity.class);
-                //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                //intent.putExtra(VectorHomeActivity.EXTRA_JUMP_TO_ROOM_PARAMS, (HashMap) params);
-                //startActivity(intent);
 
                 CommonActivityUtils.goToRoomPage(VectorHomeActivity.this, mSession, params);
             }
