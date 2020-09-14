@@ -88,6 +88,7 @@
         android:orientation="horizontal">
 
         <Button
+            style="@style/VectorButtonStyle"
             android:id="@+id/group_invite_reject_button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -99,6 +100,7 @@
             android:textSize="14sp" />
 
         <Button
+            style="@style/VectorButtonStyle"
             android:id="@+id/group_invite_join_button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
