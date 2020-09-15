@@ -94,6 +94,8 @@
     <bool name="settings_pin_missed_notification_default_value">false</bool>
     <bool name="settings_vibrate_mention_user_visible">false</bool>
     <bool name="settings_vibrate_mention_user_default_value">false</bool>
+    <bool name="settings_email_clickable">false</bool>
+    <bool name="settings_phone_clickable">false</bool>
 
     <bool name="show_custom_url_login">false</bool>
 
