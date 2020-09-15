@@ -192,10 +192,11 @@ public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
      */
     public NotificationCounter getBadgeCount() {
         NotificationCounter notificationCounter = new NotificationCounter();
+        notificationCounter.addRooms(mFilteredRooms.size());
 
         for (Room room : mFilteredRooms) {
             notificationCounter.addHighlights(room.getHighlightCount());
-
+            notificationCounter.addUnreadRooms(room.getNotificationCount() > 0 ? 1 : 0);
             // sanity checks : reported by GA
             if (null != room.getDataHandler()
                     && (null != room.getDataHandler().getBingRulesManager())

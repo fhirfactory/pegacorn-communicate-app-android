@@ -17,12 +17,22 @@
 package im.vector.adapters.model
 
 data class NotificationCounter(var highlights: Int = 0,
-                               var notifications: Int = 0) {
+                               var notifications: Int = 0,
+                               var unreadRoomCount: Int = 0,
+                               var totalRoomCount: Int = 0) {
     fun addHighlights(quantity: Int) {
         highlights += quantity
     }
 
     fun addNotifications(quantity: Int) {
         notifications += quantity
+    }
+
+    fun addUnreadRooms(quantity: Int) {
+        unreadRoomCount += quantity
+    }
+
+    fun addRooms(quantity: Int) {
+        totalRoomCount += quantity
     }
 }
