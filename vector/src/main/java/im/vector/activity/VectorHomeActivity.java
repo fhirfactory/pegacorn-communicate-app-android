@@ -750,7 +750,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         if (CommonActivityUtils.shouldRestartApp(this)) {
             return false;
         }
-        if(!getResources().getBoolean(R.bool.enable_riot_search_view)) {
+        //no need to setup the searchview again if its already done
+        if(!getResources().getBoolean(R.bool.enable_riot_search_view) && mSearchView!=null) {
             MenuItem searchMenuItem = menu.findItem(R.id.action_search);
             mSearchView = (SearchView) searchMenuItem.getActionView();
             setUpSearchView();
