@@ -793,10 +793,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         }
 
         int inviteCount = getRoomInvitations().size();
-        setupBadge(inviteCount);
         if(inviteCount > 0){
             menu.findItem(R.id.ic_action_invite).setVisible(true);
-            setupBadge(getRoomInvitations().size());
+            setupBadge(inviteCount);
         }else{
             menu.findItem(R.id.ic_action_invite).setVisible(false);
         }
@@ -811,7 +810,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     inviteItemCountTextView.setVisibility(View.GONE);
                 }
             } else {
-                inviteItemCountTextView.setText(String.valueOf(Math.min(inviteItemCount, 99)));
+                inviteItemCountTextView.setText(String.valueOf(inviteItemCount));
                 if (inviteItemCountTextView.getVisibility() != View.VISIBLE) {
                     inviteItemCountTextView.setVisibility(View.VISIBLE);
                 }
