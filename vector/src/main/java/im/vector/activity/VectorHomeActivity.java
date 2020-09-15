@@ -972,13 +972,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = new CommunicateHomeFragment();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_HOME;
-                if(getResources().getBoolean(R.bool.enable_riot_search_view)) {
-                    mSearchView.setVisibility(View.VISIBLE);
-                    mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_home));
-                }
-                if (null != getSupportActionBar()) {
-                    getSupportActionBar().setTitle(getString(R.string.riot_app_name));
-                }
+                setQueryHint(R.string.home_filter_placeholder_home, R.string.search_chats);
                 break;
             case R.id.bottom_action_favourites:
                 Log.d(LOG_TAG, "onNavigationItemSelected FAVOURITES");
@@ -987,10 +981,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = FavouritesFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_FAVOURITES;
-                if(getResources().getBoolean(R.bool.enable_riot_search_view)) {
-                    mSearchView.setVisibility(View.VISIBLE);
-                    mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_favorites));
-                }
+                setQueryHint(R.string.home_filter_placeholder_favorites, R.string.search_chats);
                 break;
             case R.id.bottom_action_people:
                 Log.d(LOG_TAG, "onNavigationItemSelected PEOPLE");
@@ -999,9 +990,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = PeopleFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_PEOPLE;
-                if(getResources().getBoolean(R.bool.enable_riot_search_view)) {
-                    mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_people));
-                }
+                setQueryHint(R.string.home_filter_placeholder_people, R.string.search_chats);
                 break;
             case R.id.bottom_action_rooms:
                 Log.d(LOG_TAG, "onNavigationItemSelected ROOMS");
@@ -1010,10 +999,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = RoomsFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_ROOMS;
-                if(getResources().getBoolean(R.bool.enable_riot_search_view)) {
-                    mSearchView.setVisibility(View.VISIBLE);
-                    mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_rooms));
-                }
+                setQueryHint(R.string.home_filter_placeholder_rooms, R.string.search_chats);
                 break;
             case R.id.bottom_action_groups:
                 Log.d(LOG_TAG, "onNavigationItemSelected GROUPS");
@@ -1022,10 +1008,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = GroupsFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_GROUPS;
-                if(getResources().getBoolean(R.bool.enable_riot_search_view)) {
-                    mSearchView.setVisibility(View.VISIBLE);
-                    mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_groups));
-                }
+                setQueryHint(R.string.home_filter_placeholder_groups, R.string.search_chats);
                 break;
         }
 
@@ -1051,6 +1034,12 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## updateSelectedFragment() failed : " + e.getMessage(), e);
             }
+        }
+    }
+
+    private void setQueryHint(int riotHintResource, int actHintResource){
+        if (mSearchView != null){
+            mSearchView.setQueryHint(getString(getResources().getBoolean(R.bool.enable_riot_search_view) ? riotHintResource : actHintResource));
         }
     }
 
@@ -1149,23 +1138,24 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             mSearchView.setOnQueryTextListener(this);
             switch (mCurrentMenuId) {
                 case R.id.bottom_action_home:
-                    mSearchView.setQueryHint(getString(R.string.search_chats));
+                    setQueryHint(R.string.home_filter_placeholder_home, R.string.search_chats);
                     break;
                 case R.id.bottom_action_favourites:
-                    mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_favorites));
+                    setQueryHint(R.string.home_filter_placeholder_favorites, R.string.search_chats);
                     break;
                 case R.id.bottom_action_people:
-                    mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_people));
+                    setQueryHint(R.string.home_filter_placeholder_people, R.string.search_chats);
                     break;
                 case R.id.bottom_action_rooms:
-                    mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_rooms));
+                    setQueryHint(R.string.home_filter_placeholder_rooms, R.string.search_chats);
                     break;
                 case R.id.bottom_action_groups:
-                    mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_groups));
+                    setQueryHint(R.string.home_filter_placeholder_groups, R.string.search_chats);
                     break;
             }
         }
     }
+
 
     /**
      * Init views
