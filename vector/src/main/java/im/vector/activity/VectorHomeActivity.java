@@ -793,12 +793,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         }
 
         int inviteCount = getRoomInvitations().size();
-        if(inviteCount > 0){
-            menu.findItem(R.id.ic_action_invite).setVisible(true);
-            setupBadge(inviteCount);
-        }else{
-            menu.findItem(R.id.ic_action_invite).setVisible(false);
-        }
+        setupBadge(inviteCount);
+        menu.findItem(R.id.ic_action_invite).setVisible(inviteCount > 0);
         return true;
     }
 
