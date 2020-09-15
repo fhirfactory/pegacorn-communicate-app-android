@@ -751,7 +751,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             return false;
         }
         //no need to setup the searchview again if its already done
-        if(!getResources().getBoolean(R.bool.enable_riot_search_view) && mSearchView!=null) {
+        if(!getResources().getBoolean(R.bool.enable_riot_search_view) && mSearchView == null) {
             MenuItem searchMenuItem = menu.findItem(R.id.action_search);
             mSearchView = (SearchView) searchMenuItem.getActionView();
             setUpSearchView();
@@ -1108,6 +1108,23 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 mSearchView.setIconifiedByDefault(false);
             }
             mSearchView.setOnQueryTextListener(this);
+            switch (mCurrentMenuId) {
+                case R.id.bottom_action_home:
+                    mSearchView.setQueryHint(getString(R.string.search_chats));
+                    break;
+                case R.id.bottom_action_favourites:
+                    mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_favorites));
+                    break;
+                case R.id.bottom_action_people:
+                    mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_people));
+                    break;
+                case R.id.bottom_action_rooms:
+                    mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_rooms));
+                    break;
+                case R.id.bottom_action_groups:
+                    mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_groups));
+                    break;
+            }
         }
     }
 
