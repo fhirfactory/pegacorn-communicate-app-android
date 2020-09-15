@@ -129,6 +129,7 @@ import im.vector.fragments.RoomsFragment;
 import im.vector.fragments.signout.SignOutBottomSheetDialogFragment;
 import im.vector.fragments.signout.SignOutViewModel;
 import im.vector.home.CommunicateHomeFragment;
+import im.vector.invite.InviteActivity;
 import im.vector.push.PushManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.services.EventStreamServiceX;
@@ -260,6 +261,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     @BindView(R.id.floating_action_menu_touch_guard)
     View touchGuard;
+
+    private TextView inviteItemCountTextView;
 
     // a shared files intent is waiting the store init
     private Intent mSharedFilesIntent = null;
@@ -745,6 +748,19 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        final MenuItem menuItem = menu.findItem(R.id.ic_action_invite);
+
+        View actionView = menuItem.getActionView();
+        inviteItemCountTextView = actionView.findViewById(R.id.invite_badge);
+
+        actionView.setOnClickListener(v -> onOptionsItemSelected(menuItem));
+
+        return true;
+    }
+
+    @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // the application is in a weird state
         if (CommonActivityUtils.shouldRestartApp(this)) {
@@ -756,7 +772,27 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             mSearchView = (SearchView) searchMenuItem.getActionView();
             setUpSearchView();
         }
+
+        int inviteCount = getRoomInvitations().size();
+        setupBadge(inviteCount);
+        menu.findItem(R.id.ic_action_invite).setVisible(inviteCount > 0);
         return true;
+    }
+
+
+    private void setupBadge(int inviteItemCount) {
+        if (inviteItemCountTextView != null) {
+            if (inviteItemCount == 0) {
+                if (inviteItemCountTextView.getVisibility() != View.GONE) {
+                    inviteItemCountTextView.setVisibility(View.GONE);
+                }
+            } else {
+                inviteItemCountTextView.setText(String.valueOf(inviteItemCount));
+                if (inviteItemCountTextView.getVisibility() != View.VISIBLE) {
+                    inviteItemCountTextView.setVisibility(View.VISIBLE);
+                }
+            }
+        }
     }
 
     @Override
@@ -774,6 +810,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 return true;
             case R.id.ic_action_historical:
                 startActivity(new Intent(this, HistoricalRoomsActivity.class));
+                return true;
+            case R.id.ic_action_invite:
+                startActivity(new Intent(this, InviteActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -1778,6 +1817,55 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         }
     }
 
+    /**
+     * Trigger the room join / invitation accept.
+     *
+     * @param roomId            the room id
+     * @param onSuccessCallback the success asynchronous callback
+     */
+    public void onAcceptInvitation(final String roomId, final ApiCallback<Void> onSuccessCallback) {
+        showWaitingView();
+        mSession.joinRoom(roomId, new ApiCallback<String>() {
+            @Override
+            public void onSuccess(String roomId) {
+                hideWaitingView();
+
+                Map<String, Object> params = new HashMap<>();
+
+                params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+
+                CommonActivityUtils.goToRoomPage(VectorHomeActivity.this, mSession, params);
+            }
+
+            private void onError(String errorMessage) {
+                Log.d(LOG_TAG, "re join failed " + errorMessage);
+                //Toast.makeText(VectorRoomActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                hideWaitingView();
+            }
+
+            @Override
+            public void onNetworkError(Exception e) {
+                onError(e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onMatrixError(MatrixError e) {
+                if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                    hideWaitingView();
+                    getConsentNotGivenHelper().displayDialog(e);
+                } else {
+                    onError(e.getLocalizedMessage());
+                }
+            }
+
+            @Override
+            public void onUnexpectedError(Exception e) {
+                onError(e.getLocalizedMessage());
+            }
+        });
+    }
+
     /*
      * *********************************************************************************************
      * Sliding menu management
@@ -2209,10 +2297,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         }
 
         Set<Integer> menuIndexes = new HashSet<>(mBadgeViewByIndex.keySet());
-
-        // the badges are not anymore displayed on the home tab
-        menuIndexes.remove(R.id.bottom_action_home);
-
+        
         for (Integer id : menuIndexes) {
             int highlightCount = 0;
             int roomCount = 0;
@@ -2221,11 +2306,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             Set<String> filteredRoomIdsSet = new HashSet<>();
 
             if (id == R.id.bottom_action_favourites) {
-                List<Room> favRooms = mSession.roomsWithTag(RoomTag.ROOM_TAG_FAVOURITE);
-
-                for (Room room : favRooms) {
-                    filteredRoomIdsSet.add(room.getRoomId());
-                }
+                filterFavoriteRoomSet(filteredRoomIdsSet);
             } else if (id == R.id.bottom_action_people) {
                 filteredRoomIdsSet.addAll(mSession.getDataHandler().getDirectChatRoomIdsList());
                 // Add direct chat invitations
@@ -2241,21 +2322,16 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     filteredRoomIdsSet.remove(room.getRoomId());
                 }
             } else if (id == R.id.bottom_action_rooms) {
-                Set<String> directChatRoomIds = new HashSet<>(mSession.getDataHandler().getDirectChatRoomIdsList());
-                Set<String> lowPriorityRoomIds = new HashSet<>(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY));
-
-                directChatRoomIds.addAll(directChatInvitations);
-
-                for (Room room : roomSummaryByRoom.keySet()) {
-                    if (!room.isConferenceUserRoom() && // not a VOIP conference room
-                            !directChatRoomIds.contains(room.getRoomId()) && // not a direct chat
-                            !lowPriorityRoomIds.contains(room.getRoomId())) {
-                        filteredRoomIdsSet.add(room.getRoomId());
-                    }
-                }
+                filterNormalRoomSet(filteredRoomIdsSet, directChatInvitations, roomSummaryByRoom);
             } else if (id == R.id.bottom_action_groups) {
                 // Display number of groups invitation in the badge of groups
                 roomCount = mSession.getGroupsManager().getInvitedGroups().size();
+            } else if (id == R.id.bottom_action_home) {
+                for (Room room : roomSummaryByRoom.keySet()) {
+                    if (!room.isInvited()) {
+                        filteredRoomIdsSet.add(room.getRoomId());
+                    }
+                }
             }
 
             // compute the badge value and its displays
@@ -2288,6 +2364,29 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 mBadgeViewByIndex.get(id).updateText((roomCount > 0) ? "\u2022" : "", status);
             } else {
                 mBadgeViewByIndex.get(id).updateCounter(roomCount, status);
+            }
+        }
+    }
+
+    private void filterFavoriteRoomSet(Set<String> filteredRoomIdsSet){
+        List<Room> favRooms = mSession.roomsWithTag(RoomTag.ROOM_TAG_FAVOURITE);
+
+        for (Room room : favRooms) {
+            filteredRoomIdsSet.add(room.getRoomId());
+        }
+    }
+
+    private void filterNormalRoomSet(Set<String> filteredRoomIdsSet, Set<String> directChatInvitations, Map<Room, RoomSummary> roomSummaryByRoom){
+        Set<String> directChatRoomIds = new HashSet<>(mSession.getDataHandler().getDirectChatRoomIdsList());
+        Set<String> lowPriorityRoomIds = new HashSet<>(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY));
+
+        directChatRoomIds.addAll(directChatInvitations);
+
+        for (Room room : roomSummaryByRoom.keySet()) {
+            if (!room.isConferenceUserRoom() && // not a VOIP conference room
+                    !directChatRoomIds.contains(room.getRoomId()) && // not a direct chat
+                    !lowPriorityRoomIds.contains(room.getRoomId())) {
+                filteredRoomIdsSet.add(room.getRoomId());
             }
         }
     }
@@ -2366,6 +2465,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         if ((null != fragment) && (fragment instanceof AbsHomeFragment)) {
             ((AbsHomeFragment) fragment).onRoomResultUpdated(result);
         }
+        supportInvalidateOptionsMenu();
     }
 
     /**

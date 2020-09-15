@@ -4,9 +4,12 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View.GONE
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import im.vector.R
 import im.vector.adapters.AbsAdapter
 import im.vector.adapters.HomeRoomAdapter
+import im.vector.adapters.model.NotificationCounter
 import im.vector.fragments.AbsHomeFragment
 import kotlinx.android.synthetic.main.fragment_home_individual.*
 import org.matrix.androidsdk.data.Room
@@ -14,7 +17,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-abstract class BaseCommunicateHomeIndividualFragment (private var fragmentType: CommunicateHomeFragment.ROOM_FRAGMENTS) : BaseCommunicateHomeFragment(), UpDateListener, BadgeUpdateListener {
+abstract class BaseCommunicateHomeIndividualFragment(private var fragmentType: CommunicateHomeFragment.ROOM_FRAGMENTS) : BaseCommunicateHomeFragment(), UpDateListener, BadgeUpdateListener {
     private val LOG_TAG = BaseCommunicateHomeIndividualFragment::class.java.simpleName
 
     var registerListener: RegisterListener? = null
@@ -29,12 +32,20 @@ abstract class BaseCommunicateHomeIndividualFragment (private var fragmentType: 
         return R.layout.fragment_home_individual
     }
 
-    override fun onBadgeUpdate(count: Int) {
-        communicateTabBadgeUpdateListener?.onBadgeUpdate(count, fragmentType)
+    override fun onBadgeUpdate(notificationCounter: NotificationCounter) {
+        communicateTabBadgeUpdateListener?.onBadgeUpdate(notificationCounter.unreadRoomCount, fragmentType)
+        when (fragmentType) {
+            CommunicateHomeFragment.ROOM_FRAGMENTS.FAVORITE, CommunicateHomeFragment.ROOM_FRAGMENTS.CHAT, CommunicateHomeFragment.ROOM_FRAGMENTS.LOW_PRIORITY -> {
+                sectionView.setTitle(R.string.total_number_of_room, notificationCounter.totalRoomCount)
+            }
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        sectionView.setupRoomRecyclerView(LinearLayoutManager(activity, RecyclerView.VERTICAL, false),
+                R.layout.adapter_item_room_view, true, onSelectRoomListener, invitationListener, moreActionListener)
+        sectionView.setRooms(localRooms)
         sectionView.mHeader.visibility = GONE
         sectionView.mBadge.visibility = GONE
         sectionView.setHideIfEmpty(true)
@@ -57,7 +68,7 @@ abstract class BaseCommunicateHomeIndividualFragment (private var fragmentType: 
         try {
             Collections.sort(rooms, comparator)
         } catch (e: Exception) {
-            org.matrix.androidsdk.core.Log.e(LOG_TAG, "## sortAndDisplay() failed " + e.message, e)
+            Log.e(LOG_TAG, "## sortAndDisplay() failed " + e.message, e)
         }
         rooms?.let {
             localRooms.addAll(rooms)

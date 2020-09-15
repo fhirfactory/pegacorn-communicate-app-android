@@ -131,7 +131,7 @@
             android:layout_marginLeft="16dp"
             android:fontFamily="sans-serif-medium"
             android:minWidth="100dp"
-            android:text="@string/preview"
+            android:text="@string/join"
             android:textColor="@android:color/white"
             android:textSize="14sp" />
     </LinearLayout>
