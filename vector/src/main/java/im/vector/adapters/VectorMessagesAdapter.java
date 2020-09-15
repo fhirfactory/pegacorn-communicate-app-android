@@ -2572,11 +2572,11 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             }
 
             //Hiding the "Remove" option from the system messages
-            if (event.getType().equals(EVENT_TYPE_STATE_ROOM_NAME) || event.getType().equals(EVENT_TYPE_STATE_ROOM_TOPIC) || event.getType().equals(EVENT_TYPE_STATE_ROOM_AVATAR)
+            if (mContext.getResources().getBoolean(R.bool.hide_remove_from_system_message) && (event.getType().equals(EVENT_TYPE_STATE_ROOM_NAME) || event.getType().equals(EVENT_TYPE_STATE_ROOM_TOPIC) || event.getType().equals(EVENT_TYPE_STATE_ROOM_AVATAR)
                     || event.getType().equals(EVENT_TYPE_STATE_ROOM_MEMBER) || event.getType().equals(EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE) || event.getType().equals(EVENT_TYPE_STATE_ROOM_CREATE)
                     || event.getType().equals(EVENT_TYPE_STATE_ROOM_JOIN_RULES) || event.getType().equals(EVENT_TYPE_STATE_ROOM_GUEST_ACCESS) || event.getType().equals(EVENT_TYPE_STATE_ROOM_POWER_LEVELS)
                     || event.getType().equals(EVENT_TYPE_STATE_ROOM_ALIASES) || event.getType().equals(EVENT_TYPE_STATE_ROOM_TOMBSTONE) || event.getType().equals(EVENT_TYPE_STATE_CANONICAL_ALIAS)
-                    || event.getType().equals(EVENT_TYPE_STATE_HISTORY_VISIBILITY) || event.getType().equals(EVENT_TYPE_STATE_RELATED_GROUPS) || event.getType().equals(EVENT_TYPE_STATE_PINNED_EVENT)) {
+                    || event.getType().equals(EVENT_TYPE_STATE_HISTORY_VISIBILITY) || event.getType().equals(EVENT_TYPE_STATE_RELATED_GROUPS) || event.getType().equals(EVENT_TYPE_STATE_PINNED_EVENT))) {
                 canBeRedacted = false;
             }
 
