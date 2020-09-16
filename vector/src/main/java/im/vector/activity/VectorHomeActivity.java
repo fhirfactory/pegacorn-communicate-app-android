@@ -256,7 +256,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     @BindView(R.id.home_recents_sync_in_progress)
     ProgressBar mSyncInProgressView;
 
-    @BindView(R.id.home_search_view)
+    //@BindView(R.id.home_search_view)
     SearchView mSearchView;
 
     @BindView(R.id.floating_action_menu_touch_guard)
@@ -602,12 +602,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         if (null != mUniversalLinkToOpen) {
             intent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, mUniversalLinkToOpen);
 
-            new Handler(getMainLooper()).postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    processIntentUniversalLink();
-                    mUniversalLinkToOpen = null;
-                }
+            new Handler(getMainLooper()).postDelayed(() -> {
+                processIntentUniversalLink();
+                mUniversalLinkToOpen = null;
             }, 100);
         }
 
@@ -629,18 +626,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 new AlertDialog.Builder(this)
                         .setMessage(R.string.send_bug_report_app_crashed)
                         .setCancelable(false)
-                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                BugReporter.sendBugReport();
-                            }
-                        })
-                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                BugReporter.deleteCrashFile(VectorHomeActivity.this);
-                            }
-                        })
+                        .setPositiveButton(R.string.yes, (dialog, which) -> BugReporter.sendBugReport())
+                        .setNegativeButton(R.string.no, (dialog, which) -> BugReporter.deleteCrashFile(VectorHomeActivity.this))
                         .show();
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## onResume() : appCrashedAlert failed " + e.getMessage(), e);
@@ -687,8 +674,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
      * Ask the user to choose a notification privacy policy.
      */
     private void checkNotificationPrivacySetting() {
-
-
         final PushManager pushManager = Matrix.getInstance(VectorHomeActivity.this).getPushManager();
 
         if (pushManager.useFcm()) {
@@ -747,18 +732,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     private void promptForAnalyticsTracking() {
         new AlertDialog.Builder(this)
                 .setMessage(R.string.settings_opt_in_of_analytics_prompt)
-                .setPositiveButton(R.string.settings_opt_in_of_analytics_ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        setAnalyticsAuthorization(true);
-                    }
-                })
-                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        setAnalyticsAuthorization(false);
-                    }
-                })
+                .setPositiveButton(R.string.settings_opt_in_of_analytics_ok, (dialog, which) -> setAnalyticsAuthorization(true))
+                .setNegativeButton(R.string.no, (dialog, which) -> setAnalyticsAuthorization(false))
                 .show();
     }
 
@@ -790,6 +765,12 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         // the application is in a weird state
         if (CommonActivityUtils.shouldRestartApp(this)) {
             return false;
+        }
+        //no need to setup the searchview again if its already done
+        if(!getResources().getBoolean(R.bool.enable_riot_search_view) && mSearchView == null) {
+            MenuItem searchMenuItem = menu.findItem(R.id.action_search);
+            mSearchView = (SearchView) searchMenuItem.getActionView();
+            setUpSearchView();
         }
 
         int inviteCount = getRoomInvitations().size();
@@ -965,12 +946,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         setSupportActionBar(mToolbar);
 
         // Bottom navigation view
-        mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                updateSelectedFragment(item);
-                return true;
-            }
+        mBottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            updateSelectedFragment(item);
+            return true;
         });
     }
 
@@ -994,8 +972,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = new CommunicateHomeFragment();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_HOME;
-                mSearchView.setVisibility(View.VISIBLE);
-                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_home));
+                setQueryHint(R.string.home_filter_placeholder_home, R.string.search_chats);
                 break;
             case R.id.bottom_action_favourites:
                 Log.d(LOG_TAG, "onNavigationItemSelected FAVOURITES");
@@ -1004,8 +981,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = FavouritesFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_FAVOURITES;
-                mSearchView.setVisibility(View.VISIBLE);
-                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_favorites));
+                setQueryHint(R.string.home_filter_placeholder_favorites, R.string.search_chats);
                 break;
             case R.id.bottom_action_people:
                 Log.d(LOG_TAG, "onNavigationItemSelected PEOPLE");
@@ -1014,7 +990,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = PeopleFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_PEOPLE;
-                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_people));
+                setQueryHint(R.string.home_filter_placeholder_people, R.string.search_chats);
                 break;
             case R.id.bottom_action_rooms:
                 Log.d(LOG_TAG, "onNavigationItemSelected ROOMS");
@@ -1023,8 +999,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = RoomsFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_ROOMS;
-                mSearchView.setVisibility(View.VISIBLE);
-                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_rooms));
+                setQueryHint(R.string.home_filter_placeholder_rooms, R.string.search_chats);
                 break;
             case R.id.bottom_action_groups:
                 Log.d(LOG_TAG, "onNavigationItemSelected GROUPS");
@@ -1033,8 +1008,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = GroupsFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_GROUPS;
-                mSearchView.setVisibility(View.VISIBLE);
-                mSearchView.setQueryHint(getString(R.string.home_filter_placeholder_groups));
+                setQueryHint(R.string.home_filter_placeholder_groups, R.string.search_chats);
                 break;
         }
 
@@ -1060,6 +1034,12 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## updateSelectedFragment() failed : " + e.getMessage(), e);
             }
+        }
+    }
+
+    private void setQueryHint(int riotHintResource, int actHintResource){
+        if (mSearchView != null){
+            mSearchView.setQueryHint(getString(getResources().getBoolean(R.bool.enable_riot_search_view) ? riotHintResource : actHintResource));
         }
     }
 
@@ -1132,10 +1112,50 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         }
 
         // Set color of toolbar search view
-        EditText edit = mSearchView.findViewById(com.google.android.material.R.id.search_src_text);
-        edit.setTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_toolbar_primary_text_color));
-        edit.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_primary_hint_text_color));
+        if(getResources().getBoolean(R.bool.enable_riot_search_view)) {
+            EditText edit = mSearchView.findViewById(com.google.android.material.R.id.search_src_text);
+            edit.setTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_toolbar_primary_text_color));
+            edit.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_primary_hint_text_color));
+        }
     }
+
+
+    private void setUpSearchView(){
+        if(mSearchView!=null) {
+            // init the search view
+            SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+            // Remove unwanted left margin
+            ViewExtensionsKt.withoutLeftMargin(mSearchView);
+
+            mToolbar.setContentInsetStartWithNavigation(0);
+
+            mSearchView.setMaxWidth(Integer.MAX_VALUE);
+            mSearchView.setSubmitButtonEnabled(false);
+            mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+            if (getResources().getBoolean(R.bool.enable_riot_search_view)) {
+                mSearchView.setIconifiedByDefault(false);
+            }
+            mSearchView.setOnQueryTextListener(this);
+            switch (mCurrentMenuId) {
+                case R.id.bottom_action_home:
+                    setQueryHint(R.string.home_filter_placeholder_home, R.string.search_chats);
+                    break;
+                case R.id.bottom_action_favourites:
+                    setQueryHint(R.string.home_filter_placeholder_favorites, R.string.search_chats);
+                    break;
+                case R.id.bottom_action_people:
+                    setQueryHint(R.string.home_filter_placeholder_people, R.string.search_chats);
+                    break;
+                case R.id.bottom_action_rooms:
+                    setQueryHint(R.string.home_filter_placeholder_rooms, R.string.search_chats);
+                    break;
+                case R.id.bottom_action_groups:
+                    setQueryHint(R.string.home_filter_placeholder_groups, R.string.search_chats);
+                    break;
+            }
+        }
+    }
+
 
     /**
      * Init views
@@ -1161,19 +1181,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         });
 
         addUnreadBadges();
-
-        // init the search view
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        // Remove unwanted left margin
-        ViewExtensionsKt.withoutLeftMargin(mSearchView);
-
-        mToolbar.setContentInsetStartWithNavigation(0);
-
-        mSearchView.setMaxWidth(Integer.MAX_VALUE);
-        mSearchView.setSubmitButtonEnabled(false);
-        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        mSearchView.setIconifiedByDefault(false);
-        mSearchView.setOnQueryTextListener(this);
+        setUpSearchView();
 
         // Set here background of labels, cause we cannot set attr color in drawable on API < 21
         Class menuClass = FloatingActionsMenu.class;
@@ -1227,8 +1235,10 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
      * Reset the filter
      */
     private void resetFilter() {
-        mSearchView.setQuery("", false);
-        mSearchView.clearFocus();
+        if (mSearchView != null) {
+            mSearchView.setQuery("", false);
+            mSearchView.clearFocus();
+        }
         hideKeyboard();
     }
 
@@ -1262,16 +1272,13 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         // 4 - search for matt
         // whereas only one search should have been triggered
         // else it might trigger some lags evenif the search is done in a background thread
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                String queryText = mSearchView.getQuery().toString();
-                String currentFilter = queryText + "-" + mCurrentMenuId;
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            String queryText = mSearchView.getQuery().toString();
+            String currentFilter = queryText + "-" + mCurrentMenuId;
 
-                // display if the pattern matched
-                if (TextUtils.equals(currentFilter, filter)) {
-                    applyFilter(queryText);
-                }
+            // display if the pattern matched
+            if (TextUtils.equals(currentFilter, filter)) {
+                applyFilter(queryText);
             }
         }, 500);
         return true;
