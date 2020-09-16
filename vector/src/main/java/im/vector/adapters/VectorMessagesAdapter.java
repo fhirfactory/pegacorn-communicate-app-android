@@ -41,6 +41,7 @@ import android.text.style.StyleSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -2511,16 +2512,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             menu.getItem(i).setVisible(false);
         }
 
-        if (mContext.getResources().getBoolean(R.bool.hide_message_view_source)) {
-            menu.findItem(R.id.ic_action_view_source).setVisible(false);
-        } else {
-            menu.findItem(R.id.ic_action_view_source).setVisible(true);
-        }
-        if (mContext.getResources().getBoolean(R.bool.hide_message_view_decrypted)) {
-            menu.findItem(R.id.ic_action_view_decrypted_source).setVisible(false);
-        } else {
-            menu.findItem(R.id.ic_action_view_decrypted_source).setVisible(event.isEncrypted() && (null != event.getClearEvent()));
-        }
+        menu.findItem(R.id.ic_action_view_source).setVisible(mContext.getResources().getBoolean(R.bool.show_message_view_source));
+        menu.findItem(R.id.ic_action_view_decrypted_source).setVisible(event.isEncrypted() && (null != event.getClearEvent()) && mContext.getResources().getBoolean(R.bool.show_message_view_decrypted));
+
         menu.findItem(R.id.ic_action_vector_permalink).setVisible(true);
 
         if (!TextUtils.isEmpty(textMsg)) {
@@ -2579,32 +2573,28 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 }
 
                 // offer to report a message content
-                if (mContext.getResources().getBoolean(R.bool.hide_message_report_content)) {
-                    menu.findItem(R.id.ic_action_vector_report).setVisible(false);
-                } else {
-                    menu.findItem(R.id.ic_action_vector_report).setVisible(!mIsPreviewMode && !TextUtils.equals(event.sender, mSession.getMyUserId()));
-                }
+                menu.findItem(R.id.ic_action_vector_report).setVisible(!mIsPreviewMode && !TextUtils.equals(event.sender, mSession.getMyUserId()) && mContext.getResources().getBoolean(R.bool.show_message_report_content));
+
             }
         }
 
         // e2e
-        if (mContext.getResources().getBoolean(R.bool.hide_message_view_session)) {
-            menu.findItem(R.id.ic_action_device_verification).setVisible(false);
-        } else {
-            menu.findItem(R.id.ic_action_device_verification).setVisible(mE2eIconByEventId.containsKey(event.eventId));
-        }
+        menu.findItem(R.id.ic_action_device_verification).setVisible(mE2eIconByEventId.containsKey(event.eventId) && mContext.getResources().getBoolean(R.bool.show_message_view_session));
+
         // display the menu
-        popup.setOnMenuItemClickListener(item -> {
-            // warn the listener
-            if (null != mVectorMessagesAdapterEventsListener) {
-                mVectorMessagesAdapterEventsListener.onEventAction(event, textMsg, item.getItemId());
-            }
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(final MenuItem item) {
+                // warn the listener
+                if (null != mVectorMessagesAdapterEventsListener) {
+                    mVectorMessagesAdapterEventsListener.onEventAction(event, textMsg, item.getItemId());
+                }
 
             // disable the selection
             cancelSelectionMode();
 
             return true;
-        });
+        }});
 
         // fix an issue reported by GA
         try {

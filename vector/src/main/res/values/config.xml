@@ -113,8 +113,8 @@
     <bool name="use_progressbar_original_background">false</bool>
     <bool name="use_fab_color_as_accent_color">false</bool>
 
-    <bool name="hide_message_view_source">false</bool>
-    <bool name="hide_message_view_decrypted">false</bool>
-    <bool name="hide_message_view_session">false</bool>
-    <bool name="hide_message_report_content">false</bool>
+    <bool name="show_message_view_source">true</bool>
+    <bool name="show_message_view_decrypted">true</bool>
+    <bool name="show_message_view_session">true</bool>
+    <bool name="show_message_report_content">true</bool>
 </resources>
