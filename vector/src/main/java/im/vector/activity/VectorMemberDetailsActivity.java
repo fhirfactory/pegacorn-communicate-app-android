@@ -1099,14 +1099,14 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             }
 
             // build the "block" item (block)
-            if (supportedActionsList.indexOf(ITEM_ACTION_BAN) >= 0) {
+            if (!getResources().getBoolean(R.bool.hide_ban_action_member_detail) && supportedActionsList.indexOf(ITEM_ACTION_BAN) >= 0) {
                 imageResource = R.drawable.ic_block_black;
                 actionText = getString(R.string.room_participants_action_ban);
                 adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_BAN));
             }
 
             // build the "unblock" item (unblock)
-            if (supportedActionsList.indexOf(ITEM_ACTION_UNBAN) >= 0) {
+            if (!getResources().getBoolean(R.bool.hide_ban_action_member_detail) && supportedActionsList.indexOf(ITEM_ACTION_UNBAN) >= 0) {
                 imageResource = R.drawable.ic_block_black;
                 actionText = getString(R.string.room_participants_action_unban);
                 adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_UNBAN));
