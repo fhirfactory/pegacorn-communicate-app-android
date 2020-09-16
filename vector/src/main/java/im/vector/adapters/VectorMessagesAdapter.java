@@ -2528,8 +2528,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             menu.getItem(i).setVisible(false);
         }
 
-        menu.findItem(R.id.ic_action_view_source).setVisible(true);
-        menu.findItem(R.id.ic_action_view_decrypted_source).setVisible(event.isEncrypted() && (null != event.getClearEvent()));
+        menu.findItem(R.id.ic_action_view_source).setVisible(mContext.getResources().getBoolean(R.bool.show_message_view_source));
+        menu.findItem(R.id.ic_action_view_decrypted_source).setVisible(event.isEncrypted() && (null != event.getClearEvent()) && mContext.getResources().getBoolean(R.bool.show_message_view_decrypted));
+
         menu.findItem(R.id.ic_action_vector_permalink).setVisible(true);
 
         if (!TextUtils.isEmpty(textMsg)) {
@@ -2597,12 +2598,13 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 }
 
                 // offer to report a message content
-                menu.findItem(R.id.ic_action_vector_report).setVisible(!mIsPreviewMode && !TextUtils.equals(event.sender, mSession.getMyUserId()));
+                menu.findItem(R.id.ic_action_vector_report).setVisible(!mIsPreviewMode && !TextUtils.equals(event.sender, mSession.getMyUserId()) && mContext.getResources().getBoolean(R.bool.show_message_report_content));
+
             }
         }
 
         // e2e
-        menu.findItem(R.id.ic_action_device_verification).setVisible(mE2eIconByEventId.containsKey(event.eventId));
+        menu.findItem(R.id.ic_action_device_verification).setVisible(mE2eIconByEventId.containsKey(event.eventId) && mContext.getResources().getBoolean(R.bool.show_message_view_session));
 
         // display the menu
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {

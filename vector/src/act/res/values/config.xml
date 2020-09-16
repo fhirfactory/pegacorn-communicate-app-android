@@ -112,6 +112,11 @@
     <bool name="use_progressbar_original_background">true</bool>
     <bool name="use_fab_color_as_accent_color">true</bool>
 
+    <bool name="show_message_view_source">false</bool>
+    <bool name="show_message_view_decrypted">false</bool>
+    <bool name="show_message_view_session">false</bool>
+    <bool name="show_message_report_content">false</bool>
+
     <bool name="hide_remove_from_system_message">true</bool>
     <bool name="enable_riot_search_view">false</bool>
 </resources>
