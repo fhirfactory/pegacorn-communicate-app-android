@@ -897,12 +897,14 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             memberPowerLevel = powerLevels.getUserPowerLevel(mMemberId);
             selfPowerLevel = powerLevels.getUserPowerLevel(selfUserId);
 
-            if (memberPowerLevel >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN) {
-                mMemberAvatarBadgeImageView.setVisibility(View.VISIBLE);
-                mMemberAvatarBadgeImageView.setImageResource(R.drawable.admin_icon);
-            } else if (memberPowerLevel >= CommonActivityUtils.UTILS_POWER_LEVEL_MODERATOR) {
-                mMemberAvatarBadgeImageView.setVisibility(View.VISIBLE);
-                mMemberAvatarBadgeImageView.setImageResource(R.drawable.mod_icon);
+            if(!getResources().getBoolean(R.bool.hide_admin_badge_member_detail)) {
+                if (memberPowerLevel >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN) {
+                    mMemberAvatarBadgeImageView.setVisibility(View.VISIBLE);
+                    mMemberAvatarBadgeImageView.setImageResource(R.drawable.admin_icon);
+                } else if (memberPowerLevel >= CommonActivityUtils.UTILS_POWER_LEVEL_MODERATOR) {
+                    mMemberAvatarBadgeImageView.setVisibility(View.VISIBLE);
+                    mMemberAvatarBadgeImageView.setImageResource(R.drawable.mod_icon);
+                }
             }
 
             // compute the number of administrators
@@ -1113,7 +1115,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             }
 
             // build the "ignore" item
-            if (supportedActionsList.indexOf(ITEM_ACTION_IGNORE) >= 0) {
+            if (!getResources().getBoolean(R.bool.hide_hide_all_message_action_member_detail) && supportedActionsList.indexOf(ITEM_ACTION_IGNORE) >= 0) {
                 imageResource = R.drawable.ic_person_outline_black;
                 actionText = getString(R.string.room_participants_action_ignore);
                 uncategorizedActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_IGNORE));

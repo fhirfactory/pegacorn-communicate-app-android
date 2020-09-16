@@ -115,4 +115,6 @@
 
     <bool name="hide_ban_action_member_detail">false</bool>
     <bool name="hide_session_member_detail">false</bool>
+    <bool name="hide_hide_all_message_action_member_detail">false</bool>
+    <bool name="hide_admin_badge_member_detail">false</bool>
 </resources>
