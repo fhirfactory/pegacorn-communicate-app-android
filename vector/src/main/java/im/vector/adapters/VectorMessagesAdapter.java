@@ -114,6 +114,22 @@ import im.vector.util.VectorImageGetter;
 import im.vector.util.VectorLinkifyKt;
 import im.vector.widgets.WidgetsManager;
 
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_CANONICAL_ALIAS;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_PINNED_EVENT;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_RELATED_GROUPS;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_ROOM_ALIASES;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_ROOM_AVATAR;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_ROOM_CREATE;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_ROOM_GUEST_ACCESS;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_ROOM_JOIN_RULES;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_ROOM_MEMBER;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_ROOM_NAME;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_ROOM_TOMBSTONE;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_ROOM_TOPIC;
+
 /**
  * An adapter which can display room information.
  */
@@ -1051,17 +1067,17 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             viewType = ROW_TYPE_STICKER;
         } else if (
                 event.isCallEvent()
-                        || Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY.equals(eventType)
-                        || Event.EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType)
-                        || Event.EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType)
-                        || Event.EVENT_TYPE_STATE_ROOM_NAME.equals(eventType)
-                        || Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType)
+                        || EVENT_TYPE_STATE_HISTORY_VISIBILITY.equals(eventType)
+                        || EVENT_TYPE_STATE_ROOM_TOPIC.equals(eventType)
+                        || EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType)
+                        || EVENT_TYPE_STATE_ROOM_NAME.equals(eventType)
+                        || EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType)
                         || Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
             viewType = ROW_TYPE_ROOM_MEMBER;
 
         } else if (WidgetsManager.WIDGET_EVENT_TYPE.equals(eventType)) {
             return ROW_TYPE_ROOM_MEMBER;
-        } else if (Event.EVENT_TYPE_STATE_ROOM_CREATE.equals(eventType)) {
+        } else if (EVENT_TYPE_STATE_ROOM_CREATE.equals(eventType)) {
             viewType = ROW_TYPE_VERSIONED_ROOM;
         } else {
             throw new RuntimeException("Unknown event type: " + eventType);
@@ -1788,7 +1804,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             Log.w(LOG_TAG, "Unsupported row. Event type: " + event.getType());
         }
 
-        if (isSupported && TextUtils.equals(event.getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
+        if (isSupported && TextUtils.equals(event.getType(), EVENT_TYPE_STATE_ROOM_MEMBER)) {
             RoomMember roomMember = JsonUtils.toRoomMember(event.getContent());
             String membership = roomMember.membership;
 
@@ -2555,6 +2571,15 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 }
             }
 
+            //Hiding the "Remove" option from the system messages
+            if (mContext.getResources().getBoolean(R.bool.hide_remove_from_system_message) && (event.getType().equals(EVENT_TYPE_STATE_ROOM_NAME) || event.getType().equals(EVENT_TYPE_STATE_ROOM_TOPIC) || event.getType().equals(EVENT_TYPE_STATE_ROOM_AVATAR)
+                    || event.getType().equals(EVENT_TYPE_STATE_ROOM_MEMBER) || event.getType().equals(EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE) || event.getType().equals(EVENT_TYPE_STATE_ROOM_CREATE)
+                    || event.getType().equals(EVENT_TYPE_STATE_ROOM_JOIN_RULES) || event.getType().equals(EVENT_TYPE_STATE_ROOM_GUEST_ACCESS) || event.getType().equals(EVENT_TYPE_STATE_ROOM_POWER_LEVELS)
+                    || event.getType().equals(EVENT_TYPE_STATE_ROOM_ALIASES) || event.getType().equals(EVENT_TYPE_STATE_ROOM_TOMBSTONE) || event.getType().equals(EVENT_TYPE_STATE_CANONICAL_ALIAS)
+                    || event.getType().equals(EVENT_TYPE_STATE_HISTORY_VISIBILITY) || event.getType().equals(EVENT_TYPE_STATE_RELATED_GROUPS) || event.getType().equals(EVENT_TYPE_STATE_PINNED_EVENT))) {
+                canBeRedacted = false;
+            }
+
             menu.findItem(R.id.ic_action_vector_redact_message).setVisible(canBeRedacted);
 
             if (Event.EVENT_TYPE_MESSAGE.equals(event.getType())) {
@@ -2660,7 +2685,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                     break;
                 } else
                     // there is no more room member events
-                    if (!TextUtils.equals(curRow.getEvent().getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER)) {
+                    if (!TextUtils.equals(curRow.getEvent().getType(), EVENT_TYPE_STATE_ROOM_MEMBER)) {
                         break;
                     }
             }
@@ -2731,7 +2756,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             Event eventBef = getItem(position - 1).getEvent();
             Event eventAfter = getItem(position).getEvent();
 
-            if (TextUtils.equals(eventBef.getType(), Event.EVENT_TYPE_STATE_ROOM_MEMBER) && eventAfter instanceof EventGroup) {
+            if (TextUtils.equals(eventBef.getType(), EVENT_TYPE_STATE_ROOM_MEMBER) && eventAfter instanceof EventGroup) {
                 EventGroup nextEventGroup = (EventGroup) eventAfter;
                 EventGroup eventGroupBefore = null;
 
