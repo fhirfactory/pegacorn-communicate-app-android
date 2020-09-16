@@ -1139,7 +1139,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             // devices
             // don't show devices list if the member isn't a matrix user
-            if (mUser != null && MXPatterns.isUserId(mMemberId)) {
+            if (!getResources().getBoolean(R.bool.hide_session_member_detail) && mUser != null && MXPatterns.isUserId(mMemberId)) {
                 imageResource = R.drawable.ic_devices_info;
                 actionText = getString(R.string.room_participants_action_devices_list);
                 devicesActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_DEVICES));

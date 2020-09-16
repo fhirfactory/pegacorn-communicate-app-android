@@ -113,4 +113,5 @@
     <bool name="use_fab_color_as_accent_color">true</bool>
 
     <bool name="hide_ban_action_member_detail">true</bool>
+    <bool name="hide_session_member_detail">true</bool>
 </resources>
