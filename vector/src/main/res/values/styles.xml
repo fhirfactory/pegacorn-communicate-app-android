@@ -111,6 +111,10 @@
         <item name="boxBackgroundColor">@android:color/background_light</item>
     </style>
 
+    <style name="HomeTabText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <!-- Styles for button -->
     <!--
         Widget.AppCompat.Button.Colored, which sets the button color to colorAccent,
@@ -256,5 +260,10 @@
         <item name="android:textColorSecondary">@color/riot_secondary_text_color_status</item>
         <!-- Default color for text View -->
         <item name="android:textColorTertiary">@color/riot_tertiary_text_color_status</item>
+    </style>
+
+    <style name="SearchViewTheme" parent="Widget.AppCompat.Light.SearchView">
+        <item name="android:maxWidth">10000dp</item>
+        <item name="android:textColorHint">@android:color/white</item>
     </style>
 </resources>

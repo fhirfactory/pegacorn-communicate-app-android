@@ -117,4 +117,7 @@
     <bool name="show_message_view_decrypted">true</bool>
     <bool name="show_message_view_session">true</bool>
     <bool name="show_message_report_content">true</bool>
+
+    <bool name="hide_remove_from_system_message">false</bool>
+    <bool name="enable_riot_search_view">true</bool>
 </resources>

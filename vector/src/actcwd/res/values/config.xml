@@ -116,4 +116,8 @@
     <bool name="show_message_view_decrypted">false</bool>
     <bool name="show_message_view_session">false</bool>
     <bool name="show_message_report_content">false</bool>
+
+    <bool name="hide_remove_from_system_message">true</bool>
+    <bool name="enable_riot_search_view">false</bool>
+>>>>>>> act-master
 </resources>

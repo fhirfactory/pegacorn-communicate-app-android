@@ -396,9 +396,9 @@
 
     <!-- Actions -->
     <string name="remove">Remove</string>
-    <string name="join">Join</string>
+    <string name="join">Accept</string>
     <string name="preview">Preview</string>
-    <string name="reject">Reject</string>
+    <string name="reject">Decline</string>
 
     <!-- Room -->
     <string name="list_members">List members</string>
@@ -1597,7 +1597,15 @@ Why choose Riot.im?
         <item>Low Priority</item>
     </string-array>
 
+    <string name="search_chats">Search Chats</string>
+    <string name="rejecting">Declining the invitation</string>
+    <string name="accepting">Accepting the invitation</string>
+    <string name="invite_menu_title">Invites</string>
+    <string name="invite_title">Invites</string>
     <string name="total_notification">Total Notifications</string>
+    <string name="total_number_of_room"> Rooms: </string>
+    <string name="total_number_of_invite">Invites: </string>
+    <string name="no_invites">You do not have any invitations. </string>
     <string name="search_role">Search for a role</string>
     <string name="category">Category</string>
     <string name="organisation_unit">Organisation Unit</string>
