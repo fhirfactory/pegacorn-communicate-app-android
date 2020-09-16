@@ -113,8 +113,8 @@
     <bool name="use_progressbar_original_background">false</bool>
     <bool name="use_fab_color_as_accent_color">false</bool>
 
-    <bool name="hide_ban_action_member_detail">false</bool>
-    <bool name="hide_session_member_detail">false</bool>
-    <bool name="hide_hide_all_message_action_member_detail">false</bool>
-    <bool name="hide_admin_badge_member_detail">false</bool>
+    <bool name="show_ban_action_member_detail">true</bool>
+    <bool name="show_session_member_detail">true</bool>
+    <bool name="show_hide_all_message_action_member_detail">true</bool>
+    <bool name="show_admin_badge_member_detail">true</bool>
 </resources>
