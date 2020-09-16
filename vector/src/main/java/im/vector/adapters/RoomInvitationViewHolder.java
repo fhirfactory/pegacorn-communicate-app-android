@@ -50,7 +50,7 @@ public class RoomInvitationViewHolder extends RoomViewHolder {
             @Override
             public void onClick(View v) {
                 if (null != invitationListener) {
-                    invitationListener.onPreviewRoom(session, room.getRoomId());
+                    invitationListener.onAcceptInvitation(session, room.getRoomId());
                 }
             }
         });

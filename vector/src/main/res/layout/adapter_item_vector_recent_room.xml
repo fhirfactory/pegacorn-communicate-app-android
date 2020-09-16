@@ -291,7 +291,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.26"
                 android:fontFamily="sans-serif-medium"
-                android:text="@string/preview"
+                android:text="@string/join"
                 android:textColor="@android:color/white"
                 android:textSize="14sp" />
 

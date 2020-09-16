@@ -114,4 +114,5 @@
     <bool name="use_fab_color_as_accent_color">false</bool>
 
     <bool name="hide_remove_from_system_message">false</bool>
+    <bool name="enable_riot_search_view">true</bool>
 </resources>
