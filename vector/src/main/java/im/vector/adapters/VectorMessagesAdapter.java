@@ -2615,11 +2615,12 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                     mVectorMessagesAdapterEventsListener.onEventAction(event, textMsg, item.getItemId());
                 }
 
-            // disable the selection
-            cancelSelectionMode();
+                // disable the selection
+                cancelSelectionMode();
 
-            return true;
-        }});
+                return true;
+            }
+        });
 
         // fix an issue reported by GA
         try {
