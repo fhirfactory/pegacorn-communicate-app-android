@@ -3895,7 +3895,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         }
 
         // Send sticker
-        if (Matrix.getWidgetManager(this) != null) {
+        if (Matrix.getWidgetManager(this) != null && getResources().getBoolean(R.bool.show_sticker_to_send_room)) {
             items.add(DialogListItem.SendSticker.INSTANCE);
         }
 
