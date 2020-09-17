@@ -121,4 +121,5 @@
     <bool name="enable_riot_search_view">false</bool>
 
     <bool name="show_sticker_to_send_room">false</bool>
+    <bool name="show_send_voice_room">false</bool>
 </resources>
