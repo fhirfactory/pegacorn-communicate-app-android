@@ -119,5 +119,7 @@
 
     <bool name="hide_remove_from_system_message">true</bool>
     <bool name="enable_riot_search_view">false</bool>
->>>>>>> act-master
+
+    <bool name="show_direct_chat_room_setting">false</bool>
+    <bool name="show_shortcut_room_setting">false</bool>
 </resources>
