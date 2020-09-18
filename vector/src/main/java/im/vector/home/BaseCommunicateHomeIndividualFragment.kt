@@ -46,10 +46,10 @@ abstract class BaseCommunicateHomeIndividualFragment(private var fragmentType: C
         sectionView.setupRoomRecyclerView(LinearLayoutManager(activity, RecyclerView.VERTICAL, false),
                 R.layout.adapter_item_room_view, true, onSelectRoomListener, invitationListener, moreActionListener)
         sectionView.setRooms(localRooms)
-        sectionView.mHeader.visibility = GONE
         sectionView.mBadge.visibility = GONE
         sectionView.setHideIfEmpty(true)
         sectionView.setBadgeUpdateListener(this)
+        sectionView.updateRoomCounts()
     }
 
     override fun onAttach(context: Context) {

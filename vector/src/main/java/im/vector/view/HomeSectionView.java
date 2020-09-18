@@ -129,6 +129,14 @@ public class HomeSectionView extends RelativeLayout {
         this.badgeUpdateListener = badgeUpdateListener;
     }
 
+    public void updateRoomCounts(){
+        NotificationCounter notificationCounter = mAdapter.getBadgeCount();
+        if(badgeUpdateListener != null){
+            badgeUpdateListener.onBadgeUpdate(notificationCounter);
+        }
+        //setTitle(R.string.total_number_of_room, notificationCounter.getTotalRoomCount());
+    }
+
     /**
      * Update the views to reflect the new number of items
      */
@@ -143,12 +151,7 @@ public class HomeSectionView extends RelativeLayout {
                     setVisibility(GONE);
                 } else {
                     setVisibility(VISIBLE);
-
-                    NotificationCounter notificationCounter = mAdapter.getBadgeCount();
-                    if(badgeUpdateListener != null){
-                        badgeUpdateListener.onBadgeUpdate(notificationCounter);
-                    }
-                    mHeader.setVisibility(VISIBLE);
+                    updateRoomCounts();
 
                     if (mAdapter.hasNoResult()) {
                         mRecyclerView.setVisibility(GONE);
@@ -186,6 +189,9 @@ public class HomeSectionView extends RelativeLayout {
      * @param count number of item in section
      */
     public void setTitle(@StringRes final int title, int count) {
+        if(mHeader.getVisibility()!=VISIBLE){
+            mHeader.setVisibility(VISIBLE);
+        }
         String titleText = getResources().getString(title);
         SpannableStringBuilder str = new SpannableStringBuilder(titleText);
         str.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, titleText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -288,6 +294,7 @@ public class HomeSectionView extends RelativeLayout {
     public void setRooms(final List<Room> rooms) {
         if (mAdapter != null) {
             mAdapter.setRooms(rooms);
+            updateRoomCounts();
         }
     }
 
