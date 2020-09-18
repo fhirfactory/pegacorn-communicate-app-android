@@ -96,6 +96,8 @@
     <bool name="settings_vibrate_mention_user_default_value">false</bool>
     <bool name="settings_email_clickable">true</bool>
     <bool name="settings_phone_clickable">true</bool>
+    <bool name="settings_session_rename_button_visible">true</bool>
+    <bool name="settings_session_delete_button_visible">true</bool>
 
     <bool name="hide_custom_url_login">false</bool>
 
