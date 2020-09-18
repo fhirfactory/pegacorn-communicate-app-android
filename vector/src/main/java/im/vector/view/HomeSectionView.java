@@ -134,7 +134,6 @@ public class HomeSectionView extends RelativeLayout {
         if(badgeUpdateListener != null){
             badgeUpdateListener.onBadgeUpdate(notificationCounter);
         }
-        //setTitle(R.string.total_number_of_room, notificationCounter.getTotalRoomCount());
     }
 
     /**
