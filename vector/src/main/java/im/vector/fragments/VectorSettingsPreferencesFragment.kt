@@ -490,7 +490,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         refreshEmailsList()
         refreshPhoneNumbersList()
-        
+
         setFontPreferences()
 
         // Contacts
@@ -874,27 +874,27 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         // Analytics
         // Analytics tracking management
-        if (resources.getBoolean(R.bool.settings_analytics_category_visible)) {
-            (findPreference(PreferencesManager.SETTINGS_USE_ANALYTICS_KEY) as SwitchPreference).let {
-                // On if the analytics tracking is activated
-                it.isChecked = PreferencesManager.useAnalytics(appContext)
+        (findPreference(PreferencesManager.SETTINGS_USE_ANALYTICS_KEY) as SwitchPreference).let {
+            // On if the analytics tracking is activated
+            it.isChecked = PreferencesManager.useAnalytics(appContext)
 
-                it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                    PreferencesManager.setUseAnalytics(appContext, newValue as Boolean)
-                    true
-                }
+            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                PreferencesManager.setUseAnalytics(appContext, newValue as Boolean)
+                true
             }
+        }
 
-            // Rageshake Management
-            (findPreference(PreferencesManager.SETTINGS_USE_RAGE_SHAKE_KEY) as SwitchPreference).let {
-                it.isChecked = PreferencesManager.useRageshake(appContext)
+        // Rageshake Management
+        (findPreference(PreferencesManager.SETTINGS_USE_RAGE_SHAKE_KEY) as SwitchPreference).let {
+            it.isChecked = PreferencesManager.useRageshake(appContext)
 
-                it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                    PreferencesManager.setUseRageshake(appContext, newValue as Boolean)
-                    true
-                }
+            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                PreferencesManager.setUseRageshake(appContext, newValue as Boolean)
+                true
             }
-        } else {
+        }
+
+        if (!resources.getBoolean(R.bool.settings_analytics_configuration_visible) && !resources.getBoolean(R.bool.settings_rage_shake_configuration_visible)) {
             removeAnalyticsPreference()
         }
 

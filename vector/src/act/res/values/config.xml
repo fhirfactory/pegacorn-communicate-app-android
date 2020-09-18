@@ -62,7 +62,8 @@
     <bool name="settings_default_media_source_visible">true</bool>
     <bool name="settings_allow_fallback_call_visible">false</bool>
     <bool name="settings_encryption_visible">false</bool>
-    <bool name="settings_analytics_category_visible">false</bool>
+    <bool name="settings_analytics_configuration_visible">false</bool>
+    <bool name="settings_rage_shake_configuration_visible">false</bool>
     <bool name="settings_integration_category_visible">false</bool>
     <bool name="settings_deactivate_account_visible">false</bool>
     <bool name="settings_application_info_visible">true</bool>
