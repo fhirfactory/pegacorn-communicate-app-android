@@ -120,4 +120,6 @@
 
     <bool name="hide_remove_from_system_message">false</bool>
     <bool name="enable_riot_search_view">true</bool>
+
+    <bool name="show_hide_all_message_room_setting">true</bool>
 </resources>

@@ -1113,7 +1113,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             }
 
             // build the "ignore" item
-            if (supportedActionsList.indexOf(ITEM_ACTION_IGNORE) >= 0) {
+            if (supportedActionsList.indexOf(ITEM_ACTION_IGNORE) >= 0 && getResources().getBoolean(R.bool.show_hide_all_message_room_setting)) {
                 imageResource = R.drawable.ic_person_outline_black;
                 actionText = getString(R.string.room_participants_action_ignore);
                 uncategorizedActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_IGNORE));
