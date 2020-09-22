@@ -897,12 +897,14 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             memberPowerLevel = powerLevels.getUserPowerLevel(mMemberId);
             selfPowerLevel = powerLevels.getUserPowerLevel(selfUserId);
 
-            if (memberPowerLevel >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN) {
-                mMemberAvatarBadgeImageView.setVisibility(View.VISIBLE);
-                mMemberAvatarBadgeImageView.setImageResource(R.drawable.admin_icon);
-            } else if (memberPowerLevel >= CommonActivityUtils.UTILS_POWER_LEVEL_MODERATOR) {
-                mMemberAvatarBadgeImageView.setVisibility(View.VISIBLE);
-                mMemberAvatarBadgeImageView.setImageResource(R.drawable.mod_icon);
+            if(getResources().getBoolean(R.bool.show_admin_badge_member_detail)) {
+                if (memberPowerLevel >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN) {
+                    mMemberAvatarBadgeImageView.setVisibility(View.VISIBLE);
+                    mMemberAvatarBadgeImageView.setImageResource(R.drawable.admin_icon);
+                } else if (memberPowerLevel >= CommonActivityUtils.UTILS_POWER_LEVEL_MODERATOR) {
+                    mMemberAvatarBadgeImageView.setVisibility(View.VISIBLE);
+                    mMemberAvatarBadgeImageView.setImageResource(R.drawable.mod_icon);
+                }
             }
 
             // compute the number of administrators
@@ -1099,14 +1101,14 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             }
 
             // build the "block" item (block)
-            if (supportedActionsList.indexOf(ITEM_ACTION_BAN) >= 0) {
+            if (getResources().getBoolean(R.bool.show_ban_action_member_detail) && supportedActionsList.indexOf(ITEM_ACTION_BAN) >= 0) {
                 imageResource = R.drawable.ic_block_black;
                 actionText = getString(R.string.room_participants_action_ban);
                 adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_BAN));
             }
 
             // build the "unblock" item (unblock)
-            if (supportedActionsList.indexOf(ITEM_ACTION_UNBAN) >= 0) {
+            if (getResources().getBoolean(R.bool.show_ban_action_member_detail) && supportedActionsList.indexOf(ITEM_ACTION_UNBAN) >= 0) {
                 imageResource = R.drawable.ic_block_black;
                 actionText = getString(R.string.room_participants_action_unban);
                 adminActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_UNBAN));
@@ -1139,7 +1141,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
 
             // devices
             // don't show devices list if the member isn't a matrix user
-            if (mUser != null && MXPatterns.isUserId(mMemberId)) {
+            if (getResources().getBoolean(R.bool.show_session_member_detail) && mUser != null && MXPatterns.isUserId(mMemberId)) {
                 imageResource = R.drawable.ic_devices_info;
                 actionText = getString(R.string.room_participants_action_devices_list);
                 devicesActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_DEVICES));

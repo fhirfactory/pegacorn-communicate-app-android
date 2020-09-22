@@ -113,6 +113,10 @@
     <bool name="use_progressbar_original_background">false</bool>
     <bool name="use_fab_color_as_accent_color">false</bool>
 
+    <bool name="show_ban_action_member_detail">true</bool>
+    <bool name="show_session_member_detail">true</bool>
+    <bool name="show_admin_badge_member_detail">true</bool>
+
     <bool name="show_message_view_source">true</bool>
     <bool name="show_message_view_decrypted">true</bool>
     <bool name="show_message_view_session">true</bool>
@@ -122,4 +126,9 @@
     <bool name="enable_riot_search_view">true</bool>
 
     <bool name="show_hide_all_message_room_setting">true</bool>
+    <bool name="show_direct_chat_room_setting">true</bool>
+    <bool name="show_shortcut_room_setting">true</bool>
+
+    <bool name="show_sticker_to_send_room">true</bool>
+    <bool name="show_send_voice_room">true</bool>
 </resources>
