@@ -524,7 +524,7 @@ public class RoomUtils {
                 if (!manager.isRequestPinShortcutSupported()) {
                     popup.getMenu().setGroupVisible(R.id.add_shortcut_actions, false);
                 } else {
-                    popup.getMenu().setGroupVisible(R.id.add_shortcut_actions, true);
+                    popup.getMenu().setGroupVisible(R.id.add_shortcut_actions, context.getResources().getBoolean(R.bool.show_shortcut_room_setting));
                 }
             }
 
@@ -568,6 +568,8 @@ public class RoomUtils {
                 item = popup.getMenu().findItem(R.id.ic_action_select_direct_chat);
                 item.setIcon(R.drawable.ic_material_transparent);
             }
+
+            popup.getMenu().findItem(R.id.ic_action_select_direct_chat).setVisible(context.getResources().getBoolean(R.bool.show_direct_chat_room_setting));
 
             // TODO LazyLoading, current user may be null
             RoomMember member = room.getMember(session.getMyUserId());
