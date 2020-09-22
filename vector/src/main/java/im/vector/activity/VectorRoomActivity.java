@@ -3890,12 +3890,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         items.add(DialogListItem.SendFile.INSTANCE);
 
         // Send voice
-        if (isVoiceFeatureEnabled) {
+        if (isVoiceFeatureEnabled && getResources().getBoolean(R.bool.show_send_voice_room)) {
             items.add(DialogListItem.SendVoice.INSTANCE);
         }
 
         // Send sticker
-        if (Matrix.getWidgetManager(this) != null) {
+        if (Matrix.getWidgetManager(this) != null && getResources().getBoolean(R.bool.show_sticker_to_send_room)) {
             items.add(DialogListItem.SendSticker.INSTANCE);
         }
 
