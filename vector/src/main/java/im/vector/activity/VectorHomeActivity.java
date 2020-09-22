@@ -766,8 +766,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         if (CommonActivityUtils.shouldRestartApp(this)) {
             return false;
         }
-        //no need to setup the searchview again if its already done
-        if(!getResources().getBoolean(R.bool.enable_riot_search_view) && mSearchView == null) {
+
+        if(!getResources().getBoolean(R.bool.enable_riot_search_view)) {
             MenuItem searchMenuItem = menu.findItem(R.id.action_search);
             mSearchView = (SearchView) searchMenuItem.getActionView();
             setUpSearchView();
@@ -778,7 +778,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         menu.findItem(R.id.ic_action_invite).setVisible(inviteCount > 0);
         return true;
     }
-
 
     private void setupBadge(int inviteItemCount) {
         if (inviteItemCountTextView != null) {
