@@ -3213,7 +3213,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                 // hide the action bar header view and reset the arrow image (arrow reset to down)
                 mActionBarCustomArrowImageView.setImageResource(R.drawable.ic_arrow_drop_down_white);
                 mRoomHeaderView.setVisibility(View.GONE);
-                toolbar.setBackgroundColor(ThemeUtils.INSTANCE.getColor(this, R.attr.colorPrimary));
+                toolbar.setBackgroundResource(R.drawable.act_gradient);
             }
         }
     }
@@ -3890,12 +3890,12 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         items.add(DialogListItem.SendFile.INSTANCE);
 
         // Send voice
-        if (isVoiceFeatureEnabled) {
+        if (isVoiceFeatureEnabled && getResources().getBoolean(R.bool.show_send_voice_room)) {
             items.add(DialogListItem.SendVoice.INSTANCE);
         }
 
         // Send sticker
-        if (Matrix.getWidgetManager(this) != null) {
+        if (Matrix.getWidgetManager(this) != null && getResources().getBoolean(R.bool.show_sticker_to_send_room)) {
             items.add(DialogListItem.SendSticker.INSTANCE);
         }
 

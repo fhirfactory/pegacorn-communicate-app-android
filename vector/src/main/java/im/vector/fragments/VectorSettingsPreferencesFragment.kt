@@ -2344,9 +2344,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 }
                 //preference.order = order
 
-                preference.onPreferenceClickListener = Preference.OnPreferenceClickListener { pref ->
-                    displayDelete3PIDConfirmationDialog(email3PID, pref.summary)
-                    true
+                if(resources.getBoolean(R.bool.settings_email_clickable)) {
+                    preference.onPreferenceClickListener = Preference.OnPreferenceClickListener { pref ->
+                        displayDelete3PIDConfirmationDialog(email3PID, pref.summary)
+                        true
+                    }
                 }
 
                 preference.onPreferenceLongClickListener = object : VectorPreference.OnPreferenceLongClickListener {
@@ -2673,9 +2675,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     preference.order = order
                 }
 
-                preference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                    displayDelete3PIDConfirmationDialog(phoneNumber3PID, preference.summary)
-                    true
+                if(resources.getBoolean(R.bool.settings_phone_clickable)) {
+                    preference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                        displayDelete3PIDConfirmationDialog(phoneNumber3PID, preference.summary)
+                        true
+                    }
                 }
 
                 preference.onPreferenceLongClickListener = object : VectorPreference.OnPreferenceLongClickListener {

@@ -159,6 +159,11 @@
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
+            android:name=".invite.InviteActivity"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:label="@string/invite"/>
+        <activity
             android:name=".activity.AccountCreationCaptchaActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/create_account" />
@@ -187,7 +192,7 @@
         <activity
             android:name=".activity.VectorHomeActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_home"
+            android:label="@string/riot_app_name"
             android:theme="@style/HomeActivityTheme.Light"
             android:windowSoftInputMode="adjustPan" />
         <activity
