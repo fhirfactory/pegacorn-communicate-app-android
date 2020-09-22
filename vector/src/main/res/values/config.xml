@@ -126,6 +126,10 @@
     <bool name="hide_remove_from_system_message">false</bool>
     <bool name="enable_riot_search_view">true</bool>
 
+
+    <bool name="show_direct_chat_room_setting">true</bool>
+    <bool name="show_shortcut_room_setting">true</bool>
+
     <bool name="show_sticker_to_send_room">true</bool>
     <bool name="show_send_voice_room">true</bool>
 </resources>
