@@ -51,6 +51,10 @@ class DirectoryPeopleFragment : BaseCommunicateHomeFragment(), PeopleClickListen
         peopleDirectoryAdapter.setData(testPeopleData)
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.findItem(R.id.ic_action_advanced_search)?.isVisible = false
+    }
+
     override fun onPeopleClick(directoryPeople: DirectoryPeople) {
         startActivity(PeopleDetailActivity.intent(requireContext(), directoryPeople))
     }

@@ -146,14 +146,7 @@ class DirectoryRoleFragment : BaseCommunicateHomeFragment(), RoleClickListener {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.findItem(R.id.ic_action_global_search)?.isVisible = false
-        menu.findItem(R.id.ic_action_historical)?.isVisible = false
-        menu.findItem(R.id.ic_action_mark_all_as_read)?.isVisible = false
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.advanced_search, menu)
-        super.onCreateOptionsMenu(menu, inflater)
+        menu.findItem(R.id.ic_action_advanced_search)?.isVisible = true
     }
 
     private fun subscribeUI() {

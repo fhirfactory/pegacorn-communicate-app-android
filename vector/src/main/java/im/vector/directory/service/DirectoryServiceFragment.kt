@@ -26,6 +26,10 @@ import org.matrix.androidsdk.data.Room
 class DirectoryServiceFragment : BaseCommunicateHomeFragment() {
     override fun getLayoutResId() = R.layout.fragment_directory_service
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        menu.findItem(R.id.ic_action_advanced_search)?.isVisible = false
+    }
+
     override fun getRooms(): MutableList<Room> {
         TODO("Not yet implemented")
     }
