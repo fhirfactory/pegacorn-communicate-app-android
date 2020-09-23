@@ -149,9 +149,6 @@ class DirectoryRoleFragment : BaseCommunicateHomeFragment(), RoleClickListener {
         menu.findItem(R.id.ic_action_global_search)?.isVisible = false
         menu.findItem(R.id.ic_action_historical)?.isVisible = false
         menu.findItem(R.id.ic_action_mark_all_as_read)?.isVisible = false
-        val searchMenuItem = menu.findItem(R.id.action_search)
-        val searchView = searchMenuItem.actionView as SearchView
-        searchView.queryHint = getString(R.string.search_role)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

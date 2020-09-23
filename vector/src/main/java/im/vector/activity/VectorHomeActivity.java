@@ -976,7 +976,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_HOME;
                 setActionBarTitle(R.string.riot_app_name);
-                setQueryHint(R.string.home_filter_placeholder_home, R.string.search_chats);
                 break;
             case R.id.bottom_action_people:
                 Log.d(LOG_TAG, "onNavigationItemSelected PEOPLE");
@@ -987,7 +986,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 mCurrentFragmentTag = TAG_FRAGMENT_PEOPLE;
                 mSearchView.setVisibility(View.GONE);
                 setActionBarTitle(R.string.directory_title);
-                setQueryHint(R.string.home_filter_placeholder_people, R.string.search_directory);
                 break;
             case R.id.bottom_action_rooms:
                 Log.d(LOG_TAG, "onNavigationItemSelected ROOMS");
@@ -996,7 +994,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = RoomsFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_ROOMS;
-                setQueryHint(R.string.home_filter_placeholder_rooms, R.string.search_chats);
                 break;
             case R.id.bottom_action_groups:
                 Log.d(LOG_TAG, "onNavigationItemSelected GROUPS");
@@ -1005,7 +1002,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = GroupsFragment.newInstance();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_GROUPS;
-                setQueryHint(R.string.home_filter_placeholder_groups, R.string.search_chats);
                 break;
             case R.id.bottom_action_favourites:
                 Log.d(LOG_TAG, "onNavigationItemSelected ROLE");
@@ -1018,7 +1014,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 if (null != getSupportActionBar()) {
                     getSupportActionBar().setTitle(getString(R.string.roles_title));
                 }
-                setQueryHint(R.string.home_filter_placeholder_favorites, R.string.search_chats);
                 break;
         }
 
@@ -1160,7 +1155,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     setQueryHint(R.string.home_filter_placeholder_favorites, R.string.search_chats);
                     break;
                 case R.id.bottom_action_people:
-                    setQueryHint(R.string.home_filter_placeholder_people, R.string.search_chats);
+                    setQueryHint(R.string.home_filter_placeholder_people, R.string.search_directory);
                     break;
                 case R.id.bottom_action_rooms:
                     setQueryHint(R.string.home_filter_placeholder_rooms, R.string.search_chats);

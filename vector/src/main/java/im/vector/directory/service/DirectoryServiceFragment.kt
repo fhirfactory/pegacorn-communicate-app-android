@@ -24,7 +24,7 @@ import org.matrix.androidsdk.data.Room
 
 
 class DirectoryServiceFragment : BaseCommunicateHomeFragment() {
-    override fun getLayoutResId() = R.layout.fragment_directory_role
+    override fun getLayoutResId() = R.layout.fragment_directory_service
 
     override fun getRooms(): MutableList<Room> {
         TODO("Not yet implemented")
