@@ -17,8 +17,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-abstract class BaseCommunicateHomeIndividualFragment(private var fragmentType: CommunicateHomeFragment.ROOM_FRAGMENTS) : BaseCommunicateHomeFragment(), UpDateListener, BadgeUpdateListener {
-    private val LOG_TAG = BaseCommunicateHomeIndividualFragment::class.java.simpleName
+abstract class BaseActIndividualFragment(private var fragmentType: ActFragment.ROOM_FRAGMENTS) : BaseActFragment(), UpDateListener, BadgeUpdateListener {
+    private val LOG_TAG = BaseActIndividualFragment::class.java.simpleName
 
     var registerListener: RegisterListener? = null
     var onSelectRoomListener: HomeRoomAdapter.OnSelectRoomListener? = null
@@ -35,7 +35,7 @@ abstract class BaseCommunicateHomeIndividualFragment(private var fragmentType: C
     override fun onBadgeUpdate(notificationCounter: NotificationCounter) {
         communicateTabBadgeUpdateListener?.onBadgeUpdate(notificationCounter.unreadRoomCount, fragmentType)
         when (fragmentType) {
-            CommunicateHomeFragment.ROOM_FRAGMENTS.FAVORITE, CommunicateHomeFragment.ROOM_FRAGMENTS.CHAT, CommunicateHomeFragment.ROOM_FRAGMENTS.LOW_PRIORITY -> {
+            ActFragment.ROOM_FRAGMENTS.FAVORITE, ActFragment.ROOM_FRAGMENTS.CHAT, ActFragment.ROOM_FRAGMENTS.LOW_PRIORITY -> {
                 sectionView.setTitle(R.string.total_number_of_room, notificationCounter.totalRoomCount)
             }
         }
@@ -102,6 +102,6 @@ interface UpDateListener {
 }
 
 interface RegisterListener {
-    fun onRegister(fragmentType: CommunicateHomeFragment.ROOM_FRAGMENTS, listener: UpDateListener)
-    fun onUnregister(fragmentType: CommunicateHomeFragment.ROOM_FRAGMENTS)
+    fun onRegister(fragmentType: ActFragment.ROOM_FRAGMENTS, listener: UpDateListener)
+    fun onUnregister(fragmentType: ActFragment.ROOM_FRAGMENTS)
 }

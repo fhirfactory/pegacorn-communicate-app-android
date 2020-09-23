@@ -13,7 +13,7 @@ import im.vector.activity.VectorHomeActivity
 import im.vector.activity.VectorRoomActivity
 import im.vector.activity.util.WaitingViewData
 import im.vector.adapters.AbsAdapter
-import im.vector.home.BaseCommunicateHomeFragment
+import im.vector.home.BaseActFragment
 import kotlinx.android.synthetic.main.fragment_home_individual.*
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.core.Log
@@ -21,7 +21,7 @@ import org.matrix.androidsdk.core.callback.ApiCallback
 import org.matrix.androidsdk.core.model.MatrixError
 import java.util.*
 
-class InviteRoomFragment : BaseCommunicateHomeFragment(), AbsAdapter.RoomInvitationListener {
+class InviteRoomFragment : BaseActFragment(), AbsAdapter.RoomInvitationListener {
     private var LOG_TAG = "InviteRoomFragment"
     private lateinit var viewModel: InviteRoomViewModel
     private var simpleFragmentActivityListener: SimpleFragmentActivityListener? = null

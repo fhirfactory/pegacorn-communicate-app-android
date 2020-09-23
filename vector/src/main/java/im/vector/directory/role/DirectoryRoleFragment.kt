@@ -2,11 +2,9 @@ package im.vector.directory.role
 
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -14,16 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.transition.TransitionManager
 import im.vector.R
-import im.vector.directory.DirectoryFragment
+import im.vector.directory.BaseDirectoryFragment
 import im.vector.directory.role.detail.RoleDetailActivity
 import im.vector.directory.role.model.*
-import im.vector.fragments.AbsHomeFragment
-import im.vector.home.BaseCommunicateHomeFragment
 import kotlinx.android.synthetic.main.fragment_directory_role.*
 import org.matrix.androidsdk.data.Room
 
 
-class DirectoryRoleFragment : BaseCommunicateHomeFragment(), RoleClickListener {
+class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
     private lateinit var viewModel: DirectoryRoleViewModel
     private lateinit var categoryAdapter: DropDownAdapter
     private lateinit var organisationUnitAdapter: DropDownAdapter
@@ -133,6 +129,9 @@ class DirectoryRoleFragment : BaseCommunicateHomeFragment(), RoleClickListener {
                 arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
 
         roleAdapter.setData(testRoleData)
+    }
+
+    override fun onFavorite(enable: Boolean) {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

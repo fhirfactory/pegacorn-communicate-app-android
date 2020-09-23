@@ -2,18 +2,15 @@ package im.vector.directory.people
 
 import android.os.Bundle
 import android.view.Menu
-import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.R
-import im.vector.directory.DirectoryFragment
+import im.vector.directory.BaseDirectoryFragment
 import im.vector.directory.people.detail.PeopleDetailActivity
 import im.vector.directory.people.model.DirectoryPeople
-import im.vector.fragments.AbsHomeFragment
-import im.vector.home.BaseCommunicateHomeFragment
 import kotlinx.android.synthetic.main.fragment_directory_people.*
 import org.matrix.androidsdk.data.Room
 
-class DirectoryPeopleFragment : BaseCommunicateHomeFragment(), PeopleClickListener {
+class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
     private lateinit var peopleDirectoryAdapter: PeopleDirectoryAdapter
 
     override fun onFilter(pattern: String?, listener: OnFilterListener?) {
@@ -27,6 +24,9 @@ class DirectoryPeopleFragment : BaseCommunicateHomeFragment(), PeopleClickListen
 
     override fun getRooms(): MutableList<Room> {
         TODO("Not yet implemented")
+    }
+
+    override fun onFavorite(enable: Boolean) {
     }
 
     override fun getLayoutResId(): Int {

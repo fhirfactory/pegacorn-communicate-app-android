@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.fragment_view_pager_tab.*
 import org.matrix.androidsdk.data.Room
 import org.matrix.androidsdk.data.RoomTag
 
-class CommunicateHomeFragment : BaseCommunicateHomeFragment(), HomeRoomAdapter.OnSelectRoomListener, RegisterListener, CommunicateTabBadgeUpdateListener {
+class ActFragment : BaseActFragment(), HomeRoomAdapter.OnSelectRoomListener, RegisterListener, CommunicateTabBadgeUpdateListener {
     private val dataUpdateListeners = mutableMapOf<ROOM_FRAGMENTS, UpDateListener?>(ROOM_FRAGMENTS.FAVORITE to null, ROOM_FRAGMENTS.CHAT to null, ROOM_FRAGMENTS.LOW_PRIORITY to null)
     private var result: HomeRoomsViewModel.Result? = null
     private var roomPositionMap = mutableMapOf(ROOM_FRAGMENTS.FAVORITE to -1, ROOM_FRAGMENTS.CHAT to -1, ROOM_FRAGMENTS.LOW_PRIORITY to -1)
@@ -142,17 +142,17 @@ class CommunicateHomeFragment : BaseCommunicateHomeFragment(), HomeRoomAdapter.O
 
         private fun getFragmentForNormal() = ChatRoomFragment().also { fragment ->
             fragment.onUpdate(result?.directChats?.let { result?.otherRooms?.plus(it) }, notificationComparator)
-            fragment.addListener(this@CommunicateHomeFragment, this@CommunicateHomeFragment, null, this@CommunicateHomeFragment, this@CommunicateHomeFragment)
+            fragment.addListener(this@ActFragment, this@ActFragment, null, this@ActFragment, this@ActFragment)
         }
 
         private fun getFragmentForFavorite() = FavoriteRoomFragment().also { fragment ->
             fragment.onUpdate(result?.favourites, notificationComparator)
-            fragment.addListener(this@CommunicateHomeFragment, this@CommunicateHomeFragment, null, this@CommunicateHomeFragment, this@CommunicateHomeFragment)
+            fragment.addListener(this@ActFragment, this@ActFragment, null, this@ActFragment, this@ActFragment)
         }
 
         private fun getFragmentForLowPriority() = LowPriorityRoomFragment().also { fragment ->
             fragment.onUpdate(result?.lowPriorities, notificationComparator)
-            fragment.addListener(this@CommunicateHomeFragment, this@CommunicateHomeFragment, null, this@CommunicateHomeFragment, this@CommunicateHomeFragment)
+            fragment.addListener(this@ActFragment, this@ActFragment, null, this@ActFragment, this@ActFragment)
         }
 
         private fun getFragment(roomFragment: ROOM_FRAGMENTS): Fragment {

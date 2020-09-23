@@ -10,13 +10,15 @@ import im.vector.R
 import im.vector.directory.people.DirectoryPeopleFragment
 import im.vector.directory.role.DirectoryRoleFragment
 import im.vector.directory.service.DirectoryServiceFragment
-import im.vector.home.BaseCommunicateHomeFragment
+import im.vector.home.BaseActFragment
 import im.vector.ui.themes.ThemeUtils
 import kotlinx.android.synthetic.main.fragment_view_pager_tab.*
 
 
-class DirectoryFragment : BaseCommunicateHomeFragment() {
+class DirectoryFragment : BaseActFragment() {
     var favouriteEnable = false
+    private val fragments = mutableMapOf(DIRECTORY_FRAGMENTS.ROLE to DirectoryRoleFragment(), DIRECTORY_FRAGMENTS.PEOPLE to DirectoryPeopleFragment(), DIRECTORY_FRAGMENTS.SERVICE to DirectoryServiceFragment())
+
     override fun getLayoutResId() = R.layout.fragment_view_pager_tab
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -38,6 +40,9 @@ class DirectoryFragment : BaseCommunicateHomeFragment() {
             R.id.action_favourite -> {
                 favouriteEnable = !favouriteEnable
                 item.setIcon(if (favouriteEnable) R.drawable.filled_star else R.drawable.outline_star)
+                fragments.forEach { fragment ->
+                    fragment.value.onFavorite(favouriteEnable)
+                }
                 return true
             }
         }
@@ -59,17 +64,7 @@ class DirectoryFragment : BaseCommunicateHomeFragment() {
     }
 
     inner class DirectoryPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-        override fun getItem(position: Int) = when (DIRECTORY_FRAGMENTS.values()[position]) {
-            DIRECTORY_FRAGMENTS.ROLE -> {
-                DirectoryRoleFragment()
-            }
-            DIRECTORY_FRAGMENTS.PEOPLE -> {
-                DirectoryPeopleFragment()
-            }
-            DIRECTORY_FRAGMENTS.SERVICE -> {
-                DirectoryServiceFragment()
-            }
-        }
+        override fun getItem(position: Int) = fragments[DIRECTORY_FRAGMENTS.values()[position]]!!
 
         override fun getCount() = DIRECTORY_FRAGMENTS.values().size
 
