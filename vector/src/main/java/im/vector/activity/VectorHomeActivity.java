@@ -53,6 +53,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
@@ -119,6 +120,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.RolesInNavigationBarAdapter;
 import im.vector.adapters.model.UserRole;
+import im.vector.directory.DirectoryFragment;
 import im.vector.directory.people.DirectoryPeopleFragment;
 import im.vector.directory.role.DirectoryRoleFragment;
 import im.vector.extensions.ViewExtensionsKt;
@@ -973,33 +975,19 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = new CommunicateHomeFragment();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_HOME;
+                setActionBarTitle(R.string.riot_app_name);
                 setQueryHint(R.string.home_filter_placeholder_home, R.string.search_chats);
-                break;
-            case R.id.bottom_action_favourites:
-                Log.d(LOG_TAG, "onNavigationItemSelected ROLE");
-                fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_ROLES);
-                if (fragment == null) {
-                    fragment = new DirectoryRoleFragment();
-                }
-                mCurrentFragmentTag = TAG_FRAGMENT_ROLES;
-                mSearchView.setVisibility(View.GONE);
-                if (null != getSupportActionBar()) {
-                    getSupportActionBar().setTitle(getString(R.string.roles_title));
-                }
-                setQueryHint(R.string.home_filter_placeholder_favorites, R.string.search_chats);
                 break;
             case R.id.bottom_action_people:
                 Log.d(LOG_TAG, "onNavigationItemSelected PEOPLE");
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_PEOPLE);
                 if (fragment == null) {
-                    fragment = new DirectoryPeopleFragment();
+                    fragment = new DirectoryFragment();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_PEOPLE;
                 mSearchView.setVisibility(View.GONE);
-                if (null != getSupportActionBar()) {
-                    getSupportActionBar().setTitle(getString(R.string.people_title));
-                }
-                setQueryHint(R.string.home_filter_placeholder_people, R.string.search_chats);
+                setActionBarTitle(R.string.directory_title);
+                setQueryHint(R.string.home_filter_placeholder_people, R.string.search_directory);
                 break;
             case R.id.bottom_action_rooms:
                 Log.d(LOG_TAG, "onNavigationItemSelected ROOMS");
@@ -1018,6 +1006,19 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_GROUPS;
                 setQueryHint(R.string.home_filter_placeholder_groups, R.string.search_chats);
+                break;
+            case R.id.bottom_action_favourites:
+                Log.d(LOG_TAG, "onNavigationItemSelected ROLE");
+                fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_ROLES);
+                if (fragment == null) {
+                    fragment = new DirectoryRoleFragment();
+                }
+                mCurrentFragmentTag = TAG_FRAGMENT_ROLES;
+                mSearchView.setVisibility(View.GONE);
+                if (null != getSupportActionBar()) {
+                    getSupportActionBar().setTitle(getString(R.string.roles_title));
+                }
+                setQueryHint(R.string.home_filter_placeholder_favorites, R.string.search_chats);
                 break;
         }
 
@@ -1043,6 +1044,12 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             } catch (Exception e) {
                 Log.e(LOG_TAG, "## updateSelectedFragment() failed : " + e.getMessage(), e);
             }
+        }
+    }
+
+    private void setActionBarTitle(@StringRes int res){
+        if (null != getSupportActionBar()) {
+            getSupportActionBar().setTitle(getString(res));
         }
     }
 

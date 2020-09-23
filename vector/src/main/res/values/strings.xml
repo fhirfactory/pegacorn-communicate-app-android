@@ -1601,6 +1601,7 @@ Why choose Riot.im?
     </string-array>
 
     <string name="search_chats">Search Chats</string>
+    <string name="search_directory">Search Directory</string>
     <string name="rejecting">Declining the invitation</string>
     <string name="accepting">Accepting the invitation</string>
     <string name="invite_menu_title">Invites</string>

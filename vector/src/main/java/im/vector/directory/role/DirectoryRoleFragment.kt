@@ -17,10 +17,13 @@ import im.vector.R
 import im.vector.directory.DirectoryFragment
 import im.vector.directory.role.detail.RoleDetailActivity
 import im.vector.directory.role.model.*
+import im.vector.fragments.AbsHomeFragment
+import im.vector.home.BaseCommunicateHomeFragment
 import kotlinx.android.synthetic.main.fragment_directory_role.*
+import org.matrix.androidsdk.data.Room
 
 
-class DirectoryRoleFragment : DirectoryFragment(), RoleClickListener {
+class DirectoryRoleFragment : BaseCommunicateHomeFragment(), RoleClickListener {
     private lateinit var viewModel: DirectoryRoleViewModel
     private lateinit var categoryAdapter: DropDownAdapter
     private lateinit var organisationUnitAdapter: DropDownAdapter
@@ -39,6 +42,11 @@ class DirectoryRoleFragment : DirectoryFragment(), RoleClickListener {
     }
 
     override fun onResetFilter() {
+        TODO("Not yet implemented")
+    }
+
+
+    override fun getRooms(): MutableList<Room> {
         TODO("Not yet implemented")
     }
 
