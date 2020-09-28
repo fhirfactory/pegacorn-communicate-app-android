@@ -47,7 +47,8 @@ class RolesDetailAdapter(val context: Context) :
             secondaryName = itemView.secondaryName
         }
 
-        fun bind(context: Context, session: MXSession?, adapterModel: AdapterModel) {
+        fun bind(context: Context, session: MXSession?, adapterModel: AdapterModel, showHeader: Boolean) {
+            heading?.visibility = if (showHeader) VISIBLE else GONE
             heading?.text = adapterModel.title
             officialName?.text = adapterModel.primaryText
             if (adapterModel.secondaryText == null) {
@@ -72,11 +73,12 @@ class RolesDetailAdapter(val context: Context) :
             secondaryName = itemView.secondaryName
         }
 
-        fun bind(context: Context, session: MXSession?, adapterModel: AdapterModel) {
+        fun bind(context: Context, session: MXSession?, adapterModel: AdapterModel, showHeader: Boolean) {
             VectorUtils.loadRoomAvatar(context, session, avatar, adapterModel.people)
             officialName?.text = adapterModel.people?.officialName
             secondaryName?.text = adapterModel.people?.jobTitle
             heading?.text = adapterModel.title
+            heading?.visibility = if (showHeader) VISIBLE else GONE
         }
     }
 
@@ -109,10 +111,9 @@ class RolesDetailAdapter(val context: Context) :
                                     viewType: Int): RecyclerView.ViewHolder {
         // create a new view
         return when (viewType) {
-            TYPE_ROLE, TYPE_ORGANISATION_UNIT, TYPE_SPECIALITY, TYPE_LOCATION -> RoleViewHolder(LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_role_detail_category1, parent, false))
             TYPE_PRACTITIONER_IN_ROLE -> PractitionerInRoleViewHolder(LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_role_detail_category2, parent, false))
+            //TYPE_ROLE, TYPE_ORGANISATION_UNIT, TYPE_SPECIALITY, TYPE_LOCATION
             else -> RoleViewHolder(LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_role_detail_category1, parent, false))
         }
@@ -121,10 +122,12 @@ class RolesDetailAdapter(val context: Context) :
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (adapterModels[position].rowType) {
-            TYPE_ROLE, TYPE_ORGANISATION_UNIT, TYPE_SPECIALITY, TYPE_LOCATION -> (holder as RoleViewHolder).bind(context, mSession, adapterModels[position])
-            TYPE_PRACTITIONER_IN_ROLE -> (holder as PractitionerInRoleViewHolder).bind(context, mSession, adapterModels[position])
+            TYPE_ROLE, TYPE_ORGANISATION_UNIT, TYPE_SPECIALITY, TYPE_LOCATION -> (holder as RoleViewHolder).bind(context, mSession, adapterModels[position], showHeader(position))
+            TYPE_PRACTITIONER_IN_ROLE -> (holder as PractitionerInRoleViewHolder).bind(context, mSession, adapterModels[position], showHeader(position))
         }
     }
+
+    private fun showHeader(position: Int) = position == 0 || adapterModels[position - 1].title != adapterModels[position].title
 
     override fun getItemViewType(position: Int): Int {
         return adapterModels[position].rowType
