@@ -1611,6 +1611,8 @@ Why choose Riot.im?
     <string name="search_role">Search roles</string>
 
     <string name="total_number_of_room"> Rooms: </string>
+    <string name="total_number_of_roles"> Roles: </string>
+    <string name="total_number_of_people"> People: </string>
     <string name="total_number_of_invite">Invites: </string>
     <string name="no_invites">You do not have any invitations. </string>
 

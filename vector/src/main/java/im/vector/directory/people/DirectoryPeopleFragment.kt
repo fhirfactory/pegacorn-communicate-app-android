@@ -8,6 +8,8 @@ import im.vector.directory.BaseDirectoryFragment
 import im.vector.directory.people.detail.PeopleDetailActivity
 import im.vector.directory.people.model.DirectoryPeople
 import kotlinx.android.synthetic.main.fragment_directory_people.*
+import kotlinx.android.synthetic.main.fragment_directory_people.header
+import kotlinx.android.synthetic.main.fragment_directory_role.*
 import org.matrix.androidsdk.data.Room
 
 class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
@@ -49,6 +51,7 @@ class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
         testPeopleData.add(DirectoryPeople("5", "James", "Test Analyst", null, "Emergency Department", "Hospital Department"))
 
         peopleDirectoryAdapter.setData(testPeopleData)
+        setHeader(header, R.string.total_number_of_people, testPeopleData.size)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
