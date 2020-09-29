@@ -146,7 +146,7 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.findItem(R.id.ic_action_advanced_search)?.isVisible = true
+        menu.findItem(R.id.ic_action_advanced_search)?.isVisible = false
     }
 
     private fun subscribeUI() {

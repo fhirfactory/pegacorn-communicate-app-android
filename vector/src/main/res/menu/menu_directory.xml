@@ -13,5 +13,6 @@
         android:id="@+id/ic_action_advanced_search"
         android:icon="@drawable/ic_material_search_white"
         android:title="@string/advanced_search_menu"
+        android:visible="false"
         app:showAsAction="collapseActionView" />
 </menu>
