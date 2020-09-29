@@ -117,7 +117,6 @@
 
     <bool name="show_ban_action_member_detail">false</bool>
     <bool name="show_session_member_detail">false</bool>
-    <bool name="show_hide_all_message_action_member_detail">false</bool>
     <bool name="show_admin_badge_member_detail">false</bool>
 
     <bool name="show_message_view_source">false</bool>
@@ -128,6 +127,7 @@
     <bool name="hide_remove_from_system_message">true</bool>
     <bool name="enable_riot_search_view">false</bool>
 
+    <bool name="show_hide_all_message_room_setting">false</bool>
     <bool name="show_direct_chat_room_setting">false</bool>
     <bool name="show_shortcut_room_setting">false</bool>
 
