@@ -134,4 +134,6 @@
 
     <bool name="show_sticker_to_send_room">true</bool>
     <bool name="show_send_voice_room">true</bool>
+
+    <bool name="show_add_matrix_app_menu_item">true</bool>
 </resources>
