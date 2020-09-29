@@ -2,15 +2,15 @@ package im.vector.directory.people
 
 import android.os.Bundle
 import android.view.Menu
-import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.R
-import im.vector.directory.DirectoryFragment
+import im.vector.directory.BaseDirectoryFragment
 import im.vector.directory.people.detail.PeopleDetailActivity
 import im.vector.directory.people.model.DirectoryPeople
 import kotlinx.android.synthetic.main.fragment_directory_people.*
+import org.matrix.androidsdk.data.Room
 
-class DirectoryPeopleFragment : DirectoryFragment(), PeopleClickListener {
+class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
     private lateinit var peopleDirectoryAdapter: PeopleDirectoryAdapter
 
     override fun onFilter(pattern: String?, listener: OnFilterListener?) {
@@ -19,6 +19,16 @@ class DirectoryPeopleFragment : DirectoryFragment(), PeopleClickListener {
 
     override fun onResetFilter() {
         TODO("Not yet implemented")
+    }
+
+
+    override fun getRooms(): MutableList<Room> {
+        TODO("Not yet implemented")
+    }
+
+    override fun onFavorite(enable: Boolean) {
+        //Temporary
+        setHeader(header, if (enable) R.string.total_number_of_favourite_people else R.string.total_number_of_people, if (enable) 4 else 10)
     }
 
     override fun getLayoutResId(): Int {
@@ -41,17 +51,15 @@ class DirectoryPeopleFragment : DirectoryFragment(), PeopleClickListener {
         testPeopleData.add(DirectoryPeople("5", "James", "Test Analyst", null, "Emergency Department", "Hospital Department"))
 
         peopleDirectoryAdapter.setData(testPeopleData)
-        activity?.invalidateOptionsMenu()
+        setHeader(header, R.string.total_number_of_people, testPeopleData.size)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        val searchMenuItem = menu.findItem(R.id.action_search)
-        val searchView = searchMenuItem.actionView as SearchView
-        searchView.queryHint = getString(R.string.search_people)
+        menu.findItem(R.id.ic_action_advanced_search)?.isVisible = false
     }
 
     override fun onPeopleClick(directoryPeople: DirectoryPeople) {
-        startActivity(PeopleDetailActivity.intent(requireContext(), directoryPeople))
+        startActivity(PeopleDetailActivity.intent(requireContext(), directoryPeople, true))
     }
 
     override fun onPeopleFavorite(directoryPeople: DirectoryPeople) {

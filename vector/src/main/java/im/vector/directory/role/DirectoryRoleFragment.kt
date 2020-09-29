@@ -2,11 +2,9 @@ package im.vector.directory.role
 
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -14,13 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.transition.TransitionManager
 import im.vector.R
-import im.vector.directory.DirectoryFragment
+import im.vector.directory.BaseDirectoryFragment
 import im.vector.directory.role.detail.RoleDetailActivity
 import im.vector.directory.role.model.*
 import kotlinx.android.synthetic.main.fragment_directory_role.*
+import org.matrix.androidsdk.data.Room
 
 
-class DirectoryRoleFragment : DirectoryFragment(), RoleClickListener {
+class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
     private lateinit var viewModel: DirectoryRoleViewModel
     private lateinit var categoryAdapter: DropDownAdapter
     private lateinit var organisationUnitAdapter: DropDownAdapter
@@ -35,10 +34,15 @@ class DirectoryRoleFragment : DirectoryFragment(), RoleClickListener {
     }
 
     override fun onFilter(pattern: String?, listener: OnFilterListener?) {
-        TODO("Not yet implemented")
+        //TODO("Not yet implemented")
     }
 
     override fun onResetFilter() {
+        TODO("Not yet implemented")
+    }
+
+
+    override fun getRooms(): MutableList<Room> {
         TODO("Not yet implemented")
     }
 
@@ -125,6 +129,12 @@ class DirectoryRoleFragment : DirectoryFragment(), RoleClickListener {
                 arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
 
         roleAdapter.setData(testRoleData)
+        setHeader(header, R.string.total_number_of_roles, testRoleData.size)
+    }
+
+    override fun onFavorite(enable: Boolean) {
+        //Temporary
+        setHeader(header, if (enable) R.string.total_number_of_favourite_roles else R.string.total_number_of_roles, if (enable) 4 else 10)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -138,17 +148,7 @@ class DirectoryRoleFragment : DirectoryFragment(), RoleClickListener {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.findItem(R.id.ic_action_global_search)?.isVisible = false
-        menu.findItem(R.id.ic_action_historical)?.isVisible = false
-        menu.findItem(R.id.ic_action_mark_all_as_read)?.isVisible = false
-        val searchMenuItem = menu.findItem(R.id.action_search)
-        val searchView = searchMenuItem.actionView as SearchView
-        searchView.queryHint = getString(R.string.search_role)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.advanced_search, menu)
-        super.onCreateOptionsMenu(menu, inflater)
+        menu.findItem(R.id.ic_action_advanced_search)?.isVisible = false
     }
 
     private fun subscribeUI() {
@@ -160,6 +160,6 @@ class DirectoryRoleFragment : DirectoryFragment(), RoleClickListener {
     }
 
     override fun onRoleClick(role: DummyRole) {
-        startActivity(RoleDetailActivity.intent(requireContext(), role))
+        startActivity(RoleDetailActivity.intent(requireContext(), role, true))
     }
 }

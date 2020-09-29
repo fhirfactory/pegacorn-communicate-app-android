@@ -1,3 +1,3 @@
 package im.vector.home
 
-class FavoriteRoomFragment : BaseCommunicateHomeIndividualFragment(CommunicateHomeFragment.ROOM_FRAGMENTS.FAVORITE)
+class FavoriteRoomFragment : BaseActIndividualFragment(CommunicateHomeFragment.ROOM_FRAGMENTS.FAVORITE)

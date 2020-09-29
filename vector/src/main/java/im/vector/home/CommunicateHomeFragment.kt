@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.fragment_view_pager_tab.*
 import org.matrix.androidsdk.data.Room
 import org.matrix.androidsdk.data.RoomTag
 
-class CommunicateHomeFragment : BaseCommunicateHomeFragment(), HomeRoomAdapter.OnSelectRoomListener, RegisterListener, CommunicateTabBadgeUpdateListener {
+class CommunicateHomeFragment : BaseActFragment(), HomeRoomAdapter.OnSelectRoomListener, RegisterListener, CommunicateTabBadgeUpdateListener {
     private val dataUpdateListeners = mutableMapOf<ROOM_FRAGMENTS, UpDateListener?>(ROOM_FRAGMENTS.FAVORITE to null, ROOM_FRAGMENTS.CHAT to null, ROOM_FRAGMENTS.LOW_PRIORITY to null)
     private var result: HomeRoomsViewModel.Result? = null
     private var roomPositionMap = mutableMapOf(ROOM_FRAGMENTS.FAVORITE to -1, ROOM_FRAGMENTS.CHAT to -1, ROOM_FRAGMENTS.LOW_PRIORITY to -1)

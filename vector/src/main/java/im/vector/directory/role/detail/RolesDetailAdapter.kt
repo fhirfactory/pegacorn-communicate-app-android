@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.Matrix
 import im.vector.R
+import im.vector.directory.people.PeopleClickListener
 import im.vector.directory.people.model.DirectoryPeople
 import im.vector.directory.role.model.DummyRole
 import im.vector.util.VectorUtils
@@ -21,7 +22,7 @@ import kotlinx.android.synthetic.main.item_role_detail_category2.view.*
 import org.matrix.androidsdk.MXSession
 
 
-class RolesDetailAdapter(val context: Context) :
+class RolesDetailAdapter(val context: Context, private val onClickListener: PeopleClickListener?) :
         RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val adapterModels = mutableListOf<AdapterModel>()
     private val TYPE_ROLE = 1
@@ -47,7 +48,8 @@ class RolesDetailAdapter(val context: Context) :
             secondaryName = itemView.secondaryName
         }
 
-        fun bind(context: Context, session: MXSession?, adapterModel: AdapterModel) {
+        fun bind(context: Context, session: MXSession?, adapterModel: AdapterModel, showHeader: Boolean) {
+            heading?.visibility = if (showHeader) VISIBLE else GONE
             heading?.text = adapterModel.title
             officialName?.text = adapterModel.primaryText
             if (adapterModel.secondaryText == null) {
@@ -72,11 +74,17 @@ class RolesDetailAdapter(val context: Context) :
             secondaryName = itemView.secondaryName
         }
 
-        fun bind(context: Context, session: MXSession?, adapterModel: AdapterModel) {
+        fun bind(context: Context, session: MXSession?, adapterModel: AdapterModel, showHeader: Boolean) {
             VectorUtils.loadRoomAvatar(context, session, avatar, adapterModel.people)
             officialName?.text = adapterModel.people?.officialName
             secondaryName?.text = adapterModel.people?.jobTitle
             heading?.text = adapterModel.title
+            heading?.visibility = if (showHeader) VISIBLE else GONE
+            itemView.setOnClickListener {
+                adapterModel.people?.let { people ->
+                    onClickListener?.onPeopleClick(people)
+                }
+            }
         }
     }
 
@@ -109,10 +117,9 @@ class RolesDetailAdapter(val context: Context) :
                                     viewType: Int): RecyclerView.ViewHolder {
         // create a new view
         return when (viewType) {
-            TYPE_ROLE, TYPE_ORGANISATION_UNIT, TYPE_SPECIALITY, TYPE_LOCATION -> RoleViewHolder(LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_role_detail_category1, parent, false))
             TYPE_PRACTITIONER_IN_ROLE -> PractitionerInRoleViewHolder(LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_role_detail_category2, parent, false))
+            //TYPE_ROLE, TYPE_ORGANISATION_UNIT, TYPE_SPECIALITY, TYPE_LOCATION
             else -> RoleViewHolder(LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_role_detail_category1, parent, false))
         }
@@ -121,10 +128,12 @@ class RolesDetailAdapter(val context: Context) :
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (adapterModels[position].rowType) {
-            TYPE_ROLE, TYPE_ORGANISATION_UNIT, TYPE_SPECIALITY, TYPE_LOCATION -> (holder as RoleViewHolder).bind(context, mSession, adapterModels[position])
-            TYPE_PRACTITIONER_IN_ROLE -> (holder as PractitionerInRoleViewHolder).bind(context, mSession, adapterModels[position])
+            TYPE_ROLE, TYPE_ORGANISATION_UNIT, TYPE_SPECIALITY, TYPE_LOCATION -> (holder as RoleViewHolder).bind(context, mSession, adapterModels[position], showHeader(position))
+            TYPE_PRACTITIONER_IN_ROLE -> (holder as PractitionerInRoleViewHolder).bind(context, mSession, adapterModels[position], showHeader(position))
         }
     }
+
+    private fun showHeader(position: Int) = position == 0 || adapterModels[position - 1].title != adapterModels[position].title
 
     override fun getItemViewType(position: Int): Int {
         return adapterModels[position].rowType

@@ -133,6 +133,7 @@
     <string name="bottom_action_people">People</string>
     <string name="bottom_action_rooms">Rooms</string>
     <string name="bottom_action_groups">Communities</string>
+    <string name="bottom_action_roles">Roles</string>
 
     <!-- Home screen -->
     <string name="home_filter_placeholder_home">Filter room names</string>
@@ -1590,6 +1591,8 @@ Why choose Riot.im?
         <item>People</item>
     </string-array>
 
+    <string name="advanced_search">advanced</string>
+    <string name="advanced_search_menu">Advanced Search</string>
     <string-array name="home_tabs">
         <item>Invites</item>
         <item>Favourites</item>
@@ -1597,24 +1600,34 @@ Why choose Riot.im?
         <item>Low Priority</item>
     </string-array>
 
+    <string name="favourite">Favourite</string>
     <string name="search_chats">Search Chats</string>
+    <string name="search_directory">Search Directory</string>
     <string name="rejecting">Declining the invitation</string>
     <string name="accepting">Accepting the invitation</string>
     <string name="invite_menu_title">Invites</string>
     <string name="invite_title">Invites</string>
     <string name="total_notification">Total Notifications</string>
+    <string name="search_role">Search roles</string>
+
     <string name="total_number_of_room"> Rooms: </string>
+    <string name="total_number_of_roles"> Roles: </string>
+    <string name="total_number_of_favourite_roles"> Favourite Roles: </string>
+    <string name="total_number_of_people"> People: </string>
+    <string name="total_number_of_favourite_people">Favourite People: </string>
     <string name="total_number_of_invite">Invites: </string>
     <string name="no_invites">You do not have any invitations. </string>
-    <string name="search_role">Search for a role</string>
+
     <string name="category">Category</string>
     <string name="organisation_unit">Organisation Unit</string>
     <string name="speciality">Speciality</string>
     <string name="location">Location</string>
     <string name="apply">Apply</string>
     <string name="roles">Role</string>
+    <string name="roles_title">Roles</string>
+    <string name="people_title">People</string>
     <string name="title_activity_role_detail">Role Detail</string>
-    <string name="search_people">Search for people</string>
+    <string name="search_people">Search people</string>
     <string name="title_activity_people_detail">Person Detail</string>
     <string name="short_text">Short text</string>
     <string name="long_text">very long text very long text very long text very long text very long text very long text very long text</string>
