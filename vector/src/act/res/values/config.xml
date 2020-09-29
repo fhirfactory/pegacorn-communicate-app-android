@@ -59,7 +59,7 @@
     <bool name="settings_play_shutter_sound_visible">false</bool>
     <bool name="settings_preview_media_before_sending_visible">false</bool>
     <bool name="settings_default_compression_visible">true</bool>
-    <bool name="settings_default_media_source_visible">true</bool>
+    <bool name="settings_default_media_source_visible">false</bool>
     <bool name="settings_allow_fallback_call_visible">false</bool>
     <bool name="settings_encryption_visible">false</bool>
     <bool name="settings_analytics_configuration_visible">false</bool>
