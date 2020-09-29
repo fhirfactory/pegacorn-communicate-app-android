@@ -141,18 +141,18 @@ class CommunicateHomeFragment : BaseCommunicateHomeFragment(), HomeRoomAdapter.O
         private val notificationComparator = RoomUtils.getNotifCountRoomsComparator(mSession, pinMissedNotifications, pinUnreadMessages)
 
         private fun getFragmentForNormal() = ChatRoomFragment().also { fragment ->
-            fragment.onUpdate(result?.directChats?.let { result?.otherRooms?.plus(it) }, notificationComparator)
             fragment.addListener(this@CommunicateHomeFragment, this@CommunicateHomeFragment, null, this@CommunicateHomeFragment, this@CommunicateHomeFragment)
+            fragment.onUpdate(result?.directChats?.let { result?.otherRooms?.plus(it) }, notificationComparator)
         }
 
         private fun getFragmentForFavorite() = FavoriteRoomFragment().also { fragment ->
-            fragment.onUpdate(result?.favourites, notificationComparator)
             fragment.addListener(this@CommunicateHomeFragment, this@CommunicateHomeFragment, null, this@CommunicateHomeFragment, this@CommunicateHomeFragment)
+            fragment.onUpdate(result?.favourites, notificationComparator)
         }
 
         private fun getFragmentForLowPriority() = LowPriorityRoomFragment().also { fragment ->
-            fragment.onUpdate(result?.lowPriorities, notificationComparator)
             fragment.addListener(this@CommunicateHomeFragment, this@CommunicateHomeFragment, null, this@CommunicateHomeFragment, this@CommunicateHomeFragment)
+            fragment.onUpdate(result?.lowPriorities, notificationComparator)
         }
 
         private fun getFragment(roomFragment: ROOM_FRAGMENTS): Fragment {
