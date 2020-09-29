@@ -8,8 +8,6 @@ import im.vector.directory.BaseDirectoryFragment
 import im.vector.directory.people.detail.PeopleDetailActivity
 import im.vector.directory.people.model.DirectoryPeople
 import kotlinx.android.synthetic.main.fragment_directory_people.*
-import kotlinx.android.synthetic.main.fragment_directory_people.header
-import kotlinx.android.synthetic.main.fragment_directory_role.*
 import org.matrix.androidsdk.data.Room
 
 class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
@@ -30,7 +28,7 @@ class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
 
     override fun onFavorite(enable: Boolean) {
         //Temporary
-        setHeader(header, if (enable) R.string.total_number_of_favourite_people else R.string.total_number_of_people,  if (enable) 4 else 10)
+        setHeader(header, if (enable) R.string.total_number_of_favourite_people else R.string.total_number_of_people, if (enable) 4 else 10)
     }
 
     override fun getLayoutResId(): Int {
@@ -61,7 +59,7 @@ class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
     }
 
     override fun onPeopleClick(directoryPeople: DirectoryPeople) {
-        startActivity(PeopleDetailActivity.intent(requireContext(), directoryPeople))
+        startActivity(PeopleDetailActivity.intent(requireContext(), directoryPeople, true))
     }
 
     override fun onPeopleFavorite(directoryPeople: DirectoryPeople) {

@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.Matrix
 import im.vector.R
+import im.vector.directory.people.PeopleClickListener
 import im.vector.directory.people.model.DirectoryPeople
 import im.vector.directory.role.model.DummyRole
 import im.vector.util.VectorUtils
@@ -21,7 +22,7 @@ import kotlinx.android.synthetic.main.item_role_detail_category2.view.*
 import org.matrix.androidsdk.MXSession
 
 
-class RolesDetailAdapter(val context: Context) :
+class RolesDetailAdapter(val context: Context, private val onClickListener: PeopleClickListener?) :
         RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val adapterModels = mutableListOf<AdapterModel>()
     private val TYPE_ROLE = 1
@@ -79,6 +80,11 @@ class RolesDetailAdapter(val context: Context) :
             secondaryName?.text = adapterModel.people?.jobTitle
             heading?.text = adapterModel.title
             heading?.visibility = if (showHeader) VISIBLE else GONE
+            itemView.setOnClickListener {
+                adapterModel.people?.let { people ->
+                    onClickListener?.onPeopleClick(people)
+                }
+            }
         }
     }
 
