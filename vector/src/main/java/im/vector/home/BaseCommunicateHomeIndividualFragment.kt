@@ -4,6 +4,8 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View.GONE
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import im.vector.R
 import im.vector.adapters.AbsAdapter
 import im.vector.adapters.HomeRoomAdapter
@@ -32,8 +34,8 @@ abstract class BaseCommunicateHomeIndividualFragment(private var fragmentType: C
 
     override fun onBadgeUpdate(notificationCounter: NotificationCounter) {
         communicateTabBadgeUpdateListener?.onBadgeUpdate(notificationCounter.unreadRoomCount, fragmentType)
-        when(fragmentType){
-            CommunicateHomeFragment.ROOM_FRAGMENTS.FAVORITE, CommunicateHomeFragment.ROOM_FRAGMENTS.NORMAL, CommunicateHomeFragment.ROOM_FRAGMENTS.LOW_PRIORITY -> {
+        when (fragmentType) {
+            CommunicateHomeFragment.ROOM_FRAGMENTS.FAVORITE, CommunicateHomeFragment.ROOM_FRAGMENTS.CHAT, CommunicateHomeFragment.ROOM_FRAGMENTS.LOW_PRIORITY -> {
                 sectionView.setTitle(R.string.total_number_of_room, notificationCounter.totalRoomCount)
             }
         }
@@ -41,10 +43,13 @@ abstract class BaseCommunicateHomeIndividualFragment(private var fragmentType: C
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        sectionView.mHeader.visibility = GONE
+        sectionView.setupRoomRecyclerView(LinearLayoutManager(activity, RecyclerView.VERTICAL, false),
+                R.layout.adapter_item_room_view, true, onSelectRoomListener, invitationListener, moreActionListener)
+        sectionView.setRooms(localRooms)
         sectionView.mBadge.visibility = GONE
         sectionView.setHideIfEmpty(true)
         sectionView.setBadgeUpdateListener(this)
+        sectionView.updateRoomCounts()
     }
 
     override fun onAttach(context: Context) {
@@ -63,7 +68,7 @@ abstract class BaseCommunicateHomeIndividualFragment(private var fragmentType: C
         try {
             Collections.sort(rooms, comparator)
         } catch (e: Exception) {
-            org.matrix.androidsdk.core.Log.e(LOG_TAG, "## sortAndDisplay() failed " + e.message, e)
+            Log.e(LOG_TAG, "## sortAndDisplay() failed " + e.message, e)
         }
         rooms?.let {
             localRooms.addAll(rooms)

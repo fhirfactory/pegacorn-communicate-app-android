@@ -192,7 +192,7 @@
         <activity
             android:name=".activity.VectorHomeActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_home"
+            android:label="@string/riot_app_name"
             android:theme="@style/HomeActivityTheme.Light"
             android:windowSoftInputMode="adjustPan" />
         <activity

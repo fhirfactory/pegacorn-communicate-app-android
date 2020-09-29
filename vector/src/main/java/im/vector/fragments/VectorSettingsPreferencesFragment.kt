@@ -490,7 +490,7 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         refreshEmailsList()
         refreshPhoneNumbersList()
-        
+
         setFontPreferences()
 
         // Contacts
@@ -810,14 +810,14 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             removeLabsPreference()
         }
 
+        // Device list
+        refreshDevicesList()
+
         if (resources.getBoolean(R.bool.settings_encryption_visible)) {
-            // Device list
-            refreshDevicesList()
             //Refresh Key Management section
             refreshKeysManagementSection()
         } else {
             removeCryptographyPreference()
-            removeDevicesPreference()
         }
 
         // Advanced settings
@@ -874,27 +874,27 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         // Analytics
         // Analytics tracking management
-        if (resources.getBoolean(R.bool.settings_analytics_category_visible)) {
-            (findPreference(PreferencesManager.SETTINGS_USE_ANALYTICS_KEY) as SwitchPreference).let {
-                // On if the analytics tracking is activated
-                it.isChecked = PreferencesManager.useAnalytics(appContext)
+        (findPreference(PreferencesManager.SETTINGS_USE_ANALYTICS_KEY) as SwitchPreference).let {
+            // On if the analytics tracking is activated
+            it.isChecked = PreferencesManager.useAnalytics(appContext)
 
-                it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                    PreferencesManager.setUseAnalytics(appContext, newValue as Boolean)
-                    true
-                }
+            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                PreferencesManager.setUseAnalytics(appContext, newValue as Boolean)
+                true
             }
+        }
 
-            // Rageshake Management
-            (findPreference(PreferencesManager.SETTINGS_USE_RAGE_SHAKE_KEY) as SwitchPreference).let {
-                it.isChecked = PreferencesManager.useRageshake(appContext)
+        // Rageshake Management
+        (findPreference(PreferencesManager.SETTINGS_USE_RAGE_SHAKE_KEY) as SwitchPreference).let {
+            it.isChecked = PreferencesManager.useRageshake(appContext)
 
-                it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                    PreferencesManager.setUseRageshake(appContext, newValue as Boolean)
-                    true
-                }
+            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                PreferencesManager.setUseRageshake(appContext, newValue as Boolean)
+                true
             }
-        } else {
+        }
+
+        if (!resources.getBoolean(R.bool.settings_analytics_configuration_visible) && !resources.getBoolean(R.bool.settings_rage_shake_configuration_visible)) {
             removeAnalyticsPreference()
         }
 
@@ -2344,9 +2344,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 }
                 //preference.order = order
 
-                preference.onPreferenceClickListener = Preference.OnPreferenceClickListener { pref ->
-                    displayDelete3PIDConfirmationDialog(email3PID, pref.summary)
-                    true
+                if(resources.getBoolean(R.bool.settings_email_clickable)) {
+                    preference.onPreferenceClickListener = Preference.OnPreferenceClickListener { pref ->
+                        displayDelete3PIDConfirmationDialog(email3PID, pref.summary)
+                        true
+                    }
                 }
 
                 preference.onPreferenceLongClickListener = object : VectorPreference.OnPreferenceLongClickListener {
@@ -2673,9 +2675,11 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                     preference.order = order
                 }
 
-                preference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                    displayDelete3PIDConfirmationDialog(phoneNumber3PID, preference.summary)
-                    true
+                if(resources.getBoolean(R.bool.settings_phone_clickable)) {
+                    preference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                        displayDelete3PIDConfirmationDialog(phoneNumber3PID, preference.summary)
+                        true
+                    }
                 }
 
                 preference.onPreferenceLongClickListener = object : VectorPreference.OnPreferenceLongClickListener {
@@ -3342,7 +3346,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 mDevicesListSettingsCategory.addPreference(preference)
             }
 
-            refreshCryptographyPreference(mMyDeviceInfo)
+            if(resources.getBoolean(R.bool.settings_encryption_visible)) {
+                refreshCryptographyPreference(mMyDeviceInfo)
+            }
         }
     }
 
@@ -3388,10 +3394,12 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             builder.setTitle(R.string.devices_details_dialog_title)
                     .setIcon(android.R.drawable.ic_dialog_info)
                     .setView(layout)
-                    .setPositiveButton(R.string.rename) { _, _ -> displayDeviceRenameDialog(aDeviceInfo) }
 
+            if(resources.getBoolean(R.bool.settings_session_rename_button_visible)){
+                builder.setPositiveButton(R.string.rename) { _, _ -> displayDeviceRenameDialog(aDeviceInfo) }
+            }
             // disable the deletion for our own device
-            if (!TextUtils.equals(mSession.crypto?.myDevice?.deviceId, aDeviceInfo.device_id)) {
+            if (!TextUtils.equals(mSession.crypto?.myDevice?.deviceId, aDeviceInfo.device_id) && resources.getBoolean(R.bool.settings_session_rename_button_visible)) {
                 builder.setNegativeButton(R.string.delete) { _, _ -> displayDeviceDeletionDialog(aDeviceInfo) }
             }
 

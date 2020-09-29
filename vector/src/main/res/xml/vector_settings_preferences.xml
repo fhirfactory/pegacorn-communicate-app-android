@@ -171,7 +171,7 @@
         android:title="@string/settings_home_display">
 
         <im.vector.preference.VectorSwitchPreference
-            android:defaultValue="true"
+            android:defaultValue="@bool/settings_pin_missed_notification_default_value"
             app:isPreferenceVisible="@bool/settings_pin_missed_notification_visible"
             android:key="SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY"
             android:title="@string/settings_pin_missed_notifications" />
@@ -491,11 +491,13 @@
 
         <im.vector.preference.VectorSwitchPreference
             android:defaultValue="false"
+            app:isPreferenceVisible="@bool/settings_analytics_configuration_visible"
             android:key="SETTINGS_USE_ANALYTICS_KEY"
             android:summary="@string/settings_opt_in_of_analytics_summary"
             android:title="@string/settings_opt_in_of_analytics" />
 
         <im.vector.preference.VectorSwitchPreference
+            app:isPreferenceVisible="@bool/settings_rage_shake_configuration_visible"
             android:key="SETTINGS_USE_RAGE_SHAKE_KEY"
             android:title="@string/send_bug_report_rage_shake" />
     </im.vector.preference.VectorPreferenceCategory>
