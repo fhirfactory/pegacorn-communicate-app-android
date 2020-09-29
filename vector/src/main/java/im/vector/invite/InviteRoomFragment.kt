@@ -19,6 +19,7 @@ import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.core.Log
 import org.matrix.androidsdk.core.callback.ApiCallback
 import org.matrix.androidsdk.core.model.MatrixError
+import org.matrix.androidsdk.data.Room
 import java.util.*
 
 class InviteRoomFragment : BaseActFragment(), AbsAdapter.RoomInvitationListener {
@@ -48,13 +49,19 @@ class InviteRoomFragment : BaseActFragment(), AbsAdapter.RoomInvitationListener 
 
         sectionView.setupRoomRecyclerView(LinearLayoutManager(activity, RecyclerView.VERTICAL, false),
                 R.layout.adapter_item_room_invite, false, null, this, null)
-        val rooms = viewModel.getRoomInvitations()
-        sectionView.setRooms(rooms)
-        rooms?.size?.let {
-            if (rooms.isEmpty()) {
+        setRooms(viewModel.getRoomInvitations())
+    }
+
+    /**
+     * updating the List and header
+     */
+    private fun setRooms(roomInvitations: List<Room?>?) {
+        sectionView.setRooms(roomInvitations)
+        roomInvitations?.size?.let {
+            if (roomInvitations.isEmpty()) {
                 sectionView.setTitle(R.string.no_invites)
             } else {
-                sectionView.setTitle(R.string.total_number_of_invite, rooms.size)
+                sectionView.setTitle(R.string.total_number_of_invite, roomInvitations.size)
             }
         }
     }
@@ -119,7 +126,7 @@ class InviteRoomFragment : BaseActFragment(), AbsAdapter.RoomInvitationListener 
                 VectorApp.getInstance().notificationDrawerManager.clearMessageEventOfRoom(roomId)
                 simpleFragmentActivityListener?.hideWaitingView()
                 onSuccessCallback?.onSuccess(null)
-                sectionView.setRooms(viewModel.getRoomInvitations())
+                setRooms(viewModel.getRoomInvitations())
             }
 
             private fun onError(message: String) {

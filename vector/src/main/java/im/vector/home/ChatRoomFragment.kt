@@ -1,3 +1,3 @@
 package im.vector.home
 
-class ChatRoomFragment : BaseActIndividualFragment(ActFragment.ROOM_FRAGMENTS.CHAT)
+class ChatRoomFragment : BaseActIndividualFragment(CommunicateHomeFragment.ROOM_FRAGMENTS.CHAT)

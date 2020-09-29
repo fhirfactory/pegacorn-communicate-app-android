@@ -129,7 +129,7 @@ import im.vector.fragments.GroupsFragment;
 import im.vector.fragments.RoomsFragment;
 import im.vector.fragments.signout.SignOutBottomSheetDialogFragment;
 import im.vector.fragments.signout.SignOutViewModel;
-import im.vector.home.ActFragment;
+import im.vector.home.CommunicateHomeFragment;
 import im.vector.invite.InviteActivity;
 import im.vector.push.PushManager;
 import im.vector.receiver.VectorUniversalLinkReceiver;
@@ -969,7 +969,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 Log.d(LOG_TAG, "onNavigationItemSelected HOME");
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_HOME);
                 if (fragment == null) {
-                    fragment = new ActFragment();
+                    fragment = new CommunicateHomeFragment();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_HOME;
                 setActionBarTitle(R.string.riot_app_name);

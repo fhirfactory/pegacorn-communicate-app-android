@@ -17,7 +17,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-abstract class BaseActIndividualFragment(private var fragmentType: ActFragment.ROOM_FRAGMENTS) : BaseActFragment(), UpDateListener, BadgeUpdateListener {
+abstract class BaseActIndividualFragment(private var fragmentType: CommunicateHomeFragment.ROOM_FRAGMENTS) : BaseActFragment(), UpDateListener, BadgeUpdateListener {
     private val LOG_TAG = BaseActIndividualFragment::class.java.simpleName
 
     var registerListener: RegisterListener? = null
@@ -35,7 +35,7 @@ abstract class BaseActIndividualFragment(private var fragmentType: ActFragment.R
     override fun onBadgeUpdate(notificationCounter: NotificationCounter) {
         communicateTabBadgeUpdateListener?.onBadgeUpdate(notificationCounter.unreadRoomCount, fragmentType)
         when (fragmentType) {
-            ActFragment.ROOM_FRAGMENTS.FAVORITE, ActFragment.ROOM_FRAGMENTS.CHAT, ActFragment.ROOM_FRAGMENTS.LOW_PRIORITY -> {
+            CommunicateHomeFragment.ROOM_FRAGMENTS.FAVORITE, CommunicateHomeFragment.ROOM_FRAGMENTS.CHAT, CommunicateHomeFragment.ROOM_FRAGMENTS.LOW_PRIORITY -> {
                 sectionView.setTitle(R.string.total_number_of_room, notificationCounter.totalRoomCount)
             }
         }
@@ -46,10 +46,10 @@ abstract class BaseActIndividualFragment(private var fragmentType: ActFragment.R
         sectionView.setupRoomRecyclerView(LinearLayoutManager(activity, RecyclerView.VERTICAL, false),
                 R.layout.adapter_item_room_view, true, onSelectRoomListener, invitationListener, moreActionListener)
         sectionView.setRooms(localRooms)
-        sectionView.mHeader.visibility = GONE
         sectionView.mBadge.visibility = GONE
         sectionView.setHideIfEmpty(true)
         sectionView.setBadgeUpdateListener(this)
+        sectionView.updateRoomCounts()
     }
 
     override fun onAttach(context: Context) {
@@ -102,6 +102,6 @@ interface UpDateListener {
 }
 
 interface RegisterListener {
-    fun onRegister(fragmentType: ActFragment.ROOM_FRAGMENTS, listener: UpDateListener)
-    fun onUnregister(fragmentType: ActFragment.ROOM_FRAGMENTS)
+    fun onRegister(fragmentType: CommunicateHomeFragment.ROOM_FRAGMENTS, listener: UpDateListener)
+    fun onUnregister(fragmentType: CommunicateHomeFragment.ROOM_FRAGMENTS)
 }
