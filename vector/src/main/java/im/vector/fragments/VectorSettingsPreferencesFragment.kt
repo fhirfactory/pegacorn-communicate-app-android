@@ -810,14 +810,14 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             removeLabsPreference()
         }
 
+        // Device list
+        refreshDevicesList()
+
         if (resources.getBoolean(R.bool.settings_encryption_visible)) {
-            // Device list
-            refreshDevicesList()
             //Refresh Key Management section
             refreshKeysManagementSection()
         } else {
             removeCryptographyPreference()
-            removeDevicesPreference()
         }
 
         // Advanced settings
@@ -3346,7 +3346,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
                 mDevicesListSettingsCategory.addPreference(preference)
             }
 
-            refreshCryptographyPreference(mMyDeviceInfo)
+            if(resources.getBoolean(R.bool.settings_encryption_visible)) {
+                refreshCryptographyPreference(mMyDeviceInfo)
+            }
         }
     }
 
@@ -3392,10 +3394,12 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
             builder.setTitle(R.string.devices_details_dialog_title)
                     .setIcon(android.R.drawable.ic_dialog_info)
                     .setView(layout)
-                    .setPositiveButton(R.string.rename) { _, _ -> displayDeviceRenameDialog(aDeviceInfo) }
 
+            if(resources.getBoolean(R.bool.settings_session_rename_button_visible)){
+                builder.setPositiveButton(R.string.rename) { _, _ -> displayDeviceRenameDialog(aDeviceInfo) }
+            }
             // disable the deletion for our own device
-            if (!TextUtils.equals(mSession.crypto?.myDevice?.deviceId, aDeviceInfo.device_id)) {
+            if (!TextUtils.equals(mSession.crypto?.myDevice?.deviceId, aDeviceInfo.device_id) && resources.getBoolean(R.bool.settings_session_rename_button_visible)) {
                 builder.setNegativeButton(R.string.delete) { _, _ -> displayDeviceDeletionDialog(aDeviceInfo) }
             }
 
