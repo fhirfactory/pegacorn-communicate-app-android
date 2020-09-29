@@ -29,6 +29,8 @@ class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
     }
 
     override fun onFavorite(enable: Boolean) {
+        //Temporary
+        setHeader(header, if (enable) R.string.total_number_of_favourite_people else R.string.total_number_of_people,  if (enable) 4 else 10)
     }
 
     override fun getLayoutResId(): Int {

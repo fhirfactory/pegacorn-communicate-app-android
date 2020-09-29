@@ -15,7 +15,9 @@ import im.vector.R
 import im.vector.directory.BaseDirectoryFragment
 import im.vector.directory.role.detail.RoleDetailActivity
 import im.vector.directory.role.model.*
+import kotlinx.android.synthetic.main.fragment_directory_people.*
 import kotlinx.android.synthetic.main.fragment_directory_role.*
+import kotlinx.android.synthetic.main.fragment_directory_role.header
 import org.matrix.androidsdk.data.Room
 
 
@@ -34,7 +36,7 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
     }
 
     override fun onFilter(pattern: String?, listener: OnFilterListener?) {
-        TODO("Not yet implemented")
+        //TODO("Not yet implemented")
     }
 
     override fun onResetFilter() {
@@ -133,6 +135,8 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
     }
 
     override fun onFavorite(enable: Boolean) {
+        //Temporary
+        setHeader(header, if (enable) R.string.total_number_of_favourite_roles else R.string.total_number_of_roles,  if (enable) 4 else 10)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
