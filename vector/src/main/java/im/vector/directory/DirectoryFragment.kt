@@ -53,6 +53,7 @@ class DirectoryFragment : BaseActFragment() {
         menu.findItem(R.id.ic_action_global_search)?.isVisible = false
         menu.findItem(R.id.ic_action_historical)?.isVisible = false
         menu.findItem(R.id.ic_action_mark_all_as_read)?.isVisible = false
+        menu.findItem(R.id.action_favourite).setIcon(if (favouriteEnable) R.drawable.filled_star else R.drawable.outline_star)
     }
 
     override fun onFilter(pattern: String?, listener: OnFilterListener?) {
