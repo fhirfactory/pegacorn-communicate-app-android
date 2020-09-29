@@ -252,7 +252,8 @@ public class VectorApp extends MultiDexApplication {
         Log.d(LOG_TAG, "----------------------------------------------------------------");
         Log.d(LOG_TAG, "----------------------------------------------------------------\n\n\n\n");
 
-        mRageShake = new RageShake(this);
+        if(getResources().getBoolean(R.bool.settings_rage_shake_configuration_visible))
+            mRageShake = new RageShake(this);
 
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             final Map<String, String> mLocalesByActivity = new HashMap<>();
@@ -432,7 +433,8 @@ public class VectorApp extends MultiDexApplication {
 
         MyPresenceManager.advertiseAllUnavailable();
 
-        mRageShake.stop();
+        if(getResources().getBoolean(R.bool.settings_rage_shake_configuration_visible))
+            mRageShake.stop();
 
         onAppPause();
     }
@@ -537,7 +539,8 @@ public class VectorApp extends MultiDexApplication {
         }
 
         MyPresenceManager.advertiseAllOnline();
-        mRageShake.start();
+        if(getResources().getBoolean(R.bool.settings_rage_shake_configuration_visible))
+            mRageShake.start();
 
         mIsCallingInBackground = false;
         mIsInBackground = false;
