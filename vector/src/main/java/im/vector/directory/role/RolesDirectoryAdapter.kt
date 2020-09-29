@@ -4,6 +4,8 @@ import android.content.Context
 import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -79,8 +81,10 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var officialName: TextView? = null
     var secondaryName: TextView? = null
     var description: TextView? = null
+    var heading: TextView? = null
 
     init {
+        heading = itemView.findViewById(R.id.heading)
         avatar = itemView.findViewById(R.id.avatar)
         expandableIcon = itemView.findViewById(R.id.expandableIcon)
         officialName = itemView.findViewById(R.id.officialName)
@@ -88,8 +92,9 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         description = itemView.findViewById(R.id.description)
     }
 
-    fun bind(context: Context, session: MXSession?, role: DummyRole, spanTextBackgroundColor: Int, spanTextColor: Int, textSize: Float, onDataSetChange: OnDataSetChange, position: Int) {
+    fun bind(context: Context, session: MXSession?, role: DummyRole, spanTextBackgroundColor: Int, spanTextColor: Int, textSize: Float, onDataSetChange: OnDataSetChange, position: Int, showHeader: Boolean = false) {
         VectorUtils.loadRoomAvatar(context, session, avatar, role)
+        if(showHeader) heading?.visibility = VISIBLE else heading?.visibility = GONE
         officialName?.text = role.officialName
         secondaryName?.text = role.secondaryName
         if (role.expanded) {
