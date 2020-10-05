@@ -922,7 +922,7 @@
     <string name="room_settings_room_photo">Room Photo</string>
     <string name="room_settings_room_name">Room Name</string>
     <string name="room_settings_topic">Topic</string>
-    <string name="room_settings_room_tag">Room Tag</string>
+    <string name="room_settings_room_tag">Room Priority</string>
     <string name="room_settings_tag_pref_dialog_title">Tagged as:</string>
 
     <!-- Room settings: Room tag -->
