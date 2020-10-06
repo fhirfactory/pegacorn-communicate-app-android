@@ -196,7 +196,9 @@ public class HomeRoomAdapter extends AbsFilterableAdapter<RoomViewHolder> {
 
         for (Room room : mFilteredRooms) {
             notificationCounter.addHighlights(room.getHighlightCount());
-            notificationCounter.addUnreadRooms(room.getNotificationCount() > 0 ? 1 : 0);
+            if (room.getRoomSummary() != null) {
+                notificationCounter.addUnreadRooms(room.getRoomSummary().mUnreadEventsCount > 0 ? 1 : 0);
+            }
             // sanity checks : reported by GA
             if (null != room.getDataHandler()
                     && (null != room.getDataHandler().getBingRulesManager())
