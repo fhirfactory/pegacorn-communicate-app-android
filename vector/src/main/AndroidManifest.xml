@@ -180,6 +180,10 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_role_detail" />
         <activity
+            android:name=".directory.service.detail.ServiceDetailActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_service_detail" />
+        <activity
             android:name=".directory.people.detail.PeopleDetailActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_people_detail" />

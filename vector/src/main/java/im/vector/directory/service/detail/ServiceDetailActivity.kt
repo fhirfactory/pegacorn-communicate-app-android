@@ -27,7 +27,6 @@ class ServiceDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStac
         val service = intent.getParcelableExtra<DummyService>(SERVICE_EXTRA)
         VectorUtils.loadRoomAvatar(this, session, avatar, service)
         officialName.text = service.name
-
     }
 
     override fun onDestroy() {
