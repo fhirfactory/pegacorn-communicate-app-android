@@ -147,7 +147,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     ListView mDevicesListView;
     @BindView(R.id.devices_header_view)
     View mDevicesListHeaderView;
-
+    @BindView(R.id.status_indicator)
+    ImageView statusIndicator;
     // direct message
     /**
      * callback for the creation of the direct message room
@@ -1132,7 +1133,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             if (supportedActionsList.indexOf(ITEM_ACTION_MENTION) >= 0) {
                 imageResource = R.drawable.ic_comment_black;
                 actionText = getString(R.string.room_participants_action_mention);
-                uncategorizedActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_MENTION));
+                callActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_MENTION));
             }
 
             mListViewAdapter.setUncategorizedActionsList(uncategorizedActions);
@@ -1461,12 +1462,19 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     private void updatePresenceInfoUi() {
         // sanity check
         if (null != mPresenceTextView) {
-            mPresenceTextView.setText(VectorUtils.getUserOnlineStatus(this, mSession, mMemberId, new SimpleApiCallback<Void>() {
+            String status = VectorUtils.getUserOnlineStatus(this, mSession, mMemberId, new SimpleApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
                     mPresenceTextView.setText(VectorUtils.getUserOnlineStatus(VectorMemberDetailsActivity.this, mSession, mMemberId, null));
                 }
-            }));
+            });
+            mPresenceTextView.setText(status);
+            // "online" / "offline" is expected from the server response
+            if(status.compareToIgnoreCase("online")==0){
+                statusIndicator.setImageResource(R.drawable.avatar_indicator_online);
+            }else{
+                statusIndicator.setImageResource(R.drawable.avatar_indicator_offline);
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- this section has no title in purpose -->
     <im.vector.preference.RoomAvatarPreference
@@ -57,6 +58,7 @@
             android:dialogTitle="@string/room_settings_room_access_rules_pref_dialog_title"
             android:entries="@array/room_access_rules_entries"
             android:entryValues="@array/room_access_rules_values"
+            app:isPreferenceVisible="@bool/room_settings_show_access"
             android:key="roomAccessRulesList"
             android:summary="%s"
             android:title="@string/room_settings_room_access_rules_pref_title" />
@@ -71,17 +73,19 @@
             android:title="@string/room_settings_room_read_history_rules_pref_title" />
     </im.vector.preference.VectorPreferenceCategory>
 
-    <im.vector.preference.VectorPreferenceDivider />
+    <im.vector.preference.VectorPreferenceDivider app:isPreferenceVisible="@bool/room_settings_show_addresses" />
 
     <im.vector.preference.VectorPreferenceCategory
         android:key="addresses"
-        android:title="@string/room_settings_addresses_pref_title">
+        android:title="@string/room_settings_addresses_pref_title"
+        app:isPreferenceVisible="@bool/room_settings_show_addresses">
 
     </im.vector.preference.VectorPreferenceCategory>
 
-    <im.vector.preference.VectorPreferenceDivider android:key="flair_divider" />
+    <im.vector.preference.VectorPreferenceDivider android:key="flair_divider" app:isPreferenceVisible="@bool/room_settings_show_flair" />
 
     <im.vector.preference.VectorPreferenceCategory
+        app:isPreferenceVisible="@bool/room_settings_show_flair"
         android:key="flair"
         android:title="@string/settings_flair" />
 
@@ -91,9 +95,10 @@
         android:key="banned"
         android:title="@string/room_settings_banned_users_title" />
 
-    <im.vector.preference.VectorPreferenceDivider />
+    <im.vector.preference.VectorPreferenceDivider app:isPreferenceVisible="@bool/room_settings_show_advanced"/>
 
     <im.vector.preference.VectorPreferenceCategory
+        app:isPreferenceVisible="@bool/room_settings_show_advanced"
         android:key="advanced"
         android:title="@string/room_settings_category_advanced_title">
 
