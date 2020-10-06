@@ -2039,6 +2039,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         TextView statusTextView = navigationView.findViewById(R.id.status_text_view);
         ImageView statusIndicator = navigationView.findViewById(R.id.status_indicator);
         if (null != statusTextView && null != statusIndicator) {
+            // TODO We have to come back here to set the status from server response
             statusTextView.setText(getText(R.string.online));
             statusIndicator.setBackgroundResource(R.drawable.avatar_indicator_online);
         }

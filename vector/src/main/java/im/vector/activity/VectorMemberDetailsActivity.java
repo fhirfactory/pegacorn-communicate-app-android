@@ -1469,6 +1469,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
                 }
             });
             mPresenceTextView.setText(status);
+            // "online" / "offline" is expected from the server response
             if(status.compareToIgnoreCase("online")==0){
                 statusIndicator.setImageResource(R.drawable.avatar_indicator_online);
             }else{
