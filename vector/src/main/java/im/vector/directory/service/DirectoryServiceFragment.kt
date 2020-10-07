@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import im.vector.R
 import im.vector.directory.BaseDirectoryFragment
-import im.vector.directory.role.detail.RoleDetailActivity
 import im.vector.directory.service.detail.ServiceDetailActivity
 import kotlinx.android.synthetic.main.fragment_directory_service.*
 import org.matrix.androidsdk.data.Room

@@ -23,6 +23,7 @@ class DirectoryFragment : BaseActFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        pager.offscreenPageLimit = 2
         pager.adapter = DirectoryPagerAdapter(childFragmentManager)
         tabLayout.setupWithViewPager(pager)
         activity?.let { activity ->
