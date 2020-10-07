@@ -463,7 +463,7 @@
 
     <string name="room_participants_header_admin_tools">ADMIN TOOLS</string>
     <string name="room_participants_header_call">CALL</string>
-    <string name="room_participants_header_direct_chats">DIRECT CHATS</string>
+    <string name="room_participants_header_direct_chats">CHAT</string>
     <string name="room_participants_header_devices">SESSIONS</string>
 
     <string name="room_participants_action_invite">Invite</string>
@@ -608,7 +608,7 @@
     <string name="room_settings_mute">Mute</string>
     <string name="room_settings_favourite">Favourite</string>
     <string name="room_settings_de_prioritize">De-prioritize</string>
-    <string name="room_settings_direct_chat">Direct Chat</string>
+    <string name="room_settings_direct_chat">Chat</string>
     <string name="room_settings_leave_conversation">Leave Conversation</string>
     <string name="room_settings_forget">Forget</string>
     <string name="room_settings_add_homescreen_shortcut">Add Homescreen Shortcut</string>
