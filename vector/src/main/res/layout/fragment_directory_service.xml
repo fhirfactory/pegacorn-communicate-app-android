@@ -15,12 +15,9 @@
         tools:text="Header" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/peopleRecyclerview"
+        android:id="@+id/serviceRecyclerview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginLeft="@dimen/layout_horizontal_margin"
-        android:layout_marginEnd="@dimen/layout_horizontal_margin"
-        android:layout_marginRight="@dimen/layout_horizontal_margin"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

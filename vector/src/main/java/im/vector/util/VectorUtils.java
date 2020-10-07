@@ -75,6 +75,7 @@ import im.vector.VectorApp;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.directory.people.model.DirectoryPeople;
 import im.vector.directory.role.model.DummyRole;
+import im.vector.directory.service.DummyService;
 import im.vector.settings.VectorLocale;
 
 public class VectorUtils {
@@ -373,6 +374,13 @@ public class VectorUtils {
         if (null != role) {
             VectorUtils.loadUserAvatar(context,
                     session, imageView, role.getAvatarUrl(), role.getId(), role.getOfficialName());
+        }
+    }
+
+    public static void loadRoomAvatar(Context context, MXSession session, ImageView imageView, DummyService service) {
+        if (null != service) {
+            VectorUtils.loadUserAvatar(context,
+                    session, imageView, null, service.getId(), service.getName());
         }
     }
 

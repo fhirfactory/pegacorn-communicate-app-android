@@ -8,6 +8,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class DirectoryPeople(val id: String, val officialName: String, val jobTitle: String, val avatarUrl: String?, val organisations: String, val businessUnits: String) : Parcelable {
+    var expanded = false
     fun getSpannableStringBuilder(spanTextBackgroundColor: Int, spanTextColor: Int, textSize: Float, title: String, value: String): SpannableStringBuilder {
         val stringBuilder = SpannableStringBuilder()
         stringBuilder.append(title).append(": ").append(value).append(" ")
