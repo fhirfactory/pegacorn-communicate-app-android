@@ -135,7 +135,7 @@ class CommunicateHomeFragment : BaseActFragment(), HomeRoomAdapter.OnSelectRoomL
         dataUpdateListeners[fragmentType] = null
     }
 
-    inner class HomePagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
+    inner class HomePagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
         private val pinMissedNotifications = PreferencesManager.pinMissedNotifications(activity)
         private val pinUnreadMessages = PreferencesManager.pinUnreadMessages(activity)
         private val notificationComparator = RoomUtils.getNotifCountRoomsComparator(mSession, pinMissedNotifications, pinUnreadMessages)
