@@ -97,9 +97,17 @@ android {
         javaMaxHeapSize "2g"
     }
 
+    signingConfigs {
+        release {
+            storeFile file("act_riot_key_store.jks")
+            storePassword '123456'
+            keyAlias 'key'
+            keyPassword '123456'
+        }
+    }
+
     buildTypes {
         debug {
-
             resValue "bool", "debug_mode", "true"
             resValue "string", "git_revision", "\"${gitRevision()}\""
             resValue "string", "git_revision_date", "\"${gitRevisionDate()}\""
@@ -111,6 +119,8 @@ android {
         }
 
         release {
+            //should be commented before actual release
+            debuggable true
             resValue "bool", "debug_mode", "false"
             resValue "string", "git_revision", "\"${gitRevision()}\""
             resValue "string", "git_revision_date", "\"${gitRevisionDate()}\""
@@ -119,6 +129,7 @@ android {
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 
