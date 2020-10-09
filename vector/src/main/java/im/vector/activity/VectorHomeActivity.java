@@ -199,6 +199,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     // Key used to restore the proper fragment after orientation change
     private static final String CURRENT_MENU_ID = "CURRENT_MENU_ID";
+    private static final String CURRENT_SEARCH_TEXT = "CURRENT_SEARCH_TEXT";
 
     // switch to a room activity
     private Map<String, Object> mAutomaticallyOpenedRoomParams = null;
@@ -285,6 +286,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     // the current displayed fragment
     private String mCurrentFragmentTag;
 
+    private String searchText = "";
     /*
      * *********************************************************************************************
      * Static methods
@@ -557,11 +559,11 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             selectedMenu = mBottomNavigationView.findViewById(R.id.bottom_action_home);
         } else {
             selectedMenu = mBottomNavigationView.findViewById(getSavedInstanceState().getInt(CURRENT_MENU_ID, R.id.bottom_action_home));
+            searchText = getSavedInstanceState().getString(CURRENT_SEARCH_TEXT, "");
         }
         if (selectedMenu != null) {
             selectedMenu.performClick();
         }
-
         // initialize the public rooms list
         PublicRoomsManager.getInstance().setSession(mSession);
         PublicRoomsManager.getInstance().refreshPublicRoomsCount(null);
@@ -770,6 +772,10 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         if(!getResources().getBoolean(R.bool.enable_riot_search_view)) {
             MenuItem searchMenuItem = menu.findItem(R.id.action_search);
             mSearchView = (SearchView) searchMenuItem.getActionView();
+            if(!searchText.isEmpty()) {
+                searchMenuItem.expandActionView();
+                mSearchView.setQuery(searchText, false);
+            }
             setUpSearchView();
         }
 
@@ -826,6 +832,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         }
 
         if (!TextUtils.isEmpty(mSearchView.getQuery().toString())) {
+            searchText = "";
             mSearchView.setQuery("", true);
             return;
         }
@@ -845,6 +852,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(CURRENT_MENU_ID, mCurrentMenuId);
+        outState.putString(CURRENT_SEARCH_TEXT, searchText);
     }
 
     @Override
@@ -1235,6 +1243,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
      */
     private void resetFilter() {
         if (mSearchView != null) {
+            searchText = "";
             mSearchView.setQuery("", false);
             mSearchView.clearFocus();
         }
@@ -1276,7 +1285,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             String currentFilter = queryText + "-" + mCurrentMenuId;
 
             // display if the pattern matched
-            if (TextUtils.equals(currentFilter, filter)) {
+            if (TextUtils.equals(currentFilter, filter) && !searchText.equals(queryText)) {
+                searchText = queryText;
                 applyFilter(queryText);
             }
         }, 500);
