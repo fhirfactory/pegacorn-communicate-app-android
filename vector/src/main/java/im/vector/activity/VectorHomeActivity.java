@@ -199,7 +199,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     // Key used to restore the proper fragment after orientation change
     private static final String CURRENT_MENU_ID = "CURRENT_MENU_ID";
-    private static final String CURRENT_SEARCH_TEXT = "CURRENT_SEARCH_TEXT";
 
     // switch to a room activity
     private Map<String, Object> mAutomaticallyOpenedRoomParams = null;
@@ -559,7 +558,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             selectedMenu = mBottomNavigationView.findViewById(R.id.bottom_action_home);
         } else {
             selectedMenu = mBottomNavigationView.findViewById(getSavedInstanceState().getInt(CURRENT_MENU_ID, R.id.bottom_action_home));
-            searchText = getSavedInstanceState().getString(CURRENT_SEARCH_TEXT, "");
         }
         if (selectedMenu != null) {
             selectedMenu.performClick();
@@ -585,6 +583,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     @Override
     protected void onResume() {
         super.onResume();
+        searchText = "";
         MyPresenceManager.createPresenceManager(this, Matrix.getInstance(this).getSessions());
         MyPresenceManager.advertiseAllOnline();
 
@@ -852,7 +851,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(CURRENT_MENU_ID, mCurrentMenuId);
-        outState.putString(CURRENT_SEARCH_TEXT, searchText);
     }
 
     @Override
