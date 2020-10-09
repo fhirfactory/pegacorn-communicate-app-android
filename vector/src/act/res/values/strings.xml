@@ -622,7 +622,7 @@
     <string name="room_sliding_menu_third_party_notices">Third party notices</string>
     <string name="room_sliding_menu_copyright">Copyright</string>
     <string name="room_sliding_menu_privacy_policy">Privacy policy</string>
-    <string name="room_sliding_menu_credit">Acknowledgement</string>
+    <string name="room_sliding_menu_credit">Credits</string>
     <string name="room_sliding_menu_role">Roles</string>
 
     <!-- Vector Settings -->
@@ -769,7 +769,7 @@
     <string name="settings_third_party_notices">Third party notices</string>
     <string name="settings_copyright">Copyright</string>
     <string name="settings_privacy_policy">Privacy policy</string>
-    <string name="settings_acknowledgement">Acknowledgement</string>
+    <string name="settings_acknowledgement">Credits</string>
     <string name="settings_keep_media">Keep media</string>
     <string name="settings_clear_cache">Clear cache</string>
     <string name="settings_clear_media_cache">Clear media cache</string>
