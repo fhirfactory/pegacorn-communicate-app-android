@@ -1590,6 +1590,11 @@ Why choose Riot.im?
         <item>People</item>
     </string-array>
 
+    <string-array name="create_chat_tabs">
+        <item>Roles</item>
+        <item>People</item>
+    </string-array>
+
     <string-array name="home_tabs">
         <item>Invites</item>
         <item>Favourites</item>

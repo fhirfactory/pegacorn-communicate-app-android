@@ -1,11 +1,17 @@
 package im.vector.chat
 
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
 import im.vector.Matrix
 import im.vector.R
 import im.vector.activity.CommonActivityUtils
 import im.vector.activity.VectorBaseSearchActivity
+import im.vector.directory.people.DirectoryPeopleFragment
+import im.vector.directory.role.DirectoryRoleFragment
+import kotlinx.android.synthetic.main.fragment_view_pager_tab.*
 
-class ActChatOneToOneActivity : VectorBaseSearchActivity(){
+class ActChatOneToOneActivity : VectorBaseSearchActivity() {
     private var mMatrixId: String? = null
 
     override fun getLayoutRes() = R.layout.activity_view_pager_tab
@@ -39,6 +45,25 @@ class ActChatOneToOneActivity : VectorBaseSearchActivity(){
         // the user defines a
         if (null != mPatternToSearchEditText) {
             mPatternToSearchEditText.setHint(R.string.one_to_one_room_search_hint)
+        }
+
+        pager.adapter = CreateChatTabAdapter(supportFragmentManager, resources.getStringArray(R.array.create_chat_tabs))
+        tabLayout.setupWithViewPager(pager)
+    }
+
+    class CreateChatTabAdapter(fm: FragmentManager, val titles: Array<String>) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+        override fun getItem(position: Int): Fragment {
+            return when (position) {
+                0 -> DirectoryRoleFragment()
+                1 -> DirectoryPeopleFragment()
+                else -> DirectoryRoleFragment()
+            }
+        }
+
+        override fun getCount(): Int = titles.size
+
+        override fun getPageTitle(position: Int): CharSequence {
+            return titles[position]
         }
     }
 }
