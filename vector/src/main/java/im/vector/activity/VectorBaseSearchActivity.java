@@ -61,7 +61,7 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
     private static final int SPEECH_REQUEST_CODE = 1234;
 
     private ActionBar mActionBar;
-    EditText mPatternToSearchEditText;
+    public EditText mPatternToSearchEditText;
 
     private MenuItem mMicroMenuItem;
     private MenuItem mClearEditTextMenuItem;
