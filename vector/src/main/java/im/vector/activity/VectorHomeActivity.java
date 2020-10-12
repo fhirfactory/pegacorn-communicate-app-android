@@ -119,6 +119,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.RolesInNavigationBarAdapter;
 import im.vector.adapters.model.UserRole;
+import im.vector.chat.ActChatOneToOneActivity;
 import im.vector.extensions.ViewExtensionsKt;
 import im.vector.features.logout.ProposeLogout;
 import im.vector.fragments.AbsHomeFragment;
@@ -1500,9 +1501,15 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
      * Open the room creation with inviting people.
      */
     private void invitePeopleToNewRoom() {
-        final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorRoomCreationActivity.class);
-        settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-        startActivity(settingsIntent);
+        if(getResources().getBoolean(R.bool.use_riot_invite_activity)) {
+            final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorRoomCreationActivity.class);
+            settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+            startActivity(settingsIntent);
+        }else{
+            final Intent settingsIntent = new Intent(VectorHomeActivity.this, ActChatOneToOneActivity.class);
+            settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+            startActivity(settingsIntent);
+        }
     }
 
     /**
