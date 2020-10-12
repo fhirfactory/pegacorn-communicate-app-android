@@ -583,9 +583,9 @@
     <string name="room_recents_conversations">ROOMS</string>
     <string name="room_recents_low_priority">LOW PRIORITY</string>
     <string name="room_recents_invites">INVITES</string>
-    <string name="room_recents_start_chat">Start chat</string>
-    <string name="room_recents_create_room">Create room</string>
-    <string name="room_recents_join_room">Join room</string>
+    <string name="room_recents_start_chat">Create Chat</string>
+    <string name="room_recents_create_room">Create Group Chat</string>
+    <string name="room_recents_join_room">Join Chat</string>
     <string name="room_recents_join_room_title">Join a room</string>
     <string name="room_recents_join_room_prompt">Type a room id or a room alias</string>
 
