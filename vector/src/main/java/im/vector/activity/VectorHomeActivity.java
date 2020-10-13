@@ -108,6 +108,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import butterknife.BindView;
@@ -1207,17 +1208,19 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         }
 
         mFabStartChat.setIconDrawable(ThemeUtils.INSTANCE.tintDrawableWithColor(
-                ContextCompat.getDrawable(this, R.drawable.ic_person_black_24dp),
+                Objects.requireNonNull(ContextCompat.getDrawable(this, R.drawable.ic_person_black_24dp)),
                 ContextCompat.getColor(this, android.R.color.white)
         ));
 
         mFabCreateRoom.setIconDrawable(ThemeUtils.INSTANCE.tintDrawableWithColor(
-                ContextCompat.getDrawable(this, R.drawable.ic_add_white),
+                //ACT specific
+                Objects.requireNonNull(ContextCompat.getDrawable(this, R.drawable.riot_tab_groups)),
                 ContextCompat.getColor(this, android.R.color.white)
         ));
 
         mFabJoinRoom.setIconDrawable(ThemeUtils.INSTANCE.tintDrawableWithColor(
-                ContextCompat.getDrawable(this, R.drawable.riot_tab_rooms),
+                //ACT specific
+                Objects.requireNonNull(ContextCompat.getDrawable(this, R.drawable.ic_add_white)),
                 ContextCompat.getColor(this, android.R.color.white)
         ));
 
