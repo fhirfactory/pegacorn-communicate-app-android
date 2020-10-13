@@ -191,7 +191,7 @@ public abstract class VectorBaseSearchActivity extends MXCActionBarActivity {
      *
      * @param isTypingUpdate true when the pattern has been updated while typing.
      */
-    void onPatternUpdate(boolean isTypingUpdate) {
+    protected void onPatternUpdate(boolean isTypingUpdate) {
         // do something here
     }
 

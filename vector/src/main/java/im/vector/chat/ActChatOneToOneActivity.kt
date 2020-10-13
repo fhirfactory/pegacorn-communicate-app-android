@@ -1,5 +1,6 @@
 package im.vector.chat
 
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -49,6 +50,15 @@ class ActChatOneToOneActivity : VectorBaseSearchActivity() {
 
         pager.adapter = CreateChatTabAdapter(supportFragmentManager, resources.getStringArray(R.array.create_chat_tabs))
         tabLayout.setupWithViewPager(pager)
+    }
+
+    /**
+     * The search pattern has been updated
+     */
+    override fun onPatternUpdate(isTypingUpdate: Boolean) {
+        val pattern = mPatternToSearchEditText.text.toString()
+        Log.d("zzz", pattern)
+        //TODO 
     }
 
     class CreateChatTabAdapter(fm: FragmentManager, val titles: Array<String>) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
