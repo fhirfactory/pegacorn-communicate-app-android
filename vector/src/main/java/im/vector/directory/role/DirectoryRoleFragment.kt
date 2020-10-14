@@ -37,6 +37,10 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
         //TODO("Not yet implemented")
     }
 
+    override fun onFilter(pattern: String?) {
+        //TODO("Not yet implemented")
+    }
+
     override fun onResetFilter() {
         TODO("Not yet implemented")
     }

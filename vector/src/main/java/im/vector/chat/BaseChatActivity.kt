@@ -1,7 +1,6 @@
 package im.vector.chat
 
 import android.util.Log
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import im.vector.Matrix
@@ -14,6 +13,8 @@ import kotlinx.android.synthetic.main.activity_create_chat.*
 
 abstract class BaseChatActivity : VectorBaseSearchActivity() {
     private var mMatrixId: String? = null
+    val fragments = listOf(DirectoryRoleFragment(), DirectoryPeopleFragment())
+
     override fun getLayoutRes() = R.layout.activity_create_chat
 
     override fun initUiAndData() {
@@ -57,17 +58,13 @@ abstract class BaseChatActivity : VectorBaseSearchActivity() {
     override fun onPatternUpdate(isTypingUpdate: Boolean) {
         val pattern = mPatternToSearchEditText.text.toString()
         Log.d("zzz", pattern)
-        //TODO
+        fragments.forEach { fragment ->
+            fragment.onFilter(pattern)
+        }
     }
 
-    class CreateChatTabAdapter(fm: FragmentManager, val titles: Array<String>) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-        override fun getItem(position: Int): Fragment {
-            return when (position) {
-                0 -> DirectoryRoleFragment()
-                1 -> DirectoryPeopleFragment()
-                else -> DirectoryRoleFragment()
-            }
-        }
+    inner class CreateChatTabAdapter(fm: FragmentManager, val titles: Array<String>) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+        override fun getItem(position: Int) = fragments[position]
 
         override fun getCount(): Int = titles.size
 

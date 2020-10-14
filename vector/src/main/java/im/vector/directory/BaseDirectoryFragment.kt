@@ -10,6 +10,7 @@ import im.vector.home.BaseActFragment
 
 abstract class BaseDirectoryFragment : BaseActFragment() {
     abstract fun onFavorite(enable: Boolean)
+    abstract fun onFilter(pattern: String?)
 
     open fun setHeader(headingView: TextView, @StringRes title: Int, count: Int) {
         val titleText = resources.getString(title)
