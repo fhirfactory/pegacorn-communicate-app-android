@@ -1,13 +1,13 @@
 package im.vector.chat
 
+import android.view.View.VISIBLE
 import im.vector.R
+import kotlinx.android.synthetic.main.activity_create_chat.*
 
 class ActChatGroupActivity : BaseChatActivity() {
 
-    override fun getLayoutRes() = R.layout.activity_view_pager_tab
-
     override fun initUiAndData() {
         super.initUiAndData()
-
+        selectedUserRecyclerView.visibility = VISIBLE
     }
 }

@@ -10,10 +10,12 @@ import im.vector.activity.CommonActivityUtils
 import im.vector.activity.VectorBaseSearchActivity
 import im.vector.directory.people.DirectoryPeopleFragment
 import im.vector.directory.role.DirectoryRoleFragment
-import kotlinx.android.synthetic.main.fragment_view_pager_tab.*
+import kotlinx.android.synthetic.main.activity_create_chat.*
 
 abstract class BaseChatActivity : VectorBaseSearchActivity() {
     private var mMatrixId: String? = null
+    override fun getLayoutRes() = R.layout.activity_create_chat
+
     override fun initUiAndData() {
         super.initUiAndData()
         configureToolbar()
