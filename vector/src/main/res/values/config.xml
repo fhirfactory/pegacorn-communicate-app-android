@@ -143,4 +143,5 @@
 
     <bool name="show_add_matrix_app_menu_item">true</bool>
     <bool name="use_riot_invite_activity">true</bool>
+    <bool name="use_riot_create_room_activity">true</bool>
 </resources>
