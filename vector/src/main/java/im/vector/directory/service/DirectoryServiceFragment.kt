@@ -27,10 +27,6 @@ class DirectoryServiceFragment : BaseDirectoryFragment(), ServiceClickListener {
         setHeader(header, if (enable) R.string.total_number_of_favourite_service else R.string.total_number_of_service, if (enable) 4 else 10)
     }
 
-    override fun onFilter(pattern: String?) {
-        //TODO("Not yet implemented")
-    }
-
     override fun getRooms(): MutableList<Room> {
         TODO("Not yet implemented")
     }

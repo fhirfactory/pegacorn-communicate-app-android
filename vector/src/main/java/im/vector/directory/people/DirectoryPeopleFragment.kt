@@ -21,10 +21,6 @@ class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
         TODO("Not yet implemented")
     }
 
-    override fun onFilter(pattern: String?) {
-        //TODO("Not yet implemented")
-    }
-
     override fun getRooms(): MutableList<Room> {
         TODO("Not yet implemented")
     }

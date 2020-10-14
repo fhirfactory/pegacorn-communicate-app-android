@@ -59,7 +59,7 @@ abstract class BaseChatActivity : VectorBaseSearchActivity() {
         val pattern = mPatternToSearchEditText.text.toString()
         Log.d("zzz", pattern)
         fragments.forEach { fragment ->
-            fragment.onFilter(pattern)
+            fragment.applyFilter(pattern)
         }
     }
 
