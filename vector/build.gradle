@@ -98,6 +98,10 @@ android {
     }
 
     signingConfigs {
+        // DO NOT USE THIS KEY FOR GOOGLE PLAY RELEASE
+        // TODO STEPS to create a new key and sign the app with the key
+        // https://developer.android.com/studio/publish/app-signing
+
         release {
             storeFile file("act_riot_key_store.jks")
             storePassword '123456'
