@@ -463,7 +463,7 @@
 
     <string name="room_participants_header_admin_tools">ADMIN TOOLS</string>
     <string name="room_participants_header_call">CALL</string>
-    <string name="room_participants_header_direct_chats">DIRECT CHATS</string>
+    <string name="room_participants_header_direct_chats">CHAT</string>
     <string name="room_participants_header_devices">SESSIONS</string>
 
     <string name="room_participants_action_invite">Invite</string>
@@ -608,7 +608,7 @@
     <string name="room_settings_mute">Mute</string>
     <string name="room_settings_favourite">Favourite</string>
     <string name="room_settings_de_prioritize">De-prioritize</string>
-    <string name="room_settings_direct_chat">Direct Chat</string>
+    <string name="room_settings_direct_chat">Chat</string>
     <string name="room_settings_leave_conversation">Leave Conversation</string>
     <string name="room_settings_forget">Forget</string>
     <string name="room_settings_add_homescreen_shortcut">Add Homescreen Shortcut</string>
@@ -622,7 +622,7 @@
     <string name="room_sliding_menu_third_party_notices">Third party notices</string>
     <string name="room_sliding_menu_copyright">Copyright</string>
     <string name="room_sliding_menu_privacy_policy">Privacy policy</string>
-    <string name="room_sliding_menu_credit">Acknowledgement</string>
+    <string name="room_sliding_menu_credit">Credits</string>
     <string name="room_sliding_menu_role">Roles</string>
 
     <!-- Vector Settings -->
@@ -769,7 +769,7 @@
     <string name="settings_third_party_notices">Third party notices</string>
     <string name="settings_copyright">Copyright</string>
     <string name="settings_privacy_policy">Privacy policy</string>
-    <string name="settings_acknowledgement">Acknowledgement</string>
+    <string name="settings_acknowledgement">Credits</string>
     <string name="settings_keep_media">Keep media</string>
     <string name="settings_clear_cache">Clear cache</string>
     <string name="settings_clear_media_cache">Clear media cache</string>
@@ -923,7 +923,7 @@
     <string name="room_settings_room_name">Room Name</string>
     <string name="room_settings_topic">Topic</string>
     <string name="room_settings_room_tag">Room Priority</string>
-    <string name="room_settings_tag_pref_dialog_title">Tagged as:</string>
+    <string name="room_settings_tag_pref_dialog_title">Priority as:</string>
 
     <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Favourite</string>
