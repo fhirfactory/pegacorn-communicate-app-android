@@ -4,7 +4,7 @@ The detail of the steps of how to prepare the release build can be found in the 
 https://developer.android.com/studio/publish/app-signing
 
 The summary of the steps are,
-1. Generate an upload key and keystore. This is a one time step and the key has to be save in a secure place and passwords too. The same key needs to be used for the future releases.
-2. Sign your app with your upload key. This can be done using Android Studio Tools. There is no need of commands from command line. Please choose "Android App Bundle" instead of "Apk" while choosing the build type. https://developer.android.com/studio/publish/app-signing#sign_release
+1. Generate an upload key and keystore. This can be done using Android Studio Tools (Build->Generate Signed Bundle/Apk). This is a one time step and the key and the passwords have to be saved in a secure place. The same key and passwords need to be used for the future releases.
+2. Sign your app with your upload key. This can be done using Android Studio Tools (Build->Generate Signed Bundle/Apk). There is no need of commands from command line. Please choose "Android App Bundle" instead of "Apk" while choosing the build type. You have to use the same key for the future releases. https://developer.android.com/studio/publish/app-signing#sign_release
 3. Opt in to Play App Signing
 4. Upload your app to Google Play
