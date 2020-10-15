@@ -5,8 +5,10 @@ import android.view.Menu
 import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.R
 import im.vector.directory.BaseDirectoryFragment
+import im.vector.directory.RoomClickListener
 import im.vector.directory.people.detail.PeopleDetailActivity
 import im.vector.directory.people.model.DirectoryPeople
+import im.vector.directory.people.model.TemporaryRoom
 import kotlinx.android.synthetic.main.fragment_directory_people.*
 import org.matrix.androidsdk.data.Room
 
@@ -58,7 +60,11 @@ class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
     }
 
     override fun onPeopleClick(directoryPeople: DirectoryPeople) {
-        startActivity(PeopleDetailActivity.intent(requireContext(), directoryPeople, true))
+        if(roomClickListener==null) {
+            startActivity(PeopleDetailActivity.intent(requireContext(), directoryPeople, true))
+        } else {
+            roomClickListener?.onRoomClick(TemporaryRoom(directoryPeople, null))
+        }
     }
 
     override fun onPeopleFavorite(directoryPeople: DirectoryPeople) {

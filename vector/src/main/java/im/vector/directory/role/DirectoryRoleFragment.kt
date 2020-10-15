@@ -13,6 +13,9 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.transition.TransitionManager
 import im.vector.R
 import im.vector.directory.BaseDirectoryFragment
+import im.vector.directory.RoomClickListener
+import im.vector.directory.people.detail.PeopleDetailActivity
+import im.vector.directory.people.model.TemporaryRoom
 import im.vector.directory.role.detail.RoleDetailActivity
 import im.vector.directory.role.model.*
 import kotlinx.android.synthetic.main.fragment_directory_role.*
@@ -160,6 +163,11 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
     }
 
     override fun onRoleClick(role: DummyRole) {
-        startActivity(RoleDetailActivity.intent(requireContext(), role, true))
+        if(roomClickListener==null) {
+            startActivity(RoleDetailActivity.intent(requireContext(), role, true))
+        } else {
+            roomClickListener?.onRoomClick(TemporaryRoom(null, role))
+        }
+
     }
 }

@@ -7,11 +7,12 @@ import im.vector.Matrix
 import im.vector.R
 import im.vector.activity.CommonActivityUtils
 import im.vector.activity.VectorBaseSearchActivity
+import im.vector.directory.RoomClickListener
 import im.vector.directory.people.DirectoryPeopleFragment
 import im.vector.directory.role.DirectoryRoleFragment
 import kotlinx.android.synthetic.main.activity_create_chat.*
 
-abstract class BaseChatActivity : VectorBaseSearchActivity() {
+abstract class BaseChatActivity : VectorBaseSearchActivity(), RoomClickListener {
     private var mMatrixId: String? = null
     val fragments = listOf(DirectoryRoleFragment(), DirectoryPeopleFragment())
 
@@ -50,6 +51,10 @@ abstract class BaseChatActivity : VectorBaseSearchActivity() {
 
         pager.adapter = CreateChatTabAdapter(supportFragmentManager, resources.getStringArray(R.array.create_chat_tabs))
         tabLayout.setupWithViewPager(pager)
+
+        fragments.forEach {fragment->
+            fragment.roomClickListener = this
+        }
     }
 
     /**
