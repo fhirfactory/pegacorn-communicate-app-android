@@ -1133,7 +1133,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             if (supportedActionsList.indexOf(ITEM_ACTION_MENTION) >= 0) {
                 imageResource = R.drawable.ic_comment_black;
                 actionText = getString(R.string.room_participants_action_mention);
-                callActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_MENTION));
+                directMessagesActions.add(new VectorMemberDetailsAdapter.AdapterMemberActionItems(imageResource, actionText, ITEM_ACTION_MENTION));
             }
 
             mListViewAdapter.setUncategorizedActionsList(uncategorizedActions);
