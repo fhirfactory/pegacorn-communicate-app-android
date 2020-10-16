@@ -24,7 +24,7 @@ class DirectoryServiceFragment : BaseDirectoryFragment(), ServiceClickListener {
 
     override fun onFavorite(enable: Boolean) {
         //Temporary
-        setHeader(header, if (enable) R.string.total_number_of_favourite_service else R.string.total_number_of_service, if (enable) 4 else 10)
+        setHeader(header, if (enable) R.string.total_number_of_favourite_service else R.string.total_number_of_services, if (enable) 4 else 10)
     }
 
     override fun getRooms(): MutableList<Room> {
@@ -59,7 +59,7 @@ class DirectoryServiceFragment : BaseDirectoryFragment(), ServiceClickListener {
         testServiceData.add(DummyService("7", "Service name 7", "Service Telecom 1", "Service Address 1", "Service Organization 1", false));
 
         serviceAdapter.setData(testServiceData)
-        setHeader(header, R.string.total_number_of_roles,10)
+        setHeader(header, R.string.total_number_of_services,10)
     }
 
     override fun onServiceClick(service: DummyService) {
