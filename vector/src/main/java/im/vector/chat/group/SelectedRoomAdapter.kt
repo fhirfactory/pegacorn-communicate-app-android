@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.Matrix
 import im.vector.R
@@ -28,11 +29,12 @@ class SelectedRoomAdapter(val context: Context) :
     inner class SelectableRoomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var avatar: VectorCircularImageView? = null
         var closeButton: ImageView? = null
-
+        var name: TextView? = null
 
         init {
             avatar = itemView.avatar
             closeButton = itemView.closeButton
+            name = itemView.name
         }
     }
 
@@ -59,10 +61,13 @@ class SelectedRoomAdapter(val context: Context) :
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: SelectableRoomViewHolder, position: Int) {
-        if (rooms[position].people == null)
+        if (rooms[position].people == null) {
             VectorUtils.loadRoomAvatar(context, mSession, holder.itemView.avatar, rooms[position].role)
-        else
+            holder.itemView.name.text = rooms[position].role?.officialName
+        } else {
             VectorUtils.loadRoomAvatar(context, mSession, holder.itemView.avatar, rooms[position].people)
+            holder.itemView.name.text = rooms[position].people?.officialName
+        }
 
         holder.itemView.closeButton.setOnClickListener {
             rooms.removeAt(position)
