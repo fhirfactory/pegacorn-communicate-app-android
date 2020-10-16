@@ -108,6 +108,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import butterknife.BindView;
@@ -120,6 +121,8 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.RolesInNavigationBarAdapter;
 import im.vector.adapters.model.UserRole;
+import im.vector.chat.CHAT_TYPE;
+import im.vector.chat.ChatCreateActivity;
 import im.vector.directory.DirectoryFragment;
 import im.vector.directory.role.DirectoryRoleFragment;
 import im.vector.extensions.ViewExtensionsKt;
@@ -768,7 +771,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             return false;
         }
 
-        if(!getResources().getBoolean(R.bool.enable_riot_search_view)) {
+        if (!getResources().getBoolean(R.bool.enable_riot_search_view)) {
             MenuItem searchMenuItem = menu.findItem(R.id.action_search);
             mSearchView = (SearchView) searchMenuItem.getActionView();
             setUpSearchView();
@@ -1039,14 +1042,14 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         }
     }
 
-    private void setActionBarTitle(@StringRes int res){
+    private void setActionBarTitle(@StringRes int res) {
         if (null != getSupportActionBar()) {
             getSupportActionBar().setTitle(getString(res));
         }
     }
 
-    private void setQueryHint(int riotHintResource, int actHintResource){
-        if (mSearchView != null){
+    private void setQueryHint(int riotHintResource, int actHintResource) {
+        if (mSearchView != null) {
             mSearchView.setQueryHint(getString(getResources().getBoolean(R.bool.enable_riot_search_view) ? riotHintResource : actHintResource));
         }
     }
@@ -1070,7 +1073,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         mToolbar.setBackgroundResource(R.drawable.act_gradient);
 
         mVectorPendingCallView.updateBackgroundColor(primaryColor);
-        if(!getResources().getBoolean(R.bool.use_progressbar_original_background)) {
+        if (!getResources().getBoolean(R.bool.use_progressbar_original_background)) {
             mSyncInProgressView.setBackgroundColor(primaryColor);
         }
         // Apply secondary color
@@ -1092,7 +1095,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         }
 
         // FAB button
-        if(!getResources().getBoolean(R.bool.use_fab_color_as_accent_color)) {
+        if (!getResources().getBoolean(R.bool.use_fab_color_as_accent_color)) {
             if (fabColor != -1) {
                 Class menuClass = FloatingActionsMenu.class;
                 try {
@@ -1120,7 +1123,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         }
 
         // Set color of toolbar search view
-        if(getResources().getBoolean(R.bool.enable_riot_search_view)) {
+        if (getResources().getBoolean(R.bool.enable_riot_search_view)) {
             EditText edit = mSearchView.findViewById(com.google.android.material.R.id.search_src_text);
             edit.setTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_toolbar_primary_text_color));
             edit.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_primary_hint_text_color));
@@ -1128,8 +1131,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     }
 
 
-    private void setUpSearchView(){
-        if(mSearchView!=null) {
+    private void setUpSearchView() {
+        if (mSearchView != null) {
             // init the search view
             SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
             // Remove unwanted left margin
@@ -1206,17 +1209,19 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         }
 
         mFabStartChat.setIconDrawable(ThemeUtils.INSTANCE.tintDrawableWithColor(
-                ContextCompat.getDrawable(this, R.drawable.ic_person_black_24dp),
+                Objects.requireNonNull(ContextCompat.getDrawable(this, R.drawable.ic_person_black_24dp)),
                 ContextCompat.getColor(this, android.R.color.white)
         ));
 
         mFabCreateRoom.setIconDrawable(ThemeUtils.INSTANCE.tintDrawableWithColor(
-                ContextCompat.getDrawable(this, R.drawable.ic_add_white),
+                //ACT specific
+                Objects.requireNonNull(ContextCompat.getDrawable(this, R.drawable.riot_tab_groups)),
                 ContextCompat.getColor(this, android.R.color.white)
         ));
 
         mFabJoinRoom.setIconDrawable(ThemeUtils.INSTANCE.tintDrawableWithColor(
-                ContextCompat.getDrawable(this, R.drawable.riot_tab_rooms),
+                //ACT specific
+                Objects.requireNonNull(ContextCompat.getDrawable(this, R.drawable.ic_add_white)),
                 ContextCompat.getColor(this, android.R.color.white)
         ));
 
@@ -1509,64 +1514,72 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
      * Open the room creation with inviting people.
      */
     private void invitePeopleToNewRoom() {
-        final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorRoomCreationActivity.class);
-        settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-        startActivity(settingsIntent);
+        if (getResources().getBoolean(R.bool.use_riot_invite_activity)) {
+            final Intent settingsIntent = new Intent(VectorHomeActivity.this, VectorRoomCreationActivity.class);
+            settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+            startActivity(settingsIntent);
+        } else {
+            startActivity(ChatCreateActivity.Companion.intent(this, CHAT_TYPE.ONE_TO_ONE));
+        }
     }
 
     /**
      * Create a room and open the dedicated activity
      */
     private void createRoom() {
-        showWaitingView();
-        mSession.createRoom(new SimpleApiCallback<String>(VectorHomeActivity.this) {
-            @Override
-            public void onSuccess(final String roomId) {
-                mToolbar.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        hideWaitingView();
+        if (getResources().getBoolean(R.bool.use_riot_create_room_activity)) {
+            showWaitingView();
+            mSession.createRoom(new SimpleApiCallback<String>(VectorHomeActivity.this) {
+                @Override
+                public void onSuccess(final String roomId) {
+                    mToolbar.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            hideWaitingView();
 
-                        Map<String, Object> params = new HashMap<>();
-                        params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-                        params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
-                        params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
-                        CommonActivityUtils.goToRoomPage(VectorHomeActivity.this, mSession, params);
-                    }
-                });
-            }
-
-            private void onError(final String message) {
-                mToolbar.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (null != message) {
-                            Toast.makeText(VectorHomeActivity.this, message, Toast.LENGTH_LONG).show();
+                            Map<String, Object> params = new HashMap<>();
+                            params.put(VectorRoomActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                            params.put(VectorRoomActivity.EXTRA_ROOM_ID, roomId);
+                            params.put(VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER, true);
+                            CommonActivityUtils.goToRoomPage(VectorHomeActivity.this, mSession, params);
                         }
-                        hideWaitingView();
-                    }
-                });
-            }
+                    });
+                }
 
-            @Override
-            public void onNetworkError(Exception e) {
-                onError(e.getLocalizedMessage());
-            }
+                private void onError(final String message) {
+                    mToolbar.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (null != message) {
+                                Toast.makeText(VectorHomeActivity.this, message, Toast.LENGTH_LONG).show();
+                            }
+                            hideWaitingView();
+                        }
+                    });
+                }
 
-            @Override
-            public void onMatrixError(final MatrixError e) {
-                if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
-                    getConsentNotGivenHelper().displayDialog(e);
-                } else {
+                @Override
+                public void onNetworkError(Exception e) {
                     onError(e.getLocalizedMessage());
                 }
-            }
 
-            @Override
-            public void onUnexpectedError(final Exception e) {
-                onError(e.getLocalizedMessage());
-            }
-        });
+                @Override
+                public void onMatrixError(final MatrixError e) {
+                    if (MatrixError.M_CONSENT_NOT_GIVEN.equals(e.errcode)) {
+                        getConsentNotGivenHelper().displayDialog(e);
+                    } else {
+                        onError(e.getLocalizedMessage());
+                    }
+                }
+
+                @Override
+                public void onUnexpectedError(final Exception e) {
+                    onError(e.getLocalizedMessage());
+                }
+            });
+        } else {
+            startActivity(ChatCreateActivity.Companion.intent(this, CHAT_TYPE.GROUP));
+        }
     }
 
     /**
@@ -2301,7 +2314,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         }
 
         Set<Integer> menuIndexes = new HashSet<>(mBadgeViewByIndex.keySet());
-        
+
         for (Integer id : menuIndexes) {
             int highlightCount = 0;
             int roomCount = 0;
@@ -2372,7 +2385,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         }
     }
 
-    private void filterFavoriteRoomSet(Set<String> filteredRoomIdsSet){
+    private void filterFavoriteRoomSet(Set<String> filteredRoomIdsSet) {
         List<Room> favRooms = mSession.roomsWithTag(RoomTag.ROOM_TAG_FAVOURITE);
 
         for (Room room : favRooms) {
@@ -2380,7 +2393,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         }
     }
 
-    private void filterNormalRoomSet(Set<String> filteredRoomIdsSet, Set<String> directChatInvitations, Map<Room, RoomSummary> roomSummaryByRoom){
+    private void filterNormalRoomSet(Set<String> filteredRoomIdsSet, Set<String> directChatInvitations, Map<Room, RoomSummary> roomSummaryByRoom) {
         Set<String> directChatRoomIds = new HashSet<>(mSession.getDataHandler().getDirectChatRoomIdsList());
         Set<String> lowPriorityRoomIds = new HashSet<>(mSession.roomIdsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY));
 

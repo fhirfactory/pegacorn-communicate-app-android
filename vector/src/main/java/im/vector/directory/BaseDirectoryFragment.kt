@@ -9,6 +9,8 @@ import androidx.annotation.StringRes
 import im.vector.home.BaseActFragment
 
 abstract class BaseDirectoryFragment : BaseActFragment() {
+    var roomClickListener: RoomClickListener? = null
+
     abstract fun onFavorite(enable: Boolean)
 
     open fun setHeader(headingView: TextView, @StringRes title: Int, count: Int) {
