@@ -2,6 +2,8 @@ package im.vector.chat
 
 import android.content.Context
 import android.content.Intent
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import im.vector.R
 import im.vector.activity.CommonActivityUtils
 import im.vector.activity.SimpleFragmentActivity
@@ -10,11 +12,16 @@ import im.vector.chat.onetoone.ActChatOneToOneFragment
 
 class ChatCreateActivity : SimpleFragmentActivity() {
     var chatType: CHAT_TYPE? = null
-    override fun getTitleRes() = R.string.invite_title
+    private lateinit var viewModel: ChatViewModel
 
     override fun initUiAndData() {
         super.initUiAndData()
         configureToolbar()
+        viewModel = ViewModelProviders.of(this).get(ChatViewModel::class.java)
+        viewModel.title.observe(this, Observer {
+            supportActionBar?.title = it
+        })
+
         mSession = getSession(intent)
         if (mSession == null) {
             finish()

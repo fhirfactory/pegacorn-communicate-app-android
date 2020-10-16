@@ -166,8 +166,7 @@
         <activity
             android:name=".chat.ChatCreateActivity"
             android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            android:label="@string/room_recents_start_chat"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".activity.AccountCreationCaptchaActivity"
             android:configChanges="orientation|screenSize"

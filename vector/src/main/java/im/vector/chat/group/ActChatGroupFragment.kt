@@ -2,7 +2,9 @@ package im.vector.chat.group
 
 import android.os.Bundle
 import android.view.View.VISIBLE
+import im.vector.R
 import im.vector.chat.BaseChatFragment
+import im.vector.chat.ChatViewModel
 import im.vector.directory.people.model.TemporaryRoom
 import kotlinx.android.synthetic.main.fragment_create_chat.*
 
@@ -11,6 +13,8 @@ class ActChatGroupFragment : BaseChatFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        viewModel.updateActionBarTitle(getString(R.string.room_recents_create_room))
+
         selectedUserRecyclerView.visibility = VISIBLE
 
         selectedRoomAdapter = SelectedRoomAdapter(requireContext())
