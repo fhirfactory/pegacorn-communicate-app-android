@@ -2102,8 +2102,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
             //test data
             List<UserRole> roles = new ArrayList<>();
+            roles.add(new UserRole(false, "Gen Surg Reg"));
             roles.add(new UserRole(false, "Registrar"));
-            roles.add(new UserRole(false, "Ward Nurse"));
             roles.add(new UserRole(false, "Consultant"));
             rolesInNavigationBarAdapter.setData(roles);
         }
