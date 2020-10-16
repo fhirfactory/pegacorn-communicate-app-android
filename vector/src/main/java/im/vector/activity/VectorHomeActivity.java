@@ -121,8 +121,8 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.RolesInNavigationBarAdapter;
 import im.vector.adapters.model.UserRole;
-import im.vector.chat.ActChatGroupActivity;
-import im.vector.chat.ActChatOneToOneActivity;
+import im.vector.chat.CHAT_TYPE;
+import im.vector.chat.ChatCreateActivity;
 import im.vector.directory.DirectoryFragment;
 import im.vector.directory.role.DirectoryRoleFragment;
 import im.vector.extensions.ViewExtensionsKt;
@@ -1519,9 +1519,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
             startActivity(settingsIntent);
         } else {
-            final Intent settingsIntent = new Intent(VectorHomeActivity.this, ActChatOneToOneActivity.class);
-            settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-            startActivity(settingsIntent);
+            startActivity(ChatCreateActivity.Companion.intent(this, CHAT_TYPE.ONE_TO_ONE));
         }
     }
 
@@ -1580,9 +1578,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 }
             });
         } else {
-            final Intent settingsIntent = new Intent(VectorHomeActivity.this, ActChatGroupActivity.class);
-            settingsIntent.putExtra(MXCActionBarActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-            startActivity(settingsIntent);
+            startActivity(ChatCreateActivity.Companion.intent(this, CHAT_TYPE.GROUP));
         }
     }
 

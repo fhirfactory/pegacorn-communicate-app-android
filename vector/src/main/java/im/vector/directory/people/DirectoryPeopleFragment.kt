@@ -16,7 +16,7 @@ class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
     private lateinit var peopleDirectoryAdapter: PeopleDirectoryAdapter
 
     override fun onFilter(pattern: String?, listener: OnFilterListener?) {
-        TODO("Not yet implemented")
+        // TODO("Not yet implemented")
     }
 
     override fun onResetFilter() {

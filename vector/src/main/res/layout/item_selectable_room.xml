@@ -17,13 +17,21 @@
 
     <ImageView
         android:id="@+id/closeButton"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
         android:background="@drawable/remove_circle_background"
-        android:padding="2dp"
+        android:padding="3dp"
         android:src="@drawable/ic_small_close"
         android:tint="@android:color/white"
         app:layout_constraintRight_toRightOf="@+id/avatar"
         app:layout_constraintTop_toTopOf="@+id/avatar" />
+
+    <ImageView
+        app:layout_constraintRight_toRightOf="@+id/avatar"
+        app:layout_constraintBottom_toBottomOf="@+id/avatar"
+        android:id="@+id/status_indicator"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:background="@drawable/avatar_indicator_online" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

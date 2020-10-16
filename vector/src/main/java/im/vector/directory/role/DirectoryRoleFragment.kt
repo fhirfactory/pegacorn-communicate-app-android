@@ -37,13 +37,12 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
     }
 
     override fun onFilter(pattern: String?, listener: OnFilterListener?) {
-        //TODO("Not yet implemented")
+        // TODO("Not yet implemented")
     }
 
     override fun onResetFilter() {
         TODO("Not yet implemented")
     }
-
 
     override fun getRooms(): MutableList<Room> {
         TODO("Not yet implemented")

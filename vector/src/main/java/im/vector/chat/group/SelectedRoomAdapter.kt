@@ -1,4 +1,4 @@
-package im.vector.chat
+package im.vector.chat.group
 
 import android.content.Context
 import android.view.LayoutInflater
