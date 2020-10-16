@@ -41,11 +41,12 @@ class RoleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStackCh
 
         //test data
         val testPeopleData = mutableListOf<DirectoryPeople>()
-        testPeopleData.add(DirectoryPeople("1", "Liam", "Registrar", null, "Emergency Department", "Hospital Department"))
-        testPeopleData.add(DirectoryPeople("2", "Noah", "Ward Nurse", null, "Emergency Department", "Hospital Department"))
-        testPeopleData.add(DirectoryPeople("3", "William", "Nursing Team Leader", null, "Emergency Department", "Hospital Department"))
-        testPeopleData.add(DirectoryPeople("4", "Oliver", "Emergency Admitting Officer", null, "Emergency Department", "Hospital Department"))
-        testPeopleData.add(DirectoryPeople("5", "James", "Consultant", null, "Emergency Department", "Hospital Department"))
+        testPeopleData.add(DirectoryPeople("1", "John Smith", "Registrar", null, "Emergency Department", "Hospital Department"))
+        testPeopleData.add(DirectoryPeople("2", "Paul George", "Ward Nurse", null, "Emergency Department", "Hospital Department"))
+        testPeopleData.add(DirectoryPeople("3", "Anthony Davis", "Nursing Team Leader", null, "Emergency Department", "Hospital Department"))
+        testPeopleData.add(DirectoryPeople("4", "Stephen Curry", "Emergency Admitting Officer", null, "Emergency Department", "Hospital Department"))
+        testPeopleData.add(DirectoryPeople("5", "James Harden", "Consultant", null, "Emergency Department", "Hospital Department"))
+        testPeopleData.add(DirectoryPeople("6", "Mike Jones", "Consultant", null, "Emergency Department", "Hospital Department"))
 
         roleAdapter.setData(testPeopleData)
     }

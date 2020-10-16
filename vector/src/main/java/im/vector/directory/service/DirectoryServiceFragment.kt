@@ -24,7 +24,7 @@ class DirectoryServiceFragment : BaseDirectoryFragment(), ServiceClickListener {
 
     override fun onFavorite(enable: Boolean) {
         //Temporary
-        setHeader(header, if (enable) R.string.total_number_of_favourite_service else R.string.total_number_of_service, if (enable) 4 else 10)
+        setHeader(header, if (enable) R.string.total_number_of_favourite_service else R.string.total_number_of_services, if (enable) 4 else 10)
     }
 
     override fun getRooms(): MutableList<Room> {
@@ -51,15 +51,15 @@ class DirectoryServiceFragment : BaseDirectoryFragment(), ServiceClickListener {
 
         val testServiceData = mutableListOf<DummyService>()
         testServiceData.add(DummyService("1", "Service name 1", "Service Telecom 1", "Service Address 1", "Service Organization 1", true));
-        testServiceData.add(DummyService("2", "Service name 2", "Service Telecom 1", "Service Address 1", "Service Organization 1", true));
-        testServiceData.add(DummyService("3", "Service name 3", "Service Telecom 1", "Service Address 1", "Service Organization 1", false));
-        testServiceData.add(DummyService("4", "Service name 4", "Service Telecom 1", "Service Address 1", "Service Organization 1", false));
-        testServiceData.add(DummyService("5", "Service name 5", "Service Telecom 1", "Service Address 1", "Service Organization 1", false));
-        testServiceData.add(DummyService("6", "Service name 6", "Service Telecom 1", "Service Address 1", "Service Organization 1", true));
-        testServiceData.add(DummyService("7", "Service name 7", "Service Telecom 1", "Service Address 1", "Service Organization 1", false));
+        testServiceData.add(DummyService("2", "Service name 2", "Service Telecom 2", "Service Address 2", "Service Organization 2", true));
+        testServiceData.add(DummyService("3", "Service name 3", "Service Telecom 3", "Service Address 3", "Service Organization 3", false));
+        testServiceData.add(DummyService("4", "Service name 4", "Service Telecom 4", "Service Address 4", "Service Organization 4", false));
+        testServiceData.add(DummyService("5", "Service name 5", "Service Telecom 5", "Service Address 5", "Service Organization 5", false));
+        testServiceData.add(DummyService("6", "Service name 6", "Service Telecom 6", "Service Address 6", "Service Organization 6", true));
+        testServiceData.add(DummyService("7", "Service name 7", "Service Telecom 7", "Service Address 7", "Service Organization 7", false));
 
         serviceAdapter.setData(testServiceData)
-        setHeader(header, R.string.total_number_of_roles,10)
+        setHeader(header, R.string.total_number_of_services,10)
     }
 
     override fun onServiceClick(service: DummyService) {
