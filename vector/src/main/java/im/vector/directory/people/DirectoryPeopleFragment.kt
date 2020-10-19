@@ -5,15 +5,25 @@ import android.view.Menu
 import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.R
 import im.vector.directory.BaseDirectoryFragment
-import im.vector.directory.RoomClickListener
 import im.vector.directory.people.detail.PeopleDetailActivity
 import im.vector.directory.people.model.DirectoryPeople
 import im.vector.directory.people.model.TemporaryRoom
-import im.vector.directory.role.model.DummyRole
+import im.vector.directory.role.DirectoryRoleFragment
+import im.vector.extensions.withArgs
 import kotlinx.android.synthetic.main.fragment_directory_people.*
 import org.matrix.androidsdk.data.Room
 
 class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
+    companion object {
+        private const val SELECTABLE = "SELECTABLE"
+
+        fun newInstance(selectable: Boolean = false): DirectoryPeopleFragment {
+            return DirectoryPeopleFragment().withArgs {
+                putBoolean(SELECTABLE, selectable)
+            }
+        }
+    }
+
     private lateinit var peopleDirectoryAdapter: PeopleDirectoryAdapter
 
     override fun onFilter(pattern: String?, listener: OnFilterListener?) {
@@ -39,8 +49,9 @@ class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        val selectable = arguments?.getBoolean(SELECTABLE, false)
 
-        peopleDirectoryAdapter = PeopleDirectoryAdapter(requireContext(), this)
+        peopleDirectoryAdapter = PeopleDirectoryAdapter(requireContext(), this, selectable ?: false)
         peopleRecyclerview.layoutManager = LinearLayoutManager(requireContext())
         peopleRecyclerview.adapter = peopleDirectoryAdapter
 
@@ -60,11 +71,11 @@ class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
         menu.findItem(R.id.ic_action_advanced_search)?.isVisible = false
     }
 
-    override fun onPeopleClick(directoryPeople: DirectoryPeople) {
+    override fun onPeopleClick(directoryPeople: DirectoryPeople, forRemove: Boolean) {
         if(roomClickListener==null) {
             startActivity(PeopleDetailActivity.intent(requireContext(), directoryPeople, true))
         } else {
-            roomClickListener?.onRoomClick(TemporaryRoom(directoryPeople, null))
+            roomClickListener?.onRoomClick(TemporaryRoom(directoryPeople, null), forRemove)
         }
     }
 
@@ -73,6 +84,6 @@ class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
     }
 
     fun unSelect(people: DirectoryPeople){
-        //peopleDirectoryAdapter.
+        peopleDirectoryAdapter.removePeople(people.id)
     }
 }

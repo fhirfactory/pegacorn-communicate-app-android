@@ -72,7 +72,7 @@ class RoleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStackCh
         }
     }
 
-    override fun onPeopleClick(directoryPeople: DirectoryPeople) {
+    override fun onPeopleClick(directoryPeople: DirectoryPeople, forRemove: Boolean) {
         startActivity(PeopleDetailActivity.intent(this, directoryPeople, false))
     }
 
