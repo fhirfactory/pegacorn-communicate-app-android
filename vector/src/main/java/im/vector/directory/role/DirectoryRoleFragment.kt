@@ -13,14 +13,10 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.transition.TransitionManager
 import im.vector.R
 import im.vector.directory.BaseDirectoryFragment
-import im.vector.directory.RoomClickListener
-import im.vector.directory.people.detail.PeopleDetailActivity
 import im.vector.directory.people.model.TemporaryRoom
 import im.vector.directory.role.detail.RoleDetailActivity
 import im.vector.directory.role.model.*
 import im.vector.extensions.withArgs
-import im.vector.fragments.VectorPublicRoomsListFragment
-import im.vector.fragments.VectorReadReceiptsDialogFragment
 import kotlinx.android.synthetic.main.fragment_directory_role.*
 import org.matrix.androidsdk.data.Room
 
@@ -175,12 +171,15 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
         })
     }
 
-    override fun onRoleClick(role: DummyRole) {
+    override fun onRoleClick(role: DummyRole, forRemove: Boolean) {
         if(roomClickListener==null) {
             startActivity(RoleDetailActivity.intent(requireContext(), role, true))
         } else {
-            roomClickListener?.onRoomClick(TemporaryRoom(null, role))
+            roomClickListener?.onRoomClick(TemporaryRoom(null, role), forRemove)
         }
+    }
 
+    fun unSelect(role: DummyRole){
+        roleAdapter.removeRoles(role.id)
     }
 }

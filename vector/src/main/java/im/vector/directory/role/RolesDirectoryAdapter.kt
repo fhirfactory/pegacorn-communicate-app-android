@@ -65,6 +65,11 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: R
         return false
     }
 
+    fun removeRoles(id: String){
+        selectedIds?.remove(id)
+        notifyDataSetChanged()
+    }
+
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: RoleViewHolder, position: Int) {
         holder.bind(context, mSession, roles[position], spanTextBackgroundColor, spanTextColor, textSize, this, position, checkSelection(roles[position]))
@@ -76,7 +81,7 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: R
                     selectedIds?.remove(roles[position].id)
                 }
                 notifyItemChanged(position)
-                onClickListener.onRoleClick(roles[position])
+                onClickListener.onRoleClick(roles[position], !(added ?: true))
             } else {
                 onClickListener.onRoleClick(roles[position])
             }
@@ -142,7 +147,7 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 }
 
 interface RoleClickListener {
-    fun onRoleClick(role: DummyRole)
+    fun onRoleClick(role: DummyRole, forRemove: Boolean = false)
 }
 
 interface OnDataSetChange {

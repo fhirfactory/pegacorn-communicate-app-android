@@ -84,7 +84,7 @@ class PeopleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStack
         }
     }
 
-    override fun onRoleClick(role: DummyRole) {
+    override fun onRoleClick(role: DummyRole, forRemove: Boolean) {
         startActivity(RoleDetailActivity.intent(this, role, false))
     }
 }

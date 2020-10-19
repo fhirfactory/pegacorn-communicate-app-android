@@ -9,6 +9,7 @@ import im.vector.directory.RoomClickListener
 import im.vector.directory.people.detail.PeopleDetailActivity
 import im.vector.directory.people.model.DirectoryPeople
 import im.vector.directory.people.model.TemporaryRoom
+import im.vector.directory.role.model.DummyRole
 import kotlinx.android.synthetic.main.fragment_directory_people.*
 import org.matrix.androidsdk.data.Room
 
@@ -69,5 +70,9 @@ class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
 
     override fun onPeopleFavorite(directoryPeople: DirectoryPeople) {
 
+    }
+
+    fun unSelect(people: DirectoryPeople){
+        //peopleDirectoryAdapter.
     }
 }
