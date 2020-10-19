@@ -18,11 +18,24 @@ import im.vector.directory.people.detail.PeopleDetailActivity
 import im.vector.directory.people.model.TemporaryRoom
 import im.vector.directory.role.detail.RoleDetailActivity
 import im.vector.directory.role.model.*
+import im.vector.extensions.withArgs
+import im.vector.fragments.VectorPublicRoomsListFragment
+import im.vector.fragments.VectorReadReceiptsDialogFragment
 import kotlinx.android.synthetic.main.fragment_directory_role.*
 import org.matrix.androidsdk.data.Room
 
 
 class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
+    companion object {
+        private const val SELECTABLE = "SELECTABLE"
+
+        fun newInstance(selectable: Boolean = false): DirectoryRoleFragment {
+            return DirectoryRoleFragment().withArgs {
+                putBoolean(SELECTABLE, selectable)
+            }
+        }
+    }
+
     private lateinit var viewModel: DirectoryRoleViewModel
     private lateinit var categoryAdapter: DropDownAdapter
     private lateinit var organisationUnitAdapter: DropDownAdapter
@@ -51,6 +64,7 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(DirectoryRoleViewModel::class.java)
+        val selectable = arguments?.getBoolean(SELECTABLE, false)
         subscribeUI()
         cancelButton.setOnClickListener {
             viewModel.toggleSearchView()
@@ -87,7 +101,7 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
         locationEditText.threshold = 1
         locationEditText.setAdapter(locationAdapter)*/
 
-        roleAdapter = RolesDirectoryAdapter(requireContext(), this)
+        roleAdapter = RolesDirectoryAdapter(requireContext(), this, selectable?: false)
         (roleRecyclerview.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         roleRecyclerview.layoutManager = LinearLayoutManager(requireContext())
         roleRecyclerview.adapter = roleAdapter
@@ -109,25 +123,25 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
         testRoleData.add(DummyRole("1", "ED Acute SRMO", "Emergency Department  Acute Senior Resident Medical Officer Medical Officer", null, "ED {Emergency Department}", arrayListOf(Role("1", "Senior Resident Medical Officer", "Doctor")),
                 arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
 
-        testRoleData.add(DummyRole("1", "ED Acute RMO", "Emergency Department  Acute Resident Medical Officer", null, "ED {Emergency Department}", arrayListOf(Role("1", "Resident", "Doctor")),
+        testRoleData.add(DummyRole("2", "ED Acute RMO", "Emergency Department  Acute Resident Medical Officer", null, "ED {Emergency Department}", arrayListOf(Role("1", "Resident", "Doctor")),
                 arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
 
-        testRoleData.add(DummyRole("1", "ED Acute Intern", "Emergency Department  Acute Intern", null, "ED {Emergency Department}", arrayListOf(Role("1", "Intern", "Doctor")),
+        testRoleData.add(DummyRole("3", "ED Acute Intern", "Emergency Department  Acute Intern", null, "ED {Emergency Department}", arrayListOf(Role("1", "Intern", "Doctor")),
                 arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
 
-        testRoleData.add(DummyRole("1", "ED Acute Consultant", "Emergency Department  Acute Consultant", null, "ED {Emergency Department}", arrayListOf(Role("1", "Consultant", "Doctor")),
+        testRoleData.add(DummyRole("4", "ED Acute Consultant", "Emergency Department  Acute Consultant", null, "ED {Emergency Department}", arrayListOf(Role("1", "Consultant", "Doctor")),
                 arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
 
-        testRoleData.add(DummyRole("1", "ED Acute East Nurse", "Emergency Department  Acute East Nurse", null, "ED {Emergency Department}", arrayListOf(Role("1", "Emergency Department Nurse", "Nursing and Midwifery")),
+        testRoleData.add(DummyRole("5", "ED Acute East Nurse", "Emergency Department  Acute East Nurse", null, "ED {Emergency Department}", arrayListOf(Role("1", "Emergency Department Nurse", "Nursing and Midwifery")),
                 arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
 
-        testRoleData.add(DummyRole("1", "ED Acute East PL", "Emergency Department  Acute East Pod Leader", null, "ED {Emergency Department}", arrayListOf(Role("1", "Nursing Team Leader", "Nursing and Midwifery")),
+        testRoleData.add(DummyRole("6", "ED Acute East PL", "Emergency Department  Acute East Pod Leader", null, "ED {Emergency Department}", arrayListOf(Role("1", "Nursing Team Leader", "Nursing and Midwifery")),
                 arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
 
-        testRoleData.add(DummyRole("1", "ED Acute North Nurse", "Emergency Department  Acute North Nurse", null, "ED {Emergency Department}", arrayListOf(Role("1", "Emergency Department Nurse", "Nursing and Midwifery")),
+        testRoleData.add(DummyRole("7", "ED Acute North Nurse", "Emergency Department  Acute North Nurse", null, "ED {Emergency Department}", arrayListOf(Role("1", "Emergency Department Nurse", "Nursing and Midwifery")),
                 arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
 
-        testRoleData.add(DummyRole("1", "ED Acute North Nurse", "Emergency Department  Acute North Nurse", null, "ED {Emergency Department}", arrayListOf(Role("1", "Emergency Department Nurse", "Nursing and Midwifery")),
+        testRoleData.add(DummyRole("8", "ED Acute North Nurse", "Emergency Department  Acute North Nurse", null, "ED {Emergency Department}", arrayListOf(Role("1", "Emergency Department Nurse", "Nursing and Midwifery")),
                 arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
 
         roleAdapter.setData(testRoleData)

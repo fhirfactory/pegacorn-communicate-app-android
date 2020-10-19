@@ -17,23 +17,28 @@ import im.vector.ui.themes.ThemeUtils.getColor
 import im.vector.util.VectorUtils
 import im.vector.view.VectorCircularImageView
 import org.matrix.androidsdk.MXSession
+import java.util.*
+import kotlin.collections.ArrayList
 
 
-class RolesDirectoryAdapter(val context: Context, private val onClickListener: RoleClickListener) :
+class RolesDirectoryAdapter(val context: Context, private val onClickListener: RoleClickListener, private val selectable: Boolean = false) :
         RecyclerView.Adapter<RoleViewHolder>(), OnDataSetChange {
     private val roles = mutableListOf<DummyRole>()
     var mSession: MXSession? = null
     var textSize: Float = 0.0F
     var spanTextBackgroundColor: Int
     var spanTextColor: Int
+    var selectedIds: MutableSet<String>? = null
 
     init {
         mSession = Matrix.getInstance(context).defaultSession
         textSize = 12 * context.resources.displayMetrics.scaledDensity // sp to px
         spanTextBackgroundColor = getColor(context, R.attr.vctr_text_spanable_text_background_color)
         spanTextColor = getColor(context, R.attr.vctr_text_reverse_color)
+        if(selectable){
+            selectedIds = mutableSetOf()
+        }
     }
-
 
     fun setData(roles: MutableList<DummyRole>) {
         this.roles.clear()
@@ -51,9 +56,31 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: R
         return RoleViewHolder(view)
     }
 
+    private fun checkSelection(role: DummyRole): Boolean{
+        if(!selectable) return false
+        selectedIds?.forEach { id ->
+            if(id == role.id)
+                return true
+        }
+        return false
+    }
+
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: RoleViewHolder, position: Int) {
-        holder.bind(context, mSession, roles[position], spanTextBackgroundColor, spanTextColor, textSize, this, position, onClickListener)
+        holder.bind(context, mSession, roles[position], spanTextBackgroundColor, spanTextColor, textSize, this, position, checkSelection(roles[position]))
+        holder.selectionRadioImageView?.visibility = if (selectable) VISIBLE else GONE
+        holder.itemView.setOnClickListener {
+            if(selectable) {
+                val added = selectedIds?.add(roles[position].id)
+                if(added == false) {
+                    selectedIds?.remove(roles[position].id)
+                }
+                notifyItemChanged(position)
+                onClickListener.onRoleClick(roles[position])
+            } else {
+                onClickListener.onRoleClick(roles[position])
+            }
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -64,17 +91,10 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: R
     }
 }
 
-interface RoleClickListener {
-    fun onRoleClick(role: DummyRole)
-}
-
-interface OnDataSetChange {
-    fun onDataChange(position: Int)
-}
-
 class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var avatar: VectorCircularImageView? = null
     var expandableIcon: ImageView? = null
+    var selectionRadioImageView: ImageView? = null
     var officialName: TextView? = null
     var secondaryName: TextView? = null
     var description: TextView? = null
@@ -84,16 +104,18 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         heading = itemView.findViewById(R.id.heading)
         avatar = itemView.findViewById(R.id.avatar)
         expandableIcon = itemView.findViewById(R.id.expandableIcon)
+        selectionRadioImageView = itemView.findViewById(R.id.selected)
         officialName = itemView.findViewById(R.id.officialName)
         secondaryName = itemView.findViewById(R.id.secondaryName)
         description = itemView.findViewById(R.id.description)
     }
 
-    fun bind(context: Context, session: MXSession?, role: DummyRole, spanTextBackgroundColor: Int, spanTextColor: Int, textSize: Float, onDataSetChange: OnDataSetChange, position: Int, onClickListener: RoleClickListener?, showHeader: Boolean = false) {
+    fun bind(context: Context, session: MXSession?, role: DummyRole, spanTextBackgroundColor: Int, spanTextColor: Int, textSize: Float, onDataSetChange: OnDataSetChange, position: Int, selection: Boolean? = false, showHeader: Boolean = false) {
         VectorUtils.loadRoomAvatar(context, session, avatar, role)
         heading?.visibility = if (showHeader) VISIBLE else GONE
         officialName?.text = role.officialName
         secondaryName?.text = role.secondaryName
+        selectionRadioImageView?.setImageResource(if(selection == true) R.drawable.ic_radio_button_checked else R.drawable.ic_radio_button_unchecked)
         if (role.expanded) {
             expandableIcon?.animate()?.setDuration(200)?.rotation(180F)
             description?.visibility = VISIBLE
@@ -116,8 +138,14 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             role.expanded = !role.expanded
             onDataSetChange.onDataChange(position)
         }
-        itemView.setOnClickListener {
-            onClickListener?.onRoleClick(role)
-        }
     }
 }
+
+interface RoleClickListener {
+    fun onRoleClick(role: DummyRole)
+}
+
+interface OnDataSetChange {
+    fun onDataChange(position: Int)
+}
+
