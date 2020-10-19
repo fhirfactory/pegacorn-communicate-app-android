@@ -7,18 +7,30 @@
     android:paddingTop="8dp"
     android:background="?attr/selectableItemBackground">
 
+    <ImageView
+        android:id="@+id/selected"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginLeft="@dimen/layout_horizontal_margin_half"
+        android:src="@drawable/ic_radio_button_unchecked"
+        android:tint="?attr/vctr_list_icon_tint_color"
+        app:layout_constraintBottom_toBottomOf="@+id/avatar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/avatar" />
+
     <im.vector.view.VectorCircularImageView
         android:id="@+id/avatar"
         android:layout_width="44dp"
         android:layout_height="44dp"
-        android:layout_marginLeft="@dimen/layout_horizontal_margin"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars"
-        android:layout_marginStart="@dimen/layout_horizontal_margin" />
+        android:layout_marginStart="@dimen/layout_horizontal_margin_half"
+        android:layout_marginLeft="@dimen/layout_horizontal_margin_half"
+        android:layout_marginTop="@dimen/layout_vertical_margin"
+        app:layout_constraintLeft_toRightOf="@+id/selected"
+        app:layout_constraintTop_toBottomOf="@+id/heading"
+        tools:src="@tools:sample/avatars" />
 
     <ImageView
-        android:layout_marginRight="@dimen/layout_horizontal_margin"
+        android:layout_marginRight="@dimen/layout_horizontal_margin_half"
         android:id="@+id/expandableIcon"
         android:layout_width="24dp"
         android:layout_height="24dp"
@@ -26,7 +38,7 @@
         android:tint="?attr/vctr_list_icon_tint_color"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginEnd="@dimen/layout_horizontal_margin" />
+        android:layout_marginEnd="@dimen/layout_horizontal_margin_half" />
 
     <ImageView
         android:id="@+id/favoriteIcon"
@@ -62,20 +74,20 @@
         android:layout_marginTop="4dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:layout_marginRight="@dimen/layout_horizontal_margin"
+        android:layout_marginRight="@dimen/layout_horizontal_margin_half"
         android:textSize="14sp"
         app:layout_constraintLeft_toRightOf="@+id/avatar"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/officialName"
-        android:layout_marginEnd="@dimen/layout_horizontal_margin" />
+        android:layout_marginEnd="@dimen/layout_horizontal_margin_half" />
 
     <TextView
         android:id="@+id/description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginLeft="@dimen/layout_horizontal_margin"
-        android:layout_marginRight="@dimen/layout_horizontal_margin"
+        android:layout_marginLeft="@dimen/layout_horizontal_margin_half"
+        android:layout_marginRight="@dimen/layout_horizontal_margin_half"
         android:textSize="22sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

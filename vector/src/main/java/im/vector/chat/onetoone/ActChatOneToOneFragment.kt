@@ -15,7 +15,7 @@ class ActChatOneToOneFragment : BaseChatFragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel.updateActionBarTitle(getString(R.string.room_recents_start_chat))
     }
-    override fun onRoomClick(temporaryRoom: TemporaryRoom) {
+    override fun onRoomClick(temporaryRoom: TemporaryRoom, forRemove: Boolean) {
 
     }
 }

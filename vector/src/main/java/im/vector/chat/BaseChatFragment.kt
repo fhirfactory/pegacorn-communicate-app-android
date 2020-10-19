@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.fragment_create_chat.*
 
 abstract class BaseChatFragment : BaseActFragment(), RoomClickListener {
     lateinit var viewModel: ChatViewModel
-    val fragments = listOf(DirectoryRoleFragment(), DirectoryPeopleFragment())
+    val fragments = listOf(DirectoryRoleFragment.newInstance(true), DirectoryPeopleFragment.newInstance(true))
 
     override fun getLayoutResId() = R.layout.fragment_create_chat
 

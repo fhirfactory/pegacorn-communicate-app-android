@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.Matrix
 import im.vector.R
+import im.vector.directory.RoomClickListener
 import im.vector.directory.people.model.TemporaryRoom
 import im.vector.util.VectorUtils
 import im.vector.view.VectorCircularImageView
@@ -17,7 +18,7 @@ import kotlinx.android.synthetic.main.item_selectable_room.view.*
 import org.matrix.androidsdk.MXSession
 
 
-class SelectedRoomAdapter(val context: Context) :
+class SelectedRoomAdapter(val context: Context, val removeListener: RoomClickListener) :
         RecyclerView.Adapter<SelectedRoomAdapter.SelectableRoomViewHolder>() {
     private val rooms = mutableListOf<TemporaryRoom>()
     var mSession: MXSession? = null
@@ -48,6 +49,11 @@ class SelectedRoomAdapter(val context: Context) :
         notifyDataSetChanged()
     }
 
+    fun removeRoom(room:TemporaryRoom){
+        this.rooms.remove(room)
+        notifyDataSetChanged()
+    }
+
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(parent: ViewGroup,
                                     viewType: Int): SelectableRoomViewHolder {
@@ -70,6 +76,7 @@ class SelectedRoomAdapter(val context: Context) :
         }
 
         holder.itemView.closeButton.setOnClickListener {
+            removeListener.onRoomClick(rooms[position], true)
             rooms.removeAt(position)
             notifyDataSetChanged()
         }
