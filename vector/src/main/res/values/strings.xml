@@ -1633,6 +1633,9 @@ Why choose Riot.im?
     <string name="title_activity_role_detail">Role Detail</string>
     <string name="search_people">Search for people</string>
     <string name="one_to_one_room_search_hint">Search role or person</string>
+    <string name="public_room_detail">Make this room public. Public room can be found and joined by anyone.</string>
+    <string name="room_name_hint">Room Name</string>
+    <string name="room_topic_hint">Topic</string>
 
     <string name="title_activity_people_detail">Person Detail</string>
     <string name="title_activity_service_detail">Service Detail</string>
