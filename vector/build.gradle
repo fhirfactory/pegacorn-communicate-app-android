@@ -281,6 +281,13 @@ dependencies {
     //Alerter
     implementation 'com.tapadoo.android:alerter:4.0.3'
 
+    //jetpack navigation
+    def nav_version = "2.3.0"
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-fragment:$nav_version"
+    implementation "androidx.navigation:navigation-ui:$nav_version"
+
     /************* Matrix SDK management **************/
     // update settings.gradle
     // use the matrix SDK as external dependency

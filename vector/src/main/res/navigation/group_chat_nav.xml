@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/group_chat_nav"
+    app:startDestination="@id/actChatGroupFragment">
+
+    <fragment
+        android:id="@+id/actChatGroupFragment"
+        android:name="im.vector.chat.group.ActChatGroupFragment"
+        android:label="ActChatGroupFragment" />
+</navigation>
