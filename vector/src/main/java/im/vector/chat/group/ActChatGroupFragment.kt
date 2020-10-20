@@ -3,6 +3,8 @@ package im.vector.chat.group
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View.VISIBLE
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import im.vector.R
 import im.vector.chat.BaseChatFragment
 import im.vector.directory.RoomClickListener
@@ -45,7 +47,7 @@ class ActChatGroupFragment : BaseChatFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.ic_action_next -> {
-                Log.d("zzzz", "Next")
+                view?.findNavController()?.navigate(R.id.action_actChatGroupFragment_to_groupChatDetailFragment)
                 return true
             }
         }

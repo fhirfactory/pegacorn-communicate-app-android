@@ -6,5 +6,13 @@
     <fragment
         android:id="@+id/actChatGroupFragment"
         android:name="im.vector.chat.group.ActChatGroupFragment"
-        android:label="ActChatGroupFragment" />
+        android:label="ActChatGroupFragment" >
+        <action
+            android:id="@+id/action_actChatGroupFragment_to_groupChatDetailFragment"
+            app:destination="@id/groupChatDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/groupChatDetailFragment"
+        android:name="im.vector.chat.group.GroupChatDetailFragment"
+        android:label="GroupChatDetailFragment" />
 </navigation>

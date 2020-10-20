@@ -9,6 +9,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import im.vector.R
 import im.vector.activity.CommonActivityUtils
 import im.vector.activity.SimpleFragmentActivity
@@ -52,7 +53,7 @@ class ChatCreateActivity : SimpleFragmentActivity() {
             null -> R.navigation.one_to_one_chat_nav
         })
         appBarConfiguration = AppBarConfiguration.Builder().build()
-        setupActionBarWithNavController( navController, appBarConfiguration!!)
+        toolbar.setupWithNavController(navController, appBarConfiguration!!)
 
         /*if (supportFragmentManager.fragments.isEmpty()) {
             supportFragmentManager.beginTransaction()
@@ -61,10 +62,10 @@ class ChatCreateActivity : SimpleFragmentActivity() {
         }*/
     }
 
-    override fun onSupportNavigateUp(): Boolean {
+/*    override fun onSupportNavigateUp(): Boolean {
         return (appBarConfiguration?.let { NavigationUI.navigateUp(navController, it) } ?: false
                 || super.onSupportNavigateUp())
-    }
+    }*/
 
     companion object {
         const val CHAT_TYPE = "CHAT_TYPE"
