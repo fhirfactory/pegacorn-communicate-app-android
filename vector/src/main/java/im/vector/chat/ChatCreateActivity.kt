@@ -55,17 +55,14 @@ class ChatCreateActivity : SimpleFragmentActivity() {
         appBarConfiguration = AppBarConfiguration.Builder().build()
         toolbar.setupWithNavController(navController, appBarConfiguration!!)
 
-        /*if (supportFragmentManager.fragments.isEmpty()) {
-            supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, if(chatType==im.vector.chat.CHAT_TYPE.GROUP) ActChatGroupFragment() else ActChatOneToOneFragment())
-                    .commitNow()
-        }*/
+        toolbar.setNavigationOnClickListener {
+            if(navController.graph.startDestination == navController.currentDestination?.id) {
+                finish()
+            } else {
+                navController.navigateUp()
+            }
+        }
     }
-
-/*    override fun onSupportNavigateUp(): Boolean {
-        return (appBarConfiguration?.let { NavigationUI.navigateUp(navController, it) } ?: false
-                || super.onSupportNavigateUp())
-    }*/
 
     companion object {
         const val CHAT_TYPE = "CHAT_TYPE"
