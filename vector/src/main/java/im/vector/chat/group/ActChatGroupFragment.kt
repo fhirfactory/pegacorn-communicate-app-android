@@ -1,6 +1,7 @@
 package im.vector.chat.group
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View.VISIBLE
 import androidx.lifecycle.Observer
@@ -8,12 +9,12 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import im.vector.R
 import im.vector.chat.BaseChatFragment
-import im.vector.chat.ChatViewModel
 import im.vector.directory.RoomClickListener
 import im.vector.directory.people.DirectoryPeopleFragment
 import im.vector.directory.people.model.TemporaryRoom
 import im.vector.directory.role.DirectoryRoleFragment
 import kotlinx.android.synthetic.main.fragment_create_chat.*
+
 
 class ActChatGroupFragment : BaseChatFragment() {
     lateinit var selectedChatViewModel: SelectedChatViewModel
@@ -44,16 +45,22 @@ class ActChatGroupFragment : BaseChatFragment() {
         subscribeUI()
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val item: MenuItem = menu.findItem(R.id.ic_action_next)
+        item.isVisible = selectedChatViewModel.selectedLiveItems.value?.size ?: 0 > 0
+    }
+
     fun subscribeUI() {
         selectedChatViewModel.selectedLiveItems.observe(viewLifecycleOwner, Observer { rooms ->
             selectedRoomAdapter.setData(rooms)
-            rooms.forEach {room ->
+            rooms.forEach { room ->
                 if (room.role != null) {
                     (fragments[0] as DirectoryRoleFragment).selectRole(room.role)
                 } else if (room.people != null) {
                     (fragments[1] as DirectoryPeopleFragment).selectPeople(room.people)
                 }
             }
+            activity?.invalidateOptionsMenu()
         })
     }
 
