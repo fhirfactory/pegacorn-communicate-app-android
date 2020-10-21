@@ -12,12 +12,4 @@ abstract class BaseDirectoryFragment : BaseActFragment() {
     var roomClickListener: RoomClickListener? = null
 
     abstract fun onFavorite(enable: Boolean)
-
-    open fun setHeader(headingView: TextView, @StringRes title: Int, count: Int) {
-        val titleText = resources.getString(title)
-        val str = SpannableStringBuilder(titleText)
-        str.setSpan(StyleSpan(Typeface.BOLD), 0, titleText.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        str.append(" ").append(count.toString())
-        headingView.text = str
-    }
 }

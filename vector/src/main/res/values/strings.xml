@@ -1614,6 +1614,7 @@ Why choose Riot.im?
     <string name="total_number_of_roles"> Roles: </string>
     <string name="total_number_of_favourite_roles"> Favourite Roles: </string>
     <string name="total_number_of_people"> People: </string>
+    <string name="total_number_of_member"> Member: </string>
     <string name="total_number_of_favourite_people">Favourite People: </string>
     <string name="total_number_of_service"> Service: </string>
     <string name="total_number_of_favourite_service">Favourite Service: </string>

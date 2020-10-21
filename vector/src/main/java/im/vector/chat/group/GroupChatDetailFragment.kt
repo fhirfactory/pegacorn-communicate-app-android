@@ -10,6 +10,8 @@ import im.vector.directory.RoomClickListener
 import im.vector.directory.people.model.TemporaryRoom
 import im.vector.home.BaseActFragment
 import kotlinx.android.synthetic.main.fragment_create_chat.*
+import kotlinx.android.synthetic.main.fragment_create_chat.selectedUserRecyclerView
+import kotlinx.android.synthetic.main.fragment_group_chat_create_detail.*
 import org.matrix.androidsdk.core.Log
 
 class GroupChatDetailFragment : BaseActFragment() {
@@ -39,6 +41,7 @@ class GroupChatDetailFragment : BaseActFragment() {
     fun subscribeUI() {
         selectedChatViewModel.selectedLiveItems.observe(viewLifecycleOwner, Observer { rooms ->
             selectedRoomAdapter.setData(rooms)
+            rooms?.size?.let { setHeader(header, R.string.total_number_of_member, it) }
         })
     }
 
