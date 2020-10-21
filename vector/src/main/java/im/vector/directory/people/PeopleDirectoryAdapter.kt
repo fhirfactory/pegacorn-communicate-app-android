@@ -11,7 +11,6 @@ import im.vector.Matrix
 import im.vector.R
 import im.vector.directory.people.model.DirectoryPeople
 import im.vector.directory.role.OnDataSetChange
-import im.vector.directory.role.model.DummyRole
 import im.vector.ui.themes.ThemeUtils.getColor
 import im.vector.util.VectorUtils
 import im.vector.view.VectorCircularImageView
@@ -33,7 +32,7 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
         textSize = 12 * context.resources.displayMetrics.scaledDensity // sp to px
         spanTextBackgroundColor = getColor(context, R.attr.vctr_text_spanable_text_background_color)
         spanTextColor = getColor(context, R.attr.vctr_text_reverse_color)
-        if(selectable){
+        if (selectable) {
             selectedIds = mutableSetOf()
         }
     }
@@ -59,7 +58,7 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
 
         fun bind(context: Context, session: MXSession?, people: DirectoryPeople, onDataSetChange: OnDataSetChange, position: Int, selection: Boolean? = false) {
             VectorUtils.loadRoomAvatar(context, session, avatar, people)
-            selectionRadioImageView?.setImageResource(if(selection == true) R.drawable.ic_radio_button_checked else R.drawable.ic_radio_button_unchecked)
+            selectionRadioImageView?.setImageResource(if (selection == true) R.drawable.ic_radio_button_checked else R.drawable.ic_radio_button_unchecked)
             officialName?.text = people.officialName
             jobTitle?.text = people.jobTitle
             description?.text = people.getSpannableStringBuilder(spanTextBackgroundColor, spanTextColor, textSize, "Organisation", people.organisations).append(people.getSpannableStringBuilder(spanTextBackgroundColor, spanTextColor, textSize, "Business Unit", people.businessUnits))
@@ -98,9 +97,9 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
         holder.bind(context, mSession, people[position], this, position, checkSelection(people[position]))
         holder.selectionRadioImageView?.visibility = if (selectable) View.VISIBLE else View.GONE
         holder.itemView.setOnClickListener {
-            if(selectable) {
+            if (selectable) {
                 val added = selectedIds?.add(people[position].id)
-                if(added == false) {
+                if (added == false) {
                     selectedIds?.remove(people[position].id)
                 }
                 notifyItemChanged(position)
@@ -111,18 +110,24 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
         }
     }
 
-    private fun checkSelection(people: DirectoryPeople): Boolean{
-        if(!selectable) return false
+    private fun checkSelection(people: DirectoryPeople): Boolean {
+        if (!selectable) return false
         selectedIds?.forEach { id ->
-            if(id == people.id)
+            if (id == people.id)
                 return true
         }
         return false
     }
 
-    fun removePeople(id: String){
+    fun removeFromSelectedPeople(id: String) {
         selectedIds?.remove(id)
         notifyDataSetChanged()
+    }
+
+    fun addToSelectedPeople(id: String) {
+        if (selectedIds?.add(id) == true) {
+            notifyDataSetChanged()
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)

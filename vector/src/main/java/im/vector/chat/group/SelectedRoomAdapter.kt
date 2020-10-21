@@ -42,9 +42,10 @@ class SelectedRoomAdapter(val context: Context, val removeListener: RoomClickLis
     fun setData(rooms: MutableList<TemporaryRoom>) {
         this.rooms.clear()
         this.rooms.addAll(rooms)
+        notifyDataSetChanged()
     }
 
-    fun addRoom(room:TemporaryRoom){
+/*    fun addRoom(room:TemporaryRoom){
         this.rooms.add(room)
         notifyDataSetChanged()
     }
@@ -52,7 +53,7 @@ class SelectedRoomAdapter(val context: Context, val removeListener: RoomClickLis
     fun removeRoom(room:TemporaryRoom){
         this.rooms.remove(room)
         notifyDataSetChanged()
-    }
+    }*/
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(parent: ViewGroup,
@@ -77,8 +78,6 @@ class SelectedRoomAdapter(val context: Context, val removeListener: RoomClickLis
 
         holder.itemView.closeButton.setOnClickListener {
             removeListener.onRoomClick(rooms[position], true)
-            rooms.removeAt(position)
-            notifyDataSetChanged()
         }
     }
 

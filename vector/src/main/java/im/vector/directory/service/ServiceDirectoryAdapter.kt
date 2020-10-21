@@ -78,7 +78,7 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         VectorUtils.loadRoomAvatar(context, session, avatar, service)
         officialName?.text = service.name
         contactDetail?.text = service.address
-        favoriteIcon?.setImageResource(if(service.isFavorite) R.drawable.filled_star else R.drawable.outline_star)
+        favoriteIcon?.setImageResource(if (service.isFavorite) R.drawable.filled_star else R.drawable.outline_star)
         itemView.setOnClickListener {
             onClickListener?.onServiceClick(service)
         }

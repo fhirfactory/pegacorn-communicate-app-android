@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/one_to_one_chat_nav"
+    app:startDestination="@id/actChatOneToOneFragment">
+
+    <fragment
+        android:id="@+id/actChatOneToOneFragment"
+        android:name="im.vector.chat.onetoone.ActChatOneToOneFragment"
+        android:label="ActChatOneToOneFragment" />
+</navigation>

@@ -5,7 +5,6 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import im.vector.directory.RoundedBackgroundSpan
 import im.vector.directory.role.model.DummyRole
-import im.vector.directory.role.model.Role
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -20,4 +19,5 @@ data class DirectoryPeople(val id: String, val officialName: String, val jobTitl
     }
 }
 
-data class TemporaryRoom(val people: DirectoryPeople?, val role: DummyRole?)
+@Parcelize
+data class TemporaryRoom(val people: DirectoryPeople?, val role: DummyRole?) : Parcelable

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/group_chat_nav"
+    app:startDestination="@id/actChatGroupFragment">
+
+    <fragment
+        android:id="@+id/actChatGroupFragment"
+        android:name="im.vector.chat.group.ActChatGroupFragment"
+        android:label="ActChatGroupFragment" >
+        <action
+            android:id="@+id/action_actChatGroupFragment_to_groupChatDetailFragment"
+            app:destination="@id/groupChatDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/groupChatDetailFragment"
+        android:name="im.vector.chat.group.GroupChatDetailFragment"
+        android:label="GroupChatDetailFragment" />
+</navigation>

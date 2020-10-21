@@ -1,10 +1,8 @@
 package im.vector.chat.onetoone
 
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProviders
 import im.vector.R
 import im.vector.chat.BaseChatFragment
-import im.vector.chat.ChatViewModel
 import im.vector.directory.people.model.TemporaryRoom
 
 class ActChatOneToOneFragment : BaseChatFragment() {
@@ -15,6 +13,7 @@ class ActChatOneToOneFragment : BaseChatFragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel.updateActionBarTitle(getString(R.string.room_recents_start_chat))
     }
+
     override fun onRoomClick(temporaryRoom: TemporaryRoom, forRemove: Boolean) {
 
     }
