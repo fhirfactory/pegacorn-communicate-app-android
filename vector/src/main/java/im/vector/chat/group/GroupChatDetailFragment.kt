@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.navArgs
 import im.vector.R
 import im.vector.chat.ChatViewModel
 import im.vector.directory.RoomClickListener
@@ -17,7 +16,6 @@ class GroupChatDetailFragment : BaseActFragment() {
     lateinit var viewModel: ChatViewModel
     lateinit var selectedChatViewModel: SelectedChatViewModel
     lateinit var selectedRoomAdapter: SelectedRoomAdapter
-    val safeArgs: GroupChatDetailFragmentArgs by navArgs()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -25,7 +23,9 @@ class GroupChatDetailFragment : BaseActFragment() {
             viewModel = ViewModelProviders.of(this).get(ChatViewModel::class.java)
         } ?: throw Throwable("invalid activity")
         viewModel.updateActionBarTitle(getString(R.string.room_recents_create_room))
-        selectedChatViewModel = ViewModelProviders.of(this).get(SelectedChatViewModel::class.java)
+        activity?.run {
+            selectedChatViewModel = ViewModelProviders.of(this).get(SelectedChatViewModel::class.java)
+        } ?: throw Throwable("invalid activity")
 
         selectedRoomAdapter = SelectedRoomAdapter(requireContext(), object : RoomClickListener {
             override fun onRoomClick(temporaryRoom: TemporaryRoom, forRemove: Boolean) {
@@ -34,9 +34,6 @@ class GroupChatDetailFragment : BaseActFragment() {
         })
         selectedUserRecyclerView.adapter = selectedRoomAdapter
         subscribeUI()
-        safeArgs.rooms?.let { rooms ->
-            selectedChatViewModel.selectedLiveItems.postValue(rooms.toMutableList())
-        }
     }
 
     fun subscribeUI() {

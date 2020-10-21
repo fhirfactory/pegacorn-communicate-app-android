@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import im.vector.R
 import im.vector.chat.BaseChatFragment
+import im.vector.chat.ChatViewModel
 import im.vector.directory.RoomClickListener
 import im.vector.directory.people.DirectoryPeopleFragment
 import im.vector.directory.people.model.TemporaryRoom
@@ -22,7 +23,10 @@ class ActChatGroupFragment : BaseChatFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel.updateActionBarTitle(getString(R.string.room_recents_create_room))
-        selectedChatViewModel = ViewModelProviders.of(this).get(SelectedChatViewModel::class.java)
+
+        activity?.run {
+            selectedChatViewModel = ViewModelProviders.of(this).get(SelectedChatViewModel::class.java)
+        } ?: throw Throwable("invalid activity")
 
         selectedUserRecyclerView.visibility = VISIBLE
 
@@ -64,8 +68,7 @@ class ActChatGroupFragment : BaseChatFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.ic_action_next -> {
-                val action = ActChatGroupFragmentDirections.actionActChatGroupFragmentToGroupChatDetailFragment(selectedChatViewModel.selectedLiveItems.value?.toTypedArray())
-                view?.findNavController()?.navigate(action)
+                view?.findNavController()?.navigate(R.id.action_actChatGroupFragment_to_groupChatDetailFragment)
                 return true
             }
         }
