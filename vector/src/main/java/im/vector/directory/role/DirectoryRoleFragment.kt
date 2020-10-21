@@ -97,7 +97,7 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
         locationEditText.threshold = 1
         locationEditText.setAdapter(locationAdapter)*/
 
-        roleAdapter = RolesDirectoryAdapter(requireContext(), this, selectable?: false)
+        roleAdapter = RolesDirectoryAdapter(requireContext(), this, selectable ?: false)
         (roleRecyclerview.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         roleRecyclerview.layoutManager = LinearLayoutManager(requireContext())
         roleRecyclerview.adapter = roleAdapter
@@ -172,18 +172,18 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
     }
 
     override fun onRoleClick(role: DummyRole, forRemove: Boolean) {
-        if(roomClickListener==null) {
+        if (roomClickListener == null) {
             startActivity(RoleDetailActivity.intent(requireContext(), role, true))
         } else {
             roomClickListener?.onRoomClick(TemporaryRoom(null, role), forRemove)
         }
     }
 
-    fun unSelectRole(role: DummyRole){
+    fun unSelectRole(role: DummyRole) {
         roleAdapter.removeFromSelectedRoles(role.id)
     }
 
-    fun selectRole(role: DummyRole){
+    fun selectRole(role: DummyRole) {
         roleAdapter.addToSelectedRoles(role.id)
     }
 }

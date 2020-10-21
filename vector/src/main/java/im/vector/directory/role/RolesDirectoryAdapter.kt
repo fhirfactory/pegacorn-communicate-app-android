@@ -17,8 +17,6 @@ import im.vector.ui.themes.ThemeUtils.getColor
 import im.vector.util.VectorUtils
 import im.vector.view.VectorCircularImageView
 import org.matrix.androidsdk.MXSession
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class RolesDirectoryAdapter(val context: Context, private val onClickListener: RoleClickListener, private val selectable: Boolean = false) :
@@ -35,7 +33,7 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: R
         textSize = 12 * context.resources.displayMetrics.scaledDensity // sp to px
         spanTextBackgroundColor = getColor(context, R.attr.vctr_text_spanable_text_background_color)
         spanTextColor = getColor(context, R.attr.vctr_text_reverse_color)
-        if(selectable){
+        if (selectable) {
             selectedIds = mutableSetOf()
         }
     }
@@ -56,22 +54,22 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: R
         return RoleViewHolder(view)
     }
 
-    private fun checkSelection(role: DummyRole): Boolean{
-        if(!selectable) return false
+    private fun checkSelection(role: DummyRole): Boolean {
+        if (!selectable) return false
         selectedIds?.forEach { id ->
-            if(id == role.id)
+            if (id == role.id)
                 return true
         }
         return false
     }
 
-    fun addToSelectedRoles(id: String){
-        if(selectedIds?.add(id) == true) {
+    fun addToSelectedRoles(id: String) {
+        if (selectedIds?.add(id) == true) {
             notifyDataSetChanged()
         }
     }
 
-    fun removeFromSelectedRoles(id: String){
+    fun removeFromSelectedRoles(id: String) {
         selectedIds?.remove(id)
         notifyDataSetChanged()
     }
@@ -81,9 +79,9 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: R
         holder.bind(context, mSession, roles[position], spanTextBackgroundColor, spanTextColor, textSize, this, position, checkSelection(roles[position]))
         holder.selectionRadioImageView?.visibility = if (selectable) VISIBLE else GONE
         holder.itemView.setOnClickListener {
-            if(selectable) {
+            if (selectable) {
                 val added = selectedIds?.add(roles[position].id)
-                if(added == false) {
+                if (added == false) {
                     selectedIds?.remove(roles[position].id)
                 }
                 notifyItemChanged(position)
@@ -126,7 +124,7 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         heading?.visibility = if (showHeader) VISIBLE else GONE
         officialName?.text = role.officialName
         secondaryName?.text = role.secondaryName
-        selectionRadioImageView?.setImageResource(if(selection == true) R.drawable.ic_radio_button_checked else R.drawable.ic_radio_button_unchecked)
+        selectionRadioImageView?.setImageResource(if (selection == true) R.drawable.ic_radio_button_checked else R.drawable.ic_radio_button_unchecked)
         if (role.expanded) {
             expandableIcon?.animate()?.setDuration(200)?.rotation(180F)
             description?.visibility = VISIBLE

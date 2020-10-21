@@ -5,7 +5,6 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import im.vector.directory.RoundedBackgroundSpan
 import im.vector.directory.role.model.DummyRole
-import im.vector.directory.role.model.Role
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize

@@ -71,7 +71,7 @@ class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
     }
 
     override fun onPeopleClick(directoryPeople: DirectoryPeople, forRemove: Boolean) {
-        if(roomClickListener==null) {
+        if (roomClickListener == null) {
             startActivity(PeopleDetailActivity.intent(requireContext(), directoryPeople, true))
         } else {
             roomClickListener?.onRoomClick(TemporaryRoom(directoryPeople, null), forRemove)
@@ -82,11 +82,11 @@ class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
 
     }
 
-    fun unSelectPeople(people: DirectoryPeople){
+    fun unSelectPeople(people: DirectoryPeople) {
         peopleDirectoryAdapter.removeFromSelectedPeople(people.id)
     }
 
-    fun selectPeople(people: DirectoryPeople){
+    fun selectPeople(people: DirectoryPeople) {
         peopleDirectoryAdapter.addToSelectedPeople(people.id)
     }
 }

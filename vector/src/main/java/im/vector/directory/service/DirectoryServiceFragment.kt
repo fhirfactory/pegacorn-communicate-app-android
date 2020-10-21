@@ -59,7 +59,7 @@ class DirectoryServiceFragment : BaseDirectoryFragment(), ServiceClickListener {
         testServiceData.add(DummyService("7", "Service name 7", "Service Telecom 1", "Service Address 1", "Service Organization 1", false));
 
         serviceAdapter.setData(testServiceData)
-        setHeader(header, R.string.total_number_of_roles,10)
+        setHeader(header, R.string.total_number_of_roles, 10)
     }
 
     override fun onServiceClick(service: DummyService) {

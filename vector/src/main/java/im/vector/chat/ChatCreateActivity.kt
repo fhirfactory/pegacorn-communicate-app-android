@@ -7,8 +7,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import im.vector.R
 import im.vector.activity.CommonActivityUtils
@@ -56,7 +54,7 @@ class ChatCreateActivity : SimpleFragmentActivity() {
         toolbar.setupWithNavController(navController, appBarConfiguration!!)
 
         toolbar.setNavigationOnClickListener {
-            if(navController.graph.startDestination == navController.currentDestination?.id) {
+            if (navController.graph.startDestination == navController.currentDestination?.id) {
                 finish()
             } else {
                 navController.navigateUp()
@@ -74,7 +72,7 @@ class ChatCreateActivity : SimpleFragmentActivity() {
     }
 }
 
-enum class CHAT_TYPE{
+enum class CHAT_TYPE {
     ONE_TO_ONE,
     GROUP
 }
