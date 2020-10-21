@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import im.vector.directory.people.model.TemporaryRoom
 import im.vector.extensions.notifyObserver
 
-class SelectedChatViewModel: ViewModel(){
+class SelectedChatViewModel : ViewModel() {
     private val rooms = mutableListOf<TemporaryRoom>()
     val selectedLiveItems = MutableLiveData<MutableList<TemporaryRoom>>()
 

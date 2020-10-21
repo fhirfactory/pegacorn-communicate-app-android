@@ -20,4 +20,5 @@ data class DirectoryPeople(val id: String, val officialName: String, val jobTitl
     }
 }
 
-data class TemporaryRoom(val people: DirectoryPeople?, val role: DummyRole?)
+@Parcelize
+data class TemporaryRoom(val people: DirectoryPeople?, val role: DummyRole?) : Parcelable

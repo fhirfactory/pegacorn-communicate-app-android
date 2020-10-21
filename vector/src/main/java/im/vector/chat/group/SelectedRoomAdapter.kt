@@ -78,8 +78,6 @@ class SelectedRoomAdapter(val context: Context, val removeListener: RoomClickLis
 
         holder.itemView.closeButton.setOnClickListener {
             removeListener.onRoomClick(rooms[position], true)
-            rooms.removeAt(position)
-            notifyDataSetChanged()
         }
     }
 

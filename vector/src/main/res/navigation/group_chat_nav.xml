@@ -14,5 +14,10 @@
     <fragment
         android:id="@+id/groupChatDetailFragment"
         android:name="im.vector.chat.group.GroupChatDetailFragment"
-        android:label="GroupChatDetailFragment" />
+        android:label="GroupChatDetailFragment" >
+        <argument
+            android:name="rooms"
+            app:argType="im.vector.directory.people.model.TemporaryRoom[]"
+            app:nullable="true" />
+    </fragment>
 </navigation>

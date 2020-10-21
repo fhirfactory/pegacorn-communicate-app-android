@@ -26,11 +26,12 @@ class ActChatGroupFragment : BaseChatFragment() {
 
         selectedUserRecyclerView.visibility = VISIBLE
 
-        selectedRoomAdapter = SelectedRoomAdapter(requireContext(), object: RoomClickListener {
+        selectedRoomAdapter = SelectedRoomAdapter(requireContext(), object : RoomClickListener {
             override fun onRoomClick(temporaryRoom: TemporaryRoom, forRemove: Boolean) {
-                if(temporaryRoom.role != null){
+                selectedChatViewModel.removeRoom(temporaryRoom)
+                if (temporaryRoom.role != null) {
                     (fragments[0] as DirectoryRoleFragment).unSelect(temporaryRoom.role)
-                } else if(temporaryRoom.people != null){
+                } else if (temporaryRoom.people != null) {
                     (fragments[1] as DirectoryPeopleFragment).unSelect(temporaryRoom.people)
                 }
             }
@@ -39,14 +40,14 @@ class ActChatGroupFragment : BaseChatFragment() {
         subscribeUI()
     }
 
-    fun subscribeUI(){
-        selectedChatViewModel.selectedLiveItems.observe(viewLifecycleOwner, Observer{ rooms ->
+    fun subscribeUI() {
+        selectedChatViewModel.selectedLiveItems.observe(viewLifecycleOwner, Observer { rooms ->
             selectedRoomAdapter.setData(rooms)
         })
     }
 
     override fun onRoomClick(temporaryRoom: TemporaryRoom, forRemove: Boolean) {
-        if(forRemove) {
+        if (forRemove) {
             selectedChatViewModel.removeRoom(temporaryRoom)
         } else {
             selectedChatViewModel.addRoom(temporaryRoom)
@@ -56,7 +57,8 @@ class ActChatGroupFragment : BaseChatFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.ic_action_next -> {
-                view?.findNavController()?.navigate(R.id.action_actChatGroupFragment_to_groupChatDetailFragment)
+                val action = ActChatGroupFragmentDirections.actionActChatGroupFragmentToGroupChatDetailFragment(selectedChatViewModel.selectedLiveItems.value?.toTypedArray())
+                view?.findNavController()?.navigate(action)
                 return true
             }
         }
