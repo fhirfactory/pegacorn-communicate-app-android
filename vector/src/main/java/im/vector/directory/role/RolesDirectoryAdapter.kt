@@ -65,7 +65,13 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: R
         return false
     }
 
-    fun removeRoles(id: String){
+    fun addToSelectedRoles(id: String){
+        if(selectedIds?.add(id) == true) {
+            notifyDataSetChanged()
+        }
+    }
+
+    fun removeFromSelectedRoles(id: String){
         selectedIds?.remove(id)
         notifyDataSetChanged()
     }

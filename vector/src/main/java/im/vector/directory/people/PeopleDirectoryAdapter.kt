@@ -120,9 +120,15 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
         return false
     }
 
-    fun removePeople(id: String){
+    fun removeFromSelectedPeople(id: String){
         selectedIds?.remove(id)
         notifyDataSetChanged()
+    }
+
+    fun addToSelectedPeople(id: String){
+        if(selectedIds?.add(id) == true) {
+            notifyDataSetChanged()
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)

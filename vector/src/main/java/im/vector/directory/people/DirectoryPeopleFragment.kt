@@ -8,7 +8,6 @@ import im.vector.directory.BaseDirectoryFragment
 import im.vector.directory.people.detail.PeopleDetailActivity
 import im.vector.directory.people.model.DirectoryPeople
 import im.vector.directory.people.model.TemporaryRoom
-import im.vector.directory.role.DirectoryRoleFragment
 import im.vector.extensions.withArgs
 import kotlinx.android.synthetic.main.fragment_directory_people.*
 import org.matrix.androidsdk.data.Room
@@ -83,7 +82,11 @@ class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
 
     }
 
-    fun unSelect(people: DirectoryPeople){
-        peopleDirectoryAdapter.removePeople(people.id)
+    fun unSelectPeople(people: DirectoryPeople){
+        peopleDirectoryAdapter.removeFromSelectedPeople(people.id)
+    }
+
+    fun selectPeople(people: DirectoryPeople){
+        peopleDirectoryAdapter.addToSelectedPeople(people.id)
     }
 }

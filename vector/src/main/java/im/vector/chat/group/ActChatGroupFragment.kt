@@ -30,9 +30,9 @@ class ActChatGroupFragment : BaseChatFragment() {
             override fun onRoomClick(temporaryRoom: TemporaryRoom, forRemove: Boolean) {
                 selectedChatViewModel.removeRoom(temporaryRoom)
                 if (temporaryRoom.role != null) {
-                    (fragments[0] as DirectoryRoleFragment).unSelect(temporaryRoom.role)
+                    (fragments[0] as DirectoryRoleFragment).unSelectRole(temporaryRoom.role)
                 } else if (temporaryRoom.people != null) {
-                    (fragments[1] as DirectoryPeopleFragment).unSelect(temporaryRoom.people)
+                    (fragments[1] as DirectoryPeopleFragment).unSelectPeople(temporaryRoom.people)
                 }
             }
         })
@@ -43,6 +43,13 @@ class ActChatGroupFragment : BaseChatFragment() {
     fun subscribeUI() {
         selectedChatViewModel.selectedLiveItems.observe(viewLifecycleOwner, Observer { rooms ->
             selectedRoomAdapter.setData(rooms)
+            rooms.forEach {room ->
+                if (room.role != null) {
+                    (fragments[0] as DirectoryRoleFragment).selectRole(room.role)
+                } else if (room.people != null) {
+                    (fragments[1] as DirectoryPeopleFragment).selectPeople(room.people)
+                }
+            }
         })
     }
 

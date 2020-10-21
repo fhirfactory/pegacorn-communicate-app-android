@@ -179,7 +179,11 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
         }
     }
 
-    fun unSelect(role: DummyRole){
-        roleAdapter.removeRoles(role.id)
+    fun unSelectRole(role: DummyRole){
+        roleAdapter.removeFromSelectedRoles(role.id)
+    }
+
+    fun selectRole(role: DummyRole){
+        roleAdapter.addToSelectedRoles(role.id)
     }
 }
