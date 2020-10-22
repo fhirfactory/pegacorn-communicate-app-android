@@ -1617,7 +1617,7 @@ Why choose Riot.im?
     <string name="total_number_of_people"> People: </string>
     <string name="total_number_of_member"> Member: </string>
     <string name="total_number_of_favourite_people">Favourite People: </string>
-    <string name="total_number_of_favourite_service">Favourite Service: </string>
+    <string name="total_number_of_favourite_service">Favourite Services: </string>
     <string name="total_number_of_invite">Invites: </string>
     <string name="phone">Phone</string>
     <string name="no_invites">You do not have any invitations. </string>
