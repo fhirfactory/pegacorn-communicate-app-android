@@ -16,6 +16,7 @@ import im.vector.directory.role.model.DummyRole
 import im.vector.ui.themes.ThemeUtils.getColor
 import im.vector.util.VectorUtils
 import im.vector.view.VectorCircularImageView
+import kotlinx.android.synthetic.main.item_directory_people.view.*
 import org.matrix.androidsdk.MXSession
 
 
@@ -79,6 +80,7 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var secondaryName: TextView? = null
     var description: TextView? = null
     var heading: TextView? = null
+    var favouriteButton: ImageView? = null
 
     init {
         heading = itemView.findViewById(R.id.heading)
@@ -87,6 +89,7 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         officialName = itemView.findViewById(R.id.officialName)
         secondaryName = itemView.findViewById(R.id.secondaryName)
         description = itemView.findViewById(R.id.description)
+        favouriteButton = itemView.favoriteIcon
     }
 
     fun bind(context: Context, session: MXSession?, role: DummyRole, spanTextBackgroundColor: Int, spanTextColor: Int, textSize: Float, onDataSetChange: OnDataSetChange, position: Int, onClickListener: RoleClickListener?, showHeader: Boolean = false) {
