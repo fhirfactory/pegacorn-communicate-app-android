@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -52,6 +53,11 @@ class GroupChatDetailFragment : BaseTitleFragment() {
         subscribeUI()
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val item: MenuItem = menu.findItem(R.id.ic_action_create)
+        item.isVisible = selectedChatViewModel.selectedLiveItems.value?.size ?: 0 > 0
+    }
+
     private fun changeAvatar() {
         val intent = Intent(activity, VectorMediaPickerActivity::class.java)
         intent.putExtra(VectorMediaPickerActivity.EXTRA_AVATAR_MODE, true)
@@ -82,6 +88,7 @@ class GroupChatDetailFragment : BaseTitleFragment() {
         selectedChatViewModel.selectedLiveItems.observe(viewLifecycleOwner, Observer { rooms ->
             selectedRoomAdapter.setData(rooms)
             rooms?.size?.let { setHeader(header, R.string.total_number_of_member, it) }
+            activity?.invalidateOptionsMenu()
         })
     }
 
