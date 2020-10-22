@@ -5,7 +5,7 @@
 
     <fragment
         android:id="@+id/actChatGroupFragment"
-        android:name="im.vector.chat.group.ActChatGroupFragment"
+        android:name="im.vector.chat.group.GroupChatMemberSelectionFragment"
         android:label="ActChatGroupFragment" >
         <action
             android:id="@+id/action_actChatGroupFragment_to_groupChatDetailFragment"

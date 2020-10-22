@@ -1,27 +1,25 @@
 package im.vector.chat
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.ViewModelProviders
 import im.vector.R
+import im.vector.directory.BaseDirectoryFragment
 import im.vector.directory.RoomClickListener
 import im.vector.directory.people.DirectoryPeopleFragment
 import im.vector.directory.role.DirectoryRoleFragment
 import im.vector.home.BaseActFragment
 import kotlinx.android.synthetic.main.fragment_create_chat.*
 
-abstract class BaseChatFragment : BaseActFragment(), RoomClickListener {
-    lateinit var viewModel: ChatViewModel
-    val fragments = listOf(DirectoryRoleFragment.newInstance(true), DirectoryPeopleFragment.newInstance(true))
+abstract class BaseMemberSelectionFragment : BaseTitleFragment(), RoomClickListener {
+    abstract val fragments: List<BaseDirectoryFragment>
 
     override fun getLayoutResId() = R.layout.fragment_create_chat
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        activity?.run {
-            viewModel = ViewModelProviders.of(this).get(ChatViewModel::class.java)
-        } ?: throw Throwable("invalid activity")
 
         pager.adapter = CreateChatTabAdapter(childFragmentManager, resources.getStringArray(R.array.create_chat_tabs))
         tabLayout.setupWithViewPager(pager)

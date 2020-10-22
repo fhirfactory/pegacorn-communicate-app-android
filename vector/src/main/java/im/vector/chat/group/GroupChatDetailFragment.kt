@@ -10,7 +10,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import im.vector.R
 import im.vector.activity.VectorMediaPickerActivity
-import im.vector.chat.ChatViewModel
+import im.vector.chat.BaseTitleFragment
+import im.vector.chat.TitleViewModel
 import im.vector.directory.RoomClickListener
 import im.vector.directory.people.model.TemporaryRoom
 import im.vector.home.BaseActFragment
@@ -24,16 +25,12 @@ import org.matrix.androidsdk.core.Log
 import java.io.FileNotFoundException
 
 
-class GroupChatDetailFragment : BaseActFragment() {
-    lateinit var viewModel: ChatViewModel
+class GroupChatDetailFragment : BaseTitleFragment() {
     lateinit var selectedChatViewModel: SelectedChatViewModel
     lateinit var selectedRoomAdapter: SelectedRoomAdapter
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        activity?.run {
-            viewModel = ViewModelProviders.of(this).get(ChatViewModel::class.java)
-        } ?: throw Throwable("invalid activity")
         viewModel.updateActionBarTitle(getString(R.string.room_recents_create_room))
         activity?.run {
             selectedChatViewModel = ViewModelProviders.of(this).get(SelectedChatViewModel::class.java)
@@ -45,6 +42,7 @@ class GroupChatDetailFragment : BaseActFragment() {
             }
         })
         selectedUserRecyclerView.adapter = selectedRoomAdapter
+
         avatar.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_material_camera))
         avatar.setOnClickListener {
             if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, PERMISSION_REQUEST_CODE_LAUNCH_CAMERA)) {
@@ -62,7 +60,6 @@ class GroupChatDetailFragment : BaseActFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 VectorUtils.TAKE_IMAGE -> {

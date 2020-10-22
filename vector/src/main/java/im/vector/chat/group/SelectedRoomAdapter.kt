@@ -45,16 +45,6 @@ class SelectedRoomAdapter(val context: Context, val removeListener: RoomClickLis
         notifyDataSetChanged()
     }
 
-/*    fun addRoom(room:TemporaryRoom){
-        this.rooms.add(room)
-        notifyDataSetChanged()
-    }
-
-    fun removeRoom(room:TemporaryRoom){
-        this.rooms.remove(room)
-        notifyDataSetChanged()
-    }*/
-
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(parent: ViewGroup,
                                     viewType: Int): SelectableRoomViewHolder {

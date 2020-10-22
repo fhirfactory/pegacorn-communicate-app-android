@@ -15,7 +15,7 @@ import im.vector.activity.SimpleFragmentActivity
 
 class ChatCreateActivity : SimpleFragmentActivity() {
     var chatType: CHAT_TYPE? = null
-    private lateinit var viewModel: ChatViewModel
+    private lateinit var viewModel: TitleViewModel
     private lateinit var navController: NavController
     private var appBarConfiguration: AppBarConfiguration? = null
     override fun getLayoutRes() = R.layout.activity_with_nav_fragment
@@ -23,7 +23,7 @@ class ChatCreateActivity : SimpleFragmentActivity() {
     override fun initUiAndData() {
         super.initUiAndData()
         configureToolbar()
-        viewModel = ViewModelProviders.of(this).get(ChatViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(TitleViewModel::class.java)
         viewModel.title.observe(this, Observer {
             supportActionBar?.title = it
         })

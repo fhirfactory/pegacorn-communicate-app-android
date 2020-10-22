@@ -2,11 +2,13 @@ package im.vector.chat.onetoone
 
 import android.os.Bundle
 import im.vector.R
-import im.vector.chat.BaseChatFragment
+import im.vector.chat.BaseMemberSelectionFragment
+import im.vector.directory.people.DirectoryPeopleFragment
 import im.vector.directory.people.model.TemporaryRoom
+import im.vector.directory.role.DirectoryRoleFragment
 
-class ActChatOneToOneFragment : BaseChatFragment() {
-
+class OneToOneChatMemberSelectionFragment : BaseMemberSelectionFragment() {
+    override val fragments = listOf(DirectoryRoleFragment.newInstance(false), DirectoryPeopleFragment.newInstance(false))
     override fun getLayoutResId() = R.layout.fragment_create_chat
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

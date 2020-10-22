@@ -8,7 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import im.vector.R
-import im.vector.chat.BaseChatFragment
+import im.vector.chat.BaseMemberSelectionFragment
 import im.vector.directory.RoomClickListener
 import im.vector.directory.people.DirectoryPeopleFragment
 import im.vector.directory.people.model.TemporaryRoom
@@ -16,7 +16,8 @@ import im.vector.directory.role.DirectoryRoleFragment
 import kotlinx.android.synthetic.main.fragment_create_chat.*
 
 
-class ActChatGroupFragment : BaseChatFragment() {
+class GroupChatMemberSelectionFragment : BaseMemberSelectionFragment() {
+    override val fragments = listOf(DirectoryRoleFragment.newInstance(true), DirectoryPeopleFragment.newInstance(true))
     lateinit var selectedChatViewModel: SelectedChatViewModel
     lateinit var selectedRoomAdapter: SelectedRoomAdapter
     override fun getMenuRes() = R.menu.next
