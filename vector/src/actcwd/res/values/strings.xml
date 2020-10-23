@@ -550,7 +550,7 @@
 
     <!-- Room Details -->
     <string name="room_details_title">Room Details</string>
-    <string name="room_details_people">People</string>
+    <string name="room_details_people">Members</string>
     <string name="room_details_files">Files</string>
     <string name="room_details_settings">Settings</string>
     <plurals name="room_details_selected">
