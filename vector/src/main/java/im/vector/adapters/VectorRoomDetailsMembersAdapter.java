@@ -161,6 +161,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
     private static class ChildMemberViewHolder {
         final ImageView mMemberAvatarImageView;
         final ImageView mMemberAvatarBadgeImageView;
+        final ImageView statusIndicator;
         final TextView mMemberNameTextView;
         final TextView mMemberStatusTextView;
         final View mHiddenListActionsView;
@@ -171,6 +172,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         ChildMemberViewHolder(View aParentView) {
             mMemberAvatarImageView = aParentView.findViewById(R.id.filtered_list_avatar);
             mMemberAvatarBadgeImageView = aParentView.findViewById(R.id.filtered_list_avatar_badge);
+            statusIndicator = aParentView.findViewById(R.id.status_indicator);
             mMemberNameTextView = aParentView.findViewById(R.id.filtered_list_name);
             mMemberStatusTextView = aParentView.findViewById(R.id.filtered_list_status);
             mHiddenListActionsView = aParentView.findViewById(R.id.filtered_list_actions);
@@ -631,7 +633,7 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         String retValue;
 
         if (mGroupIndexInvitedMembers == aGroupPosition) {
-            retValue = mContext.getString(R.string.room_details_people_invited_group_name);
+            retValue = mContext.getString(R.string.room_details_people_invited_group_name); 
         } else if (mGroupIndexPresentMembers == aGroupPosition) {
             retValue = mContext.getString(R.string.room_details_people_present_group_name);
         } else {
@@ -814,16 +816,20 @@ public class VectorRoomDetailsMembersAdapter extends BaseExpandableListAdapter {
         if (null != mRoom) {
             if (null != (powerLevels = mRoom.getState().getPowerLevels())) {
                 if (powerLevels.getUserPowerLevel(participant.mUserId) >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN) {
-                    viewHolder.mMemberAvatarBadgeImageView.setVisibility(View.VISIBLE);
-                    viewHolder.mMemberAvatarBadgeImageView.setImageResource(R.drawable.admin_icon);
+                    //viewHolder.mMemberAvatarBadgeImageView.setVisibility(View.VISIBLE);
+                    //viewHolder.mMemberAvatarBadgeImageView.setImageResource(R.drawable.admin_icon);
+                    viewHolder.mMemberStatusTextView.setText(CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN_NAME);
                 } else if (powerLevels.getUserPowerLevel(participant.mUserId) >= CommonActivityUtils.UTILS_POWER_LEVEL_MODERATOR) {
-                    viewHolder.mMemberAvatarBadgeImageView.setVisibility(View.VISIBLE);
-                    viewHolder.mMemberAvatarBadgeImageView.setImageResource(R.drawable.mod_icon);
+                    //viewHolder.mMemberAvatarBadgeImageView.setVisibility(View.VISIBLE);
+                    //viewHolder.mMemberAvatarBadgeImageView.setImageResource(R.drawable.mod_icon);
+                    viewHolder.mMemberStatusTextView.setText(CommonActivityUtils.UTILS_POWER_LEVEL_MODERATOR_NAME);
                 }
             }
         }
         // 3 - display member status
-        viewHolder.mMemberStatusTextView.setText(VectorUtils.getUserOnlineStatus(mContext, mSession, participant.mUserId, null));
+        User user = VectorUtils.getUser(mContext, mSession, participant.mUserId, null);
+        //viewHolder.mMemberStatusTextView.setText(VectorUtils.getPresenceText(mContext, user));
+        viewHolder.statusIndicator.setBackgroundResource(VectorUtils.getPresenceIndicator(user));
 
         // add "remove member from room" action
         viewHolder.mDeleteActionsView.setOnClickListener(new View.OnClickListener() {
