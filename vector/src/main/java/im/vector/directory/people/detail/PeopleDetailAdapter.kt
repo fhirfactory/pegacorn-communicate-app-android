@@ -3,6 +3,8 @@ package im.vector.directory.people.detail
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +12,7 @@ import im.vector.Matrix
 import im.vector.R
 import im.vector.directory.people.model.DirectoryPeople
 import im.vector.directory.role.OnDataSetChange
+import im.vector.directory.role.RoleClickListener
 import im.vector.directory.role.RoleViewHolder
 import im.vector.directory.role.model.DummyRole
 import im.vector.ui.themes.ThemeUtils
@@ -17,7 +20,7 @@ import kotlinx.android.synthetic.main.item_role_detail_category1.view.*
 import org.matrix.androidsdk.MXSession
 
 
-class PeopleDetailAdapter(val context: Context) :
+class PeopleDetailAdapter(val context: Context, private val onClickListener: RoleClickListener?) :
         RecyclerView.Adapter<RecyclerView.ViewHolder>(), OnDataSetChange {
     private val models = mutableListOf<PeopleDetailAdapterModel>()
     private val TYPE_EMAIL = 1
@@ -47,14 +50,15 @@ class PeopleDetailAdapter(val context: Context) :
             secondaryName = itemView.secondaryName
         }
 
-        fun bind(peopleDetailAdapterModel: PeopleDetailAdapterModel) {
+        fun bind(peopleDetailAdapterModel: PeopleDetailAdapterModel, showHeader: Boolean = false) {
+            heading?.visibility = if (showHeader) VISIBLE else GONE
             heading?.text = when (peopleDetailAdapterModel.type) {
                 TYPE_PHONE -> "Phone"
                 TYPE_EMAIL -> "Email"
                 else -> ""
             }
             officialName?.text = peopleDetailAdapterModel.value
-            secondaryName?.visibility = View.GONE
+            secondaryName?.visibility = GONE
         }
     }
 
@@ -77,10 +81,9 @@ class PeopleDetailAdapter(val context: Context) :
                                     viewType: Int): RecyclerView.ViewHolder {
         // create a new view
         return when (viewType) {
-            TYPE_EMAIL, TYPE_PHONE -> EmailPhoneViewHolder(LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_role_detail_category1, parent, false))
             TYPE_ROLE -> RoleViewHolder(LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_directory_role, parent, false))
+            // TYPE_EMAIL, TYPE_PHONE
             else -> EmailPhoneViewHolder(LayoutInflater.from(parent.context)
                     .inflate(R.layout.item_role_detail_category1, parent, false))
         }
@@ -89,10 +92,17 @@ class PeopleDetailAdapter(val context: Context) :
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (models[position].type) {
-            TYPE_ROLE -> (holder as RoleViewHolder).bind(context, mSession, models[position].role!!, spanTextBackgroundColor, spanTextColor, textSize, this, position)
-            TYPE_EMAIL, TYPE_PHONE -> (holder as EmailPhoneViewHolder).bind(models[position])
+            TYPE_ROLE -> {
+                (holder as RoleViewHolder).bind(context, mSession, models[position].role!!, spanTextBackgroundColor, spanTextColor, textSize, this, position, showHeader(position))
+                holder.itemView.setOnClickListener {
+                    onClickListener?.onRoleClick(models[position].role!!)
+                }
+            }
+            TYPE_EMAIL, TYPE_PHONE -> (holder as EmailPhoneViewHolder).bind(models[position], showHeader(position))
         }
     }
+
+    private fun showHeader(position: Int) = position == 0 || models[position - 1].type != models[position].type
 
     override fun getItemViewType(position: Int): Int {
         return models[position].type
