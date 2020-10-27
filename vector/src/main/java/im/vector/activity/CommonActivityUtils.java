@@ -111,6 +111,10 @@ public class CommonActivityUtils {
     public static final float UTILS_POWER_LEVEL_MODERATOR = 50;
     private static final int ROOM_SIZE_ONE_TO_ONE = 2;
 
+    // power names
+    public static final String UTILS_POWER_LEVEL_ADMIN_NAME = "Admin";
+    public static final String UTILS_POWER_LEVEL_MODERATOR_NAME = "Moderator";
+
     /**
      * Logout a sessions list
      *

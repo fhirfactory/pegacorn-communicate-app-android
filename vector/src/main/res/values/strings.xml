@@ -1643,4 +1643,5 @@ Why choose Riot.im?
 
     <string name="short_text">Short text</string>
     <string name="long_text">very long text very long text very long text very long text very long text very long text very long text</string>
+    <string name="doctor">Doctor</string>
 </resources>

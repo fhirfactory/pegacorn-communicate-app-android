@@ -550,7 +550,7 @@
 
     <!-- Room Details -->
     <string name="room_details_title">Room Details</string>
-    <string name="room_details_people">People</string>
+    <string name="room_details_people">Members</string>
     <string name="room_details_files">Files</string>
     <string name="room_details_settings">Settings</string>
     <plurals name="room_details_selected">
@@ -569,7 +569,7 @@
 
     <!-- Search -->
     <string name="search_hint">Search</string>
-    <string name="search_members_hint">Filter room members</string>
+    <string name="search_members_hint">Search room members</string>
     <string name="search_no_results">No results</string>
     <string name="tab_title_search_rooms">ROOMS</string>
     <string name="tab_title_search_messages">MESSAGES</string>
