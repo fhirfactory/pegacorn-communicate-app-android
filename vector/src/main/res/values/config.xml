@@ -140,8 +140,12 @@
 
     <bool name="show_sticker_to_send_room">true</bool>
     <bool name="show_send_voice_room">true</bool>
+    <bool name="show_send_file">true</bool>
+    <bool name="show_camera_icon_in_place_of_file_icon">false</bool>
 
     <bool name="show_add_matrix_app_menu_item">true</bool>
     <bool name="use_riot_invite_activity">true</bool>
     <bool name="use_riot_create_room_activity">true</bool>
+    <bool name="show_image_share_items">true</bool>
+    <bool name="show_permalink_menu_item">true</bool>
 </resources>
