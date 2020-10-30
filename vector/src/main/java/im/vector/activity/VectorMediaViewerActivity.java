@@ -219,9 +219,9 @@ public class VectorMediaViewerActivity extends MXCActionBarActivity {
         MenuItem shareMenuItem = menu.findItem(R.id.ic_action_share);
         if (null != shareMenuItem) {
             // disable shared for encrypted files as they are saved in a tmp folder
-            shareMenuItem.setVisible(null == mMediasList.get(mViewPager.getCurrentItem()).mEncryptedFileInfo && getResources().getBoolean(R.bool.show_image_detail_menu_items));
+            shareMenuItem.setVisible(null == mMediasList.get(mViewPager.getCurrentItem()).mEncryptedFileInfo && getResources().getBoolean(R.bool.show_image_share_items));
         }
-        menu.findItem(R.id.ic_action_download).setVisible(getResources().getBoolean(R.bool.show_image_detail_menu_items));
+        menu.findItem(R.id.ic_action_download).setVisible(getResources().getBoolean(R.bool.show_image_share_items));
         return true;
     }
 
