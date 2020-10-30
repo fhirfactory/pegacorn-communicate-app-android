@@ -139,6 +139,8 @@
 
     <bool name="show_sticker_to_send_room">false</bool>
     <bool name="show_send_voice_room">false</bool>
+    <bool name="show_send_file">false</bool>
+    <bool name="show_camera_icon_in_place_of_file_icon">true</bool>
 
     <bool name="show_add_matrix_app_menu_item">false</bool>
     <bool name="show_image_share_items">false</bool>
