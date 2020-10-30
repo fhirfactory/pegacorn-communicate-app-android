@@ -2038,7 +2038,9 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
                     @Override
                     public void run() {
                         mMediaStoreMediaList.addAll(medias);
-                        buildGalleryTableLayout();
+                        if(getResources().getBoolean(R.bool.show_albums_in_camera)) {
+                            buildGalleryTableLayout();
+                        }
                         progressBar.setVisibility(View.GONE);
                         mTakeImageView.setEnabled(true);
                         mTakeImageView.setAlpha(ViewUtilKt.UTILS_OPACITY_FULL);
