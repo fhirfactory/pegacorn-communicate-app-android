@@ -141,4 +141,5 @@
     <bool name="show_send_voice_room">false</bool>
 
     <bool name="show_add_matrix_app_menu_item">false</bool>
+    <bool name="show_image_detail_menu_items">false</bool>
 </resources>
