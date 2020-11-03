@@ -774,64 +774,31 @@ public class VectorRoomMediasSender {
                     }
 
                     String[] stringsArray = getImagesCompressionTextsList(mVectorRoomActivity, imageSizes, fileSize);
-
-                    mImageSizesListDialog = new AlertDialog.Builder(mVectorRoomActivity)
-                            .setTitle(im.vector.R.string.compression_options)
-                            .setSingleChoiceItems(stringsArray, -1, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    final int fPos = which;
-
-                                    mImageSizesListDialog.dismiss();
-
-                                    mVectorRoomActivity.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            mVectorRoomActivity.showWaitingView();
-
-                                            Thread thread = new Thread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    ImageSize expectedSize = null;
-
-                                                    // full size
-                                                    if (0 != fPos) {
-                                                        expectedSize = imageSizes.getImageSizesList().get(fPos);
-                                                    }
-
-                                                    // stored the compression selected by the user
-                                                    mImageCompressionDescription = imageSizes.getImageSizesDescription(mVectorRoomActivity).get(fPos);
-
-                                                    final String fImageUrl
-                                                            = resizeImage(anImageUrl, filename, imageSizes.mFullImageSize, expectedSize, rotationAngle);
-
-                                                    mVectorRoomActivity.runOnUiThread(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            mVectorMessageListFragment.sendMediaMessage(new RoomMediaMessage(Uri.parse(fImageUrl),
-                                                                    roomMediaMessage.getFileName(mVectorRoomActivity)));
-                                                            aListener.onDone();
-                                                        }
-                                                    });
-                                                }
-                                            });
-
-                                            thread.setPriority(Thread.MIN_PRIORITY);
-                                            thread.start();
-                                        }
-                                    });
-                                }
-                            })
-                            .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                @Override
-                                public void onCancel(DialogInterface dialog) {
-                                    mImageSizesListDialog = null;
-                                    if (null != aListener) {
-                                        aListener.onCancel();
+                    if(mVectorRoomActivity.getResources().getBoolean(R.bool.show_image_compression_dialog)) {
+                        mImageSizesListDialog = new AlertDialog.Builder(mVectorRoomActivity)
+                                .setTitle(im.vector.R.string.compression_options)
+                                .setSingleChoiceItems(stringsArray, -1, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        final int fPos = which;
+                                        mImageSizesListDialog.dismiss();
+                                        sendFile(imageSizes, fPos, anImageUrl, filename, rotationAngle, roomMediaMessage, aListener);
                                     }
-                                }
-                            })
-                            .show();
+                                })
+                                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                    @Override
+                                    public void onCancel(DialogInterface dialog) {
+                                        mImageSizesListDialog = null;
+                                        if (null != aListener) {
+                                            aListener.onCancel();
+                                        }
+                                    }
+                                })
+                                .show();
+                    } else {
+                        // First position is the original image
+                        sendFile(imageSizes, 0, anImageUrl, filename, rotationAngle, roomMediaMessage, aListener);
+                    }
                 }
             } catch (Exception e) {
                 Log.e(LOG_TAG, "sendImageMessage failed " + e.getMessage(), e);
@@ -850,5 +817,44 @@ public class VectorRoomMediasSender {
                 }
             });
         }
+    }
+
+    private void sendFile(ImageCompressionSizes imageSizes, int fPos, String anImageUrl, String filename, int rotationAngle, RoomMediaMessage roomMediaMessage, OnImageUploadListener aListener){
+        mVectorRoomActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mVectorRoomActivity.showWaitingView();
+
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ImageSize expectedSize = null;
+
+                        // full size
+                        if (0 != fPos) {
+                            expectedSize = imageSizes.getImageSizesList().get(fPos);
+                        }
+
+                        // stored the compression selected by the user
+                        mImageCompressionDescription = imageSizes.getImageSizesDescription(mVectorRoomActivity).get(fPos);
+
+                        final String fImageUrl
+                                = resizeImage(anImageUrl, filename, imageSizes.mFullImageSize, expectedSize, rotationAngle);
+
+                        mVectorRoomActivity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mVectorMessageListFragment.sendMediaMessage(new RoomMediaMessage(Uri.parse(fImageUrl),
+                                        roomMediaMessage.getFileName(mVectorRoomActivity)));
+                                aListener.onDone();
+                            }
+                        });
+                    }
+                });
+
+                thread.setPriority(Thread.MIN_PRIORITY);
+                thread.start();
+            }
+        });
     }
 }

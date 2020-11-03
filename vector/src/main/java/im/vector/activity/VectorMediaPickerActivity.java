@@ -400,7 +400,9 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
         super.onResume();
 
         // update gallery content
-        refreshRecentMediaList();
+        if(getResources().getBoolean(R.bool.show_albums_in_camera)) {
+            refreshRecentMediaList();
+        }
 
         // restart the preview
         startCameraPreview();

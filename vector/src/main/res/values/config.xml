@@ -147,4 +147,5 @@
     <bool name="show_image_share_items">true</bool>
     <bool name="show_permalink_menu_item">true</bool>
     <bool name="show_albums_in_camera">true</bool>
+    <bool name="show_image_compression_dialog">true</bool>
 </resources>
