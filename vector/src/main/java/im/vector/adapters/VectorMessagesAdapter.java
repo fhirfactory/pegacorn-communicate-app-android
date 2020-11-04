@@ -692,6 +692,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         if (!TextUtils.equals(pattern, mPattern)) {
             mPattern = pattern;
             mIsSearchMode = !TextUtils.isEmpty(mPattern);
+
             // in search mode, the live row are cached.
             if (mIsSearchMode) {
                 // save once
@@ -1011,12 +1012,6 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
     private int getItemViewType(Event event) {
         String eventId = event.eventId;
         String eventType = event.getType();
-       if(EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(eventType)) {
-           Log.e(LOG_TAG, "got one");
-       } else {
-           Log.e(LOG_TAG, "sadat");
-       }
-//        Log.d("zzzzzz", event.contentJson.getAsString());
 
         if ((null != eventId) && mHiddenEventIds.contains(eventId)) {
             return ROW_TYPE_HIDDEN;
