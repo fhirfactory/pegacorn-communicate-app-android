@@ -802,6 +802,7 @@ public class VectorRoomMediasSender {
                 }
             } catch (Exception e) {
                 Log.e(LOG_TAG, "sendImageMessage failed " + e.getMessage(), e);
+                Toast.makeText(mVectorRoomActivity, mVectorRoomActivity.getText(R.string.image_not_sent_error), Toast.LENGTH_LONG).show();
             }
         }
 
