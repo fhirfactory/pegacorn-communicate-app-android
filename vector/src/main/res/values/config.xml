@@ -140,6 +140,12 @@
 
     <bool name="show_sticker_to_send_room">true</bool>
     <bool name="show_send_voice_room">true</bool>
+    <bool name="show_send_file">true</bool>
+    <bool name="show_camera_icon_in_place_of_file_icon">false</bool>
 
     <bool name="show_add_matrix_app_menu_item">true</bool>
+    <bool name="show_image_share_items">true</bool>
+    <bool name="show_permalink_menu_item">true</bool>
+    <bool name="show_albums_in_camera">true</bool>
+    <bool name="show_image_compression_dialog">true</bool>
 </resources>

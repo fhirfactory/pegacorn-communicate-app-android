@@ -400,7 +400,9 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
         super.onResume();
 
         // update gallery content
-        refreshRecentMediaList();
+        if(getResources().getBoolean(R.bool.show_albums_in_camera)) {
+            refreshRecentMediaList();
+        }
 
         // restart the preview
         startCameraPreview();
@@ -2038,7 +2040,9 @@ public class VectorMediaPickerActivity extends MXCActionBarActivity implements T
                     @Override
                     public void run() {
                         mMediaStoreMediaList.addAll(medias);
-                        buildGalleryTableLayout();
+                        if(getResources().getBoolean(R.bool.show_albums_in_camera)) {
+                            buildGalleryTableLayout();
+                        }
                         progressBar.setVisibility(View.GONE);
                         mTakeImageView.setEnabled(true);
                         mTakeImageView.setAlpha(ViewUtilKt.UTILS_OPACITY_FULL);
