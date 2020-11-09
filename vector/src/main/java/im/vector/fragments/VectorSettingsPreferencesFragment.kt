@@ -273,6 +273,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
     private val mPushersSettingsDivider by lazy {
         findPreference(PreferencesManager.SETTINGS_NOTIFICATIONS_TARGET_DIVIDER_PREFERENCE_KEY)
     }
+    private val mMediaSettingsDivider by lazy {
+        findPreference(PreferencesManager.SETTINGS_MEDIA_DIVIDER_PREFERENCE_KEY)
+    }
     private val mPushersSettingsCategory by lazy {
         findPreference(PreferencesManager.SETTINGS_NOTIFICATIONS_TARGETS_PREFERENCE_KEY) as PreferenceCategory
     }
@@ -1151,6 +1154,9 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
         addListPreferenceListener(mDefaultCompressionPreference, resources.getString(R.string.settings_compression_message_summary))
         addListPreferenceListener(mDefaultMediaSourcePreference, resources.getString(R.string.settings_media_source_message_summary))
+
+        //remove media category if needed
+        removeMediaCategoryPreference();
     }
 
     private fun addListPreferenceListener(listPreference: ListPreference, defaultSummary: String){
@@ -3121,6 +3127,17 @@ class VectorSettingsPreferencesFragment : PreferenceFragmentCompat(), SharedPref
 
     private fun removeDefaultCompressionPreference() {
         mMediaPreferenceCategory.removePreference(mDefaultCompressionPreference)
+    }
+
+    private fun removeMediaCategoryPreference() {
+        if (!resources.getBoolean(R.bool.settings_default_media_source_visible)
+                && !resources.getBoolean(R.bool.settings_default_compression_visible)
+                && !resources.getBoolean(R.bool.settings_use_native_camera_visible)
+                && !resources.getBoolean(R.bool.settings_play_shutter_sound_visible)
+                && !resources.getBoolean(R.bool.settings_preview_media_before_sending_visible)) {
+            preferenceScreen.removePreference(mMediaPreferenceCategory)
+            preferenceScreen.removePreference(mMediaSettingsDivider)
+        }
     }
 
     private fun removeAllowFallbackCallPreference() {
