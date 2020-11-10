@@ -67,6 +67,7 @@
         android:id="@+id/patientsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_marginTop="@dimen/layout_horizontal_margin_half"
         android:layout_marginBottom="@dimen/layout_horizontal_margin_half"
         app:layout_constraintBottom_toTopOf="@+id/non_patient_media_button"
