@@ -1,6 +1,7 @@
 package im.vector.patient
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import im.vector.R
@@ -16,6 +17,7 @@ class PatientTagFragment : BaseCommunicateHomeFragment() {
     private lateinit var viewModel: PatientTagViewModel
     private var simpleFragmentActivityListener: SimpleFragmentActivityListener? = null
     override fun getLayoutResId(): Int = R.layout.fragment_patient_tag
+    override fun getMenuRes() = R.menu.menu_done
 
     companion object {
         private const val FILE_LOCATION__EXTRA = "FILE_LOCATION_EXTRA"
@@ -49,5 +51,14 @@ class PatientTagFragment : BaseCommunicateHomeFragment() {
 
         viewModel.fileLocation = arguments?.getString(FILE_LOCATION__EXTRA)
         Glide.with(this).load(viewModel.fileLocation).into(imageView)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.action_done->
+
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

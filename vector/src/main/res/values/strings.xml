@@ -1607,6 +1607,7 @@ Why choose Riot.im?
     <string name="total_number_of_invite">Invites: </string>
     <string name="no_invites">You do not have any invitations. </string>
     <string name="search_role">Search for a role</string>
+    <string name="search_patient">Search patient\'s URN or name</string>
     <string name="category">Category</string>
     <string name="organisation_unit">Organisation Unit</string>
     <string name="speciality">Speciality</string>
@@ -1618,6 +1619,9 @@ Why choose Riot.im?
     <string name="title_activity_people_detail">Person Detail</string>
     <string name="image_not_sent_error">Image could not be sent. Please try again.</string>
     <string name="patient_tag_title">Tag Patient</string>
+    <string name="patient_tag_message_title">Tag patient media immediately</string>
+    <string name="patient_tag_message">Consent must be obtained before capturing patient photos and video.</string>
+    <string name="non_patient_media_button_text">Save Non-Patient Media</string>
     <string name="short_text">Short text</string>
     <string name="long_text">very long text very long text very long text very long text very long text very long text very long text</string>
 </resources>
