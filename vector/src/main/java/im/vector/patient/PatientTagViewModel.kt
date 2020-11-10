@@ -8,6 +8,7 @@ import java.util.*
 
 class PatientTagViewModel : ViewModel() {
     var session: MXSession? = null
+    var fileLocation: String? = null
 
     fun initSession(session: MXSession) {
         if (this.session == null) {

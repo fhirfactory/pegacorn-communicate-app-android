@@ -50,6 +50,7 @@ import im.vector.R;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.fragments.ImageSizeSelectionDialogFragment;
 import im.vector.fragments.VectorMessageListFragment;
+import im.vector.patient.PatientTagActivity;
 
 // VectorRoomMediasSender helps the vectorRoomActivity to manage medias .
 public class VectorRoomMediasSender {
@@ -774,7 +775,7 @@ public class VectorRoomMediasSender {
                     }
 
                     String[] stringsArray = getImagesCompressionTextsList(mVectorRoomActivity, imageSizes, fileSize);
-                    if(mVectorRoomActivity.getResources().getBoolean(R.bool.show_image_compression_dialog)) {
+                    if (mVectorRoomActivity.getResources().getBoolean(R.bool.show_image_compression_dialog)) {
                         mImageSizesListDialog = new AlertDialog.Builder(mVectorRoomActivity)
                                 .setTitle(im.vector.R.string.compression_options)
                                 .setSingleChoiceItems(stringsArray, -1, new DialogInterface.OnClickListener() {
@@ -797,7 +798,12 @@ public class VectorRoomMediasSender {
                                 .show();
                     } else {
                         // First position is the original image
-                        sendFile(imageSizes, 0, anImageUrl, filename, rotationAngle, roomMediaMessage, aListener);
+                        // sendFile(imageSizes, 0, anImageUrl, filename, rotationAngle, roomMediaMessage, aListener);
+                        if(filename!=null) {
+                            mVectorRoomActivity.startActivityForResult(PatientTagActivity.Companion.intent(mVectorRoomActivity, filename), 1);
+                        } else {
+                            Toast.makeText(mVectorRoomActivity, mVectorRoomActivity.getText(R.string.image_not_sent_error), Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
             } catch (Exception e) {
@@ -820,7 +826,7 @@ public class VectorRoomMediasSender {
         }
     }
 
-    private void sendFile(ImageCompressionSizes imageSizes, int fPos, String anImageUrl, String filename, int rotationAngle, RoomMediaMessage roomMediaMessage, OnImageUploadListener aListener){
+    private void sendFile(ImageCompressionSizes imageSizes, int fPos, String anImageUrl, String filename, int rotationAngle, RoomMediaMessage roomMediaMessage, OnImageUploadListener aListener) {
         mVectorRoomActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
