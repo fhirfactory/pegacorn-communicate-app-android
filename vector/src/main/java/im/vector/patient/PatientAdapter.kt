@@ -18,6 +18,7 @@ class PatientAdapter(private val onClickListener: PatientClickListener) :
     fun setData(patients: MutableList<DemoPatient>) {
         this.patients.clear()
         this.patients.addAll(patients)
+        notifyDataSetChanged()
     }
 
     // Create new views (invoked by the layout manager)

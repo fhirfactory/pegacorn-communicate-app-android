@@ -36,6 +36,7 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: R
     fun setData(roles: MutableList<DummyRole>) {
         this.roles.clear()
         this.roles.addAll(roles)
+        notifyDataSetChanged()
     }
 
     // Create new views (invoked by the layout manager)

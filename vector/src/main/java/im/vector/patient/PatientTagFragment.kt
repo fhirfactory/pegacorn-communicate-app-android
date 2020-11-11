@@ -9,9 +9,7 @@ import com.bumptech.glide.Glide
 import im.vector.R
 import im.vector.activity.SimpleFragmentActivity
 import im.vector.activity.SimpleFragmentActivityListener
-import im.vector.directory.people.detail.PeopleDetailAdapter
 import im.vector.home.BaseCommunicateHomeFragment
-import kotlinx.android.synthetic.main.activity_people_detail.*
 import kotlinx.android.synthetic.main.fragment_patient_tag.*
 
 class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
@@ -56,8 +54,11 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
         viewModel.fileLocation = arguments?.getString(FILE_LOCATION__EXTRA)
         Glide.with(this).load(viewModel.fileLocation).into(imageView)
 
+        patientsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        patientsRecyclerView.setHasFixedSize(true)
         patientAdapter = PatientAdapter(this)
         patientsRecyclerView.adapter = patientAdapter
+
         subscribeUI()
         viewModel.getPatientData()
     }
@@ -69,10 +70,10 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
+        when (item.itemId) {
             R.id.action_done ->
 
-            return true
+                return true
         }
         return super.onOptionsItemSelected(item)
     }
