@@ -8,6 +8,8 @@ class PatientTagViewModel : ViewModel() {
     var session: MXSession? = null
     var fileLocation: String? = null
     val patients = MutableLiveData<MutableList<DemoPatient>>()
+    val selectedPatient = MutableLiveData<DemoPatient?>()
+    val fakePatients = mutableListOf<DemoPatient>()
 
     fun initSession(session: MXSession) {
         if (this.session == null) {
@@ -15,10 +17,23 @@ class PatientTagViewModel : ViewModel() {
         }
     }
 
+    fun removeSelectedPatient(){
+        selectedPatient.postValue(null)
+    }
+
+    fun addSelectedPatient(patient:DemoPatient){
+        selectedPatient.postValue(patient)
+    }
+
+    fun filterPatient(text: String){
+        val filterList = fakePatients.filter { it.name.contains(text, true) }
+        patients.postValue(filterList as MutableList<DemoPatient>?)
+    }
+
     fun getPatientData() {
-        val fakePatients = mutableListOf<DemoPatient>()
+        fakePatients.add(DemoPatient("James Bond", "12345678", "01-Jan-1900"))
         fakePatients.add(DemoPatient("Rafi Sadat", "12345678", "01-Jan-1900"))
-        fakePatients.add(DemoPatient("Rafi Sadat", "12345678", "01-Jan-1900"))
+        fakePatients.add(DemoPatient("Mark Hunter", "12345678", "01-Jan-1900"))
         fakePatients.add(DemoPatient("Emma Mcdonald", "12345678", "01-Jan-1900"))
         fakePatients.add(DemoPatient("Craig Mcdonald", "12345678", "01-Jan-1900"))
         fakePatients.add(DemoPatient("Lance Christie", "12345678", "01-Jan-1900"))

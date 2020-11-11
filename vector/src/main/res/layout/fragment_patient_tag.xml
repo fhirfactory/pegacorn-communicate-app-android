@@ -6,13 +6,14 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/non_patient_media_button"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/nonPatientMediaButton"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true">
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline"
@@ -24,7 +25,7 @@
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="250dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_material_camera"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -51,6 +52,29 @@
                 android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@+id/warningMessageTitle" />
 
+            <include
+                android:id="@+id/selectedPatient"
+                layout="@layout/item_patient"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/layout_horizontal_margin_half"
+                android:layout_marginRight="@dimen/layout_horizontal_margin_half"
+                app:layout_constraintTop_toBottomOf="@+id/warningMessage" />
+
+            <ImageView
+                android:id="@+id/cross"
+                android:elevation="1dp"
+                android:clickable="true"
+                android:visibility="visible"
+                android:tint="@color/act_gradient_color2"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginRight="@dimen/layout_horizontal_margin_half"
+                android:src="@drawable/ic_material_leave"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/selectedPatient"
+                android:focusable="true" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/searchInputLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
@@ -61,7 +85,7 @@
                 android:textColorHint="?attr/vctr_default_text_hint_color"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/warningMessage">
+                app:layout_constraintTop_toBottomOf="@+id/selectedPatient">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/searchEditText"
@@ -83,7 +107,7 @@
     </androidx.core.widget.NestedScrollView>
 
     <Button
-        android:id="@+id/non_patient_media_button"
+        android:id="@+id/nonPatientMediaButton"
         style="@style/VectorButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
