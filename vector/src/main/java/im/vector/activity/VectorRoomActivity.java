@@ -120,6 +120,8 @@ import im.vector.fragments.VectorReadReceiptsDialogFragment;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.fragments.roomwidgets.RoomWidgetPermissionBottomSheet;
 import im.vector.listeners.IMessagesAdapterActionsListener;
+import im.vector.patient.DemoPatient;
+import im.vector.patient.PatientTagActivity;
 import im.vector.util.CallsManager;
 import im.vector.util.ExternalApplicationsUtilKt;
 import im.vector.util.MatrixURLSpan;
@@ -140,6 +142,8 @@ import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
 import im.vector.widgets.model.JitsiWidgetProperties;
 import kotlin.Unit;
+
+import static im.vector.patient.PatientTagFragment.PATIENT_EXTRA;
 
 /**
  * Displays a single room with messages.
@@ -193,6 +197,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private static final int INVITE_USER_REQUEST_CODE = 4;
     public static final int UNREAD_PREVIEW_REQUEST_CODE = 5;
     private static final int RECORD_AUDIO_REQUEST_CODE = 6;
+    private static final int PATIENT_TAG_REQUEST_CODE = 8;
 
     // media selection
     private static final int MEDIA_SOURCE_FILE = 1;
@@ -1283,8 +1288,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case REQUEST_FILES_REQUEST_CODE:
                 case TAKE_IMAGE_REQUEST_CODE:
+                    getPatientData(data);
+                    break;
+                case REQUEST_FILES_REQUEST_CODE:
                 case RECORD_AUDIO_REQUEST_CODE:
                     sendMediasIntent(data);
                     break;
@@ -1307,7 +1314,18 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     }
                     mVectorRoomMediasSender.sendMedias(sharedDataItems);
                     break;
+                case PATIENT_TAG_REQUEST_CODE:
+                    sendPatientMediasIntent(data);
+                    break;
             }
+        }
+    }
+
+    private void getPatientData(Intent intent){
+        if(mLatestTakePictureCameraUri!=null) {
+            startActivityForResult(PatientTagActivity.Companion.intent(this, mLatestTakePictureCameraUri), PATIENT_TAG_REQUEST_CODE);
+        } else {
+            Toast.makeText(this, R.string.no_image, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -2014,6 +2032,23 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if (null != mVectorMessageListFragment) {
             mVectorMessageListFragment.sendEmote(emote, formattedEmote, format);
         }
+    }
+
+    private void sendPatientMediasIntent(Intent intent){
+        if(null != intent){
+            Bundle bundle = intent.getExtras();
+            // sanity checks
+            if (null != bundle) {
+                if (bundle.containsKey(PATIENT_EXTRA)) {
+                    DemoPatient patient = bundle.getParcelable(PATIENT_EXTRA);
+                    Toast.makeText(this, patient==null? "No Patient Tagged" : patient.getName(), Toast.LENGTH_LONG).show();
+                }
+            }
+        } else {
+            return;
+        }
+
+        sendMediasIntent(intent);
     }
 
     /**

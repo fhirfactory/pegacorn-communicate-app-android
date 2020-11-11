@@ -17,15 +17,15 @@ class PatientTagViewModel : ViewModel() {
         }
     }
 
-    fun removeSelectedPatient(){
+    fun removeSelectedPatient() {
         selectedPatient.postValue(null)
     }
 
-    fun addSelectedPatient(patient:DemoPatient){
+    fun addSelectedPatient(patient: DemoPatient) {
         selectedPatient.postValue(patient)
     }
 
-    fun filterPatient(text: String){
+    fun filterPatient(text: String) {
         val filterList = fakePatients.filter { it.name.contains(text, true) }
         patients.postValue(filterList as MutableList<DemoPatient>?)
     }

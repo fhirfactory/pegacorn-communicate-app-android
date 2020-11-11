@@ -798,12 +798,7 @@ public class VectorRoomMediasSender {
                                 .show();
                     } else {
                         // First position is the original image
-                        // sendFile(imageSizes, 0, anImageUrl, filename, rotationAngle, roomMediaMessage, aListener);
-                        if(filename!=null) {
-                            mVectorRoomActivity.startActivityForResult(PatientTagActivity.Companion.intent(mVectorRoomActivity, filename), 1);
-                        } else {
-                            Toast.makeText(mVectorRoomActivity, mVectorRoomActivity.getText(R.string.image_not_sent_error), Toast.LENGTH_LONG).show();
-                        }
+                        sendFile(imageSizes, 0, anImageUrl, filename, rotationAngle, roomMediaMessage, aListener);
                     }
                 }
             } catch (Exception e) {

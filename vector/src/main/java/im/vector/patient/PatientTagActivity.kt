@@ -2,6 +2,7 @@ package im.vector.patient
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import im.vector.R
 import im.vector.activity.SimpleFragmentActivity
 
@@ -11,18 +12,18 @@ class PatientTagActivity : SimpleFragmentActivity() {
     override fun initUiAndData() {
         super.initUiAndData()
         if (supportFragmentManager.fragments.isEmpty()) {
-            val fileLocation = intent.getStringExtra(FILE_LOCATION__EXTRA)
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, PatientTagFragment.newInstance(fileLocation))
+                    .replace(R.id.container, PatientTagFragment.newInstance(intent.extras))
                     .commitNow()
         }
     }
 
     companion object {
-        private const val FILE_LOCATION__EXTRA = "FILE_LOCATION_EXTRA"
+        const val FILE_LOCATION_EXTRA = "FILE_LOCATION_EXTRA"
+        const val BUNDLE_EXTRA = "BUNDLE_EXTRA"
         fun intent(context: Context, fileLocation: String): Intent {
             return Intent(context, PatientTagActivity::class.java).also {
-                it.putExtra(FILE_LOCATION__EXTRA, fileLocation)
+                it.putExtra(FILE_LOCATION_EXTRA, fileLocation)
             }
         }
     }

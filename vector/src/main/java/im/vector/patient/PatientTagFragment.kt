@@ -17,6 +17,7 @@ import im.vector.R
 import im.vector.activity.SimpleFragmentActivity
 import im.vector.activity.SimpleFragmentActivityListener
 import im.vector.home.BaseCommunicateHomeFragment
+import im.vector.patient.PatientTagActivity.Companion.FILE_LOCATION_EXTRA
 import kotlinx.android.synthetic.main.fragment_patient_tag.*
 import kotlinx.android.synthetic.main.item_patient.*
 import kotlinx.coroutines.Job
@@ -33,13 +34,10 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
     override fun getMenuRes() = R.menu.menu_done
 
     companion object {
-        private const val PATIENT_EXTRA = "PATIENT_EXTRA"
-        private const val FILE_LOCATION__EXTRA = "FILE_LOCATION_EXTRA"
-        fun newInstance(fileLocation: String): PatientTagFragment {
+        const val PATIENT_EXTRA = "PATIENT_EXTRA"
+        fun newInstance(bundle: Bundle): PatientTagFragment {
             val f = PatientTagFragment()
-            val args = Bundle()
-            args.putString(FILE_LOCATION__EXTRA, fileLocation)
-            f.arguments = args
+            f.arguments = bundle
             return f
         }
     }
@@ -63,7 +61,7 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
         viewModel = ViewModelProviders.of(this).get(PatientTagViewModel::class.java)
         viewModel.initSession(mSession)
 
-        viewModel.fileLocation = arguments?.getString(FILE_LOCATION__EXTRA)
+        viewModel.fileLocation = arguments?.getString(FILE_LOCATION_EXTRA)
         Glide.with(this).load(viewModel.fileLocation).into(imageView)
 
         patientsRecyclerView.setHasFixedSize(true)
@@ -121,7 +119,7 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun sendPatientBackToPreviousActivity(){
+    private fun sendPatientBackToPreviousActivity() {
         viewModel.selectedPatient.value?.let {
             val intent = Intent()
             intent.putExtra(PATIENT_EXTRA, viewModel.selectedPatient.value)
