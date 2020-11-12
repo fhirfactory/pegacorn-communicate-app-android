@@ -18,7 +18,7 @@ import com.bumptech.glide.Glide
 import im.vector.R
 import im.vector.activity.SimpleFragmentActivity
 import im.vector.activity.SimpleFragmentActivityListener
-import im.vector.home.BaseCommunicateHomeFragment
+import im.vector.home.BaseActFragment
 import im.vector.patient.PatientTagActivity.Companion.FILE_LOCATION_EXTRA
 import im.vector.patient.PatientTagActivity.Companion.ROOM_MEDIA_MESSAGE_EXTRA
 import kotlinx.android.synthetic.main.fragment_patient_tag.*
@@ -28,7 +28,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
+class PatientTagFragment : BaseActFragment(), PatientClickListener {
     private var LOG_TAG = "PatientTagFragment"
     private lateinit var viewModel: PatientTagViewModel
     private var simpleFragmentActivityListener: SimpleFragmentActivityListener? = null
