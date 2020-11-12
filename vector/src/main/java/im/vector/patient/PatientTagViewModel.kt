@@ -3,13 +3,15 @@ package im.vector.patient
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.matrix.androidsdk.MXSession
+import org.matrix.androidsdk.data.RoomMediaMessage
 
 class PatientTagViewModel : ViewModel() {
     var session: MXSession? = null
     var fileLocation: String? = null
+    var mediaMessageArray: ArrayList<RoomMediaMessage>? = null
     val patients = MutableLiveData<MutableList<DemoPatient>>()
     val selectedPatient = MutableLiveData<DemoPatient?>()
-    val fakePatients = mutableListOf<DemoPatient>()
+    private val fakePatients = mutableListOf<DemoPatient>()
 
     fun initSession(session: MXSession) {
         if (this.session == null) {

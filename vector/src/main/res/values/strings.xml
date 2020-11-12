@@ -1624,5 +1624,5 @@ Why choose Riot.im?
     <string name="non_patient_media_button_text">Save Non-Patient Media</string>
     <string name="short_text">Short text</string>
     <string name="long_text">very long text very long text very long text very long text very long text very long text very long text</string>
-    <string name="no_image">No image has been selected.</string>
+    <string name="no_image">No image or video has been selected.</string>
 </resources>

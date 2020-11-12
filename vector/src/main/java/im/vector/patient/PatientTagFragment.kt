@@ -2,7 +2,9 @@ package im.vector.patient
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.media.ThumbnailUtils
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MenuItem
@@ -18,11 +20,13 @@ import im.vector.activity.SimpleFragmentActivity
 import im.vector.activity.SimpleFragmentActivityListener
 import im.vector.home.BaseCommunicateHomeFragment
 import im.vector.patient.PatientTagActivity.Companion.FILE_LOCATION_EXTRA
+import im.vector.patient.PatientTagActivity.Companion.ROOM_MEDIA_MESSAGE_EXTRA
 import kotlinx.android.synthetic.main.fragment_patient_tag.*
 import kotlinx.android.synthetic.main.item_patient.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
 
 class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
     private var LOG_TAG = "PatientTagFragment"
@@ -62,7 +66,8 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
         viewModel.initSession(mSession)
 
         viewModel.fileLocation = arguments?.getString(FILE_LOCATION_EXTRA)
-        Glide.with(this).load(viewModel.fileLocation).into(imageView)
+        viewModel.mediaMessageArray = arguments?.getParcelableArrayList(ROOM_MEDIA_MESSAGE_EXTRA)
+        Glide.with(this).load(if(viewModel.fileLocation==null) viewModel.mediaMessageArray?.get(0)?.uri else viewModel.fileLocation).into(imageView)
 
         patientsRecyclerView.setHasFixedSize(true)
         patientAdapter = PatientAdapter(this)
@@ -84,8 +89,9 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
                     }
                 })
         nonPatientMediaButton.setOnClickListener {
-            activity?.setResult(RESULT_OK)
-            activity?.finish()
+            finishActivity(Intent().apply {
+                putExtra(ROOM_MEDIA_MESSAGE_EXTRA, viewModel.mediaMessageArray)
+            })
         }
     }
 
@@ -121,11 +127,16 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
 
     private fun sendPatientBackToPreviousActivity() {
         viewModel.selectedPatient.value?.let {
-            val intent = Intent()
-            intent.putExtra(PATIENT_EXTRA, viewModel.selectedPatient.value)
-            activity?.setResult(RESULT_OK, intent)
-            activity?.finish()
+            finishActivity(Intent().apply {
+                putExtra(PATIENT_EXTRA, viewModel.selectedPatient.value)
+                putExtra(ROOM_MEDIA_MESSAGE_EXTRA, viewModel.mediaMessageArray)
+            })
         }
+    }
+
+    private fun finishActivity(intent: Intent){
+        activity?.setResult(RESULT_OK, intent)
+        activity?.finish()
     }
 
     override fun onPatientClick(patient: DemoPatient) {

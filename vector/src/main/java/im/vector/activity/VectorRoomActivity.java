@@ -143,6 +143,7 @@ import im.vector.widgets.WidgetsManager;
 import im.vector.widgets.model.JitsiWidgetProperties;
 import kotlin.Unit;
 
+import static im.vector.patient.PatientTagActivity.ROOM_MEDIA_MESSAGE_EXTRA;
 import static im.vector.patient.PatientTagFragment.PATIENT_EXTRA;
 
 /**
@@ -1289,6 +1290,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case TAKE_IMAGE_REQUEST_CODE:
+                    //sendMediasIntent(data);
                     getPatientData(data);
                     break;
                 case REQUEST_FILES_REQUEST_CODE:
@@ -1321,8 +1323,21 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         }
     }
 
-    private void getPatientData(Intent intent){
-        if(mLatestTakePictureCameraUri!=null) {
+    private void getPatientData(Intent intent) {
+        // sanity check
+        if ((null == intent) && (null == mLatestTakePictureCameraUri)) {
+            return;
+        }
+
+        ArrayList<RoomMediaMessage> sharedDataItems = new ArrayList<>();
+
+        if (null != intent) {
+            sharedDataItems = new ArrayList<>(RoomMediaMessage.listRoomMediaMessages(intent));
+        }
+
+        if (sharedDataItems.size() > 0) {
+            startActivityForResult(PatientTagActivity.Companion.intent(this, sharedDataItems), PATIENT_TAG_REQUEST_CODE);
+        } else if (mLatestTakePictureCameraUri != null) {
             startActivityForResult(PatientTagActivity.Companion.intent(this, mLatestTakePictureCameraUri), PATIENT_TAG_REQUEST_CODE);
         } else {
             Toast.makeText(this, R.string.no_image, Toast.LENGTH_LONG).show();
@@ -2034,21 +2049,24 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         }
     }
 
-    private void sendPatientMediasIntent(Intent intent){
-        if(null != intent){
+    private void sendPatientMediasIntent(Intent intent) {
+        if (null != intent) {
             Bundle bundle = intent.getExtras();
             // sanity checks
             if (null != bundle) {
                 if (bundle.containsKey(PATIENT_EXTRA)) {
                     DemoPatient patient = bundle.getParcelable(PATIENT_EXTRA);
-                    Toast.makeText(this, patient==null? "No Patient Tagged" : patient.getName(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, patient == null ? "No Patient Tagged" : patient.getName(), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this,"No Patient Tagged", Toast.LENGTH_LONG).show();
+                }
+
+                if (bundle.containsKey(ROOM_MEDIA_MESSAGE_EXTRA)) {
+                    ArrayList<RoomMediaMessage> sharedDataItems = bundle.getParcelableArrayList(ROOM_MEDIA_MESSAGE_EXTRA);
+                    sendMediaMessages(intent, sharedDataItems==null? new ArrayList<>() : sharedDataItems);
                 }
             }
-        } else {
-            return;
         }
-
-        sendMediasIntent(intent);
     }
 
     /**
@@ -2067,7 +2085,10 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if (null != intent) {
             sharedDataItems = new ArrayList<>(RoomMediaMessage.listRoomMediaMessages(intent));
         }
+        sendMediaMessages(intent, sharedDataItems);
+    }
 
+    private void sendMediaMessages(Intent intent, List<RoomMediaMessage> sharedDataItems){
         // check the extras
         if ((0 == sharedDataItems.size()) && (null != intent)) {
             Bundle bundle = intent.getExtras();
@@ -2496,7 +2517,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * Display UI buttons according to user input text.
      */
     private void manageSendMoreButtons() {
-        int img = getResources().getBoolean(R.bool.show_camera_icon_in_place_of_file_icon) ? R.drawable.ic_material_camera: R.drawable.ic_material_file;
+        int img = getResources().getBoolean(R.bool.show_camera_icon_in_place_of_file_icon) ? R.drawable.ic_material_camera : R.drawable.ic_material_file;
         if (!PreferencesManager.sendMessageWithEnter(this) && mEditText.getText().length() > 0) {
             img = R.drawable.ic_material_send_green;
         } else {
