@@ -109,7 +109,7 @@
     <bool name="show_custom_url_login">false</bool>
 
     <!--default values-->
-    <bool name="settings_native_camera_use_default_value">false</bool>
+    <bool name="settings_native_camera_use_default_value">true</bool>
 
     <bool name="show_exit_navigation_bar">false</bool>
     <bool name="show_sign_out_navigation_bar">true</bool>

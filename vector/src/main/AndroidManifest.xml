@@ -427,6 +427,10 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/select_room_directory" />
         <activity
+            android:name=".patient.PatientTagActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/patient_tag_title" />
+        <activity
             android:name=".activity.PhoneNumberVerificationActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/settings_phone_number_verification" />
