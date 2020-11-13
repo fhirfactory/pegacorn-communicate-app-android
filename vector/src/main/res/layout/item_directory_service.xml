@@ -66,5 +66,5 @@
         android:background="?vctr_list_divider_color"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/avatar" />
+        app:layout_constraintTop_toBottomOf="@+id/contactDetail" />
 </androidx.constraintlayout.widget.ConstraintLayout>
