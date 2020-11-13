@@ -523,7 +523,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                         @Override
                         public void run() {
                             Log.d(LOG_TAG, "shared intent : The store is ready -> display sendFilesTo");
-                            CommonActivityUtils.sendFilesTo(VectorHomeActivity.this, sharedFilesIntent);
+                            CommonActivityUtils.sendFilesTo(VectorHomeActivity.this, sharedFilesIntent, null);
                         }
                     });
                 } else {
@@ -2527,7 +2527,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
                 if (null != mSharedFilesIntent) {
                     Log.d(LOG_TAG, "shared intent : the store is now ready, display sendFilesTo");
-                    CommonActivityUtils.sendFilesTo(VectorHomeActivity.this, mSharedFilesIntent);
+                    CommonActivityUtils.sendFilesTo(VectorHomeActivity.this, mSharedFilesIntent, null);
                     mSharedFilesIntent = null;
                 }
             }

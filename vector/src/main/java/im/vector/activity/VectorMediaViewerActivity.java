@@ -39,12 +39,16 @@ import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.core.callback.SimpleApiCallback;
 import org.matrix.androidsdk.core.model.MatrixError;
 import org.matrix.androidsdk.data.Room;
+import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.db.MXMediaCache;
 import org.matrix.androidsdk.listeners.MXMediaDownloadListener;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.PowerLevels;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import im.vector.BuildConfig;
@@ -52,6 +56,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.VectorMediaViewerAdapter;
+import im.vector.adapters.VectorRoomsSelectionAdapter;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.SlidableMediaInfo;
 
@@ -85,6 +90,7 @@ public class VectorMediaViewerActivity extends MXCActionBarActivity {
 
     public static final String EXTRA_MATRIX_ID = "ImageSliderActivity.EXTRA_MATRIX_ID";
     public static final String SELECTED_EVENT = "SELECTED_EVENT";
+    public static final String SELECTED_ROOM_TO_FORWARD = "SELECTED_ROOM_TO_FORWARD";
 
     // session
     private MXSession mSession;
@@ -247,7 +253,7 @@ public class VectorMediaViewerActivity extends MXCActionBarActivity {
         MenuItem deleteMenuItem = menu.findItem(R.id.ic_action_delete);
         if (null != deleteMenuItem) {
             // disable shared for encrypted files as they are saved in a tmp folder
-            deleteMenuItem.setVisible(mMediasList.get(mViewPager.getCurrentItem()).event!= null && isEventRemovable(mMediasList.get(mViewPager.getCurrentItem()).event));
+            deleteMenuItem.setVisible(mMediasList.get(mViewPager.getCurrentItem()).event != null && isEventRemovable(mMediasList.get(mViewPager.getCurrentItem()).event));
         }
         menu.findItem(R.id.ic_action_download).setVisible(getResources().getBoolean(R.bool.show_image_share_items));
         return true;
@@ -347,7 +353,7 @@ public class VectorMediaViewerActivity extends MXCActionBarActivity {
         }
     }
 
-    private boolean isEventRemovable(Event event){
+    private boolean isEventRemovable(Event event) {
         // test if the event can be redacted
         boolean canBeRedacted = !TextUtils.equals(event.getType(), Event.EVENT_TYPE_MESSAGE_ENCRYPTION);
 
@@ -377,6 +383,70 @@ public class VectorMediaViewerActivity extends MXCActionBarActivity {
         return canBeRedacted;
     }
 
+    private void showRoomListToForward() {
+        // sanity check
+        if ((null == mSession) || !mSession.isAlive() || isFinishing()) {
+            return;
+        }
+
+        List<RoomSummary> mergedSummaries = new ArrayList<>(mSession.getDataHandler().getStore().getSummaries());
+
+        // keep only the joined room
+        for (int index = 0; index < mergedSummaries.size(); index++) {
+            RoomSummary summary = mergedSummaries.get(index);
+            Room room = mSession.getDataHandler().getRoom(summary.getRoomId());
+
+            if (room.isInvited() || room.isConferenceUserRoom()) {
+                mergedSummaries.remove(index);
+                index--;
+            }
+        }
+
+        Collections.sort(mergedSummaries, new Comparator<RoomSummary>() {
+            @Override
+            public int compare(RoomSummary lhs, RoomSummary rhs) {
+                if (lhs == null || lhs.getLatestReceivedEvent() == null) {
+                    return 1;
+                } else if (rhs == null || rhs.getLatestReceivedEvent() == null) {
+                    return -1;
+                }
+
+                if (lhs.getLatestReceivedEvent().getOriginServerTs() > rhs.getLatestReceivedEvent().getOriginServerTs()) {
+                    return -1;
+                } else if (lhs.getLatestReceivedEvent().getOriginServerTs() < rhs.getLatestReceivedEvent().getOriginServerTs()) {
+                    return 1;
+                }
+                return 0;
+            }
+        });
+
+        VectorRoomsSelectionAdapter adapter = new VectorRoomsSelectionAdapter(this, R.layout.adapter_item_vector_recent_room, mSession);
+        adapter.addAll(mergedSummaries);
+
+        final List<RoomSummary> fMergedSummaries = mergedSummaries;
+
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.send_files_in)
+                .setNegativeButton(R.string.cancel, null)
+                .setAdapter(adapter,
+                        (dialog, which) -> {
+                            dialog.dismiss();
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    RoomSummary summary = fMergedSummaries.get(which);
+                                    Intent intent = new Intent();
+                                    intent.putExtra(SELECTED_EVENT, mMediasList.get(mViewPager.getCurrentItem()).event);
+                                    intent.putExtra(SELECTED_ROOM_TO_FORWARD, summary);
+                                    setResult(RESULT_OK, intent);
+                                    finish();
+                                }
+                            });
+                        })
+                .show();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -397,6 +467,9 @@ public class VectorMediaViewerActivity extends MXCActionBarActivity {
                                 })
                         .setNegativeButton(R.string.cancel, null)
                         .show();
+                return true;
+            case R.id.ic_action_forward:
+                showRoomListToForward();
                 return true;
         }
 

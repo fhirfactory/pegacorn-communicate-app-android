@@ -61,6 +61,7 @@ import org.matrix.androidsdk.crypto.model.crypto.EncryptedEventContent;
 import org.matrix.androidsdk.crypto.model.crypto.EncryptedFileInfo;
 import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.data.RoomState;
+import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.db.MXMediaCache;
 import org.matrix.androidsdk.fragments.MatrixMessageListFragment;
 import org.matrix.androidsdk.fragments.MatrixMessagesFragment;
@@ -104,6 +105,7 @@ import im.vector.widgets.WidgetsManager;
 
 import static android.app.Activity.RESULT_OK;
 import static im.vector.activity.VectorMediaViewerActivity.SELECTED_EVENT;
+import static im.vector.activity.VectorMediaViewerActivity.SELECTED_ROOM_TO_FORWARD;
 import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_CANONICAL_ALIAS;
 import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY;
 import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_PINNED_EVENT;
@@ -257,7 +259,10 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
         } else if(requestCode == MEDIA_PREVIEW_REQ_CODE && resultCode == RESULT_OK){
             if(data!=null){
                 Event event = (Event) data.getSerializableExtra(SELECTED_EVENT);
-                if(event!=null){
+                RoomSummary roomSummary = (RoomSummary) data.getSerializableExtra(SELECTED_ROOM_TO_FORWARD);
+                if(event!=null && roomSummary!=null) {
+                    onEventAction(event, null, R.id.ic_action_vector_forward, roomSummary);
+                }else if(event!=null){
                     deleteAnEvent(event);
                 }
             }
@@ -301,7 +306,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == PermissionsToolsKt.PERMISSION_REQUEST_CODE) {
             if (PermissionsToolsKt.allGranted(grantResults)) {
-                onMediaAction(mPendingMenuAction, mPendingMediaUrl, mPendingMediaMimeType, mPendingFilename, mPendingEncryptedFileInfo);
+                onMediaAction(mPendingMenuAction, mPendingMediaUrl, mPendingMediaMimeType, mPendingFilename, mPendingEncryptedFileInfo, null);
                 mPendingMediaUrl = null;
                 mPendingMediaMimeType = null;
                 mPendingFilename = null;
@@ -618,7 +623,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
      * @param textMsg the event text
      * @param action  an action ic_action_vector_XXX
      */
-    public void onEventAction(final Event event, final String textMsg, final int action) {
+    public void onEventAction(final Event event, final String textMsg, final int action, RoomSummary roomsummary) {
         if (action == R.id.ic_action_vector_resend_message) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -725,7 +730,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
 
             // media file ?
             if (null != mediaUrl) {
-                onMediaAction(action, mediaUrl, mediaMimeType, message.body, encryptedFileInfo);
+                onMediaAction(action, mediaUrl, mediaMimeType, message.body, encryptedFileInfo, roomsummary);
             } else if ((action == R.id.ic_action_vector_share) || (action == R.id.ic_action_vector_forward) || (action == R.id.ic_action_vector_quote)) {
                 // use the body
                 final Intent sendIntent = new Intent();
@@ -735,7 +740,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                 sendIntent.setType("text/plain");
 
                 if (action == R.id.ic_action_vector_forward) {
-                    CommonActivityUtils.sendFilesTo(getActivity(), sendIntent);
+                    CommonActivityUtils.sendFilesTo(getActivity(), sendIntent, roomsummary);
                 } else {
                     startActivity(sendIntent);
                 }
@@ -911,7 +916,8 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                        final String mediaUrl,
                        final String mediaMimeType,
                        final String filename,
-                       final EncryptedFileInfo encryptedFileInfo) {
+                       final EncryptedFileInfo encryptedFileInfo,
+                       final RoomSummary roomsummary) {
         // Sanitize file name in case `m.body` contains a path.
         final String trimmedFileName = new File(filename).getName();
 
@@ -971,7 +977,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                             sendIntent.putExtra(Intent.EXTRA_STREAM, mediaUri);
 
                             if (menuAction == ACTION_VECTOR_FORWARD) {
-                                CommonActivityUtils.sendFilesTo(getActivity(), sendIntent);
+                                CommonActivityUtils.sendFilesTo(getActivity(), sendIntent, roomsummary);
                             } else {
                                 startActivity(sendIntent);
                             }
@@ -1003,7 +1009,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    onMediaAction(menuAction, mediaUrl, mediaMimeType, trimmedFileName, encryptedFileInfo);
+                                    onMediaAction(menuAction, mediaUrl, mediaMimeType, trimmedFileName, encryptedFileInfo, null);
                                 }
                             });
                         }
@@ -1190,7 +1196,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
                 FileMessage fileMessage = JsonUtils.toFileMessage(event.getContent());
 
                 if (null != fileMessage.getUrl()) {
-                    onMediaAction(ACTION_VECTOR_OPEN, fileMessage.getUrl(), fileMessage.getMimeType(), fileMessage.body, fileMessage.file);
+                    onMediaAction(ACTION_VECTOR_OPEN, fileMessage.getUrl(), fileMessage.getMimeType(), fileMessage.body, fileMessage.file, null);
                 }
             } else {
                 // toggle selection mode

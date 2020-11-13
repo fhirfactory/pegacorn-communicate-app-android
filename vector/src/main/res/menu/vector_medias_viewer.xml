@@ -17,6 +17,12 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/ic_action_forward"
+        android:icon="@drawable/ic_material_forward"
+        android:title="@string/forward"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/ic_action_delete"
         android:icon="@drawable/ic_material_delete_white"
         android:title="@string/delete"

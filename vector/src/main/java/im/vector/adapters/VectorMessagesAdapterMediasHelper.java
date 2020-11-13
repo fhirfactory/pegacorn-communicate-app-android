@@ -588,7 +588,7 @@ class VectorMessagesAdapterMediasHelper {
                     public void onClick(View v) {
                         if (event == cancelLayout.getTag()) {
                             if (null != mVectorMessagesAdapterEventsListener) {
-                                mVectorMessagesAdapterEventsListener.onEventAction(event, "", R.id.ic_action_vector_cancel_upload);
+                                mVectorMessagesAdapterEventsListener.onEventAction(event, "", R.id.ic_action_vector_cancel_upload, null);
                             }
                         }
                     }
@@ -729,7 +729,7 @@ class VectorMessagesAdapterMediasHelper {
                     public void onClick(View v) {
                         if (event == cancelLayout.getTag()) {
                             if (null != mVectorMessagesAdapterEventsListener) {
-                                mVectorMessagesAdapterEventsListener.onEventAction(event, "", R.id.ic_action_vector_cancel_download);
+                                mVectorMessagesAdapterEventsListener.onEventAction(event, "", R.id.ic_action_vector_cancel_download, null);
                             }
                         }
                     }

@@ -33,6 +33,7 @@ import im.vector.util.MatrixLinkMovementMethod
 import im.vector.util.openUrlInExternalBrowser
 import im.vector.util.vectorCustomLinkify
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo
+import org.matrix.androidsdk.data.RoomSummary
 import org.matrix.androidsdk.rest.model.Event
 
 
@@ -204,7 +205,7 @@ abstract class MockMessageAdapterActionListener : IMessagesAdapterActionsListene
         TODO("not implemented")
     }
 
-    override fun onEventAction(event: Event?, textMsg: String?, action: Int) {
+    override fun onEventAction(event: Event?, textMsg: String?, action: Int, summary: RoomSummary?) {
         TODO("not implemented")
     }
 
