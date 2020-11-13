@@ -17,14 +17,17 @@
 
 package im.vector.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
 import androidx.viewpager.widget.ViewPager;
 
@@ -35,8 +38,11 @@ import org.matrix.androidsdk.core.JsonUtils;
 import org.matrix.androidsdk.core.Log;
 import org.matrix.androidsdk.core.callback.SimpleApiCallback;
 import org.matrix.androidsdk.core.model.MatrixError;
+import org.matrix.androidsdk.data.Room;
 import org.matrix.androidsdk.db.MXMediaCache;
 import org.matrix.androidsdk.listeners.MXMediaDownloadListener;
+import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.PowerLevels;
 
 import java.io.File;
 import java.util.List;
@@ -48,6 +54,22 @@ import im.vector.VectorApp;
 import im.vector.adapters.VectorMediaViewerAdapter;
 import im.vector.util.PermissionsToolsKt;
 import im.vector.util.SlidableMediaInfo;
+
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_CANONICAL_ALIAS;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_PINNED_EVENT;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_RELATED_GROUPS;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_ROOM_ALIASES;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_ROOM_AVATAR;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_ROOM_CREATE;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_ROOM_GUEST_ACCESS;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_ROOM_JOIN_RULES;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_ROOM_MEMBER;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_ROOM_NAME;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_ROOM_TOMBSTONE;
+import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_ROOM_TOPIC;
 
 /**
  * Display a medias list.
@@ -62,6 +84,7 @@ public class VectorMediaViewerActivity extends MXCActionBarActivity {
     public static final String KEY_THUMBNAIL_HEIGHT = "ImageSliderActivity.KEY_THUMBNAIL_HEIGHT";
 
     public static final String EXTRA_MATRIX_ID = "ImageSliderActivity.EXTRA_MATRIX_ID";
+    public static final String SELECTED_EVENT = "SELECTED_EVENT";
 
     // session
     private MXSession mSession;
@@ -221,6 +244,11 @@ public class VectorMediaViewerActivity extends MXCActionBarActivity {
             // disable shared for encrypted files as they are saved in a tmp folder
             shareMenuItem.setVisible(null == mMediasList.get(mViewPager.getCurrentItem()).mEncryptedFileInfo && getResources().getBoolean(R.bool.show_image_share_items));
         }
+        MenuItem deleteMenuItem = menu.findItem(R.id.ic_action_delete);
+        if (null != deleteMenuItem) {
+            // disable shared for encrypted files as they are saved in a tmp folder
+            deleteMenuItem.setVisible(mMediasList.get(mViewPager.getCurrentItem()).event!= null && isEventRemovable(mMediasList.get(mViewPager.getCurrentItem()).event));
+        }
         menu.findItem(R.id.ic_action_download).setVisible(getResources().getBoolean(R.bool.show_image_share_items));
         return true;
     }
@@ -319,6 +347,35 @@ public class VectorMediaViewerActivity extends MXCActionBarActivity {
         }
     }
 
+    private boolean isEventRemovable(Event event){
+        // test if the event can be redacted
+        boolean canBeRedacted = !TextUtils.equals(event.getType(), Event.EVENT_TYPE_MESSAGE_ENCRYPTION);
+
+        if (canBeRedacted) {
+            // oneself message -> can redact it
+            if (TextUtils.equals(event.sender, mSession.getMyUserId())) {
+                canBeRedacted = true;
+            } else {
+                // need the minimum power level to redact an event
+                Room room = mSession.getDataHandler().getRoom(event.roomId);
+
+                if ((null != room) && (null != room.getState().getPowerLevels())) {
+                    PowerLevels powerLevels = room.getState().getPowerLevels();
+                    canBeRedacted = powerLevels.getUserPowerLevel(mSession.getMyUserId()) >= powerLevels.redact;
+                }
+            }
+        }
+
+        //Hiding the "Remove" option from the system messages
+        if (getResources().getBoolean(R.bool.hide_remove_from_system_message) && (event.getType().equals(EVENT_TYPE_STATE_ROOM_NAME) || event.getType().equals(EVENT_TYPE_STATE_ROOM_TOPIC) || event.getType().equals(EVENT_TYPE_STATE_ROOM_AVATAR)
+                || event.getType().equals(EVENT_TYPE_STATE_ROOM_MEMBER) || event.getType().equals(EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE) || event.getType().equals(EVENT_TYPE_STATE_ROOM_CREATE)
+                || event.getType().equals(EVENT_TYPE_STATE_ROOM_JOIN_RULES) || event.getType().equals(EVENT_TYPE_STATE_ROOM_GUEST_ACCESS) || event.getType().equals(EVENT_TYPE_STATE_ROOM_POWER_LEVELS)
+                || event.getType().equals(EVENT_TYPE_STATE_ROOM_ALIASES) || event.getType().equals(EVENT_TYPE_STATE_ROOM_TOMBSTONE) || event.getType().equals(EVENT_TYPE_STATE_CANONICAL_ALIAS)
+                || event.getType().equals(EVENT_TYPE_STATE_HISTORY_VISIBILITY) || event.getType().equals(EVENT_TYPE_STATE_RELATED_GROUPS) || event.getType().equals(EVENT_TYPE_STATE_PINNED_EVENT))) {
+            canBeRedacted = false;
+        }
+        return canBeRedacted;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -326,6 +383,20 @@ public class VectorMediaViewerActivity extends MXCActionBarActivity {
             case R.id.ic_action_share:
             case R.id.ic_action_download:
                 onAction(mViewPager.getCurrentItem(), item.getItemId());
+                return true;
+            case R.id.ic_action_delete:
+                new AlertDialog.Builder(this)
+                        .setMessage(getString(R.string.redact) + " ?")
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.ok,
+                                (dialog, id) -> {
+                                    Intent intent = new Intent();
+                                    intent.putExtra(SELECTED_EVENT, mMediasList.get(mViewPager.getCurrentItem()).event);
+                                    setResult(RESULT_OK, intent);
+                                    finish();
+                                })
+                        .setNegativeButton(R.string.cancel, null)
+                        .show();
                 return true;
         }
 
