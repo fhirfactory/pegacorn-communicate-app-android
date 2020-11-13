@@ -2531,7 +2531,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         menu.findItem(R.id.ic_action_view_source).setVisible(mContext.getResources().getBoolean(R.bool.show_message_view_source));
         menu.findItem(R.id.ic_action_view_decrypted_source).setVisible(event.isEncrypted() && (null != event.getClearEvent()) && mContext.getResources().getBoolean(R.bool.show_message_view_decrypted));
 
-        menu.findItem(R.id.ic_action_vector_permalink).setVisible(true);
+        menu.findItem(R.id.ic_action_vector_permalink).setVisible(mContext.getResources().getBoolean(R.bool.show_permalink_menu_item));
 
         if (!TextUtils.isEmpty(textMsg)) {
             menu.findItem(R.id.ic_action_vector_copy).setVisible(true);
@@ -2587,14 +2587,14 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 Message message = JsonUtils.toMessage(event.getContentAsJsonObject());
 
                 // share / forward the message
-                menu.findItem(R.id.ic_action_vector_share).setVisible(!mIsRoomEncrypted);
+                menu.findItem(R.id.ic_action_vector_share).setVisible(!mIsRoomEncrypted && mContext.getResources().getBoolean(R.bool.show_image_share_items));
                 menu.findItem(R.id.ic_action_vector_forward).setVisible(true);
 
                 // save the media in the downloads directory
                 if (Message.MSGTYPE_IMAGE.equals(message.msgtype)
                         || Message.MSGTYPE_VIDEO.equals(message.msgtype)
                         || Message.MSGTYPE_FILE.equals(message.msgtype)) {
-                    menu.findItem(R.id.ic_action_vector_save).setVisible(true);
+                    menu.findItem(R.id.ic_action_vector_save).setVisible(mContext.getResources().getBoolean(R.bool.show_image_share_items));
                 }
 
                 // offer to report a message content

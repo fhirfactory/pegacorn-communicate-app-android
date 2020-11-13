@@ -97,9 +97,21 @@ android {
         javaMaxHeapSize "2g"
     }
 
+    signingConfigs {
+        // DO NOT USE THIS KEY FOR GOOGLE PLAY RELEASE
+        // TODO STEPS to create a new key and sign the app with the key
+        // https://developer.android.com/studio/publish/app-signing
+        // summary of the build process can be found in design/Google Play Store prerequisites.txt
+        release {
+            storeFile file("act_riot_key_store.jks")
+            storePassword '123456'
+            keyAlias 'key'
+            keyPassword '123456'
+        }
+    }
+
     buildTypes {
         debug {
-
             resValue "bool", "debug_mode", "true"
             resValue "string", "git_revision", "\"${gitRevision()}\""
             resValue "string", "git_revision_date", "\"${gitRevisionDate()}\""
@@ -111,6 +123,8 @@ android {
         }
 
         release {
+            //should be commented before actual release
+            debuggable true
             resValue "bool", "debug_mode", "false"
             resValue "string", "git_revision", "\"${gitRevision()}\""
             resValue "string", "git_revision_date", "\"${gitRevisionDate()}\""
@@ -119,6 +133,7 @@ android {
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 

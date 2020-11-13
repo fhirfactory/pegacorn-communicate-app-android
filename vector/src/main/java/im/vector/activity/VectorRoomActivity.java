@@ -120,7 +120,6 @@ import im.vector.fragments.VectorReadReceiptsDialogFragment;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.fragments.roomwidgets.RoomWidgetPermissionBottomSheet;
 import im.vector.listeners.IMessagesAdapterActionsListener;
-import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.CallsManager;
 import im.vector.util.ExternalApplicationsUtilKt;
 import im.vector.util.MatrixURLSpan;
@@ -2462,7 +2461,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * Display UI buttons according to user input text.
      */
     private void manageSendMoreButtons() {
-        int img = R.drawable.ic_material_file;
+        int img = getResources().getBoolean(R.bool.show_camera_icon_in_place_of_file_icon) ? R.drawable.ic_material_camera: R.drawable.ic_material_file;
         if (!PreferencesManager.sendMessageWithEnter(this) && mEditText.getText().length() > 0) {
             img = R.drawable.ic_material_send_green;
         } else {
@@ -3887,7 +3886,9 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         final List<DialogListItem> items = new ArrayList<>();
 
         // Send file
-        items.add(DialogListItem.SendFile.INSTANCE);
+        if (isVoiceFeatureEnabled && getResources().getBoolean(R.bool.show_send_file)) {
+            items.add(DialogListItem.SendFile.INSTANCE);
+        }
 
         // Send voice
         if (isVoiceFeatureEnabled && getResources().getBoolean(R.bool.show_send_voice_room)) {
@@ -3907,15 +3908,21 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             items.add(DialogListItem.TakePhotoVideo.INSTANCE);
         }
 
-        new AlertDialog.Builder(this)
-                .setAdapter(new DialogSendItemAdapter(this, items), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        onSendChoiceClicked(items.get(which));
-                    }
-                })
-                .setNegativeButton(R.string.cancel, null)
-                .show();
+        // if one item it must be DialogListItem.TakePhotoVideo.INSTANCE
+        // hence not showing the dialog
+        if (items.size() == 1) {
+            onSendChoiceClicked(DialogListItem.TakePhotoVideo.INSTANCE);
+        } else {
+            new AlertDialog.Builder(this)
+                    .setAdapter(new DialogSendItemAdapter(this, items), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            onSendChoiceClicked(items.get(which));
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .show();
+        }
     }
 
     @OnClick(R.id.room_send_image_view)
