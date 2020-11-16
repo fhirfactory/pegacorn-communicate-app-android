@@ -809,7 +809,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     ? VectorMessageListFragment.PREVIEW_MODE_UNREAD_MESSAGE : null) : VectorMessageListFragment.PREVIEW_MODE_READ_ONLY;
             mVectorMessageListFragment = VectorMessageListFragment.newInstance(mMyUserId, roomId, mEventId,
                     previewMode,
-                    org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
+                    R.layout.fragment_matrix_message_list_fragment);
             fm.beginTransaction().add(R.id.anchor_fragment_messages, mVectorMessageListFragment, TAG_FRAGMENT_MATRIX_MESSAGE_LIST).commit();
         } else {
             Log.d(LOG_TAG, "Reuse VectorMessageListFragment");
