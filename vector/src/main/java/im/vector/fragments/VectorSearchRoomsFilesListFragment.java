@@ -99,7 +99,7 @@ public class VectorSearchRoomsFilesListFragment extends VectorSearchMessagesList
                     FileMessage fileMessage = JsonUtils.toFileMessage(event.getContent());
 
                     if (null != fileMessage.getUrl()) {
-                        onMediaAction(ACTION_VECTOR_OPEN, fileMessage.getUrl(), fileMessage.getMimeType(), fileMessage.body, fileMessage.file);
+                        onMediaAction(ACTION_VECTOR_OPEN, fileMessage.getUrl(), fileMessage.getMimeType(), fileMessage.body, fileMessage.file, null);
                     }
                 }
             }

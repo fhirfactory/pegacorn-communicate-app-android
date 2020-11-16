@@ -2195,7 +2195,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                             mSessionIdsWaitingForE2eReRequest.add(sessionId);
 
                             if (mVectorMessagesAdapterEventsListener != null) {
-                                mVectorMessagesAdapterEventsListener.onEventAction(event, null, R.id.ic_action_re_request_e2e_key);
+                                mVectorMessagesAdapterEventsListener.onEventAction(event, null, R.id.ic_action_re_request_e2e_key, null);
                             }
 
                             // Update the link message (for other events with same sessionId too)
@@ -2612,7 +2612,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             public boolean onMenuItemClick(final MenuItem item) {
                 // warn the listener
                 if (null != mVectorMessagesAdapterEventsListener) {
-                    mVectorMessagesAdapterEventsListener.onEventAction(event, textMsg, item.getItemId());
+                    mVectorMessagesAdapterEventsListener.onEventAction(event, textMsg, item.getItemId(), null);
                 }
 
                 // disable the selection
