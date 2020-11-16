@@ -2094,7 +2094,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             Bundle bundle = intent.getExtras();
             // sanity checks
             if (null != bundle) {
-                if (bundle.containsKey(Intent.EXTRA_TEXT)) {
+                if (bundle.containsKey(Intent.EXTRA_TEXT) && bundle.getString(Intent.EXTRA_TEXT)!=null) {
                     mEditText.append(bundle.getString(Intent.EXTRA_TEXT));
 
                     mEditText.post(new Runnable() {
