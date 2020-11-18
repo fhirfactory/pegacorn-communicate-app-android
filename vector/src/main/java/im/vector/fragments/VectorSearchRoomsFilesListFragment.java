@@ -93,7 +93,7 @@ public class VectorSearchRoomsFilesListFragment extends VectorSearchMessagesList
                         viewImageIntent.putExtra(VectorMediaViewerActivity.KEY_INFO_LIST, (ArrayList) mediaMessagesList);
                         viewImageIntent.putExtra(VectorMediaViewerActivity.KEY_INFO_LIST_INDEX, listPosition);
 
-                        getActivity().startActivity(viewImageIntent);
+                        startActivity(viewImageIntent);
                     }
                 } else if (Message.MSGTYPE_FILE.equals(message.msgtype)) {
                     FileMessage fileMessage = JsonUtils.toFileMessage(event.getContent());

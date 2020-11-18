@@ -336,7 +336,7 @@ public class VectorRoomDetailsActivity extends MXCActionBarActivity implements T
             mSearchFilesFragment = (VectorSearchRoomFilesListFragment) getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_FILES_DETAILS);
             if (null == mSearchFilesFragment) {
                 mSearchFilesFragment = VectorSearchRoomFilesListFragment.newInstance(mSession.getCredentials().userId,
-                        mRoomId, org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
+                        mRoomId, R.layout.fragment_matrix_message_list_fragment);
                 ft.replace(R.id.room_details_fragment_container, mSearchFilesFragment, TAG_FRAGMENT_FILES_DETAILS);
                 Log.d(LOG_TAG, "## onTabSelected() file frag replace");
             } else {
