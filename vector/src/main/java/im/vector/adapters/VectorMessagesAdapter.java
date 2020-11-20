@@ -2533,7 +2533,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
         menu.findItem(R.id.ic_action_vector_permalink).setVisible(mContext.getResources().getBoolean(R.bool.show_permalink_menu_item));
 
-        if (!TextUtils.isEmpty(textMsg)) {
+        if (!TextUtils.isEmpty(textMsg) & mContext.getResources().getBoolean(R.bool.show_message_copy)) {
             menu.findItem(R.id.ic_action_vector_copy).setVisible(true);
             menu.findItem(R.id.ic_action_vector_quote).setVisible(true);
         }
