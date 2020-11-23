@@ -7,14 +7,17 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.coroutineScope
 import com.bumptech.glide.Glide
 import im.vector.R
+import im.vector.activity.CommonActivityUtils
 import im.vector.activity.SimpleFragmentActivity
 import im.vector.activity.SimpleFragmentActivityListener
+import im.vector.activity.VectorMemberDetailsActivity
 import im.vector.home.BaseCommunicateHomeFragment
 import im.vector.patient.PatientTagActivity.Companion.FILE_LOCATION_EXTRA
 import im.vector.patient.PatientTagActivity.Companion.ROOM_MEDIA_MESSAGE_EXTRA
@@ -24,6 +27,7 @@ import kotlinx.android.synthetic.main.layout_designation.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.matrix.androidsdk.core.Log
 
 
 class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
@@ -65,7 +69,7 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
 
         viewModel.fileLocation = arguments?.getString(FILE_LOCATION_EXTRA)
         viewModel.mediaMessageArray = arguments?.getParcelableArrayList(ROOM_MEDIA_MESSAGE_EXTRA)
-        Glide.with(this).load(if(viewModel.fileLocation==null) viewModel.mediaMessageArray?.get(0)?.uri else viewModel.fileLocation).into(imageView)
+        Glide.with(this).load(if (viewModel.fileLocation == null) viewModel.mediaMessageArray?.get(0)?.uri else viewModel.fileLocation).into(imageView)
 
         patientsRecyclerView.setHasFixedSize(true)
         patientAdapter = PatientAdapter(this)
@@ -78,6 +82,10 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
             viewModel.removeSelectedPatient()
         }
 
+        cancelButton.setOnClickListener {
+            requireActivity().finish()
+        }
+
         searchEditText.addTextChangedListener(
                 DebouncingQueryTextListener(
                         lifecycle
@@ -87,9 +95,20 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
                     }
                 })
         saveButton.setOnClickListener {
-            finishActivity(Intent().apply {
-                putExtra(ROOM_MEDIA_MESSAGE_EXTRA, viewModel.mediaMessageArray)
-            })
+            if(viewModel.selectedPatient.value == null) {
+                AlertDialog.Builder(requireContext())
+                        .setTitle(R.string.dialog_title_confirmation)
+                        .setMessage(getString(R.string.start_new_chat_prompt_msg))
+                        .setPositiveButton(R.string.ok) { _, _ ->
+                            finishActivity(Intent().apply {
+                                putExtra(ROOM_MEDIA_MESSAGE_EXTRA, viewModel.mediaMessageArray)
+                            })
+                        }
+                        .setNegativeButton(R.string.cancel, null)
+                        .show()
+            } else {
+                sendPatientBackToPreviousActivity()
+            }
         }
     }
 
@@ -105,8 +124,10 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
                 designationLayout.visibility = GONE
                 searchInputLayout.visibility = VISIBLE
                 patientsRecyclerView.visibility = VISIBLE
+                saveButton.isEnabled = true
             } else {
                 // selectedPatient.setBackgroundColor(Color.LTGRAY)
+                saveButton.isEnabled = false
                 searchInputLayout.visibility = GONE
                 patientsRecyclerView.visibility = GONE
                 designationLayout.visibility = VISIBLE
