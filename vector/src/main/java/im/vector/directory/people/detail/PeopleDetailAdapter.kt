@@ -93,7 +93,7 @@ class PeopleDetailAdapter(val context: Context, private val onClickListener: Rol
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (models[position].type) {
             TYPE_ROLE -> {
-                (holder as RoleViewHolder).bind(context, mSession, models[position].role!!, spanTextBackgroundColor, spanTextColor, textSize, this, position, showHeader(position))
+                (holder as RoleViewHolder).bind(context, mSession, models[position].role!!, spanTextBackgroundColor, spanTextColor, textSize, this, position, null, showHeader(position))
                 holder.itemView.setOnClickListener {
                     onClickListener?.onRoleClick(models[position].role!!)
                 }
