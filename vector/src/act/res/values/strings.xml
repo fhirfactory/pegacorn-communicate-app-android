@@ -94,7 +94,7 @@
     <string name="send_anyway">Send Anyway</string>
     <string name="or">or</string>
     <string name="invite">Invite</string>
-    <string name="offline">Offline</string>
+    <string name="offline">Online</string>
     <string name="online">Online</string>
     <string name="busy">Busy</string>
     <string name="accept">Accept</string>
@@ -451,7 +451,7 @@
     <string name="room_participants_create">Create</string>
 
     <string name="room_participants_online">Online</string>
-    <string name="room_participants_offline">Offline</string>
+    <string name="room_participants_offline">Online</string>
     <string name="room_participants_idle">Idle</string>
     <!--The variable is one of "Online", "Offline" or "Idle" states above.-->
     <string name="room_participants_now">%1$s now</string>
