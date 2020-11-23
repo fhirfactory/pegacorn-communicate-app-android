@@ -2,12 +2,9 @@ package im.vector.patient
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.media.ThumbnailUtils
 import android.os.Bundle
-import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.lifecycle.Lifecycle
@@ -23,6 +20,7 @@ import im.vector.patient.PatientTagActivity.Companion.FILE_LOCATION_EXTRA
 import im.vector.patient.PatientTagActivity.Companion.ROOM_MEDIA_MESSAGE_EXTRA
 import kotlinx.android.synthetic.main.fragment_patient_tag.*
 import kotlinx.android.synthetic.main.item_patient.*
+import kotlinx.android.synthetic.main.layout_designation.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -63,6 +61,7 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
 
         viewModel = ViewModelProviders.of(this).get(PatientTagViewModel::class.java)
         viewModel.initSession(mSession)
+        username.text = mSession.myUser.displayname
 
         viewModel.fileLocation = arguments?.getString(FILE_LOCATION_EXTRA)
         viewModel.mediaMessageArray = arguments?.getParcelableArrayList(ROOM_MEDIA_MESSAGE_EXTRA)
@@ -87,7 +86,7 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
                         viewModel.filterPatient(it)
                     }
                 })
-        nonPatientMediaButton.setOnClickListener {
+        saveButton.setOnClickListener {
             finishActivity(Intent().apply {
                 putExtra(ROOM_MEDIA_MESSAGE_EXTRA, viewModel.mediaMessageArray)
             })
@@ -103,8 +102,14 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
             if (patient == null) {
                 selectedPatient.visibility = GONE
                 cross.visibility = GONE
+                designationLayout.visibility = GONE
+                searchInputLayout.visibility = VISIBLE
+                patientsRecyclerView.visibility = VISIBLE
             } else {
                 // selectedPatient.setBackgroundColor(Color.LTGRAY)
+                searchInputLayout.visibility = GONE
+                patientsRecyclerView.visibility = GONE
+                designationLayout.visibility = VISIBLE
                 selectedPatient.visibility = VISIBLE
                 cross.visibility = VISIBLE
                 patientNameTextView?.text = patient.name
