@@ -7,6 +7,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.AdapterView
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
@@ -14,20 +15,20 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.coroutineScope
 import com.bumptech.glide.Glide
 import im.vector.R
-import im.vector.activity.CommonActivityUtils
 import im.vector.activity.SimpleFragmentActivity
 import im.vector.activity.SimpleFragmentActivityListener
-import im.vector.activity.VectorMemberDetailsActivity
+import im.vector.directory.role.DropDownAdapter
+import im.vector.directory.role.model.DropDownItem
 import im.vector.home.BaseCommunicateHomeFragment
 import im.vector.patient.PatientTagActivity.Companion.FILE_LOCATION_EXTRA
 import im.vector.patient.PatientTagActivity.Companion.ROOM_MEDIA_MESSAGE_EXTRA
+import kotlinx.android.synthetic.main.drop_down_item.view.*
 import kotlinx.android.synthetic.main.fragment_patient_tag.*
 import kotlinx.android.synthetic.main.item_patient.*
 import kotlinx.android.synthetic.main.layout_designation.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.matrix.androidsdk.core.Log
 
 
 class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
@@ -35,6 +36,7 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
     private lateinit var viewModel: PatientTagViewModel
     private var simpleFragmentActivityListener: SimpleFragmentActivityListener? = null
     private lateinit var patientAdapter: PatientAdapter
+    private lateinit var designationAdapter: DropDownAdapter
 
     override fun getLayoutResId(): Int = R.layout.fragment_patient_tag
 
@@ -67,6 +69,26 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
         viewModel.initSession(mSession)
         username.text = mSession.myUser.displayname
 
+        designationAdapter = DropDownAdapter(requireContext(), R.layout.drop_down_item)
+        designationEditText.threshold = 1
+        designationEditText.setAdapter(designationAdapter)
+        designationEditText.addTextChangedListener(object :TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                saveButton.isEnabled = (viewModel.selectedPatient.value!=null && p0.toString().isNotEmpty()) || true
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+        })
+        designationEditText.onItemClickListener = AdapterView.OnItemClickListener { _, _, pos, _ ->
+            //locationEditText.setText((locationAdapter.getItem(pos) as Location).name, false)
+            viewModel.selectedDesignation = designationAdapter.getItem(pos) as DropDownItem
+            saveButton.isEnabled = (viewModel.selectedPatient.value!=null && designationEditText.text.toString().isNotEmpty()) || true
+        }
+
         viewModel.fileLocation = arguments?.getString(FILE_LOCATION_EXTRA)
         viewModel.mediaMessageArray = arguments?.getParcelableArrayList(ROOM_MEDIA_MESSAGE_EXTRA)
         Glide.with(this).load(if (viewModel.fileLocation == null) viewModel.mediaMessageArray?.get(0)?.uri else viewModel.fileLocation).into(imageView)
@@ -77,6 +99,7 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
 
         subscribeUI()
         viewModel.getPatientData()
+        viewModel.getDesignations()
 
         cross.setOnClickListener {
             viewModel.removeSelectedPatient()
@@ -95,7 +118,7 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
                     }
                 })
         saveButton.setOnClickListener {
-            if(viewModel.selectedPatient.value == null) {
+            if (viewModel.selectedPatient.value == null) {
                 AlertDialog.Builder(requireContext())
                         .setTitle(R.string.dialog_title_confirmation)
                         .setMessage(getString(R.string.start_new_chat_prompt_msg))
@@ -117,6 +140,10 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
             patientAdapter.setData(patientList)
         })
 
+        viewModel.designations.observe(viewLifecycleOwner, Observer { designations ->
+            designationAdapter.addData(designations)
+        })
+
         viewModel.selectedPatient.observe(viewLifecycleOwner, Observer { patient ->
             if (patient == null) {
                 selectedPatient.visibility = GONE
@@ -125,6 +152,7 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
                 searchInputLayout.visibility = VISIBLE
                 patientsRecyclerView.visibility = VISIBLE
                 saveButton.isEnabled = true
+                viewModel.selectedDesignation = null
             } else {
                 // selectedPatient.setBackgroundColor(Color.LTGRAY)
                 saveButton.isEnabled = false
@@ -149,7 +177,7 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
         }
     }
 
-    private fun finishActivity(intent: Intent){
+    private fun finishActivity(intent: Intent) {
         activity?.setResult(RESULT_OK, intent)
         activity?.finish()
     }
