@@ -35,7 +35,6 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
     private lateinit var patientAdapter: PatientAdapter
 
     override fun getLayoutResId(): Int = R.layout.fragment_patient_tag
-    override fun getMenuRes() = R.menu.menu_done
 
     companion object {
         const val PATIENT_EXTRA = "PATIENT_EXTRA"
@@ -113,16 +112,6 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
                 patientDobTextView?.text = patient.dob
             }
         })
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_done -> {
-                sendPatientBackToPreviousActivity()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun sendPatientBackToPreviousActivity() {
