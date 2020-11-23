@@ -124,7 +124,12 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         heading?.visibility = if (showHeader) VISIBLE else GONE
         officialName?.text = role.officialName
         secondaryName?.text = role.secondaryName
-        selectionRadioImageView?.setImageResource(if (selection == true) R.drawable.ic_radio_button_checked else R.drawable.ic_radio_button_unchecked)
+        if(selection==null){
+            selectionRadioImageView?.visibility = GONE
+        } else {
+            selectionRadioImageView?.visibility = VISIBLE
+            selectionRadioImageView?.setImageResource(if (selection == true) R.drawable.ic_radio_button_checked else R.drawable.ic_radio_button_unchecked)
+        }
         if (role.expanded) {
             expandableIcon?.animate()?.setDuration(200)?.rotation(180F)
             description?.visibility = VISIBLE
