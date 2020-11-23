@@ -29,4 +29,5 @@
     <dimen name="sub_title_text_size">16sp</dimen>
 
     <dimen name="heading_padding">4dp</dimen>
+    <dimen name="min_button_width">140dp</dimen>
 </resources>
