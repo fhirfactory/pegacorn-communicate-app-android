@@ -60,7 +60,7 @@ class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
     }
 
     override fun onPeopleClick(directoryPeople: DirectoryPeople) {
-        startActivity(PeopleDetailActivity.intent(requireContext(), directoryPeople, true))
+        startActivity(PeopleDetailActivity.intent(requireContext(), directoryPeople, false))
     }
 
     override fun onPeopleFavorite(directoryPeople: DirectoryPeople) {
