@@ -17,36 +17,37 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="220dp"
+                android:layout_width="@dimen/patient_tag_image_height"
+                android:layout_height="@dimen/patient_tag_image_height"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="4dp"
+                android:paddingTop="4dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_material_camera"
+                app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/descriptionLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/patient_tag_image_height"
                 android:layout_marginLeft="@dimen/layout_horizontal_margin_half"
-                android:layout_marginRight="@dimen/layout_horizontal_margin_half"
                 android:layout_marginTop="4dp"
+                android:layout_marginRight="@dimen/layout_horizontal_margin_half"
                 android:hint="@string/description"
                 android:textColorHint="?attr/vctr_default_text_hint_color"
-                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/imageView"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/descriptionEditText"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:imeOptions="actionNext"
-                    android:inputType="textMultiLine"
+                    android:layout_height="match_parent"
                     android:gravity="top"
-                    android:lines="2"
-                    android:minLines="2"
-                    android:maxLines="2" />
+                    android:imeOptions="actionNext"
+                    android:inputType="textMultiLine" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <include
@@ -130,24 +131,24 @@
         android:id="@+id/saveButton"
         style="@style/VectorButtonStyle"
         android:layout_width="wrap_content"
-        android:minWidth="@dimen/min_button_width"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/layout_horizontal_margin_half"
+        android:minWidth="@dimen/min_button_width"
         android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/cancelButton"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cancelButton" />
 
     <Button
         android:id="@+id/cancelButton"
         style="@style/VectorButtonStyle"
-        android:minWidth="@dimen/min_button_width"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/layout_horizontal_margin_half"
+        android:minWidth="@dimen/min_button_width"
         android:text="@string/cancel"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/saveButton" />
+        app:layout_constraintEnd_toStartOf="@+id/saveButton"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

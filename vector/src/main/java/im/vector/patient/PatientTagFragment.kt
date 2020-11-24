@@ -22,7 +22,6 @@ import im.vector.directory.role.model.DropDownItem
 import im.vector.home.BaseCommunicateHomeFragment
 import im.vector.patient.PatientTagActivity.Companion.FILE_LOCATION_EXTRA
 import im.vector.patient.PatientTagActivity.Companion.ROOM_MEDIA_MESSAGE_EXTRA
-import kotlinx.android.synthetic.main.drop_down_item.view.*
 import kotlinx.android.synthetic.main.fragment_patient_tag.*
 import kotlinx.android.synthetic.main.item_patient.*
 import kotlinx.android.synthetic.main.layout_designation.*
@@ -72,12 +71,12 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
         designationAdapter = DropDownAdapter(requireContext(), R.layout.drop_down_item)
         designationEditText.threshold = 1
         designationEditText.setAdapter(designationAdapter)
-        designationEditText.addTextChangedListener(object :TextWatcher{
+        designationEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                saveButton.isEnabled = (viewModel.selectedPatient.value!=null && p0.toString().isNotEmpty()) || true
+                saveButton.isEnabled = (viewModel.selectedPatient.value != null && p0.toString().isNotEmpty()) || true
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -86,7 +85,7 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
         designationEditText.onItemClickListener = AdapterView.OnItemClickListener { _, _, pos, _ ->
             //locationEditText.setText((locationAdapter.getItem(pos) as Location).name, false)
             viewModel.selectedDesignation = designationAdapter.getItem(pos) as DropDownItem
-            saveButton.isEnabled = (viewModel.selectedPatient.value!=null && designationEditText.text.toString().isNotEmpty()) || true
+            saveButton.isEnabled = (viewModel.selectedPatient.value != null && designationEditText.text.toString().isNotEmpty()) || true
         }
 
         viewModel.fileLocation = arguments?.getString(FILE_LOCATION_EXTRA)
@@ -98,7 +97,7 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
         patientsRecyclerView.adapter = patientAdapter
 
         subscribeUI()
-        viewModel.getPatientData()
+        viewModel.prepareFakePatientData()
         viewModel.getDesignations()
 
         cross.setOnClickListener {
@@ -114,7 +113,12 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
                         lifecycle
                 ) { newText ->
                     newText?.let {
-                        viewModel.filterPatient(it)
+                        if (it.isEmpty()) {
+                            //so that nothing comes up, possibly temporary
+                            viewModel.filterPatient("###########")
+                        } else if (it.length > 2) {
+                            viewModel.filterPatient(it)
+                        }
                     }
                 })
         saveButton.setOnClickListener {
@@ -155,6 +159,7 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
                 viewModel.selectedDesignation = null
             } else {
                 // selectedPatient.setBackgroundColor(Color.LTGRAY)
+                simpleFragmentActivityListener?.hideKeyboard()
                 saveButton.isEnabled = false
                 searchInputLayout.visibility = GONE
                 patientsRecyclerView.visibility = GONE

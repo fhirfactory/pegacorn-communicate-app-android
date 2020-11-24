@@ -29,4 +29,5 @@
     <dimen name="sub_title_text_size">16sp</dimen>
 
     <dimen name="min_button_width">140dp</dimen>
+    <dimen name="patient_tag_image_height">100dp</dimen>
 </resources>

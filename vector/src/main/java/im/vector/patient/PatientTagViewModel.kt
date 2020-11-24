@@ -43,13 +43,12 @@ class PatientTagViewModel : ViewModel() {
         designations.postValue(designationList)
     }
 
-    fun getPatientData() {
+    fun prepareFakePatientData() {
         fakePatients.add(DemoPatient("James Bond", "12345678", "01-Jan-1900"))
         fakePatients.add(DemoPatient("Rafi Sadat", "12345678", "01-Jan-1900"))
         fakePatients.add(DemoPatient("Mark Hunter", "12345678", "01-Jan-1900"))
         fakePatients.add(DemoPatient("Emma Mcdonald", "12345678", "01-Jan-1900"))
         fakePatients.add(DemoPatient("Craig Mcdonald", "12345678", "01-Jan-1900"))
         fakePatients.add(DemoPatient("Lance Christie", "12345678", "01-Jan-1900"))
-        patients.postValue(fakePatients)
     }
 }
