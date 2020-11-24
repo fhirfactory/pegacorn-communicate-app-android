@@ -121,7 +121,7 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
             if (viewModel.selectedPatient.value == null) {
                 AlertDialog.Builder(requireContext())
                         .setTitle(R.string.dialog_title_confirmation)
-                        .setMessage(getString(R.string.start_new_chat_prompt_msg))
+                        .setMessage(getString(R.string.patient_tag_warning))
                         .setPositiveButton(R.string.ok) { _, _ ->
                             finishActivity(Intent().apply {
                                 putExtra(ROOM_MEDIA_MESSAGE_EXTRA, viewModel.mediaMessageArray)
