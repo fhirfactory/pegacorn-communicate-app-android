@@ -1629,4 +1629,6 @@ Why choose Riot.im?
     <string name="photographer">Photographer</string>
     <string name="designation">Designation</string>
     <string name="select_designation">Select a designation</string>
+    <string name="adapter_patient_info">Patient: %1$s, URN: (%2$s)</string>
+    <string name="adapter_patient_image_description">Description: %1$s</string>
 </resources>

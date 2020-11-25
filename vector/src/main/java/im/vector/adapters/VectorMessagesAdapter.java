@@ -1421,6 +1421,18 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             ImageView imageView = convertView.findViewById(R.id.messagesAdapter_image);
             addContentViewListeners(convertView, imageView, position, type);
+
+            //TODO check if there is any PATIENT TAG
+            View tagLayout = convertView.findViewById(R.id.message_adapter_patient_layout);
+            if(true){
+                tagLayout.setVisibility(View.VISIBLE);
+                TextView patientInfo = convertView.findViewById(R.id.message_adapter_patient_description);
+                TextView imageDescription = convertView.findViewById(R.id.message_adapter_media_description);
+                patientInfo.setText(mContext.getString(R.string.adapter_patient_info, "Rafi Sadat", "123456789"));
+                imageDescription.setText(mContext.getString(R.string.adapter_patient_image_description, "This will be a short description"));
+            } else {
+                tagLayout.setVisibility(View.GONE);
+            }
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getImageVideoView() failed : " + e.getMessage(), e);
         }

@@ -144,6 +144,32 @@
 
                 <!-- the description of the sticker -->
                 <LinearLayout
+                    android:id="@+id/message_adapter_patient_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <TextView
+                        android:id="@+id/message_adapter_patient_description"
+                        android:textSize="14sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="description" />
+
+                    <TextView
+                        android:id="@+id/message_adapter_media_description"
+                        android:layout_width="wrap_content"
+                        android:textSize="14sp"
+                        android:layout_marginTop="2dp"
+                        android:layout_height="wrap_content"
+                        tools:text="description" />
+                </LinearLayout>
+
+                <!-- the description of the sticker -->
+                <LinearLayout
                     android:id="@+id/message_adapter_sticker_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
