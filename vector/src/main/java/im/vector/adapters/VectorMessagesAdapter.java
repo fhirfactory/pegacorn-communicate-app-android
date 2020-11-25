@@ -1428,8 +1428,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 tagLayout.setVisibility(View.VISIBLE);
                 TextView patientInfo = convertView.findViewById(R.id.message_adapter_patient_description);
                 TextView imageDescription = convertView.findViewById(R.id.message_adapter_media_description);
-                patientInfo.setText(mContext.getString(R.string.adapter_patient_info, "Rafi Sadat", "123456789"));
-                imageDescription.setText(mContext.getString(R.string.adapter_patient_image_description, "This will be a short description"));
+                patientInfo.setText(Html.fromHtml(mContext.getString(R.string.adapter_patient_info, "Rafi Sadat", "123456789")));
+                imageDescription.setText(Html.fromHtml(mContext.getString(R.string.adapter_patient_image_description, "This will be a short description")));
             } else {
                 tagLayout.setVisibility(View.GONE);
             }
@@ -2607,6 +2607,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                         || Message.MSGTYPE_VIDEO.equals(message.msgtype)
                         || Message.MSGTYPE_FILE.equals(message.msgtype)) {
                     menu.findItem(R.id.ic_action_vector_save).setVisible(mContext.getResources().getBoolean(R.bool.show_image_share_items));
+                    // TODO we may need proper condition
+                    menu.findItem(R.id.ic_action_tag).setVisible(true);
                 }
 
                 // offer to report a message content

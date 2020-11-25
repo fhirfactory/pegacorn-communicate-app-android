@@ -5,12 +5,14 @@ import androidx.lifecycle.ViewModel
 import im.vector.directory.role.model.DropDownItem
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.data.RoomMediaMessage
+import org.matrix.androidsdk.rest.model.Event
 
 class PatientTagViewModel : ViewModel() {
     var session: MXSession? = null
     var fileLocation: String? = null
     var selectedDesignation :DropDownItem? = null
     var mediaMessageArray: ArrayList<RoomMediaMessage>? = null
+    var event: Event? = null
     val patients = MutableLiveData<MutableList<DemoPatient>>()
     val designations = MutableLiveData<MutableList<DropDownItem>>()
     val selectedPatient = MutableLiveData<DemoPatient?>()

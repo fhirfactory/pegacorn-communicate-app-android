@@ -21,13 +21,17 @@ import im.vector.directory.role.DropDownAdapter
 import im.vector.directory.role.model.DropDownItem
 import im.vector.home.BaseCommunicateHomeFragment
 import im.vector.patient.PatientTagActivity.Companion.FILE_LOCATION_EXTRA
-import im.vector.patient.PatientTagActivity.Companion.ROOM_MEDIA_MESSAGE_EXTRA
+import im.vector.patient.PatientTagActivity.Companion.ROOM_EVENT_EXTRA
+import im.vector.patient.PatientTagActivity.Companion.ROOM_MEDIA_MESSAGE_ARRAY_EXTRA
 import kotlinx.android.synthetic.main.fragment_patient_tag.*
 import kotlinx.android.synthetic.main.item_patient.*
 import kotlinx.android.synthetic.main.layout_designation.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.matrix.androidsdk.core.JsonUtils
+import org.matrix.androidsdk.rest.model.Event
+import org.matrix.androidsdk.rest.model.message.Message
 
 
 class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
@@ -89,9 +93,14 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
         }
 
         viewModel.fileLocation = arguments?.getString(FILE_LOCATION_EXTRA)
-        viewModel.mediaMessageArray = arguments?.getParcelableArrayList(ROOM_MEDIA_MESSAGE_EXTRA)
-        Glide.with(this).load(if (viewModel.fileLocation == null) viewModel.mediaMessageArray?.get(0)?.uri else viewModel.fileLocation).into(imageView)
-
+        viewModel.mediaMessageArray = arguments?.getParcelableArrayList(ROOM_MEDIA_MESSAGE_ARRAY_EXTRA)
+        viewModel.event = arguments?.getSerializable(ROOM_EVENT_EXTRA) as Event?
+        if(viewModel.event!=null){
+            val message = JsonUtils.toMessage(viewModel.event?.content)
+            // Glide.with(this).load(message.).into(imageView)
+        } else {
+            Glide.with(this).load(if (viewModel.fileLocation == null) viewModel.mediaMessageArray?.get(0)?.uri else viewModel.fileLocation).into(imageView)
+        }
         patientsRecyclerView.setHasFixedSize(true)
         patientAdapter = PatientAdapter(this)
         patientsRecyclerView.adapter = patientAdapter
@@ -128,7 +137,7 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
                         .setMessage(getString(R.string.patient_tag_warning))
                         .setPositiveButton(R.string.ok) { _, _ ->
                             finishActivity(Intent().apply {
-                                putExtra(ROOM_MEDIA_MESSAGE_EXTRA, viewModel.mediaMessageArray)
+                                putExtra(ROOM_MEDIA_MESSAGE_ARRAY_EXTRA, viewModel.mediaMessageArray)
                             })
                         }
                         .setNegativeButton(R.string.cancel, null)
@@ -177,7 +186,7 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
         viewModel.selectedPatient.value?.let {
             finishActivity(Intent().apply {
                 putExtra(PATIENT_EXTRA, viewModel.selectedPatient.value)
-                putExtra(ROOM_MEDIA_MESSAGE_EXTRA, viewModel.mediaMessageArray)
+                putExtra(ROOM_MEDIA_MESSAGE_ARRAY_EXTRA, viewModel.mediaMessageArray)
             })
         }
     }

@@ -45,6 +45,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/ic_action_tag"
+        android:icon="@drawable/ic_tag_24px"
+        android:title="@string/tag"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/ic_action_vector_forward"
         android:icon="@drawable/ic_material_forward"
         android:title="@string/forward"

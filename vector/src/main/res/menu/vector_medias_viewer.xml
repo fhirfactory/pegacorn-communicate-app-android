@@ -17,6 +17,12 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/ic_action_tag"
+        android:icon="@drawable/ic_tag_24px"
+        android:title="@string/tag"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/ic_action_forward"
         android:icon="@drawable/ic_material_forward"
         android:title="@string/forward"

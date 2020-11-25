@@ -92,6 +92,7 @@ import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.listeners.IMessagesAdapterActionsListener;
+import im.vector.patient.PatientTagActivity;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.EventGroup;
@@ -134,6 +135,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
 
     private static int VERIF_REQ_CODE = 12;
     private static int MEDIA_PREVIEW_REQ_CODE = 13;
+    private static int PATIENT_TAG_UPDATE_REQUEST_CODE = 14;
 
     public interface VectorMessageListFragmentListener {
         /**
@@ -624,7 +626,9 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
      * @param action  an action ic_action_vector_XXX
      */
     public void onEventAction(final Event event, final String textMsg, final int action, RoomSummary roomsummary) {
-        if (action == R.id.ic_action_vector_resend_message) {
+        if (action == R.id.ic_action_tag) {
+            startActivityForResult(PatientTagActivity.Companion.intent(requireActivity(), event), PATIENT_TAG_UPDATE_REQUEST_CODE);
+        } else if (action == R.id.ic_action_vector_resend_message) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
