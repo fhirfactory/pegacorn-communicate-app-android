@@ -1632,4 +1632,5 @@ Why choose Riot.im?
     <string name="adapter_patient_info"><b>Patient:</b> %1$s, <b>URN:</b> (%2$s)</string>
     <string name="adapter_patient_image_description"><b>Description:</b> %1$s</string>
     <string name="tag">Patient Tag</string>
+    <string name="update">Update</string>
 </resources>

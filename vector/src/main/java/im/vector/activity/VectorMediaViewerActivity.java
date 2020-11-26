@@ -91,6 +91,7 @@ public class VectorMediaViewerActivity extends MXCActionBarActivity {
     public static final String EXTRA_MATRIX_ID = "ImageSliderActivity.EXTRA_MATRIX_ID";
     public static final String SELECTED_EVENT = "SELECTED_EVENT";
     public static final String SELECTED_ROOM_TO_FORWARD = "SELECTED_ROOM_TO_FORWARD";
+    public static final String SELECTED_EVENT_TO_TAG = "SELECTED_EVENT_TO_TAG";
 
     // session
     private MXSession mSession;
@@ -470,6 +471,13 @@ public class VectorMediaViewerActivity extends MXCActionBarActivity {
                 return true;
             case R.id.ic_action_forward:
                 showRoomListToForward();
+                return true;
+            case R.id.ic_action_tag:
+                Intent intent = new Intent();
+                intent.putExtra(SELECTED_EVENT, mMediasList.get(mViewPager.getCurrentItem()).event);
+                intent.putExtra(SELECTED_EVENT_TO_TAG, true);
+                setResult(RESULT_OK, intent);
+                finish();
                 return true;
         }
 

@@ -103,6 +103,7 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
         viewModel.mediaMessageArray = arguments?.getParcelableArrayList(ROOM_MEDIA_MESSAGE_ARRAY_EXTRA)
         viewModel.event = arguments?.getSerializable(ROOM_EVENT_EXTRA) as Event?
         if(viewModel.event!=null){
+            saveButton.text = getText(R.string.update)
             val message = JsonUtils.toMessage(viewModel.event?.content)
             mMediasHelper?.managePendingImageVideoDownload(imageView, null, progressBar, viewModel.event, message, -1)
         } else {
