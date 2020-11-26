@@ -62,7 +62,7 @@ import im.vector.listeners.IMessagesAdapterActionsListener;
 /**
  * An helper to display medias information
  */
-class VectorMessagesAdapterMediasHelper {
+public class VectorMessagesAdapterMediasHelper {
     private static final String LOG_TAG = VectorMessagesAdapterMediasHelper.class.getSimpleName();
 
     private final MXSession mSession;
@@ -75,7 +75,7 @@ class VectorMessagesAdapterMediasHelper {
     private final int mNotSentMessageTextColor;
     private final int mDefaultMessageTextColor;
 
-    VectorMessagesAdapterMediasHelper(Context context,
+    public VectorMessagesAdapterMediasHelper(Context context,
                                       MXSession session,
                                       int maxImageWidth,
                                       int maxImageHeight,
@@ -185,7 +185,7 @@ class VectorMessagesAdapterMediasHelper {
     private Map<String, String> mUrlByBitmapIndex = new HashMap<>();
 
 
-    void managePendingImageVideoDownload(final ImageView imageView, RelativeLayout informationLayout, View downloadProgressLayout, final Event event, final Message message, final int position) {
+    public void managePendingImageVideoDownload(final ImageView imageView, RelativeLayout informationLayout, View downloadProgressLayout, final Event event, final Message message, final int position) {
         int maxImageWidth = mMaxImageWidth;
         int maxImageHeight = mMaxImageHeight;
         int rotationAngle = 0;

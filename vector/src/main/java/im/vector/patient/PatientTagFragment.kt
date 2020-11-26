@@ -2,6 +2,8 @@ package im.vector.patient
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.content.res.Resources
+import android.graphics.Point
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -17,6 +19,7 @@ import com.bumptech.glide.Glide
 import im.vector.R
 import im.vector.activity.SimpleFragmentActivity
 import im.vector.activity.SimpleFragmentActivityListener
+import im.vector.adapters.VectorMessagesAdapterMediasHelper
 import im.vector.directory.role.DropDownAdapter
 import im.vector.directory.role.model.DropDownItem
 import im.vector.home.BaseCommunicateHomeFragment
@@ -31,7 +34,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.matrix.androidsdk.core.JsonUtils
 import org.matrix.androidsdk.rest.model.Event
-import org.matrix.androidsdk.rest.model.message.Message
+import org.matrix.androidsdk.rest.model.message.ImageMessage
+import org.matrix.androidsdk.rest.model.message.VideoMessage
 
 
 class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
@@ -40,6 +44,8 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
     private var simpleFragmentActivityListener: SimpleFragmentActivityListener? = null
     private lateinit var patientAdapter: PatientAdapter
     private lateinit var designationAdapter: DropDownAdapter
+    private var mMediasHelper: VectorMessagesAdapterMediasHelper? = null
+
 
     override fun getLayoutResId(): Int = R.layout.fragment_patient_tag
 
@@ -67,6 +73,7 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
         if (activity is SimpleFragmentActivity) {
             simpleFragmentActivityListener = activity as SimpleFragmentActivity?
         }
+        initMediaAdapterHelper()
 
         viewModel = ViewModelProviders.of(this).get(PatientTagViewModel::class.java)
         viewModel.initSession(mSession)
@@ -97,7 +104,7 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
         viewModel.event = arguments?.getSerializable(ROOM_EVENT_EXTRA) as Event?
         if(viewModel.event!=null){
             val message = JsonUtils.toMessage(viewModel.event?.content)
-            // Glide.with(this).load(message.).into(imageView)
+            mMediasHelper?.managePendingImageVideoDownload(imageView, null, progressBar, viewModel.event, message, -1)
         } else {
             Glide.with(this).load(if (viewModel.fileLocation == null) viewModel.mediaMessageArray?.get(0)?.uri else viewModel.fileLocation).into(imageView)
         }
@@ -146,6 +153,15 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
                 sendPatientBackToPreviousActivity()
             }
         }
+    }
+
+    fun initMediaAdapterHelper(){
+        val screenWidth = Resources.getSystem().displayMetrics.widthPixels
+        val screenHeight = Resources.getSystem().displayMetrics.heightPixels
+
+        // helpers
+        mMediasHelper = VectorMessagesAdapterMediasHelper(context,
+                mSession, (screenWidth * 0.3f).toInt(), (screenHeight * 0.3f).toInt(), -1, -1)
     }
 
     private fun subscribeUI() {
