@@ -1633,4 +1633,5 @@ Why choose Riot.im?
     <string name="adapter_patient_image_description"><b>Description:</b> %1$s</string>
     <string name="tag">Patient Tag</string>
     <string name="update">Update</string>
+    <string name="taken">Taken</string>
 </resources>
