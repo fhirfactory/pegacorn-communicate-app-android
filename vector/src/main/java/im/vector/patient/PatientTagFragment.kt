@@ -107,6 +107,7 @@ class PatientTagFragment : BaseCommunicateHomeFragment(), PatientClickListener {
             val message = JsonUtils.toMessage(viewModel.event?.content)
             mMediasHelper?.managePendingImageVideoDownload(imageView, null, progressBar, viewModel.event, message, -1)
         } else {
+            progressBar.visibility = GONE
             Glide.with(this).load(if (viewModel.fileLocation == null) viewModel.mediaMessageArray?.get(0)?.uri else viewModel.fileLocation).into(imageView)
         }
         patientsRecyclerView.setHasFixedSize(true)
