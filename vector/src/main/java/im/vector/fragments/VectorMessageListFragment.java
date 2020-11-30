@@ -135,7 +135,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
     private EncryptedFileInfo mPendingEncryptedFileInfo;
 
     private static final int VERIF_REQ_CODE = 12;
-    private static final int MEDIA_PREVIEW_REQ_CODE = 13;
+    protected static final int MEDIA_PREVIEW_REQ_CODE = 13;
     private static final int PATIENT_TAG_UPDATE_REQUEST_CODE = 14;
 
     public interface VectorMessageListFragmentListener {
