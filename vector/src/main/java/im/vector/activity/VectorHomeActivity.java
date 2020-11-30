@@ -124,7 +124,6 @@ import im.vector.adapters.model.UserRole;
 import im.vector.chat.CHAT_TYPE;
 import im.vector.chat.ChatCreateActivity;
 import im.vector.directory.DirectoryFragment;
-import im.vector.directory.role.DirectoryRoleFragment;
 import im.vector.extensions.ViewExtensionsKt;
 import im.vector.features.logout.ProposeLogout;
 import im.vector.fragments.AbsHomeFragment;
@@ -132,6 +131,7 @@ import im.vector.fragments.GroupsFragment;
 import im.vector.fragments.RoomsFragment;
 import im.vector.fragments.signout.SignOutBottomSheetDialogFragment;
 import im.vector.fragments.signout.SignOutViewModel;
+import im.vector.gallery.GalleryFragment;
 import im.vector.home.CommunicateHomeFragment;
 import im.vector.invite.InviteActivity;
 import im.vector.push.PushManager;
@@ -196,7 +196,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     public static final String BROADCAST_ACTION_STOP_WAITING_VIEW = "im.vector.activity.ACTION_STOP_WAITING_VIEW";
 
     private static final String TAG_FRAGMENT_HOME = "TAG_FRAGMENT_HOME";
-    private static final String TAG_FRAGMENT_ROLES = "TAG_FRAGMENT_ROLES";
+    private static final String TAG_FRAGMENT_FAVOURITES = "TAG_FRAGMENT_FAVOURITES";
     private static final String TAG_FRAGMENT_PEOPLE = "TAG_FRAGMENT_PEOPLE";
     private static final String TAG_FRAGMENT_ROOMS = "TAG_FRAGMENT_ROOMS";
     private static final String TAG_FRAGMENT_GROUPS = "TAG_FRAGMENT_GROUPS";
@@ -976,6 +976,16 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_HOME;
                 setActionBarTitle(R.string.riot_app_name);
+                setQueryHint(R.string.home_filter_placeholder_home, R.string.search_chats);
+                break;
+            case R.id.bottom_action_favourites:
+                Log.d(LOG_TAG, "onNavigationItemSelected FAVOURITES");
+                fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_FAVOURITES);
+                if (fragment == null) {
+                    fragment = new GalleryFragment();
+                }
+                mCurrentFragmentTag = TAG_FRAGMENT_FAVOURITES;
+                setQueryHint(R.string.home_filter_placeholder_favorites, R.string.search_chats);
                 break;
             case R.id.bottom_action_people:
                 Log.d(LOG_TAG, "onNavigationItemSelected PEOPLE");
@@ -1003,7 +1013,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_GROUPS;
                 break;
-            case R.id.bottom_action_favourites:
+            /*case R.id.bottom_action_favourites:
                 Log.d(LOG_TAG, "onNavigationItemSelected ROLE");
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_ROLES);
                 if (fragment == null) {
@@ -1014,7 +1024,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 if (null != getSupportActionBar()) {
                     getSupportActionBar().setTitle(getString(R.string.roles_title));
                 }
-                break;
+                break;*/
         }
 
         if (mShowFloatingActionButtonRunnable != null && mFloatingActionsMenu != null) {
@@ -1314,7 +1324,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_HOME);
                 break;
             case R.id.bottom_action_favourites:
-                fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_ROLES);
+                fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_FAVOURITES);
                 break;
             case R.id.bottom_action_people:
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_PEOPLE);

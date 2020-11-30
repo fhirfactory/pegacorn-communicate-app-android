@@ -127,6 +127,7 @@
     <bool name="show_admin_badge_member_detail">true</bool>
 
     <bool name="show_message_view_source">true</bool>
+    <bool name="show_message_copy">true</bool>
     <bool name="show_message_view_decrypted">true</bool>
     <bool name="show_message_view_session">true</bool>
     <bool name="show_message_report_content">true</bool>
