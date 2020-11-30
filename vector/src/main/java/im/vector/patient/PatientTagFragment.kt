@@ -2,6 +2,7 @@ package im.vector.patient
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -17,18 +18,21 @@ import com.bumptech.glide.Glide
 import im.vector.R
 import im.vector.activity.SimpleFragmentActivity
 import im.vector.activity.SimpleFragmentActivityListener
-import im.vector.home.BaseActFragment
+import im.vector.adapters.VectorMessagesAdapterMediasHelper
 import im.vector.directory.role.DropDownAdapter
 import im.vector.directory.role.model.DropDownItem
+import im.vector.home.BaseActFragment
 import im.vector.patient.PatientTagActivity.Companion.FILE_LOCATION_EXTRA
-import im.vector.patient.PatientTagActivity.Companion.ROOM_MEDIA_MESSAGE_EXTRA
-import kotlinx.android.synthetic.main.drop_down_item.view.*
+import im.vector.patient.PatientTagActivity.Companion.ROOM_EVENT_EXTRA
+import im.vector.patient.PatientTagActivity.Companion.ROOM_MEDIA_MESSAGE_ARRAY_EXTRA
 import kotlinx.android.synthetic.main.fragment_patient_tag.*
 import kotlinx.android.synthetic.main.item_patient.*
 import kotlinx.android.synthetic.main.layout_designation.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.matrix.androidsdk.core.JsonUtils
+import org.matrix.androidsdk.rest.model.Event
 
 
 class PatientTagFragment : BaseActFragment(), PatientClickListener {
@@ -37,6 +41,8 @@ class PatientTagFragment : BaseActFragment(), PatientClickListener {
     private var simpleFragmentActivityListener: SimpleFragmentActivityListener? = null
     private lateinit var patientAdapter: PatientAdapter
     private lateinit var designationAdapter: DropDownAdapter
+    private var mMediasHelper: VectorMessagesAdapterMediasHelper? = null
+
 
     override fun getLayoutResId(): Int = R.layout.fragment_patient_tag
 
@@ -64,6 +70,7 @@ class PatientTagFragment : BaseActFragment(), PatientClickListener {
         if (activity is SimpleFragmentActivity) {
             simpleFragmentActivityListener = activity as SimpleFragmentActivity?
         }
+        initMediaAdapterHelper()
 
         viewModel = ViewModelProviders.of(this).get(PatientTagViewModel::class.java)
         viewModel.initSession(mSession)
@@ -72,12 +79,12 @@ class PatientTagFragment : BaseActFragment(), PatientClickListener {
         designationAdapter = DropDownAdapter(requireContext(), R.layout.drop_down_item)
         designationEditText.threshold = 1
         designationEditText.setAdapter(designationAdapter)
-        designationEditText.addTextChangedListener(object :TextWatcher{
+        designationEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                saveButton.isEnabled = (viewModel.selectedPatient.value!=null && p0.toString().isNotEmpty()) || true
+                saveButton.isEnabled = (viewModel.selectedPatient.value != null && p0.toString().isNotEmpty()) || true
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -86,19 +93,26 @@ class PatientTagFragment : BaseActFragment(), PatientClickListener {
         designationEditText.onItemClickListener = AdapterView.OnItemClickListener { _, _, pos, _ ->
             //locationEditText.setText((locationAdapter.getItem(pos) as Location).name, false)
             viewModel.selectedDesignation = designationAdapter.getItem(pos) as DropDownItem
-            saveButton.isEnabled = (viewModel.selectedPatient.value!=null && designationEditText.text.toString().isNotEmpty()) || true
+            saveButton.isEnabled = (viewModel.selectedPatient.value != null && designationEditText.text.toString().isNotEmpty()) || true
         }
 
         viewModel.fileLocation = arguments?.getString(FILE_LOCATION_EXTRA)
-        viewModel.mediaMessageArray = arguments?.getParcelableArrayList(ROOM_MEDIA_MESSAGE_EXTRA)
-        Glide.with(this).load(if (viewModel.fileLocation == null) viewModel.mediaMessageArray?.get(0)?.uri else viewModel.fileLocation).into(imageView)
-
+        viewModel.mediaMessageArray = arguments?.getParcelableArrayList(ROOM_MEDIA_MESSAGE_ARRAY_EXTRA)
+        viewModel.event = arguments?.getSerializable(ROOM_EVENT_EXTRA) as Event?
+        if (viewModel.event != null) {
+            saveButton.text = getText(R.string.update)
+            val message = JsonUtils.toMessage(viewModel.event?.content)
+            mMediasHelper?.managePendingImageVideoDownload(imageView, null, progressBar, viewModel.event, message, -1)
+        } else {
+            progressBar.visibility = GONE
+            Glide.with(this).load(if (viewModel.fileLocation == null) viewModel.mediaMessageArray?.get(0)?.uri else viewModel.fileLocation).into(imageView)
+        }
         patientsRecyclerView.setHasFixedSize(true)
         patientAdapter = PatientAdapter(this)
         patientsRecyclerView.adapter = patientAdapter
 
         subscribeUI()
-        viewModel.getPatientData()
+        viewModel.prepareFakePatientData()
         viewModel.getDesignations()
 
         cross.setOnClickListener {
@@ -114,17 +128,22 @@ class PatientTagFragment : BaseActFragment(), PatientClickListener {
                         lifecycle
                 ) { newText ->
                     newText?.let {
-                        viewModel.filterPatient(it)
+                        if (it.isEmpty()) {
+                            //so that nothing comes up, possibly temporary
+                            viewModel.filterPatient("###########")
+                        } else if (it.length > 2) {
+                            viewModel.filterPatient(it)
+                        }
                     }
                 })
         saveButton.setOnClickListener {
             if (viewModel.selectedPatient.value == null) {
                 AlertDialog.Builder(requireContext())
                         .setTitle(R.string.dialog_title_confirmation)
-                        .setMessage(getString(R.string.start_new_chat_prompt_msg))
+                        .setMessage(getString(R.string.patient_tag_warning))
                         .setPositiveButton(R.string.ok) { _, _ ->
                             finishActivity(Intent().apply {
-                                putExtra(ROOM_MEDIA_MESSAGE_EXTRA, viewModel.mediaMessageArray)
+                                putExtra(ROOM_MEDIA_MESSAGE_ARRAY_EXTRA, viewModel.mediaMessageArray)
                             })
                         }
                         .setNegativeButton(R.string.cancel, null)
@@ -133,6 +152,15 @@ class PatientTagFragment : BaseActFragment(), PatientClickListener {
                 sendPatientBackToPreviousActivity()
             }
         }
+    }
+
+    fun initMediaAdapterHelper() {
+        val screenWidth = Resources.getSystem().displayMetrics.widthPixels
+        val screenHeight = Resources.getSystem().displayMetrics.heightPixels
+
+        // helpers
+        mMediasHelper = VectorMessagesAdapterMediasHelper(context,
+                mSession, (screenWidth * 0.3f).toInt(), (screenHeight * 0.3f).toInt(), -1, -1)
     }
 
     private fun subscribeUI() {
@@ -155,6 +183,7 @@ class PatientTagFragment : BaseActFragment(), PatientClickListener {
                 viewModel.selectedDesignation = null
             } else {
                 // selectedPatient.setBackgroundColor(Color.LTGRAY)
+                simpleFragmentActivityListener?.hideKeyboard()
                 saveButton.isEnabled = false
                 searchInputLayout.visibility = GONE
                 patientsRecyclerView.visibility = GONE
@@ -172,7 +201,7 @@ class PatientTagFragment : BaseActFragment(), PatientClickListener {
         viewModel.selectedPatient.value?.let {
             finishActivity(Intent().apply {
                 putExtra(PATIENT_EXTRA, viewModel.selectedPatient.value)
-                putExtra(ROOM_MEDIA_MESSAGE_EXTRA, viewModel.mediaMessageArray)
+                putExtra(ROOM_MEDIA_MESSAGE_ARRAY_EXTRA, viewModel.mediaMessageArray)
             })
         }
     }

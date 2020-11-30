@@ -92,6 +92,7 @@ import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.listeners.IMessagesAdapterActionsListener;
+import im.vector.patient.PatientTagActivity;
 import im.vector.receiver.VectorUniversalLinkReceiver;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.EventGroup;
@@ -105,6 +106,7 @@ import im.vector.widgets.WidgetsManager;
 
 import static android.app.Activity.RESULT_OK;
 import static im.vector.activity.VectorMediaViewerActivity.SELECTED_EVENT;
+import static im.vector.activity.VectorMediaViewerActivity.SELECTED_EVENT_TO_TAG;
 import static im.vector.activity.VectorMediaViewerActivity.SELECTED_ROOM_TO_FORWARD;
 import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_CANONICAL_ALIAS;
 import static org.matrix.androidsdk.rest.model.Event.EVENT_TYPE_STATE_HISTORY_VISIBILITY;
@@ -132,8 +134,9 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
     private String mPendingFilename;
     private EncryptedFileInfo mPendingEncryptedFileInfo;
 
-    private static int VERIF_REQ_CODE = 12;
-    private static int MEDIA_PREVIEW_REQ_CODE = 13;
+    private static final int VERIF_REQ_CODE = 12;
+    protected static final int MEDIA_PREVIEW_REQ_CODE = 13;
+    private static final int PATIENT_TAG_UPDATE_REQUEST_CODE = 14;
 
     public interface VectorMessageListFragmentListener {
         /**
@@ -252,19 +255,28 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == VERIF_REQ_CODE) {
-            if (mAdapter != null)
-                mAdapter.notifyDataSetChanged();
-            return;
-        } else if(requestCode == MEDIA_PREVIEW_REQ_CODE && resultCode == RESULT_OK){
-            if(data!=null){
-                Event event = (Event) data.getSerializableExtra(SELECTED_EVENT);
-                RoomSummary roomSummary = (RoomSummary) data.getSerializableExtra(SELECTED_ROOM_TO_FORWARD);
-                if(event!=null && roomSummary!=null) {
-                    onEventAction(event, null, R.id.ic_action_vector_forward, roomSummary);
-                }else if(event!=null){
-                    deleteAnEvent(event);
-                }
+        if(resultCode == RESULT_OK){
+            switch (requestCode){
+                case VERIF_REQ_CODE:
+                    if (mAdapter != null)
+                        mAdapter.notifyDataSetChanged();
+                    return;
+                case MEDIA_PREVIEW_REQ_CODE:
+                    if(data!=null){
+                        Event event = (Event) data.getSerializableExtra(SELECTED_EVENT);
+                        RoomSummary roomSummary = (RoomSummary) data.getSerializableExtra(SELECTED_ROOM_TO_FORWARD);
+                        boolean forTag = data.getBooleanExtra(SELECTED_EVENT_TO_TAG, false);
+                        if(event!=null && roomSummary!=null) {
+                            onEventAction(event, null, R.id.ic_action_vector_forward, roomSummary);
+                        }else if(event!=null && forTag){
+                            startActivityForResult(PatientTagActivity.Companion.intent(requireActivity(), event), PATIENT_TAG_UPDATE_REQUEST_CODE);
+                        }else if(event!=null){
+                            deleteAnEvent(event);
+                        }
+                    }
+                    break;
+                case PATIENT_TAG_UPDATE_REQUEST_CODE:
+                    break;
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -624,7 +636,9 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
      * @param action  an action ic_action_vector_XXX
      */
     public void onEventAction(final Event event, final String textMsg, final int action, RoomSummary roomsummary) {
-        if (action == R.id.ic_action_vector_resend_message) {
+        if (action == R.id.ic_action_tag) {
+            startActivityForResult(PatientTagActivity.Companion.intent(requireActivity(), event), PATIENT_TAG_UPDATE_REQUEST_CODE);
+        } else if (action == R.id.ic_action_vector_resend_message) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

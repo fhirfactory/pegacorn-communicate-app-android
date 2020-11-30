@@ -5,12 +5,14 @@ import androidx.lifecycle.ViewModel
 import im.vector.directory.role.model.DropDownItem
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.data.RoomMediaMessage
+import org.matrix.androidsdk.rest.model.Event
 
 class PatientTagViewModel : ViewModel() {
     var session: MXSession? = null
     var fileLocation: String? = null
     var selectedDesignation :DropDownItem? = null
     var mediaMessageArray: ArrayList<RoomMediaMessage>? = null
+    var event: Event? = null
     val patients = MutableLiveData<MutableList<DemoPatient>>()
     val designations = MutableLiveData<MutableList<DropDownItem>>()
     val selectedPatient = MutableLiveData<DemoPatient?>()
@@ -43,13 +45,12 @@ class PatientTagViewModel : ViewModel() {
         designations.postValue(designationList)
     }
 
-    fun getPatientData() {
+    fun prepareFakePatientData() {
         fakePatients.add(DemoPatient("James Bond", "12345678", "01-Jan-1900"))
         fakePatients.add(DemoPatient("Rafi Sadat", "12345678", "01-Jan-1900"))
         fakePatients.add(DemoPatient("Mark Hunter", "12345678", "01-Jan-1900"))
         fakePatients.add(DemoPatient("Emma Mcdonald", "12345678", "01-Jan-1900"))
         fakePatients.add(DemoPatient("Craig Mcdonald", "12345678", "01-Jan-1900"))
         fakePatients.add(DemoPatient("Lance Christie", "12345678", "01-Jan-1900"))
-        patients.postValue(fakePatients)
     }
 }

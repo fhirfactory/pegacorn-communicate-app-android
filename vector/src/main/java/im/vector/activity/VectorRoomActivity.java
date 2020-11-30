@@ -143,7 +143,7 @@ import im.vector.widgets.WidgetsManager;
 import im.vector.widgets.model.JitsiWidgetProperties;
 import kotlin.Unit;
 
-import static im.vector.patient.PatientTagActivity.ROOM_MEDIA_MESSAGE_EXTRA;
+import static im.vector.patient.PatientTagActivity.ROOM_MEDIA_MESSAGE_ARRAY_EXTRA;
 import static im.vector.patient.PatientTagFragment.PATIENT_EXTRA;
 
 /**
@@ -2061,8 +2061,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     Toast.makeText(this,"No Patient Tagged", Toast.LENGTH_LONG).show();
                 }
 
-                if (bundle.containsKey(ROOM_MEDIA_MESSAGE_EXTRA)) {
-                    ArrayList<RoomMediaMessage> sharedDataItems = bundle.getParcelableArrayList(ROOM_MEDIA_MESSAGE_EXTRA);
+                if (bundle.containsKey(ROOM_MEDIA_MESSAGE_ARRAY_EXTRA)) {
+                    ArrayList<RoomMediaMessage> sharedDataItems = bundle.getParcelableArrayList(ROOM_MEDIA_MESSAGE_ARRAY_EXTRA);
                     sendMediaMessages(intent, sharedDataItems==null? new ArrayList<>() : sharedDataItems);
                 }
             }

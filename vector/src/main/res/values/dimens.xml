@@ -30,4 +30,5 @@
 
     <dimen name="heading_padding">4dp</dimen>
     <dimen name="min_button_width">140dp</dimen>
+    <dimen name="patient_tag_image_height">100dp</dimen>
 </resources>

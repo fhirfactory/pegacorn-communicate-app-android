@@ -1134,7 +1134,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
         // Set color of toolbar search view
         if (getResources().getBoolean(R.bool.enable_riot_search_view)) {
-            EditText edit = mSearchView.findViewById(com.google.android.material.R.id.search_src_text);
+            EditText edit = mSearchView.findViewById(R.id.search_src_text);
             edit.setTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_toolbar_primary_text_color));
             edit.setHintTextColor(ThemeUtils.INSTANCE.getColor(this, R.attr.vctr_primary_hint_text_color));
         }

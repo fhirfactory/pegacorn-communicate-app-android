@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -412,7 +413,17 @@ public class VectorMediaViewerAdapter extends PagerAdapter {
         final PhotoView imageView = view.findViewById(R.id.media_slider_image_view);
         final View videoLayout = view.findViewById(R.id.media_slider_video_layout);
         final ImageView thumbView = view.findViewById(R.id.media_slider_video_thumbnail);
-
+        final ImageView expandButton = view.findViewById(R.id.expandButton);
+        final LinearLayout tagInfoLayout = view.findViewById(R.id.tagInfoLayout);
+        expandButton.setOnClickListener(view1 -> {
+            if(tagInfoLayout.getVisibility()==View.VISIBLE){
+                expandButton.setRotation(180);
+                tagInfoLayout.setVisibility(View.GONE);
+            } else {
+                expandButton.setRotation(0);
+                tagInfoLayout.setVisibility(View.VISIBLE);
+            }
+        });
         final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(position);
         String mediaUrl = mediaInfo.mMediaUrl;
 
