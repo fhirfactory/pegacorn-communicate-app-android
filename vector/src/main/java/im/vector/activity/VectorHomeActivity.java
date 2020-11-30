@@ -128,6 +128,7 @@ import im.vector.fragments.PeopleFragment;
 import im.vector.fragments.RoomsFragment;
 import im.vector.fragments.signout.SignOutBottomSheetDialogFragment;
 import im.vector.fragments.signout.SignOutViewModel;
+import im.vector.gallery.GalleryFragment;
 import im.vector.home.CommunicateHomeFragment;
 import im.vector.invite.InviteActivity;
 import im.vector.push.PushManager;
@@ -977,7 +978,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 Log.d(LOG_TAG, "onNavigationItemSelected FAVOURITES");
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_FAVOURITES);
                 if (fragment == null) {
-                    fragment = FavouritesFragment.newInstance();
+                    fragment = new GalleryFragment();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_FAVOURITES;
                 setQueryHint(R.string.home_filter_placeholder_favorites, R.string.search_chats);
