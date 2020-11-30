@@ -115,14 +115,4 @@ public class VectorSearchRoomsFilesListFragment extends VectorSearchMessagesList
 
         return view;
     }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == RESULT_OK){
-            switch (requestCode){
-
-            }
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
 }
