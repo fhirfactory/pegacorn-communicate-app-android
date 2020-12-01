@@ -2,52 +2,77 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:paddingLeft="4dp"
+    android:paddingRight="4dp"
     android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
+        android:layout_width="84dp"
+        android:layout_height="84dp"
         android:src="@drawable/ic_collections"
+        android:tint="@color/vector_dark_grey_color"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <TextView
+        android:id="@+id/tagPresence"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:drawableStart="@drawable/ic_info"
+        android:text="@string/tag_presence"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
     <TextView
         android:id="@+id/fileSize"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="3.3 MB"/>
+        android:text="3.3 MB"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/time" />
 
     <TextView
         android:id="@+id/time"
-        android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintEnd_toStartOf="@+id/fileSize"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="0dp"
-        android:textStyle="bold"
         android:layout_height="wrap_content"
-        android:text="2020-12-22 09:12:22"/>
+        android:layout_marginLeft="4dp"
+        android:text="2020-12-22 09:12:22"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/name"
+        app:layout_constraintEnd_toStartOf="@+id/fileSize"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/tagPresence" />
 
     <TextView
         android:id="@+id/name"
-        android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintEnd_toStartOf="@+id/anotherTime"
-        app:layout_constraintTop_toBottomOf="@+id/time"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Lance Christie"/>
+        android:layout_marginLeft="4dp"
+        android:text="Lance Christie"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/anotherTime"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/time" />
 
     <TextView
         android:id="@+id/anotherTime"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fileSize"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dec 22, 09:23"/>
+        android:text="Dec 22, 09:23"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fileSize" />
 </androidx.constraintlayout.widget.ConstraintLayout>
