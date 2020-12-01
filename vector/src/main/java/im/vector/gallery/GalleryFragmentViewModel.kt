@@ -14,6 +14,9 @@ class GalleryFragmentViewModel : ViewModel() {
         items.add(DummyGalleryItem(4, "something"))
         items.add(DummyGalleryItem(5, "something"))
         items.add(DummyGalleryItem(6, "something"))
+        items.add(DummyGalleryItem(7, "something"))
+        items.add(DummyGalleryItem(8, "something"))
+        items.add(DummyGalleryItem(9, "something"))
         galleryItems.postValue(items)
     }
 }
