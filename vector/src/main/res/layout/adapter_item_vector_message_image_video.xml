@@ -74,12 +74,13 @@
             </RelativeLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@color/act_gradient_color_alpha"
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
@@ -111,6 +112,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_marginStart="4dp"
                                 android:layout_marginLeft="4dp"
+                                android:layout_marginTop="4dp"
                                 android:adjustViewBounds="true"
                                 android:scaleType="center" />
 
@@ -147,6 +149,8 @@
                     android:id="@+id/message_adapter_patient_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginLeft="4dp"
                     android:layout_marginTop="10dp"
                     android:orientation="vertical"
                     android:visibility="gone"
@@ -154,17 +158,25 @@
 
                     <TextView
                         android:id="@+id/message_adapter_patient_description"
-                        android:textSize="14sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_person"
+                        android:textSize="14sp"
+                        tools:text="description" />
+
+                    <TextView
+                        android:id="@+id/message_adapter_patient_dob"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
                         tools:text="description" />
 
                     <TextView
                         android:id="@+id/message_adapter_media_description"
                         android:layout_width="wrap_content"
-                        android:textSize="14sp"
-                        android:layout_marginTop="2dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:textSize="14sp"
                         tools:text="description" />
                 </LinearLayout>
 
@@ -175,7 +187,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:orientation="vertical"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     tools:visibility="visible">
 
                     <ImageView
