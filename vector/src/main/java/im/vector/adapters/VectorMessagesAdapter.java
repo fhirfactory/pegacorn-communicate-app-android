@@ -1431,8 +1431,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 TextView patientInfo = convertView.findViewById(R.id.message_adapter_patient_description);
                 TextView imageDescription = convertView.findViewById(R.id.message_adapter_media_description);
                 TextView dob = convertView.findViewById(R.id.message_adapter_patient_dob);
-                patientInfo.setText(RoomUtils.getBoldSpannableStringBuilder(mContext.getString(R.string.adapter_patient_info,  "Sadat","Rafi", "123456789"), new ArrayList(Arrays.asList("Sadat"))));
-                dob.setText(RoomUtils.getBoldSpannableStringBuilder(mContext.getString(R.string.adapter_patient_dob,  "01 Jan, 1980"), new ArrayList(Arrays.asList("Dob"))));
+                patientInfo.setText(RoomUtils.getBoldSpannableStringBuilder(mContext.getString(R.string.adapter_patient_info,  "Sadat","Rafi", "123456789"), new ArrayList(Arrays.asList("Sadat", "123456789"))));
+                dob.setText("01/09/1979");
                 imageDescription.setText("This will be a short description");
             } else {
                 tagLayout.setVisibility(View.GONE);
