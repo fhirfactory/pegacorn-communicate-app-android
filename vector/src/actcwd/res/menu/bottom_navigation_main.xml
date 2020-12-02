@@ -26,7 +26,7 @@
         android:id="@+id/bottom_action_rooms"
         android:contentDescription="@string/bottom_action_rooms"
         android:enabled="true"
-        android:icon="@drawable/riot_tab_rooms"
+        android:icon="@drawable/ic_material_call_white"
         android:title="" />
 
     <item

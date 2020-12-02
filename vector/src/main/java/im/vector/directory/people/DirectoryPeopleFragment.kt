@@ -73,7 +73,7 @@ class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
 
     override fun onPeopleClick(directoryPeople: DirectoryPeople, forRemove: Boolean) {
         if (roomClickListener == null) {
-            startActivity(PeopleDetailActivity.intent(requireContext(), directoryPeople, true))
+            startActivity(PeopleDetailActivity.intent(requireContext(), directoryPeople, false))
         } else {
             roomClickListener?.onRoomClick(TemporaryRoom(directoryPeople, null), forRemove)
         }
