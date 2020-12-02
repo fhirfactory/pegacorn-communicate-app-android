@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import im.vector.R
+import im.vector.calls.dialer.DialerFragment
+import im.vector.calls.recent.RecentCallFragment
 import im.vector.directory.DirectoryFragment
 import im.vector.directory.people.DirectoryPeopleFragment
 import im.vector.directory.role.DirectoryRoleFragment
@@ -50,9 +52,9 @@ class CallsFragment : AbsHomeFragment() {
     class DemoCollectionPagerAdapter(fm: FragmentManager, val titles: Array<String>) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
         override fun getItem(position: Int): Fragment {
             return when (position) {
-                0 -> DirectoryRoleFragment()
+                0 -> RecentCallFragment()
                 1 -> DirectoryFragment()
-                else -> DirectoryRoleFragment()
+                else -> DialerFragment()
             }
         }
 

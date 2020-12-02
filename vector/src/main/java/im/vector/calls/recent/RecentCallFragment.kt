@@ -9,13 +9,14 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import im.vector.R
 import im.vector.fragments.AbsHomeFragment
 import im.vector.ui.themes.ThemeUtils
+import kotlinx.android.synthetic.main.fragment_recent_calls.*
 import org.matrix.androidsdk.data.Room
 
 class RecentCallFragment : AbsHomeFragment(), RecentCallItemClickListener {
 
     private lateinit var recentCallAdapter: RecentCallAdapter
     private lateinit var viewModel: RecentCallFragmentViewModel
-    override fun getLayoutResId() = R.layout.fragment_recent_call
+    override fun getLayoutResId() = R.layout.fragment_recent_calls
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
