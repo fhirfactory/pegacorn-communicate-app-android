@@ -4,27 +4,58 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="16dp"
-    android:paddingLeft="@dimen/layout_horizontal_margin"
-    android:paddingRight="@dimen/layout_horizontal_margin"
     android:background="?attr/selectableItemBackground">
+
+    <TextView
+        android:id="@+id/heading"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/heading_background"
+        android:paddingStart="@dimen/layout_horizontal_margin"
+        android:paddingLeft="@dimen/layout_horizontal_margin"
+        android:paddingTop="@dimen/heading_padding"
+        android:paddingRight="@dimen/layout_horizontal_margin"
+        android:paddingBottom="@dimen/heading_padding"
+        android:text="@string/roles_title"
+        android:textSize="@dimen/title_text_size"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <im.vector.view.VectorCircularImageView
         android:id="@+id/avatar"
         android:layout_width="44dp"
         android:layout_height="44dp"
+        android:layout_marginStart="@dimen/layout_horizontal_margin"
+        android:layout_marginLeft="@dimen/layout_horizontal_margin"
+        android:layout_marginTop="@dimen/layout_vertical_margin"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/heading"
         tools:src="@tools:sample/avatars" />
+
+    <ImageView
+        android:id="@+id/favoriteIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_material_star_black"
+        android:tint="?attr/vctr_list_icon_tint_color"
+        android:layout_marginRight="@dimen/layout_horizontal_margin_half"
+        app:layout_constraintRight_toLeftOf="@+id/expandableIcon"
+        app:layout_constraintTop_toTopOf="@+id/expandableIcon"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin_half" />
 
     <ImageView
         android:id="@+id/expandableIcon"
         android:layout_width="24dp"
         android:layout_height="24dp"
+        android:layout_marginTop="@dimen/layout_vertical_margin"
+        android:layout_marginRight="@dimen/layout_horizontal_margin"
         android:src="@drawable/ic_expand"
         android:tint="?attr/vctr_list_icon_tint_color"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/heading"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin" />
 
     <TextView
         android:id="@+id/officialName"
@@ -36,25 +67,34 @@
         android:maxLines="1"
         android:textSize="16sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/secondaryName"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toRightOf="@+id/avatar"
-        app:layout_constraintRight_toLeftOf="@+id/expandableIcon"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintRight_toLeftOf="@+id/favoriteIcon"
+        app:layout_constraintTop_toTopOf="@+id/avatar"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/secondaryName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="4dp"
         android:ellipsize="end"
         android:maxLines="1"
+        android:layout_marginRight="@dimen/layout_horizontal_margin"
         android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/avatar"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toRightOf="@+id/avatar"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/officialName" />
+        app:layout_constraintTop_toBottomOf="@+id/officialName"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin" />
 
     <TextView
+        android:layout_marginLeft="@dimen/layout_horizontal_margin"
+        android:layout_marginRight="@dimen/layout_horizontal_margin"
         android:id="@+id/description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -62,7 +102,8 @@
         android:textSize="22sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/avatar" />
+        app:layout_constraintTop_toBottomOf="@+id/avatar"
+        android:layout_marginStart="@dimen/layout_horizontal_margin" />
 
     <View
         android:id="@+id/line"
@@ -73,7 +114,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/description" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

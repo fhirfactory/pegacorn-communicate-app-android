@@ -4,6 +4,8 @@ import android.content.Context
 import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -14,6 +16,7 @@ import im.vector.directory.role.model.DummyRole
 import im.vector.ui.themes.ThemeUtils.getColor
 import im.vector.util.VectorUtils
 import im.vector.view.VectorCircularImageView
+import kotlinx.android.synthetic.main.item_directory_people.view.*
 import org.matrix.androidsdk.MXSession
 
 
@@ -51,10 +54,7 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: R
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: RoleViewHolder, position: Int) {
-        holder.bind(context, mSession, roles[position], spanTextBackgroundColor, spanTextColor, textSize, this, position)
-        holder.itemView.setOnClickListener {
-            onClickListener.onRoleClick(roles[position])
-        }
+        holder.bind(context, mSession, roles[position], spanTextBackgroundColor, spanTextColor, textSize, this, position, onClickListener)
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -79,25 +79,30 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var officialName: TextView? = null
     var secondaryName: TextView? = null
     var description: TextView? = null
+    var heading: TextView? = null
+    var favouriteButton: ImageView? = null
 
     init {
+        heading = itemView.findViewById(R.id.heading)
         avatar = itemView.findViewById(R.id.avatar)
         expandableIcon = itemView.findViewById(R.id.expandableIcon)
         officialName = itemView.findViewById(R.id.officialName)
         secondaryName = itemView.findViewById(R.id.secondaryName)
         description = itemView.findViewById(R.id.description)
+        favouriteButton = itemView.favoriteIcon
     }
 
-    fun bind(context: Context, session: MXSession?, role: DummyRole, spanTextBackgroundColor: Int, spanTextColor: Int, textSize: Float, onDataSetChange: OnDataSetChange, position: Int) {
+    fun bind(context: Context, session: MXSession?, role: DummyRole, spanTextBackgroundColor: Int, spanTextColor: Int, textSize: Float, onDataSetChange: OnDataSetChange, position: Int, onClickListener: RoleClickListener?, showHeader: Boolean = false) {
         VectorUtils.loadRoomAvatar(context, session, avatar, role)
+        heading?.visibility = if (showHeader) VISIBLE else GONE
         officialName?.text = role.officialName
         secondaryName?.text = role.secondaryName
         if (role.expanded) {
             expandableIcon?.animate()?.setDuration(200)?.rotation(180F)
-            description?.visibility = View.VISIBLE
+            description?.visibility = VISIBLE
         } else {
             expandableIcon?.animate()?.setDuration(200)?.rotation(0F)
-            description?.visibility = View.GONE
+            description?.visibility = GONE
         }
         val stringBuilder = SpannableStringBuilder()
         for (rl in role.roles) {
@@ -113,6 +118,9 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         expandableIcon?.setOnClickListener {
             role.expanded = !role.expanded
             onDataSetChange.onDataChange(position)
+        }
+        itemView.setOnClickListener {
+            onClickListener?.onRoleClick(role)
         }
     }
 }

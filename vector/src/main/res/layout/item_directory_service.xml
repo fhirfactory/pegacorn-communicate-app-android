@@ -18,24 +18,13 @@
         android:layout_marginStart="@dimen/layout_horizontal_margin" />
 
     <ImageView
-        android:layout_marginRight="@dimen/layout_horizontal_margin"
-        android:id="@+id/expandableIcon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@drawable/ic_expand"
-        android:tint="?attr/vctr_list_icon_tint_color"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginEnd="@dimen/layout_horizontal_margin" />
-
-    <ImageView
         android:id="@+id/favoriteIcon"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:src="@drawable/ic_material_star_black"
         android:tint="?attr/vctr_list_icon_tint_color"
         android:layout_marginRight="@dimen/layout_horizontal_margin_half"
-        app:layout_constraintRight_toLeftOf="@+id/expandableIcon"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginEnd="@dimen/layout_horizontal_margin_half" />
 
@@ -54,7 +43,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/jobTitle"
+        android:id="@+id/contactDetail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -69,18 +58,6 @@
         app:layout_constraintTop_toBottomOf="@+id/officialName"
         android:layout_marginEnd="@dimen/layout_horizontal_margin" />
 
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="@dimen/layout_horizontal_margin"
-        android:layout_marginRight="@dimen/layout_horizontal_margin"
-        android:textSize="22sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/jobTitle" />
-
     <View
         android:id="@+id/line"
         android:layout_width="0dp"
@@ -89,5 +66,5 @@
         android:background="?vctr_list_divider_color"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/description" />
+        app:layout_constraintTop_toBottomOf="@+id/contactDetail" />
 </androidx.constraintlayout.widget.ConstraintLayout>
