@@ -25,9 +25,13 @@ import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.Icon;
 import android.os.Build;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.StyleSpan;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -864,5 +868,17 @@ public class RoomUtils {
         } else {
             return null;
         }
+    }
+
+    public static SpannableStringBuilder getBoldSpannableStringBuilder(String str, List<String> strings){
+        SpannableStringBuilder builder = new SpannableStringBuilder(str);
+        for (String s: strings){
+            int index = str.indexOf(s);
+            while (index>=0){
+                builder.setSpan(new StyleSpan(Typeface.BOLD), index, index+s.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                index = str.indexOf(s, index + 1);
+            }
+        }
+        return builder;
     }
 }

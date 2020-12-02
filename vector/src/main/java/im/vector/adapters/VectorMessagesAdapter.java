@@ -86,6 +86,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -110,6 +111,7 @@ import im.vector.util.MatrixLinkMovementMethod;
 import im.vector.util.MatrixURLSpan;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RiotEventDisplay;
+import im.vector.util.RoomUtils;
 import im.vector.util.VectorImageGetter;
 import im.vector.util.VectorLinkifyKt;
 import im.vector.widgets.WidgetsManager;
@@ -1428,8 +1430,10 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 tagLayout.setVisibility(View.VISIBLE);
                 TextView patientInfo = convertView.findViewById(R.id.message_adapter_patient_description);
                 TextView imageDescription = convertView.findViewById(R.id.message_adapter_media_description);
-                patientInfo.setText(Html.fromHtml(mContext.getString(R.string.adapter_patient_info, "Rafi Sadat", "123456789")));
-                imageDescription.setText(Html.fromHtml(mContext.getString(R.string.adapter_patient_image_description, "This will be a short description")));
+                TextView dob = convertView.findViewById(R.id.message_adapter_patient_dob);
+                patientInfo.setText(RoomUtils.getBoldSpannableStringBuilder(mContext.getString(R.string.adapter_patient_info,  "Sadat","Rafi", "123456789"), new ArrayList(Arrays.asList("Sadat", "123456789"))));
+                dob.setText("01/09/1979");
+                imageDescription.setText("This will be a short description");
             } else {
                 tagLayout.setVisibility(View.GONE);
             }
