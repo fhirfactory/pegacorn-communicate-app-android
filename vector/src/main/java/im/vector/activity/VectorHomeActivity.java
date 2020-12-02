@@ -119,6 +119,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.RolesInNavigationBarAdapter;
 import im.vector.adapters.model.UserRole;
+import im.vector.calls.CallsFragment;
 import im.vector.extensions.ViewExtensionsKt;
 import im.vector.features.logout.ProposeLogout;
 import im.vector.fragments.AbsHomeFragment;
@@ -995,7 +996,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 Log.d(LOG_TAG, "onNavigationItemSelected ROOMS");
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_ROOMS);
                 if (fragment == null) {
-                    fragment = RoomsFragment.newInstance();
+                    fragment = new CallsFragment();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_ROOMS;
                 setQueryHint(R.string.home_filter_placeholder_rooms, R.string.search_chats);
