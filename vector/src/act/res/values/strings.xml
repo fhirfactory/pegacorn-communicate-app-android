@@ -1592,7 +1592,6 @@ Why choose Riot.im?
 
     <string-array name="call_tabs">
         <item>Recent</item>
-        <item>Directory</item>
         <item>Dialer</item>
     </string-array>
 

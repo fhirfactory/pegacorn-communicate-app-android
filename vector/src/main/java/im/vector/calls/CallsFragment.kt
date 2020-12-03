@@ -53,7 +53,7 @@ class CallsFragment : AbsHomeFragment() {
         override fun getItem(position: Int): Fragment {
             return when (position) {
                 0 -> RecentCallFragment()
-                1 -> DirectoryFragment()
+                1 -> DialerFragment()
                 else -> DialerFragment()
             }
         }

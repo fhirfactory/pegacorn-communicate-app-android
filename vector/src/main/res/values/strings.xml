@@ -995,6 +995,9 @@
     <string name="directory_title">Directory</string>
     <string name="settings_theme">Theme</string>
 
+    <!--Calls-->
+    <string name="calls_title">Calls</string>
+
     <!-- matrix error -->
     <string name="failed_to_load_timeline_position">%s was trying to load a specific point in this room’s timeline but was unable to find it.</string>
 

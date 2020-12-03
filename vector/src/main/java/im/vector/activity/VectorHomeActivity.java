@@ -992,6 +992,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = new CallsFragment();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_ROOMS;
+                mSearchView.setVisibility(View.GONE);
+                setActionBarTitle(R.string.calls_title);
                 break;
             case R.id.bottom_action_groups:
                 Log.d(LOG_TAG, "onNavigationItemSelected GROUPS");
