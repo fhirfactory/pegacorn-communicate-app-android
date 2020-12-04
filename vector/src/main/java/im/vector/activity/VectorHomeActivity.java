@@ -578,7 +578,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
      * Display the Floating Action Menu if it is required
      */
     private void showFloatingActionMenuIfRequired() {
-        if ((mCurrentMenuId == R.id.bottom_action_favourites) || (mCurrentMenuId == R.id.bottom_action_groups)) {
+        if ((mCurrentMenuId == R.id.bottom_action_favourites) || (mCurrentMenuId == R.id.bottom_action_groups) || (mCurrentMenuId == R.id.bottom_action_rooms)) {
             concealFloatingActionMenu();
         } else {
             revealFloatingActionMenu();
@@ -1005,6 +1005,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     fragment = new CallsFragment();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_ROOMS;
+                mSearchView.setVisibility(View.GONE);
+                setActionBarTitle(R.string.calls_title);
                 break;
             case R.id.bottom_action_groups:
                 Log.d(LOG_TAG, "onNavigationItemSelected GROUPS");

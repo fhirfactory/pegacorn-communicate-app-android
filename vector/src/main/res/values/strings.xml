@@ -996,6 +996,9 @@
     <string name="directory_title">Directory</string>
     <string name="settings_theme">Theme</string>
 
+    <!--Calls-->
+    <string name="calls_title">Calls</string>
+
     <!-- matrix error -->
     <string name="failed_to_load_timeline_position">%s was trying to load a specific point in this room’s timeline but was unable to find it.</string>
 
@@ -1650,6 +1653,7 @@ Why choose Riot.im?
     <string name="tag_presence">This media has patient tag changes</string>
     <string name="short_text">Short text</string>
     <string name="long_text">very long text very long text very long text very long text very long text very long text very long text</string>
+
     <string name="doctor">Doctor</string>
     <string name="no_image">No image or video has been selected.</string>
     <string name="description">Description</string>

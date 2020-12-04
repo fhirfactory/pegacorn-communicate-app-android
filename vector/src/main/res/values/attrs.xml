@@ -95,5 +95,14 @@
         <attr name="vctr_text_reverse_color" format="color" />
         <attr name="vctr_text_spanable_text_background_color" format="color" />
 
+
+    </declare-styleable>
+
+    <declare-styleable name="DialerKey">
+        <attr name="key_image" format="reference" />
+        <attr name="key_number" format="string" />
+        <attr name="key_text" format="string" />
+        <attr name="key_background" format="reference" />
+        <attr name="key_tint" format="reference" />
     </declare-styleable>
 </resources>
