@@ -266,4 +266,5 @@
         <item name="android:maxWidth">10000dp</item>
         <item name="android:textColorHint">@android:color/white</item>
     </style>
+
 </resources>
