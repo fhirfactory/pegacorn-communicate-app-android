@@ -1639,5 +1639,4 @@ Why choose Riot.im?
     <string name="image_not_sent_error">Image could not be sent. Please try again.</string>
     <string name="short_text">Short text</string>
     <string name="long_text">very long text very long text very long text very long text very long text very long text very long text</string>
-    <string name="one">1</string>
 </resources>

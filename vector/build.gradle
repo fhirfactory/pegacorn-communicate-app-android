@@ -46,6 +46,10 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
+    dataBinding {
+        enabled = true
+    }
+
     defaultConfig {
         applicationId "im.vector"
         minSdkVersion 16
