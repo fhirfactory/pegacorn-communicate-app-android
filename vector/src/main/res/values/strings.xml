@@ -1594,6 +1594,16 @@ Why choose Riot.im?
         <item>People</item>
     </string-array>
 
+    <string-array name="call_tabs">
+        <item>Recent</item>
+        <item>Dialer</item>
+    </string-array>
+
+    <string-array name="create_chat_tabs">
+        <item>Roles</item>
+        <item>People</item>
+    </string-array>
+
     <string name="advanced_search">advanced</string>
     <string name="advanced_search_menu">Advanced Search</string>
     <string-array name="home_tabs">

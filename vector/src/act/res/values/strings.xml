@@ -1590,11 +1590,6 @@ Why choose Riot.im?
         <item>People</item>
     </string-array>
 
-    <string-array name="call_tabs">
-        <item>Recent</item>
-        <item>Dialer</item>
-    </string-array>
-
     <string-array name="home_tabs">
         <item>Invites</item>
         <item>Favourites</item>
