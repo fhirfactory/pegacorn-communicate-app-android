@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="key_size">80dp</dimen>
+    <dimen name="dialer_text_layout_margin">8dp</dimen>
+    <dimen name="dialer_image_margin">26dp</dimen>
+    <dimen name="dialer_font">34sp</dimen>
+    <dimen name="dialer_key_font">28sp</dimen>
+</resources>

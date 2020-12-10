@@ -30,5 +30,9 @@
 
     <dimen name="heading_padding">4dp</dimen>
 
-    <dimen name="key_size">90dp</dimen>
+    <dimen name="key_size">64dp</dimen>
+    <dimen name="dialer_text_layout_margin">6dp</dimen>
+    <dimen name="dialer_image_margin">20dp</dimen>
+    <dimen name="dialer_font">28sp</dimen>
+    <dimen name="dialer_key_font">24sp</dimen>
 </resources>

@@ -9,7 +9,7 @@
         android:id="@+id/textLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="12dp"
+        android:layout_margin="@dimen/dialer_text_layout_margin"
         android:background="@drawable/key_pad_circle"
         android:gravity="center"
         android:orientation="vertical"
@@ -22,7 +22,7 @@
             android:id="@+id/keyNumberTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="28sp"
+            android:textSize="@dimen/dialer_key_font"
             android:textStyle="bold" />
 
         <TextView
@@ -37,7 +37,7 @@
         android:id="@+id/keyImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="30dp"
+        android:layout_margin="@dimen/dialer_image_margin"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter" />
 </androidx.constraintlayout.widget.ConstraintLayout>

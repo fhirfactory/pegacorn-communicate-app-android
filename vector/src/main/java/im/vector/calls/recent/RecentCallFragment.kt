@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import im.vector.R
@@ -11,6 +12,7 @@ import im.vector.fragments.AbsHomeFragment
 import im.vector.ui.themes.ThemeUtils
 import kotlinx.android.synthetic.main.fragment_recent_calls.*
 import org.matrix.androidsdk.data.Room
+
 
 class RecentCallFragment : AbsHomeFragment(), RecentCallItemClickListener {
 
@@ -34,6 +36,7 @@ class RecentCallFragment : AbsHomeFragment(), RecentCallItemClickListener {
         recentCallAdapter = RecentCallAdapter(requireContext(), this)
         (recentCallRecyclerview.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         recentCallRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+        recentCallRecyclerview.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         recentCallRecyclerview.adapter = recentCallAdapter
         recentCallRecyclerview.setHasFixedSize(true)
     }

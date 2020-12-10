@@ -3,14 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="4dp"
-    android:paddingRight="4dp">
+    android:padding="4dp">
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:padding="4dp"
+        android:padding="10dp"
         android:src="@drawable/ic_phone_outgoing"
         android:tint="@color/vector_dark_grey_color"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -44,7 +43,6 @@
         android:id="@+id/nameView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/layout_horizontal_margin_half"
         android:ellipsize="end"
         android:singleLine="true"
         android:text="Renal Reg"
@@ -60,7 +58,6 @@
         android:id="@+id/typeView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/layout_horizontal_margin_half"
         android:ellipsize="end"
         android:singleLine="true"
         android:text="Lingo Audio"
