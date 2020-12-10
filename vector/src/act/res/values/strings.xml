@@ -1599,7 +1599,7 @@ Why choose Riot.im?
         <item>Recent</item>
         <item>Dialer</item>
     </string-array>
-
+    
     <string-array name="home_tabs">
         <item>Invites</item>
         <item>Favourites</item>
