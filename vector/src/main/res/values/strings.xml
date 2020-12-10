@@ -1634,4 +1634,5 @@ Why choose Riot.im?
     <string name="tag">Patient Tag</string>
     <string name="update">Update</string>
     <string name="taken">Taken</string>
+    <string name="previous_tags">Previous Tags</string>
 </resources>
