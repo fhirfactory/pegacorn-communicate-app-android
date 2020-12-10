@@ -112,7 +112,8 @@
             android:layout_marginTop="@dimen/layout_horizontal_margin_half"
             android:orientation="vertical"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/patientURNTextView">
+            app:layout_constraintTop_toBottomOf="@+id/patientURNTextView"
+            tools:visibility="visible">
 
             <TextView
                 android:id="@+id/designationHeader"
@@ -200,6 +201,23 @@
                 app:layout_constraintTop_toBottomOf="@+id/header"
                 android:text="This is a sample description"
                 tools:text="Rafi Sadat" />
+
+            <TextView
+                android:id="@+id/previous_tags_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/layout_horizontal_margin_half"
+                android:text="@string/previous_tags"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/previousTagsRecyclerView"
+                android:layout_width="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
 

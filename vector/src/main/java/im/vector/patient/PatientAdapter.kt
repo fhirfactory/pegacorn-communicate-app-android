@@ -9,7 +9,7 @@ import im.vector.R
 import kotlinx.android.synthetic.main.item_patient.view.*
 
 
-class PatientAdapter(private val onClickListener: PatientClickListener) :
+class PatientAdapter(private val onClickListener: PatientClickListener?) :
         RecyclerView.Adapter<PatientViewHolder>() {
     private val patients = mutableListOf<DemoPatient>()
 
@@ -28,7 +28,7 @@ class PatientAdapter(private val onClickListener: PatientClickListener) :
     override fun onBindViewHolder(holder: PatientViewHolder, position: Int) {
         holder.bind(patients[position])
         holder.itemView.setOnClickListener {
-            onClickListener.onPatientClick(patients[position])
+            onClickListener?.onPatientClick(patients[position])
         }
     }
 

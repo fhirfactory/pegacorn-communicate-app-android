@@ -32,6 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
@@ -56,6 +57,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import im.vector.R;
+import im.vector.patient.DemoPatient;
+import im.vector.patient.PatientAdapter;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.view.PieFractionView;
 
@@ -424,6 +427,15 @@ public class VectorMediaViewerAdapter extends PagerAdapter {
                 tagInfoLayout.setVisibility(View.VISIBLE);
             }
         });
+        final RecyclerView recyclerView = view.findViewById(R.id.previousTagsRecyclerView);
+        PatientAdapter adapter = new PatientAdapter(null);
+        recyclerView.setAdapter(adapter);
+        //TODO get the previous patients
+        ArrayList<DemoPatient> patients = new ArrayList<>();
+        patients.add(new DemoPatient("Lance Christie", "12345678", "01-Jan-1900"));
+        patients.add(new DemoPatient("Mark Hunter", "12345678", "01-Jan-1900"));
+        adapter.setData(patients);
+
         final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(position);
         String mediaUrl = mediaInfo.mMediaUrl;
 
