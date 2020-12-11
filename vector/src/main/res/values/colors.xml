@@ -163,4 +163,6 @@
     <color name="heading_background">#ECECEC</color>
     <color name="light_background">#F6F5F5</color>
     <color name="act_gradient_color_alpha">#55002677</color>
+    <color name="blue">#3F51B5</color>
+    <color name="light_gray">#F0F0F0</color>
 </resources>

@@ -1676,4 +1676,5 @@ Why choose Riot.im?
     <string name="update">Update</string>
     <string name="taken">Taken</string>
     <string name="previous_tags">Previous Tags</string>
+    <string name="include_active">Include inactive codes</string>
 </resources>
