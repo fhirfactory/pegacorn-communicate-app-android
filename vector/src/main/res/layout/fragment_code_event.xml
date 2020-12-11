@@ -6,13 +6,13 @@
     android:layout_height="match_parent">
 
     <Switch
-        android:layout_marginTop="@dimen/layout_vertical_margin_half"
         android:text="@string/include_active"
-        android:padding="@dimen/layout_vertical_margin_half"
-        android:background="?attr/selectableItemBackground"
+        android:padding="@dimen/layout_vertical_margin"
+        android:background="@color/light_gray"
         android:clickable="true"
         android:focusable="true"
         android:id="@+id/activeSwitch"
+        android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

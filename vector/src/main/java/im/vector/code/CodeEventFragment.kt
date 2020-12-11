@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.SimpleItemAnimator
 import im.vector.R
-import im.vector.directory.role.model.CodeEvent
 import kotlinx.android.synthetic.main.fragment_code_event.*
 
 
@@ -32,6 +32,7 @@ class CodeEventFragment : Fragment(), CodeEventClickListener {
         (codeEventRecyclerview.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         codeEventRecyclerview.adapter = codeAdapter
         codeEventRecyclerview.setHasFixedSize(true)
+        codeEventRecyclerview.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
     }
 
     private fun subscribeUI() {

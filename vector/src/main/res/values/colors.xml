@@ -157,4 +157,6 @@
     <!--  act gradient  -->
     <color name="act_gradient_color2">#00828c</color>
     <color name="act_gradient_color1">#002677</color>
+    <color name="blue">#3F51B5</color>
+    <color name="light_gray">#F0F0F0</color>
 </resources>
