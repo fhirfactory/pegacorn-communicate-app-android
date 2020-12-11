@@ -119,6 +119,7 @@ import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.RolesInNavigationBarAdapter;
 import im.vector.adapters.model.UserRole;
+import im.vector.code.CodeEventFragment;
 import im.vector.extensions.ViewExtensionsKt;
 import im.vector.features.logout.ProposeLogout;
 import im.vector.fragments.AbsHomeFragment;
@@ -1004,7 +1005,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 Log.d(LOG_TAG, "onNavigationItemSelected GROUPS");
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_GROUPS);
                 if (fragment == null) {
-                    fragment = GroupsFragment.newInstance();
+                    fragment = new CodeEventFragment();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_GROUPS;
                 setQueryHint(R.string.home_filter_placeholder_groups, R.string.search_chats);
