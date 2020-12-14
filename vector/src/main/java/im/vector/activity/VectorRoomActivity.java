@@ -202,6 +202,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private static final int MEDIA_SOURCE_VIDEO = 5;
 
     private static final String CAMERA_VALUE_TITLE = "attachment"; // Samsung devices need a filepath to write to or else won't return a Uri (!!!)
+    private static final String IMAGE_VALUE_TITLE = "image"; // Samsung devices need a filepath to write to or else won't return a Uri (!!!)
+    private static final String VIDEO_VALUE_TITLE = "video"; // Samsung devices need a filepath to write to or else won't return a Uri (!!!)
     private String mLatestTakePictureCameraUri = null; // has to be String not Uri because of Serializable
 
     public static final int CONFIRM_MEDIA_REQUEST_CODE = 7;
@@ -2366,8 +2368,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      */
     private void launchNativeVideoRecorder() {
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
-
-        ExternalApplicationsUtilKt.openVideoRecorder(this, TAKE_IMAGE_REQUEST_CODE);
+        ExternalApplicationsUtilKt.openCameraWithoutSavingVideoToGallery(this, VIDEO_VALUE_TITLE, TAKE_IMAGE_REQUEST_CODE);
     }
 
     /**
@@ -2375,8 +2376,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      */
     private void launchNativeCamera() {
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
-
-        mLatestTakePictureCameraUri = ExternalApplicationsUtilKt.openCamera(this, CAMERA_VALUE_TITLE, TAKE_IMAGE_REQUEST_CODE);
+        mLatestTakePictureCameraUri = ExternalApplicationsUtilKt.openCameraWithoutSavingImageToGallery(this, IMAGE_VALUE_TITLE, TAKE_IMAGE_REQUEST_CODE);
     }
 
     /**
