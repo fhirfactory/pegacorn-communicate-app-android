@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.SimpleItemAnimator
@@ -33,10 +34,15 @@ class CodeEventFragment : Fragment(), CodeEventClickListener {
         codeEventRecyclerview.adapter = codeAdapter
         codeEventRecyclerview.setHasFixedSize(true)
         codeEventRecyclerview.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+
+        subscribeUI()
     }
 
     private fun subscribeUI() {
-
+        viewModel.codeList.observe(viewLifecycleOwner, Observer {
+            codeAdapter.setData(it)
+        })
+        viewModel.getCodeEvents()
     }
 
     override fun onCodeClick(code: CodeEvent) {
