@@ -1,12 +1,16 @@
 package im.vector.code
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.Matrix
 import im.vector.R
@@ -21,9 +25,10 @@ class CodeEventsAdapter(val context: Context, private val onClickListener: CodeE
         RecyclerView.Adapter<CodeEventViewHolder>(), OnDataSetChange {
     private val codes = mutableListOf<CodeEvent>()
 
-    fun setData(codes: MutableList<CodeEvent>) {
+    fun setData(codes: List<CodeEvent>) {
         this.codes.clear()
         this.codes.addAll(codes)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup,
@@ -34,13 +39,13 @@ class CodeEventsAdapter(val context: Context, private val onClickListener: CodeE
     }
 
     override fun onBindViewHolder(holder: CodeEventViewHolder, position: Int) {
-        /*holder.bind(codes[position])
+        holder.bind(codes[position])
         holder.itemView.setOnClickListener {
             onClickListener.onCodeClick(codes[position])
-        }*/
+        }
     }
 
-    override fun getItemCount() = 10 //codes.size
+    override fun getItemCount() = codes.size
 
     override fun onDataChange(position: Int) {
         notifyItemChanged(position)
@@ -71,6 +76,10 @@ class CodeEventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     fun bind( code: CodeEvent) {
-
+        codeName?.text = code.codeName
+        codeLocation?.text = code.location
+        codeDate?.text = code.date
+        statusTextView?.text = if (code.active) "Active" else "Inactive"
+        codeImageView?.let { ImageViewCompat.setImageTintList(it, ColorStateList.valueOf(Color.parseColor(code.codeColor))) };
     }
 }

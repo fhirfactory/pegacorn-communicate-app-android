@@ -1677,4 +1677,5 @@ Why choose Riot.im?
     <string name="taken">Taken</string>
     <string name="previous_tags">Previous Tags</string>
     <string name="include_active">Include inactive codes</string>
+    <string name="title_activity_code_detail">Code Event Detail</string>
 </resources>

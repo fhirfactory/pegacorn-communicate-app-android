@@ -166,6 +166,10 @@
         <activity
             android:name=".chat.ChatCreateActivity"
             android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <activity
+            android:name=".code.detail.CodeEventDetailActivity"
+            android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".activity.AccountCreationCaptchaActivity"
