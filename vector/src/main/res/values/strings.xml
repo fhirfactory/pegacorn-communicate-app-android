@@ -1620,4 +1620,5 @@ Why choose Riot.im?
     <string name="short_text">Short text</string>
     <string name="long_text">very long text very long text very long text very long text very long text very long text very long text</string>
     <string name="include_active">Include inactive codes</string>
+    <string name="title_activity_code_detail">Code Event Detail</string>
 </resources>
