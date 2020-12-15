@@ -25,8 +25,10 @@ class ServiceDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStac
         mSession = Matrix.getInstance(this).defaultSession
 
         val service = intent.getParcelableExtra<DummyService>(SERVICE_EXTRA)
+        supportActionBar?.let {
+            it.title = service.name
+        }
         VectorUtils.loadRoomAvatar(this, session, avatar, service)
-        officialName.text = service.name
     }
 
     override fun onDestroy() {

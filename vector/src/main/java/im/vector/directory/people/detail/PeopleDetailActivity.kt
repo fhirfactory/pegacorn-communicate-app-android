@@ -18,7 +18,6 @@ class PeopleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStack
     private lateinit var peopleDetailAdapter: PeopleDetailAdapter
 
     override fun getLayoutRes(): Int = R.layout.activity_people_detail
-    override fun getTitleRes() = R.string.title_activity_people_detail
 
     override fun initUiAndData() {
         configureToolbar()
@@ -26,9 +25,11 @@ class PeopleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStack
 
         val people = intent.getParcelableExtra<DirectoryPeople>(PEOPLE_EXTRA)
         val roleClickable = intent.getBooleanExtra(ROLE_CLICKABLE, false)
+        supportActionBar?.let {
+            it.title = people.officialName
+        }
         VectorUtils.loadRoomAvatar(this, session, avatar, people)
 
-        displayName.text = people.officialName
         jobTitle.text = people.jobTitle
         organisation.text = people.organisations
         businessUnit.text = people.businessUnits

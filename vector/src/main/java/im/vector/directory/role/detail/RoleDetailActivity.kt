@@ -18,7 +18,6 @@ class RoleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStackCh
     private lateinit var roleAdapter: RolesDetailAdapter
 
     override fun getLayoutRes(): Int = R.layout.activity_role_detail
-    override fun getTitleRes() = R.string.title_activity_role_detail
 
     override fun initUiAndData() {
         configureToolbar()
@@ -26,8 +25,10 @@ class RoleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStackCh
 
         val role = intent.getParcelableExtra<DummyRole>(ROLE_EXTRA)
         val peopleClickable = intent.getBooleanExtra(PEOPLE_CLICKABLE, false)
+        supportActionBar?.let {
+            it.title = role.officialName
+        }
         VectorUtils.loadRoomAvatar(this, session, avatar, role)
-        officialName.text = role.officialName
         secondaryName.text = role.secondaryName
 
         roleAdapter = RolesDetailAdapter(this, if (peopleClickable) this else null)
