@@ -32,6 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 
@@ -418,14 +419,18 @@ public class VectorMediaViewerAdapter extends PagerAdapter {
         final ImageView thumbView = view.findViewById(R.id.media_slider_video_thumbnail);
         final ImageView expandButton = view.findViewById(R.id.expandButton);
         final LinearLayout tagInfoLayout = view.findViewById(R.id.tagInfoLayout);
+        final ConstraintLayout tagLayout = view.findViewById(R.id.tagLayout);
         expandButton.setOnClickListener(view1 -> {
-            if(tagInfoLayout.getVisibility()==View.VISIBLE){
+            if (tagInfoLayout.getVisibility() == View.VISIBLE) {
                 expandButton.setRotation(180);
                 tagInfoLayout.setVisibility(View.GONE);
             } else {
                 expandButton.setRotation(0);
                 tagInfoLayout.setVisibility(View.VISIBLE);
             }
+        });
+        imageView.setOnClickListener(view1 -> {
+            tagLayout.setVisibility(tagLayout.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
         });
         final RecyclerView recyclerView = view.findViewById(R.id.previousTagsRecyclerView);
         PatientAdapter adapter = new PatientAdapter(null);
