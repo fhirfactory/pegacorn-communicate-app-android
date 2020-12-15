@@ -35,35 +35,20 @@
                 tools:src="@tools:sample/avatars" />
 
             <TextView
-                android:id="@+id/officialName"
-                style="@style/TextAppearance.AppCompat.Title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/layout_horizontal_margin"
-                android:layout_marginTop="@dimen/layout_vertical_margin"
-                android:layout_marginRight="@dimen/layout_horizontal_margin"
-                android:gravity="center"
-                android:text="@string/short_text"
-                android:textColor="?attr/vctr_message_text_color"
-                android:textSize="@dimen/title_text_size"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/avatar" />
-
-            <TextView
                 android:id="@+id/secondaryName"
                 style="@style/TextAppearance.AppCompat.Medium"
                 android:layout_width="0dp"
+                android:layout_marginTop="@dimen/layout_vertical_margin_half"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/layout_horizontal_margin"
-                android:layout_marginTop="4dp"
                 android:layout_marginRight="@dimen/layout_horizontal_margin"
                 android:gravity="center"
                 android:text="@string/short_text"
                 android:textSize="@dimen/sub_title_text_size"
+                app:layout_constraintTop_toBottomOf="@+id/avatar"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/officialName" />
+                tools:layout_editor_absoluteY="124dp" />
 
 
             <ImageView
