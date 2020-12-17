@@ -92,7 +92,7 @@ class PeopleDetailAdapter(val context: Context, private val onClickListener: Rol
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (models[position].type) {
-            TYPE_ROLE -> (holder as RoleViewHolder).bind(context, mSession, models[position].role!!, spanTextBackgroundColor, spanTextColor, textSize, this, position, onClickListener, showHeader(position))
+            TYPE_ROLE -> (holder as RoleViewHolder).bind(context, mSession, models[position].role!!,  this, position, onClickListener, showHeader(position))
             TYPE_EMAIL, TYPE_PHONE -> (holder as EmailPhoneViewHolder).bind(models[position], showHeader(position))
         }
     }
