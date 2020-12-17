@@ -18,11 +18,6 @@ import org.matrix.androidsdk.MXSession
 class ServiceDirectoryAdapter(val context: Context, private val onClickListener: ServiceClickListener) :
         RecyclerView.Adapter<RoleViewHolder>(), OnDataSetChange {
     private val services = mutableListOf<DummyService>()
-    var mSession: MXSession? = null
-
-    init {
-        mSession = Matrix.getInstance(context).defaultSession
-    }
 
     fun setData(roles: MutableList<DummyService>) {
         this.services.clear()
@@ -42,7 +37,7 @@ class ServiceDirectoryAdapter(val context: Context, private val onClickListener:
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: RoleViewHolder, position: Int) {
-        holder.bind(context, mSession, services[position], onClickListener)
+        holder.bind(context, services[position], onClickListener)
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -62,22 +57,19 @@ interface OnDataSetChange {
 }
 
 class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    var avatar: VectorCircularImageView? = null
     var officialName: TextView? = null
-    var contactDetail: TextView? = null
+    var locationCode: TextView? = null
+    var locationDetail: TextView? = null
     var favoriteIcon: ImageView? = null
 
     init {
-        avatar = itemView.avatar
         officialName = itemView.officialName
-        contactDetail = itemView.contactDetail
+        locationCode = itemView.locationCode
+        locationDetail = itemView.locationDetail
         favoriteIcon = itemView.favoriteIcon
     }
 
-    fun bind(context: Context, session: MXSession?, service: DummyService, onClickListener: ServiceClickListener?) {
-        VectorUtils.loadRoomAvatar(context, session, avatar, service)
-        officialName?.text = service.name
-        contactDetail?.text = service.address
+    fun bind(context: Context, service: DummyService, onClickListener: ServiceClickListener?) {
         favoriteIcon?.setImageResource(if(service.isFavorite) R.drawable.filled_star else R.drawable.outline_star)
         itemView.setOnClickListener {
             onClickListener?.onServiceClick(service)
