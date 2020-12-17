@@ -22,15 +22,10 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
         RecyclerView.Adapter<PeopleDirectoryAdapter.PeopleViewHolder>(), OnDataSetChange {
     private val people = mutableListOf<DirectoryPeople>()
     var mSession: MXSession? = null
-    var textSize: Float = 0.0F
-    var spanTextBackgroundColor: Int
-    var spanTextColor: Int
+
 
     init {
         mSession = Matrix.getInstance(context).defaultSession
-        textSize = 12 * context.resources.displayMetrics.scaledDensity // sp to px
-        spanTextBackgroundColor = getColor(context, R.attr.vctr_text_spanable_text_background_color)
-        spanTextColor = getColor(context, R.attr.vctr_text_reverse_color)
     }
 
     inner class PeopleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -39,7 +34,9 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
         var expandableIcon: ImageView? = null
         var officialName: TextView? = null
         var jobTitle: TextView? = null
-        var description: TextView? = null
+        var organisationText: TextView? = null
+        var businessUnitText: TextView? = null
+        var statusText: TextView? = null
 
         init {
             avatar = itemView.avatar
@@ -47,20 +44,27 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
             expandableIcon = itemView.expandableIcon
             officialName = itemView.officialName
             jobTitle = itemView.jobTitle
-            description = itemView.description
+            organisationText = itemView.organisationText
+            businessUnitText = itemView.businessUnitText
+            statusText = itemView.statusText
         }
 
         fun bind(context: Context, session: MXSession?, people: DirectoryPeople, onDataSetChange: OnDataSetChange, position: Int) {
             VectorUtils.loadRoomAvatar(context, session, avatar, people)
             officialName?.text = people.officialName
             jobTitle?.text = people.jobTitle
-            description?.text = people.getSpannableStringBuilder(spanTextBackgroundColor, spanTextColor, textSize, "Organisation", people.organisations).append(people.getSpannableStringBuilder(spanTextBackgroundColor, spanTextColor, textSize, "Business Unit", people.businessUnits))
+            organisationText?.text = "Organisation: ${people.organisations}"
+            businessUnitText?.text = "Business Unit: ${people.businessUnits}"
+            statusText?.text = "online"
+
             if (people.expanded) {
                 expandableIcon?.animate()?.setDuration(200)?.rotation(180F)
-                description?.visibility = View.VISIBLE
+                organisationText?.visibility = View.VISIBLE
+                businessUnitText?.visibility = View.VISIBLE
             } else {
                 expandableIcon?.animate()?.setDuration(200)?.rotation(0F)
-                description?.visibility = View.GONE
+                organisationText?.visibility = View.GONE
+                businessUnitText?.visibility = View.GONE
             }
             expandableIcon?.setOnClickListener {
                 people.expanded = !people.expanded
