@@ -3,6 +3,7 @@ package im.vector.directory.people.detail
 import android.content.Context
 import android.content.Intent
 import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.Matrix
 import im.vector.R
@@ -13,6 +14,8 @@ import im.vector.directory.role.detail.RoleDetailActivity
 import im.vector.directory.role.model.*
 import im.vector.util.VectorUtils
 import kotlinx.android.synthetic.main.activity_people_detail.*
+import kotlinx.android.synthetic.main.activity_people_detail.peopleRecyclerview
+import kotlinx.android.synthetic.main.fragment_directory_people.*
 
 class PeopleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStackChangedListener, RoleClickListener {
     private lateinit var peopleDetailAdapter: PeopleDetailAdapter
@@ -36,6 +39,7 @@ class PeopleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStack
 
         peopleDetailAdapter = PeopleDetailAdapter(this, if (roleClickable) this else null)
         peopleRecyclerview.layoutManager = LinearLayoutManager(this)
+        peopleRecyclerview.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         peopleRecyclerview.adapter = peopleDetailAdapter
         peopleDetailAdapter.setData(people)
 

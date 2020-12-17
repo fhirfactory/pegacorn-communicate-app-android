@@ -8,6 +8,7 @@ import android.view.View.VISIBLE
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.transition.TransitionManager
@@ -99,6 +100,7 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
 
         roleAdapter = RolesDirectoryAdapter(requireContext(), this, selectable ?: false)
         (roleRecyclerview.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        roleRecyclerview.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         roleRecyclerview.layoutManager = LinearLayoutManager(requireContext())
         roleRecyclerview.adapter = roleAdapter
         roleRecyclerview.setHasFixedSize(true)

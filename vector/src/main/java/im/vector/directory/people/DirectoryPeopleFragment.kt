@@ -2,6 +2,7 @@ package im.vector.directory.people
 
 import android.os.Bundle
 import android.view.Menu
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.R
 import im.vector.directory.BaseDirectoryFragment
@@ -10,6 +11,8 @@ import im.vector.directory.people.model.DirectoryPeople
 import im.vector.directory.people.model.TemporaryRoom
 import im.vector.extensions.withArgs
 import kotlinx.android.synthetic.main.fragment_directory_people.*
+import kotlinx.android.synthetic.main.fragment_directory_people.header
+import kotlinx.android.synthetic.main.fragment_directory_role.*
 import org.matrix.androidsdk.data.Room
 
 class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
@@ -52,7 +55,9 @@ class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
 
         peopleDirectoryAdapter = PeopleDirectoryAdapter(requireContext(), this, selectable ?: false)
         peopleRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+        peopleRecyclerview.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         peopleRecyclerview.adapter = peopleDirectoryAdapter
+
 
         //test data
         val testPeopleData = mutableListOf<DirectoryPeople>()

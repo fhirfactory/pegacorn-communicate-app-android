@@ -3,6 +3,7 @@ package im.vector.directory.role.detail
 import android.content.Context
 import android.content.Intent
 import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.Matrix
 import im.vector.R
@@ -33,6 +34,7 @@ class RoleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStackCh
 
         roleAdapter = RolesDetailAdapter(this, if (peopleClickable) this else null)
         roleRecyclerview.layoutManager = LinearLayoutManager(this)
+        roleRecyclerview.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         roleRecyclerview.adapter = roleAdapter
         roleAdapter.setData(role)
 
