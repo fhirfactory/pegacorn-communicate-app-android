@@ -43,8 +43,10 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
         var expandableIcon: ImageView? = null
         var officialName: TextView? = null
         var jobTitle: TextView? = null
-        var description: TextView? = null
         var selectionRadioImageView: ImageView? = null
+        var organisationText: TextView? = null
+        var businessUnitText: TextView? = null
+        var statusText: TextView? = null
 
         init {
             avatar = itemView.avatar
@@ -52,8 +54,10 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
             expandableIcon = itemView.expandableIcon
             officialName = itemView.officialName
             jobTitle = itemView.jobTitle
-            description = itemView.description
             selectionRadioImageView = itemView.selected
+            organisationText = itemView.organisationText
+            businessUnitText = itemView.businessUnitText
+            statusText = itemView.statusText
         }
 
         fun bind(context: Context, session: MXSession?, people: DirectoryPeople, onDataSetChange: OnDataSetChange, position: Int, selection: Boolean? = false) {
@@ -61,13 +65,18 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
             selectionRadioImageView?.setImageResource(if (selection == true) R.drawable.ic_radio_button_checked else R.drawable.ic_radio_button_unchecked)
             officialName?.text = people.officialName
             jobTitle?.text = people.jobTitle
-            description?.text = people.getSpannableStringBuilder(spanTextBackgroundColor, spanTextColor, textSize, "Organisation", people.organisations).append(people.getSpannableStringBuilder(spanTextBackgroundColor, spanTextColor, textSize, "Business Unit", people.businessUnits))
+            organisationText?.text = "Organisation: ${people.organisations}"
+            businessUnitText?.text = "Business Unit: ${people.businessUnits}"
+            statusText?.text = "online"
+
             if (people.expanded) {
                 expandableIcon?.animate()?.setDuration(200)?.rotation(180F)
-                description?.visibility = View.VISIBLE
+                organisationText?.visibility = View.VISIBLE
+                businessUnitText?.visibility = View.VISIBLE
             } else {
                 expandableIcon?.animate()?.setDuration(200)?.rotation(0F)
-                description?.visibility = View.GONE
+                organisationText?.visibility = View.GONE
+                businessUnitText?.visibility = View.GONE
             }
             expandableIcon?.setOnClickListener {
                 people.expanded = !people.expanded

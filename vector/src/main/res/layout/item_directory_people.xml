@@ -4,8 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="8dp"
-    android:background="?attr/selectableItemBackground">
+    android:animateLayoutChanges="true"
+    android:background="?attr/selectableItemBackground"
+    android:paddingTop="@dimen/layout_horizontal_margin_half"
+    android:paddingBottom="@dimen/layout_horizontal_margin_half">
 
     <ImageView
         android:id="@+id/selected"
@@ -30,33 +32,65 @@
         tools:src="@tools:sample/avatars" />
 
     <ImageView
-        android:layout_marginRight="@dimen/layout_horizontal_margin_half"
         android:id="@+id/expandableIcon"
         android:layout_width="24dp"
         android:layout_height="24dp"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:layout_marginRight="@dimen/layout_horizontal_margin"
         android:src="@drawable/ic_expand"
         android:tint="?attr/vctr_list_icon_tint_color"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginEnd="@dimen/layout_horizontal_margin_half" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/favoriteIcon"
         android:layout_width="24dp"
         android:layout_height="24dp"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin_half"
+        android:layout_marginRight="@dimen/layout_horizontal_margin_half"
         android:src="@drawable/ic_material_star_black"
         android:tint="?attr/vctr_list_icon_tint_color"
-        android:layout_marginRight="@dimen/layout_horizontal_margin_half"
         app:layout_constraintRight_toLeftOf="@+id/expandableIcon"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginEnd="@dimen/layout_horizontal_margin_half" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/status_indicator"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:background="@drawable/avatar_indicator_online"
+        app:layout_constraintBottom_toBottomOf="@+id/avatar"
+        app:layout_constraintRight_toRightOf="@+id/avatar" />
+
+    <ImageView
+        android:id="@+id/voiceCallIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        android:layout_marginRight="@dimen/layout_horizontal_margin"
+        android:src="@drawable/ic_call_black"
+        android:tint="?attr/vctr_list_icon_tint_color"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/favoriteIcon" />
+
+    <ImageView
+        android:id="@+id/videoCallIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin_half"
+        android:layout_marginRight="@dimen/layout_horizontal_margin_half"
+        android:src="@drawable/video_call_black"
+        android:tint="?attr/vctr_list_icon_tint_color"
+        app:layout_constraintRight_toLeftOf="@+id/expandableIcon"
+        app:layout_constraintTop_toBottomOf="@+id/favoriteIcon" />
 
     <TextView
         android:id="@+id/officialName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginLeft="@dimen/layout_vertical_margin_half"
+        android:layout_marginRight="@dimen/layout_horizontal_margin_half"
         android:ellipsize="end"
         android:maxLines="1"
         android:textSize="16sp"
@@ -71,35 +105,58 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin_half"
+        android:layout_marginRight="@dimen/layout_horizontal_margin_half"
         android:ellipsize="end"
         android:maxLines="1"
-        android:layout_marginRight="@dimen/layout_horizontal_margin_half"
         android:textSize="14sp"
         app:layout_constraintLeft_toRightOf="@+id/avatar"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/officialName"
-        android:layout_marginEnd="@dimen/layout_horizontal_margin_half" />
+        app:layout_constraintRight_toLeftOf="@+id/favoriteIcon"
+        app:layout_constraintTop_toBottomOf="@+id/officialName" />
 
     <TextView
-        android:id="@+id/description"
+        android:id="@+id/statusText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="@dimen/layout_horizontal_margin_half"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin_half"
         android:layout_marginRight="@dimen/layout_horizontal_margin_half"
-        android:textSize="22sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="10sp"
+        app:layout_constraintLeft_toRightOf="@+id/avatar"
+        app:layout_constraintRight_toLeftOf="@+id/favoriteIcon"
         app:layout_constraintTop_toBottomOf="@+id/jobTitle" />
 
-    <View
-        android:id="@+id/line"
+    <TextView
+        android:id="@+id/organisationText"
         android:layout_width="0dp"
-        android:layout_height=".8dp"
-        android:layout_marginTop="8dp"
-        android:background="?vctr_list_divider_color"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/layout_horizontal_margin"
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="@dimen/layout_horizontal_margin"
+        android:textSize="14sp"
+        android:visibility="gone"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/description" />
+        app:layout_constraintTop_toBottomOf="@+id/statusText" />
+
+    <TextView
+        android:id="@+id/businessUnitText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/layout_horizontal_margin"
+        android:layout_marginTop="2dp"
+        android:layout_marginRight="@dimen/layout_horizontal_margin"
+        android:ellipsize="end"
+        android:lines="1"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/organisationText" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
