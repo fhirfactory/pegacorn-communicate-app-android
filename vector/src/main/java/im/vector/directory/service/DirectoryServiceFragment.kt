@@ -3,6 +3,7 @@ package im.vector.directory.service
 import android.os.Bundle
 import android.view.Menu
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import im.vector.R
@@ -45,6 +46,7 @@ class DirectoryServiceFragment : BaseDirectoryFragment(), ServiceClickListener {
 
         serviceAdapter = ServiceDirectoryAdapter(requireContext(), this)
         (serviceRecyclerview.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        serviceRecyclerview.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         serviceRecyclerview.layoutManager = LinearLayoutManager(requireContext())
         serviceRecyclerview.adapter = serviceAdapter
         serviceRecyclerview.setHasFixedSize(true)
@@ -59,7 +61,7 @@ class DirectoryServiceFragment : BaseDirectoryFragment(), ServiceClickListener {
         testServiceData.add(DummyService("7", "Service name 7", "Service Telecom 7", "Service Address 7", "Service Organization 7", false));
 
         serviceAdapter.setData(testServiceData)
-        setHeader(header, R.string.total_number_of_services,10)
+        setHeader(header, R.string.total_number_of_services, 10)
     }
 
     override fun onServiceClick(service: DummyService) {
