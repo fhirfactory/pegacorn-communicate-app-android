@@ -14,6 +14,7 @@
         android:background="@color/heading_background"
         android:paddingStart="@dimen/layout_horizontal_margin"
         android:paddingLeft="@dimen/layout_horizontal_margin"
+        android:textStyle="bold"
         android:paddingTop="@dimen/heading_padding"
         android:paddingRight="@dimen/layout_horizontal_margin"
         android:paddingBottom="@dimen/heading_padding"
