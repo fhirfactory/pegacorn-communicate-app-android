@@ -165,4 +165,5 @@
     <color name="act_gradient_color_alpha">#55002677</color>
     <color name="blue">#3F51B5</color>
     <color name="light_gray">#F0F0F0</color>
+    <color name="button_background_light">#ECECEC</color>
 </resources>

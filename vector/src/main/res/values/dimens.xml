@@ -38,4 +38,6 @@
     <dimen name="dialer_image_margin">20dp</dimen>
     <dimen name="dialer_font">28sp</dimen>
     <dimen name="dialer_key_font">24sp</dimen>
+    <dimen name="detail_button_size">32dp</dimen>
+    <dimen name="detail_button_padding">6dp</dimen>
 </resources>

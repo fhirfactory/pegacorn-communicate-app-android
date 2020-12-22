@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:animateLayoutChanges="true"
-    android:paddingBottom="@dimen/layout_horizontal_margin"
-    android:background="?attr/selectableItemBackground">
+    android:background="?attr/selectableItemBackground"
+    android:paddingBottom="@dimen/layout_horizontal_margin">
 
     <TextView
         android:id="@+id/heading"
@@ -77,6 +77,9 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:layout_marginRight="@dimen/layout_horizontal_margin"
+        android:background="@drawable/button_circle_background"
+        android:foreground="?attr/selectableItemBackground"
+        android:padding="2dp"
         android:src="@drawable/ic_call_black"
         android:tint="?attr/vctr_list_icon_tint_color"
         app:layout_constraintRight_toRightOf="parent"
@@ -89,6 +92,9 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="@dimen/layout_horizontal_margin_half"
         android:layout_marginRight="@dimen/layout_horizontal_margin_half"
+        android:background="@drawable/button_circle_background"
+        android:foreground="?attr/selectableItemBackground"
+        android:padding="2dp"
         android:src="@drawable/video_call_black"
         android:tint="?attr/vctr_list_icon_tint_color"
         app:layout_constraintRight_toLeftOf="@+id/expandableIcon"
