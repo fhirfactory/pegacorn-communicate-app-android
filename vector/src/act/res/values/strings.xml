@@ -83,6 +83,8 @@
     <string name="ongoing_conference_call">Ongoing conference call.\nJoin as %1$s or %2$s</string>
     <string name="ongoing_conference_call_voice">Voice</string>
     <string name="ongoing_conference_call_video">Video</string>
+    <string name="video">Video</string>
+    <string name="chat">Chat</string>
     <string name="cannot_start_call">Cannot start the call, please try later</string>
     <string name="missing_permissions_warning">"Due to missing permissions, some features may be missing…</string>
     <string name="missing_permissions_error">"Due to missing permissions, this action is not possible.</string>
@@ -1583,6 +1585,9 @@ Why choose Riot.im?
     <string name="terms_and_condition_url">https://www.act.gov.au/privacy</string>
     <string name="privacy_policy_url">https://www.act.gov.au/privacy</string>
     <string name="sliding_acknowledgement_url">https://www.act.gov.au/privacy</string>
+
+    <string name="role_filled">Filled</string>
+    <string name="role_unfilled">Unfilled</string>
 
     <!--Directory Tabs-->
     <string-array name="directory_tabs">

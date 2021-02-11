@@ -12,6 +12,7 @@ data class DummyRole(val id: String, val officialName: String, val secondaryName
                      val speciality: ArrayList<Speciality>, val location: ArrayList<DummyLocation>, val teams: ArrayList<Team>) : Parcelable {
     var expanded = false
     var type: Int = 1
+    var filled = false
 }
 
 @Parcelize

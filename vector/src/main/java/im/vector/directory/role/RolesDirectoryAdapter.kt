@@ -1,6 +1,9 @@
 package im.vector.directory.role
 
+import android.app.Application
 import android.content.Context
+import android.content.res.ColorStateList
+import android.os.Build
 import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +19,8 @@ import im.vector.directory.role.model.DummyRole
 import im.vector.util.VectorUtils
 import im.vector.view.VectorCircularImageView
 import kotlinx.android.synthetic.main.item_directory_people.view.*
+import kotlinx.android.synthetic.main.item_directory_people.view.favoriteIcon
+import kotlinx.android.synthetic.main.item_directory_role.view.*
 import org.matrix.androidsdk.MXSession
 
 
@@ -109,6 +114,7 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var locationText: TextView? = null
     var heading: TextView? = null
     var favouriteButton: ImageView? = null
+    var roleFilledTextView: TextView? = null
 
     init {
         heading = itemView.findViewById(R.id.heading)
@@ -122,6 +128,7 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         orgUnitText = itemView.findViewById(R.id.orgUnitText)
         locationText = itemView.findViewById(R.id.locationText)
         favouriteButton = itemView.favoriteIcon
+        roleFilledTextView = itemView.findViewById(R.id.roleFilledTextView)
     }
 
     fun bind(context: Context, session: MXSession?, role: DummyRole, onDataSetChange: OnDataSetChange, position: Int, onClickListener: RoleClickListener?, showHeader: Boolean = false, selection: Boolean? = false) {
@@ -147,6 +154,19 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             orgUnitText?.visibility = GONE
             categoryText?.visibility = GONE
             locationText?.visibility = GONE
+        }
+        if (role.filled) {
+            roleFilledTextView?.text = context.getText(R.string.role_filled)
+            //stealing the default colour from another text view is like, the best viable way of doing this, apparently
+            //otherwise, the color has to come from resource values -- so would be theme dependent (as it true of the use of vector_warning_color)
+            roleFilledTextView?.setTextColor(officialName?.textColors)
+        } else {
+            roleFilledTextView?.text = context.getText(R.string.role_unfilled)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                roleFilledTextView?.setTextColor(context.getColor(R.color.vector_warning_color))
+            } else {
+                roleFilledTextView?.setTextColor(context.applicationContext.resources.getColor(R.color.vector_warning_color))
+            }
         }
 
         roleText?.text = "Role: ${role.roles.joinToString(", ")}"
