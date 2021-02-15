@@ -6,4 +6,5 @@ interface SimpleFragmentActivityListener {
     fun showWaitingView()
     fun hideWaitingView()
     fun updateWaitingView(data: WaitingViewData?)
+    fun hideKeyboard()
 }

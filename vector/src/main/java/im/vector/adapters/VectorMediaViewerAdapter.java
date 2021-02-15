@@ -28,9 +28,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
@@ -55,6 +58,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import im.vector.R;
+import im.vector.patient.DemoPatient;
+import im.vector.patient.PatientAdapter;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.view.PieFractionView;
 
@@ -412,6 +417,29 @@ public class VectorMediaViewerAdapter extends PagerAdapter {
         final PhotoView imageView = view.findViewById(R.id.media_slider_image_view);
         final View videoLayout = view.findViewById(R.id.media_slider_video_layout);
         final ImageView thumbView = view.findViewById(R.id.media_slider_video_thumbnail);
+        final ImageView expandButton = view.findViewById(R.id.expandButton);
+        final LinearLayout tagInfoLayout = view.findViewById(R.id.tagInfoLayout);
+        final ConstraintLayout tagLayout = view.findViewById(R.id.tagLayout);
+        expandButton.setOnClickListener(view1 -> {
+            if (tagInfoLayout.getVisibility() == View.VISIBLE) {
+                expandButton.setRotation(180);
+                tagInfoLayout.setVisibility(View.GONE);
+            } else {
+                expandButton.setRotation(0);
+                tagInfoLayout.setVisibility(View.VISIBLE);
+            }
+        });
+        imageView.setOnClickListener(view1 -> {
+            tagLayout.setVisibility(tagLayout.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+        });
+        final RecyclerView recyclerView = view.findViewById(R.id.previousTagsRecyclerView);
+        PatientAdapter adapter = new PatientAdapter(null);
+        recyclerView.setAdapter(adapter);
+        //TODO get the previous patients
+        ArrayList<DemoPatient> patients = new ArrayList<>();
+        patients.add(new DemoPatient("Lance Christie", "12345678", "01-Jan-1900"));
+        patients.add(new DemoPatient("Mark Hunter", "12345678", "01-Jan-1900"));
+        adapter.setData(patients);
 
         final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(position);
         String mediaUrl = mediaInfo.mMediaUrl;

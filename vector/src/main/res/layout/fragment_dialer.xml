@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="android.text.TextUtils" />
+
+        <variable
+            name="viewmodel"
+            type="im.vector.calls.dialer.DialerFragmentViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/dialValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/layout_horizontal_margin"
+            android:layout_marginRight="@dimen/layout_horizontal_margin"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="1"
+            android:text="@{viewmodel.pressedKeys}"
+            android:textSize="@dimen/dialer_font"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/keyLayout"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/keyLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dialValue">
+
+            <im.vector.calls.dialer.DialerKey
+                android:id="@+id/keyOne"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick='@{(v) -> viewmodel.keyClick("1")}'
+                app:key_number="1"
+                app:layout_constraintEnd_toStartOf="@+id/keyTwo"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <im.vector.calls.dialer.DialerKey
+                android:id="@+id/keyTwo"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick='@{(v) -> viewmodel.keyClick("2")}'
+                app:key_number="2"
+                app:key_text="ABC"
+                app:layout_constraintEnd_toStartOf="@+id/keyThree"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/keyOne"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <im.vector.calls.dialer.DialerKey
+                android:id="@+id/keyThree"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick='@{(v) -> viewmodel.keyClick("3")}'
+                app:key_number="3"
+                app:key_text="DEF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/keyTwo"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <im.vector.calls.dialer.DialerKey
+                android:id="@+id/keyFour"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick='@{(v) -> viewmodel.keyClick("4")}'
+                app:key_number="4"
+                app:key_text="GHI"
+                app:layout_constraintEnd_toStartOf="@+id/keyFive"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/keyOne" />
+
+            <im.vector.calls.dialer.DialerKey
+                android:id="@+id/keyFive"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick='@{(v) -> viewmodel.keyClick("5")}'
+                app:key_number="5"
+                app:key_text="JKL"
+                app:layout_constraintEnd_toStartOf="@+id/keySix"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/keyFour"
+                app:layout_constraintTop_toBottomOf="@+id/keyOne" />
+
+            <im.vector.calls.dialer.DialerKey
+                android:id="@+id/keySix"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick='@{(v) -> viewmodel.keyClick("6")}'
+                app:key_number="6"
+                app:key_text="MNO"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/keyFive"
+                app:layout_constraintTop_toBottomOf="@+id/keyOne" />
+
+            <im.vector.calls.dialer.DialerKey
+                android:id="@+id/keySeven"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick='@{(v) -> viewmodel.keyClick("7")}'
+                app:key_number="7"
+                app:key_text="PQRS"
+                app:layout_constraintEnd_toStartOf="@+id/keyEight"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/keyFour"
+                tools:layout_editor_absoluteY="200dp" />
+
+            <im.vector.calls.dialer.DialerKey
+                android:id="@+id/keyEight"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick='@{(v) -> viewmodel.keyClick("8")}'
+                app:key_number="8"
+                app:key_text="TUV"
+                app:layout_constraintEnd_toStartOf="@+id/keyNine"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/keySeven"
+                app:layout_constraintTop_toBottomOf="@+id/keyFour"
+                tools:layout_editor_absoluteY="200dp" />
+
+            <im.vector.calls.dialer.DialerKey
+                android:id="@+id/keyNine"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick='@{(v) -> viewmodel.keyClick("9")}'
+                app:key_number="9"
+                app:key_text="WXYZ"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/keyEight"
+                app:layout_constraintTop_toBottomOf="@+id/keyFour"
+                tools:layout_editor_absoluteY="200dp" />
+
+            <im.vector.calls.dialer.DialerKey
+                android:id="@+id/keyStar"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick='@{(v) -> viewmodel.keyClick("*")}'
+                app:key_image="@drawable/ic_asterick"
+                app:layout_constraintEnd_toStartOf="@+id/keyZero"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/keySeven" />
+
+            <im.vector.calls.dialer.DialerKey
+                android:id="@+id/keyZero"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:clickable="true"
+                android:focusable="true"
+                android:longClickable="true"
+                android:onClick='@{(v) -> viewmodel.keyClick("0")}'
+                app:key_number="0"
+                app:key_text="+"
+                app:layout_constraintEnd_toStartOf="@+id/keyHash"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/keyStar"
+                app:layout_constraintTop_toBottomOf="@+id/keySeven" />
+
+            <im.vector.calls.dialer.DialerKey
+                android:id="@+id/keyHash"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick='@{(v) -> viewmodel.keyClick("#")}'
+                app:key_image="@drawable/ic_hash"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/keyZero"
+                app:layout_constraintTop_toBottomOf="@+id/keySeven" />
+
+            <im.vector.calls.dialer.DialerKey
+                android:id="@+id/callButton"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                app:key_background="@drawable/key_pad_call_circle"
+                app:key_image="@drawable/ic_material_call_white"
+                app:key_tint="@android:color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/keyZero" />
+
+            <ImageView
+                android:id="@+id/crossButton"
+                android:layout_width="@dimen/key_size"
+                android:layout_height="@dimen/key_size"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick='@{(v) -> viewmodel.delete()}'
+                android:padding="32dp"
+                android:src="@drawable/ic_cross"
+                android:visibility="@{TextUtils.isEmpty(viewmodel.pressedKeys) ? View.GONE : View.VISIBLE}"
+                app:layout_constraintStart_toEndOf="@+id/callButton"
+                app:layout_constraintTop_toBottomOf="@+id/keyHash" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

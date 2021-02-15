@@ -139,6 +139,8 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
     TextView mMemberUserIdTextView;
     @BindView(R.id.member_details_presence)
     TextView mPresenceTextView;
+    @BindView(R.id.member_details_display_role)
+    TextView mRoleTextView;
 
     // listview
     @BindView(R.id.member_details_actions_list_view)
@@ -1438,7 +1440,9 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
             mMemberDisplayNameTextView.setText(mUser.displayname);
         }
 
-        mMemberUserIdTextView.setText(mMemberId);
+        // TODO
+        mRoleTextView.setText(getText(R.string.roles));
+        //mMemberUserIdTextView.setText(mMemberId);
 
         // do not display the activity name in the action bar
         setTitle("");
@@ -1449,6 +1453,7 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         // UI updates
         updateMemberAvatarUi();
         updatePresenceInfoUi();
+        updatePowerLevelUI();
 
         // Update adapter list view:
         // notify the list view to update the items that could
@@ -1459,22 +1464,58 @@ public class VectorMemberDetailsActivity extends MXCActionBarActivity implements
         }
     }
 
+    private void updatePowerLevelUI(){
+        PowerLevels powerLevels = null;
+        if (null != mRoom) {
+            if (null != (powerLevels = mRoom.getState().getPowerLevels())) {
+                if (powerLevels.getUserPowerLevel(mMemberId) >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN) {
+                    mMemberUserIdTextView.setVisibility(View.VISIBLE);
+                    mMemberUserIdTextView.setText(CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN_NAME.concat(" in " + mRoom.getRoomDisplayName(this)));
+                } else if (powerLevels.getUserPowerLevel(mMemberId) >= CommonActivityUtils.UTILS_POWER_LEVEL_MODERATOR) {
+                    mMemberUserIdTextView.setVisibility(View.VISIBLE);
+                    mMemberUserIdTextView.setText(CommonActivityUtils.UTILS_POWER_LEVEL_MODERATOR_NAME.concat(" in " + mRoom.getRoomDisplayName(this)));
+                } else {
+                    mMemberUserIdTextView.setVisibility(View.GONE);
+                }
+            } else {
+                mMemberUserIdTextView.setVisibility(View.GONE);
+            }
+        } else {
+            mMemberUserIdTextView.setVisibility(View.GONE);
+        }
+    }
+
+    private void updatePresenceTexts(User user){
+        mPresenceTextView.setText(VectorUtils.getPresenceText(this, user));
+        statusIndicator.setBackgroundResource(VectorUtils.getPresenceIndicator(user));
+    }
+
     private void updatePresenceInfoUi() {
         // sanity check
         if (null != mPresenceTextView) {
-            String status = VectorUtils.getUserOnlineStatus(this, mSession, mMemberId, new SimpleApiCallback<Void>() {
+            User user = VectorUtils.getUser(VectorMemberDetailsActivity.this, mSession, mMemberId, new SimpleApiCallback<Void>() {
                 @Override
                 public void onSuccess(Void info) {
-                    mPresenceTextView.setText(VectorUtils.getUserOnlineStatus(VectorMemberDetailsActivity.this, mSession, mMemberId, null));
+                    User user = VectorUtils.getUser(VectorMemberDetailsActivity.this, mSession, mMemberId, null);
+                    updatePresenceTexts(user);
                 }
             });
-            mPresenceTextView.setText(status);
-            // "online" / "offline" is expected from the server response
-            if(status.compareToIgnoreCase("online")==0){
-                statusIndicator.setImageResource(R.drawable.avatar_indicator_online);
-            }else{
-                statusIndicator.setImageResource(R.drawable.avatar_indicator_offline);
-            }
+            updatePresenceTexts(user);
+//
+//
+//            String status = VectorUtils.getUserOnlineStatus(this, mSession, mMemberId, new SimpleApiCallback<Void>() {
+//                @Override
+//                public void onSuccess(Void info) {
+//                    mPresenceTextView.setText(VectorUtils.getUserOnlineStatus(VectorMemberDetailsActivity.this, mSession, mMemberId, null));
+//                }
+//            });
+//            mPresenceTextView.setText(status);
+//            // "online" / "offline" is expected from the server response
+//            if(status.compareToIgnoreCase("online")==0){
+//                statusIndicator.setImageResource(R.drawable.avatar_indicator_online);
+//            }else{
+//                statusIndicator.setImageResource(R.drawable.avatar_indicator_offline);
+//            }
         }
     }
 

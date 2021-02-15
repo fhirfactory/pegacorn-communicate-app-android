@@ -86,6 +86,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -110,6 +111,7 @@ import im.vector.util.MatrixLinkMovementMethod;
 import im.vector.util.MatrixURLSpan;
 import im.vector.util.PreferencesManager;
 import im.vector.util.RiotEventDisplay;
+import im.vector.util.RoomUtils;
 import im.vector.util.VectorImageGetter;
 import im.vector.util.VectorLinkifyKt;
 import im.vector.widgets.WidgetsManager;
@@ -1421,6 +1423,20 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             ImageView imageView = convertView.findViewById(R.id.messagesAdapter_image);
             addContentViewListeners(convertView, imageView, position, type);
+
+            //TODO check if there is any PATIENT TAG
+            View tagLayout = convertView.findViewById(R.id.message_adapter_patient_layout);
+            if(true){
+                tagLayout.setVisibility(View.VISIBLE);
+                TextView patientInfo = convertView.findViewById(R.id.message_adapter_patient_description);
+                TextView imageDescription = convertView.findViewById(R.id.message_adapter_media_description);
+                TextView dob = convertView.findViewById(R.id.message_adapter_patient_dob);
+                patientInfo.setText(RoomUtils.getBoldSpannableStringBuilder(mContext.getString(R.string.adapter_patient_info,  "SADAT","Rafi", "123456789"), new ArrayList(Arrays.asList("SADAT", "123456789"))));
+                dob.setText("01/09/1979");
+                imageDescription.setText("This will be a short description");
+            } else {
+                tagLayout.setVisibility(View.GONE);
+            }
         } catch (Exception e) {
             Log.e(LOG_TAG, "## getImageVideoView() failed : " + e.getMessage(), e);
         }
@@ -2195,7 +2211,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                             mSessionIdsWaitingForE2eReRequest.add(sessionId);
 
                             if (mVectorMessagesAdapterEventsListener != null) {
-                                mVectorMessagesAdapterEventsListener.onEventAction(event, null, R.id.ic_action_re_request_e2e_key);
+                                mVectorMessagesAdapterEventsListener.onEventAction(event, null, R.id.ic_action_re_request_e2e_key, null);
                             }
 
                             // Update the link message (for other events with same sessionId too)
@@ -2595,6 +2611,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                         || Message.MSGTYPE_VIDEO.equals(message.msgtype)
                         || Message.MSGTYPE_FILE.equals(message.msgtype)) {
                     menu.findItem(R.id.ic_action_vector_save).setVisible(mContext.getResources().getBoolean(R.bool.show_image_share_items));
+                    // TODO we may need proper condition
+                    menu.findItem(R.id.ic_action_tag).setVisible(true);
                 }
 
                 // offer to report a message content
@@ -2612,7 +2630,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             public boolean onMenuItemClick(final MenuItem item) {
                 // warn the listener
                 if (null != mVectorMessagesAdapterEventsListener) {
-                    mVectorMessagesAdapterEventsListener.onEventAction(event, textMsg, item.getItemId());
+                    mVectorMessagesAdapterEventsListener.onEventAction(event, textMsg, item.getItemId(), null);
                 }
 
                 // disable the selection

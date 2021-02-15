@@ -16,6 +16,7 @@
 package im.vector.activity
 
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isGone
@@ -87,6 +88,14 @@ abstract class SimpleFragmentActivity : MXCActionBarActivity() , SimpleFragmentA
         waitingHorizontalProgress.progress = 0
         waitingHorizontalProgress.isVisible = false
         super.hideWaitingView()
+    }
+
+    override fun hideKeyboard() {
+        val view = currentFocus
+        if (view != null) {
+            val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+        }
     }
 
     override fun onBackPressed() {

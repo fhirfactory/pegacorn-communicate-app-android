@@ -75,6 +75,7 @@ import im.vector.VectorApp;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.directory.people.model.DirectoryPeople;
 import im.vector.directory.role.model.DummyRole;
+import im.vector.directory.service.DummyService;
 import im.vector.settings.VectorLocale;
 
 public class VectorUtils {
@@ -373,6 +374,13 @@ public class VectorUtils {
         if (null != role) {
             VectorUtils.loadUserAvatar(context,
                     session, imageView, role.getAvatarUrl(), role.getId(), role.getOfficialName());
+        }
+    }
+
+    public static void loadRoomAvatar(Context context, MXSession session, ImageView imageView, DummyService service) {
+        if (null != service) {
+            VectorUtils.loadUserAvatar(context,
+                    session, imageView, null, service.getId(), service.getName());
         }
     }
 
@@ -797,17 +805,7 @@ public class VectorUtils {
         return formattedString;
     }
 
-    /**
-     * Provide the user online status from his user Id.
-     * if refreshCallback is set, try to refresh the user presence if it is not known
-     *
-     * @param context         the context.
-     * @param session         the session.
-     * @param userId          the userId.
-     * @param refreshCallback the presence callback.
-     * @return the online status description.
-     */
-    public static String getUserOnlineStatus(final Context context,
+    public static User getUser(final Context context,
                                              final MXSession session,
                                              final String userId,
                                              final ApiCallback<Void> refreshCallback) {
@@ -871,11 +869,13 @@ public class VectorUtils {
             });
         }
 
-        // unknown user
+        return user;
+    }
+
+    public static String getPresenceText(final Context context, User user){
         if (null == user) {
             return null;
         }
-
         String presenceText = null;
         if (TextUtils.equals(user.presence, User.PRESENCE_ONLINE)) {
             presenceText = context.getString(R.string.room_participants_online);
@@ -894,8 +894,39 @@ public class VectorUtils {
                                 user.getAbsoluteLastActiveAgo() / 1000L));
             }
         }
-
         return presenceText;
+    }
+
+    public static int getPresenceIndicator(User user){
+        if (null != user && TextUtils.equals(user.presence, User.PRESENCE_ONLINE)) {
+            return R.drawable.avatar_indicator_online;
+        } else {
+            return R.drawable.avatar_indicator_offline;
+        }
+    }
+
+    /**
+     * Provide the user online status from his user Id.
+     * if refreshCallback is set, try to refresh the user presence if it is not known
+     *
+     * @param context         the context.
+     * @param session         the session.
+     * @param userId          the userId.
+     * @param refreshCallback the presence callback.
+     * @return the online status description.
+     */
+    public static String getUserOnlineStatus(final Context context,
+                                             final MXSession session,
+                                             final String userId,
+                                             final ApiCallback<Void> refreshCallback) {
+
+        User user = getUser(context, session, userId, refreshCallback);
+        // unknown user
+        if (null == user) {
+            return null;
+        }
+
+        return getPresenceText(context, user);
     }
 
     //==============================================================================================================
