@@ -1,6 +1,9 @@
 package im.vector.chat
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -24,13 +27,29 @@ abstract class BaseMemberSelectionFragment : BaseTitleFragment(), RoomClickListe
         pager.adapter = CreateChatTabAdapter(childFragmentManager, resources.getStringArray(R.array.create_chat_tabs))
         tabLayout.setupWithViewPager(pager)
 
+        searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                onFilter(s.toString(),null)
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //TODO("Not yet implemented")
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                //TODO("Not yet implemented")
+            }
+        })
+
         fragments.forEach { fragment ->
             fragment.roomClickListener = this
         }
     }
 
     override fun onFilter(pattern: String?, listener: OnFilterListener?) {
-        // TODO("Not yet implemented")
+        fragments.forEach { fragment ->
+            fragment.applyFilter(pattern)
+        }
     }
 
     override fun onResetFilter() {

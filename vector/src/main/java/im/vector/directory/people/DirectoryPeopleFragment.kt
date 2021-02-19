@@ -2,17 +2,19 @@ package im.vector.directory.people
 
 import android.os.Bundle
 import android.view.Menu
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.R
+import im.vector.adapters.ParticipantAdapterItem
+import im.vector.adapters.VectorParticipantsAdapter
 import im.vector.directory.BaseDirectoryFragment
 import im.vector.directory.people.detail.PeopleDetailActivity
 import im.vector.directory.people.model.DirectoryPeople
 import im.vector.directory.people.model.TemporaryRoom
 import im.vector.extensions.withArgs
+import kotlinx.android.synthetic.main.fragment_create_chat.*
 import kotlinx.android.synthetic.main.fragment_directory_people.*
-import kotlinx.android.synthetic.main.fragment_directory_people.header
-import kotlinx.android.synthetic.main.fragment_directory_role.*
 import org.matrix.androidsdk.data.Room
 
 class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
@@ -30,6 +32,15 @@ class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
 
     override fun onFilter(pattern: String?, listener: OnFilterListener?) {
         // TODO("Not yet implemented")
+        val participantsAdapter: VectorParticipantsAdapter = VectorParticipantsAdapter(context,
+                R.layout.adapter_item_vector_add_participants,
+                R.layout.adapter_item_vector_people_header,
+                mSession, null, true)
+        val participantAdapterItem = ParticipantAdapterItem(null,null,null,false)
+        participantsAdapter.setSearchedPattern(pattern,participantAdapterItem) {count ->
+            peopleDirectoryAdapter.setData(participantsAdapter)
+            listener?.onFilterDone(count)
+        }
     }
 
     override fun onResetFilter() {

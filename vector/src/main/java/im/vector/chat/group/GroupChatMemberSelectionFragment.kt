@@ -1,5 +1,8 @@
 package im.vector.chat.group
 
+import android.app.Activity
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -81,5 +84,10 @@ class GroupChatMemberSelectionFragment : BaseMemberSelectionFragment() {
             }
         }
         return false
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) activity?.finish()
     }
 }

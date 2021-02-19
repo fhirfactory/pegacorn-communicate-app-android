@@ -4,11 +4,14 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ExpandableListAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.Matrix
 import im.vector.R
+import im.vector.adapters.ParticipantAdapterItem
+import im.vector.adapters.VectorParticipantsAdapter
 import im.vector.directory.people.model.DirectoryPeople
 import im.vector.directory.role.OnDataSetChange
 import im.vector.ui.themes.ThemeUtils.getColor
@@ -85,9 +88,21 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
         }
     }
 
-    fun setData(roles: MutableList<DirectoryPeople>) {
+    fun setData(people: MutableList<DirectoryPeople>) {
         this.people.clear()
-        this.people.addAll(roles)
+        this.people.addAll(people)
+    }
+
+    fun setData(participants: VectorParticipantsAdapter){
+        this.people.clear()
+        for (i in 0 until participants.groupCount) {
+            for (j in 0 until participants.getChildrenCount(i)) {
+                val child: ParticipantAdapterItem = participants.getChild(i,j) as ParticipantAdapterItem
+                if (child.mUserId == null) continue
+                this.people.add(this.people.count(), DirectoryPeople(child.mUserId, child.mDisplayName, "Placeholder", child.mAvatarUrl, "Placeholder", "Placeholder"))
+            }
+        }
+        notifyDataSetChanged()
     }
 
     // Create new views (invoked by the layout manager)
