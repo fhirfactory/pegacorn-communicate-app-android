@@ -17,6 +17,7 @@
 
 package im.vector.util;
 
+import android.app.Activity;
 import android.content.ClipDescription;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -73,6 +74,7 @@ public class VectorRoomMediasSender {
 
     // the linked room activity
     private final VectorRoomActivity mVectorRoomActivity;
+    private final Activity mAttachedActivity;
 
     // the room fragment
     private final VectorMessageListFragment mVectorMessageListFragment;
@@ -96,8 +98,13 @@ public class VectorRoomMediasSender {
      *
      * @param roomActivity the room activity.
      */
-    public VectorRoomMediasSender(VectorRoomActivity roomActivity, VectorMessageListFragment vectorMessageListFragment, MXMediaCache mediasCache) {
-        mVectorRoomActivity = roomActivity;
+    public VectorRoomMediasSender(Activity roomActivity, VectorMessageListFragment vectorMessageListFragment, MXMediaCache mediasCache) {
+        mAttachedActivity = roomActivity;
+        if (roomActivity instanceof VectorRoomActivity) {
+            mVectorRoomActivity = (VectorRoomActivity)roomActivity;
+        } else {
+            mVectorRoomActivity = null;
+        }
         mVectorMessageListFragment = vectorMessageListFragment;
         mMediasCache = mediasCache;
 
@@ -141,10 +148,12 @@ public class VectorRoomMediasSender {
      */
     private void sendMedias() {
         // sanity checks
-        if ((null == mVectorRoomActivity) || (null == mVectorMessageListFragment) || (null == mMediasCache)) {
+        if ((null == mAttachedActivity) || (null == mVectorMessageListFragment) || (null == mMediasCache)) {
             Log.d(LOG_TAG, "sendMedias : null parameters");
             return;
         }
+
+        boolean vectorRoomActivity = null != mVectorRoomActivity;
 
         // detect end of messages sending
         if ((null == mSharedDataItems) || (0 == mSharedDataItems.size())) {
@@ -152,12 +161,14 @@ public class VectorRoomMediasSender {
             mImageCompressionDescription = null;
             mSharedDataItems = null;
 
-            mVectorRoomActivity.runOnUiThread(new Runnable() {
+            mAttachedActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     mVectorMessageListFragment.scrollToBottom();
-                    mVectorRoomActivity.cancelSelectionMode();
-                    mVectorRoomActivity.hideWaitingView();
+                    if (vectorRoomActivity) {
+                        mVectorRoomActivity.cancelSelectionMode();
+                        mVectorRoomActivity.hideWaitingView();
+                    }
                 }
             });
 
@@ -165,8 +176,10 @@ public class VectorRoomMediasSender {
         }
 
         // display a spinner
-        mVectorRoomActivity.cancelSelectionMode();
-        mVectorRoomActivity.showWaitingView();
+        if (vectorRoomActivity) {
+            mVectorRoomActivity.cancelSelectionMode();
+            mVectorRoomActivity.showWaitingView();
+        }
 
         Log.d(LOG_TAG, "sendMedias : " + mSharedDataItems.size() + " items to send");
 
@@ -174,7 +187,7 @@ public class VectorRoomMediasSender {
             @Override
             public void run() {
                 final RoomMediaMessage sharedDataItem = mSharedDataItems.get(0);
-                String mimeType = sharedDataItem.getMimeType(mVectorRoomActivity);
+                String mimeType = sharedDataItem.getMimeType(mAttachedActivity);
 
                 // avoid null case
                 if (null == mimeType) {
@@ -206,18 +219,18 @@ public class VectorRoomMediasSender {
                         return;
                     }
 
-                    final String fFilename = sharedDataItem.getFileName(mVectorRoomActivity);
+                    final String fFilename = sharedDataItem.getFileName(mAttachedActivity);
 
                     ResourceUtils.Resource resource
-                            = ResourceUtils.openResource(mVectorRoomActivity, sharedDataItem.getUri(), sharedDataItem.getMimeType(mVectorRoomActivity));
+                            = ResourceUtils.openResource(mAttachedActivity, sharedDataItem.getUri(), sharedDataItem.getMimeType(mAttachedActivity));
 
                     if (null == resource) {
                         Log.e(LOG_TAG, "sendMedias : " + fFilename + " is not found");
 
-                        mVectorRoomActivity.runOnUiThread(new Runnable() {
+                        mAttachedActivity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(mVectorRoomActivity,
+                                Toast.makeText(mAttachedActivity,
                                         mVectorRoomActivity.getString(R.string.room_message_file_not_found),
                                         Toast.LENGTH_LONG).show();
                             }
@@ -239,7 +252,7 @@ public class VectorRoomMediasSender {
                         sendJpegImage(sharedDataItem, resource);
                     } else {
                         resource.close();
-                        mVectorRoomActivity.runOnUiThread(new Runnable() {
+                        mAttachedActivity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 mVectorMessageListFragment.sendMediaMessage(sharedDataItem);
@@ -322,7 +335,7 @@ public class VectorRoomMediasSender {
      * @param resource       the media resource
      */
     private void sendJpegImage(final RoomMediaMessage sharedDataItem, final ResourceUtils.Resource resource) {
-        String mimeType = sharedDataItem.getMimeType(mVectorRoomActivity);
+        String mimeType = sharedDataItem.getMimeType(mAttachedActivity);
 
         // save the file in the filesystem
         String mediaUrl = mMediasCache.saveMedia(resource.mContentStream, null, mimeType);
@@ -331,7 +344,7 @@ public class VectorRoomMediasSender {
         final String fMediaUrl = mediaUrl;
         final String fMimeType = mimeType;
 
-        mVectorRoomActivity.runOnUiThread(new Runnable() {
+        mAttachedActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if ((null != mSharedDataItems) && (mSharedDataItems.size() > 0)) {
@@ -668,7 +681,7 @@ public class VectorRoomMediasSender {
             // try to apply exif rotation
             if (0 != rotationAngle) {
                 // rotate the image content
-                ImageUtils.rotateImage(mVectorRoomActivity, imageUrl, rotationAngle, mMediasCache);
+                ImageUtils.rotateImage(mAttachedActivity, imageUrl, rotationAngle, mMediasCache);
             }
         } catch (Exception e) {
             Log.e(LOG_TAG, "resizeImage " + e.getMessage(), e);
@@ -706,7 +719,7 @@ public class VectorRoomMediasSender {
                 Uri uri = Uri.parse(anImageUrl);
                 final String filename = uri.getPath();
 
-                final int rotationAngle = ImageUtils.getRotationAngleForBitmap(mVectorRoomActivity, uri);
+                final int rotationAngle = ImageUtils.getRotationAngleForBitmap(mAttachedActivity, uri);
 
                 imageStream = new FileInputStream(new File(filename));
 
@@ -729,7 +742,7 @@ public class VectorRoomMediasSender {
 
                 imageStream.close();
 
-                int prefResize = PreferencesManager.getSelectedDefaultMediaCompressionLevel(mVectorRoomActivity);
+                int prefResize = PreferencesManager.getSelectedDefaultMediaCompressionLevel(mAttachedActivity);
                 if (prefResize > MEDIA_COMPRESSION_CHOOSE) {
                     // subtract "choose" option
                     int opt = prefResize - 1;
@@ -744,27 +757,27 @@ public class VectorRoomMediasSender {
                     if (opt > sizesIdx) opt = sizesIdx;
                     else if (opt < 0) opt = 0;
 
-                    mImageCompressionDescription = imageSizes.getImageSizesDescription(mVectorRoomActivity).get(opt);
+                    mImageCompressionDescription = imageSizes.getImageSizesDescription(mAttachedActivity).get(opt);
                 }
 
                 // the user already selects a compression
                 if (null != mImageCompressionDescription) {
                     isManaged = true;
 
-                    final ImageSize expectedSize = imageSizes.getImageSize(mVectorRoomActivity, mImageCompressionDescription);
+                    final ImageSize expectedSize = imageSizes.getImageSize(mAttachedActivity, mImageCompressionDescription);
                     final String fImageUrl = resizeImage(anImageUrl, filename, imageSizes.mFullImageSize, expectedSize, rotationAngle);
 
-                    mVectorRoomActivity.runOnUiThread(new Runnable() {
+                    mAttachedActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             mVectorMessageListFragment.sendMediaMessage(new RoomMediaMessage(Uri.parse(fImageUrl),
-                                    roomMediaMessage.getFileName(mVectorRoomActivity)));
+                                    roomMediaMessage.getFileName(mAttachedActivity)));
                             aListener.onDone();
                         }
                     });
                 }
                 // can be rescaled ?
-                else if (null != imageSizes.mSmallImageSize) {
+                else if (null != imageSizes.mSmallImageSize && null != mVectorRoomActivity) {
                     isManaged = true;
 
                     FragmentManager fm = mVectorRoomActivity.getSupportFragmentManager();
@@ -809,7 +822,7 @@ public class VectorRoomMediasSender {
 
         // cannot resize, let assumes that it has been done
         if (!isManaged) {
-            mVectorRoomActivity.runOnUiThread(new Runnable() {
+            mAttachedActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     mVectorMessageListFragment.sendMediaMessage(roomMediaMessage);

@@ -131,6 +131,8 @@ import im.vector.features.logout.ProposeLogout;
 import im.vector.fragments.AbsHomeFragment;
 import im.vector.fragments.GroupsFragment;
 import im.vector.fragments.RoomsFragment;
+import im.vector.fragments.VectorSearchRoomFilesListFragment;
+import im.vector.fragments.VectorSearchRoomsFilesListFragment;
 import im.vector.fragments.signout.SignOutBottomSheetDialogFragment;
 import im.vector.fragments.signout.SignOutViewModel;
 import im.vector.gallery.GalleryFragment;
@@ -984,9 +986,11 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 Log.d(LOG_TAG, "onNavigationItemSelected FAVOURITES");
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_FAVOURITES);
                 if (fragment == null) {
-                    fragment = new GalleryFragment();
+                    fragment = new GalleryFragment();//VectorSearchRoomFilesListFragment.newInstance(mSession.getMyUserId(),"!HdSQgdQYAGKNMuYUPk:matrix.org",R.layout.fragment_matrix_message_list_fragment);
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_FAVOURITES;
+                setActionBarTitle(R.string.bottom_action_gallery);
+                mSearchView.setVisibility(View.GONE);
                 setQueryHint(R.string.home_filter_placeholder_favorites, R.string.search_chats);
                 break;
             case R.id.bottom_action_people:

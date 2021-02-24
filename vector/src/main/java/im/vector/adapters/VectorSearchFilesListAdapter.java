@@ -20,11 +20,14 @@ package im.vector.adapters;
 
 import android.content.Context;
 import android.media.ExifInterface;
+import android.os.Build;
 import android.text.format.Formatter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.RequiresApi;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.MessageRow;
@@ -37,6 +40,12 @@ import org.matrix.androidsdk.rest.model.message.FileMessage;
 import org.matrix.androidsdk.rest.model.message.ImageMessage;
 import org.matrix.androidsdk.rest.model.message.Message;
 import org.matrix.androidsdk.rest.model.message.VideoMessage;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 import im.vector.R;
 
@@ -74,6 +83,52 @@ public class VectorSearchFilesListAdapter extends VectorMessagesAdapter {
         Event event = row.getEvent();
 
         Message message = JsonUtils.toMessage(event.getContent());
+
+        if (Message.MSGTYPE_IMAGE.equals(message.msgtype)) {
+            //TODO: Update this when there exists a service for fetching patient tag details
+            convertView = mLayoutInflater.inflate(R.layout.item_gallery, parent, false);
+            long messageTimestamp = event.getOriginServerTs();
+            Date date = new Date(messageTimestamp);
+            ImageMessage imageMessage = JsonUtils.toImageMessage(event.getContent());
+            String thumbUrl = imageMessage.getThumbnailUrl();
+            EncryptedFileInfo encryptedFileInfo = null;
+            if (null == thumbUrl) {
+                thumbUrl = imageMessage.getUrl();
+                encryptedFileInfo = imageMessage.file;
+            } else if (imageMessage.info != null) {
+                encryptedFileInfo = imageMessage.info.thumbnail_file;
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                ZoneOffset id = ZoneOffset.systemDefault().getRules().getOffset(Instant.ofEpochMilli(messageTimestamp));
+                LocalDateTime ldt = LocalDateTime.ofEpochSecond(messageTimestamp / 1000, (int)(messageTimestamp % 1000) * 1000000, id);
+                ((TextView)convertView.findViewById(R.id.time)).setText(ldt.format(formatter));
+
+            } else {
+                ((TextView)convertView.findViewById(R.id.time)).setText(AdapterUtils.tsToString(mContext, event.getOriginServerTs(), false));
+            }
+
+            ((TextView)convertView.findViewById(R.id.fileSize)).setText(Formatter.formatFileSize(mContext, imageMessage.info.size));
+            ((TextView)convertView.findViewById(R.id.name)).setText(mSession.getDataHandler().getUser(event.sender).displayname);
+            ((TextView)convertView.findViewById(R.id.tagPresence)).setVisibility(View.GONE);
+            ImageView thumbnail = (ImageView)convertView.findViewById(R.id.imageView);
+
+
+
+            if (null != thumbUrl) {
+                // detect if the media is encrypted
+                if (null == encryptedFileInfo) {
+                    int size = getContext().getResources().getDimensionPixelSize(R.dimen.member_list_avatar_size);
+                    mSession.getMediaCache().loadAvatarThumbnail(mSession.getHomeServerConfig(), thumbnail, thumbUrl, size);
+                } else {
+                    mSession.getMediaCache().loadBitmap(mSession.getHomeServerConfig(),
+                            thumbnail, thumbUrl, 0, ExifInterface.ORIENTATION_UNDEFINED, null, encryptedFileInfo);
+                }
+            }
+
+            return convertView;
+        }
 
         // common info
         String thumbUrl = null;

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:paddingLeft="4dp"
     android:paddingRight="4dp"
@@ -11,7 +12,6 @@
         android:layout_width="84dp"
         android:layout_height="84dp"
         android:src="@drawable/ic_collections"
-        android:tint="@color/vector_dark_grey_color"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,7 +29,8 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageView"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintVertical_chainStyle="spread"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/fileSize"
@@ -74,5 +75,5 @@
         android:text="Dec 22, 09:23"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fileSize" />
+        app:layout_constraintTop_toTopOf="@+id/name" />
 </androidx.constraintlayout.widget.ConstraintLayout>
