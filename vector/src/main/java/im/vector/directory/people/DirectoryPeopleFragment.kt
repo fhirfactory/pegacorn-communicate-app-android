@@ -72,12 +72,12 @@ class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
 
         //test data
         val testPeopleData = mutableListOf<DirectoryPeople>()
-        testPeopleData.add(DirectoryPeople("1", "John Smith", "Registrar", null, "Emergency Department", "Hospital Department"))
-        testPeopleData.add(DirectoryPeople("2", "Paul George", "Ward Nurse", null, "Emergency Department", "Hospital Department"))
-        testPeopleData.add(DirectoryPeople("3", "Anthony Davis", "Nurse", null, "Emergency Department", "Hospital Department"))
-        testPeopleData.add(DirectoryPeople("4", "Stephen Curry", "Emergency Consultant", null, "Emergency Department", "Hospital Department"))
-        testPeopleData.add(DirectoryPeople("5", "James Harden", "Consultant", null, "Emergency Department", "Hospital Department"))
-        testPeopleData.add(DirectoryPeople("6", "Mike Jones", "Consultant", null, "Emergency Department", "Hospital Department"))
+//        testPeopleData.add(DirectoryPeople("1", "John Smith", "Registrar", null, "Emergency Department", "Hospital Department"))
+//        testPeopleData.add(DirectoryPeople("2", "Paul George", "Ward Nurse", null, "Emergency Department", "Hospital Department"))
+//        testPeopleData.add(DirectoryPeople("3", "Anthony Davis", "Nurse", null, "Emergency Department", "Hospital Department"))
+//        testPeopleData.add(DirectoryPeople("4", "Stephen Curry", "Emergency Consultant", null, "Emergency Department", "Hospital Department"))
+//        testPeopleData.add(DirectoryPeople("5", "James Harden", "Consultant", null, "Emergency Department", "Hospital Department"))
+//        testPeopleData.add(DirectoryPeople("6", "Mike Jones", "Consultant", null, "Emergency Department", "Hospital Department"))
 
         peopleDirectoryAdapter.setData(testPeopleData)
         setHeader(header, R.string.total_number_of_people, testPeopleData.size)

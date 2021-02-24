@@ -71,7 +71,7 @@
             android:id="@+id/patientNameTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="James Bond"
+            android:text="Test Patient"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -91,7 +91,7 @@
             android:id="@+id/patientDobTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="30 Jun, 1980"
+            android:text="1 Sep, 1979"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintRight_toRightOf="parent"
@@ -134,8 +134,8 @@
                 android:textSize="14sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/header"
-                android:text="Rafi Sadat"
-                tools:text="Rafi Sadat" />
+                android:text="Lingo Test User"
+                tools:text="Lingo Test User" />
 
             <TextView
                 android:id="@+id/designation"
@@ -200,7 +200,7 @@
                 android:textSize="14sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/header"
-                android:text="This is a sample description"
+                android:text="This is a sample description."
                 tools:text="Rafi Sadat" />
 
             <TextView
