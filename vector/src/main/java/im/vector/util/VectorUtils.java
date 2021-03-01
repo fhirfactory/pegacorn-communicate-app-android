@@ -306,8 +306,17 @@ public class VectorUtils {
         if(name != null) {
             String[] names = name.split(" ");
             String initials = "";
-            if (names.length > 1) {
-                initials = getInitialLetter(names[0]) + getInitialLetter(names[names.length - 1]);
+            int namePosition = names.length - 1;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                while (!Character.isAlphabetic(names[namePosition].charAt(0)) && namePosition-- > 0);
+            } else {
+                //Not internationalized on old versions of android
+                // >= A, <=Z.
+                //if we ignore 6th bit, we make every character the same case. We can do that by bitwise & with bitwise not of 32.
+                while (!((names[namePosition].charAt(0) & ~32) >= 65 && (names[namePosition].charAt(0) & ~32) <= 90) && namePosition-- > 0);
+            }
+            if (namePosition > 0) {
+                initials = getInitialLetter(names[0]) + getInitialLetter(names[namePosition]);
             } else {
                 initials = getInitialLetter(names[0]);
             }
