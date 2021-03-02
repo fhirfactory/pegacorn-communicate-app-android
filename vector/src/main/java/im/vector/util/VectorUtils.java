@@ -41,6 +41,7 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.collection.LruCache;
 import androidx.core.content.ContextCompat;
@@ -63,7 +64,9 @@ import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -304,6 +307,11 @@ public class VectorUtils {
      */
     public static String getInitials(String name){
         if(name != null) {
+            if (name.contains(",")) {
+                List<String> split = Arrays.asList((String[]) name.split(","));
+                Collections.reverse(split);
+                name = TextUtils.join(" ", split).trim();
+            }
             String[] names = name.split(" ");
             String initials = "";
             int namePosition = names.length - 1;
