@@ -52,16 +52,17 @@ class GalleryFragment : AbsHomeFragment() {
             mFabPressedColor = ContextCompat.getColor(activity, R.color.tab_people_secondary)
         }
 
-        galleryAdapter = VectorSearchRoomFilesListFragment.newInstance(mSession.myUserId,"!HdSQgdQYAGKNMuYUPk:matrix.org",R.layout.fragment_matrix_message_list_fragment);
-        mVectorRoomMediasSender = VectorRoomMediasSender(requireActivity(),galleryAdapter, Matrix.getInstance(requireContext()).mediaCache)
-        childFragmentManager.beginTransaction().apply {
-            add(R.id.filesListContainer, galleryAdapter)
-            commit()
-        }
-
-        takePhoto.setOnClickListener {
-            chooseMediaSource()
-        }
+        //TODO: When the gallery is implemented in earnest, this should be uncommented, and should point to the user's gallery room.
+//        galleryAdapter = VectorSearchRoomFilesListFragment.newInstance(mSession.myUserId,"!HdSQgdQYAGKNMuYUPk:matrix.org",R.layout.fragment_matrix_message_list_fragment);
+//        mVectorRoomMediasSender = VectorRoomMediasSender(requireActivity(),galleryAdapter, Matrix.getInstance(requireContext()).mediaCache)
+//        childFragmentManager.beginTransaction().apply {
+//            add(R.id.filesListContainer, galleryAdapter)
+//            commit()
+//        }
+//
+//        takePhoto.setOnClickListener {
+//            chooseMediaSource()
+//        }
 
     }
 

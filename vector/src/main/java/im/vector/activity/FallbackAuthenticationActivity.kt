@@ -254,6 +254,7 @@ class FallbackAuthenticationActivity : VectorAppCompatActivity() {
                                 credentials.userId = body.userID
                                 credentials.accessToken = body.accessToken
                                 credentials.homeServer = body.homeServer
+                                credentials.deviceId = body.deviceId
 
                                 runOnUiThread {
                                     val returnIntent = Intent()
