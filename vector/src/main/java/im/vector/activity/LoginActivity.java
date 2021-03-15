@@ -1914,8 +1914,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         final HomeServerConnectionConfig hsConfig = getHsConfig();
 
         Intent intent = FallbackAuthenticationActivity.Companion
-                .getIntentToLogin(LoginActivity.this, hsConfig.getHomeserverUri().toString());
+                .getIntentToLoginWithSSO(LoginActivity.this, hsConfig.getHomeserverUri().toString());
         startActivityForResult(intent, RequestCodesKt.FALLBACK_AUTHENTICATION_ACTIVITY_REQUEST_CODE);
+
     }
 
     /**
