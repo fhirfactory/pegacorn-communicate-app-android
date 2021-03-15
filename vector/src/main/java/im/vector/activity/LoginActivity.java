@@ -128,10 +128,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private static final int MODE_UNKNOWN = 0;
     private static final int MODE_LOGIN = 1;
     private static final int MODE_LOGIN_SSO = 2;
-    private static final int MODE_ACCOUNT_CREATION = 3;
-    private static final int MODE_FORGOT_PASSWORD = 4;
-    private static final int MODE_FORGOT_PASSWORD_WAITING_VALIDATION = 5;
-    private static final int MODE_ACCOUNT_CREATION_THREE_PID = 6;
+    private static final int MODE_ACCOUNT_CREATION = 4;
+    private static final int MODE_FORGOT_PASSWORD = 8;
+    private static final int MODE_FORGOT_PASSWORD_WAITING_VALIDATION = 16;
+    private static final int MODE_ACCOUNT_CREATION_THREE_PID = 32;
 
     // saved parameters index
     // creation
@@ -1202,7 +1202,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         if (mMode == MODE_LOGIN
                 || mMode == MODE_LOGIN_SSO
                 || mMode == MODE_FORGOT_PASSWORD
-                || mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION) {
+                || mMode == MODE_FORGOT_PASSWORD_WAITING_VALIDATION
+                || mMode == (MODE_LOGIN | MODE_LOGIN_SSO)) {
             checkLoginFlows();
         } else {
             checkRegistrationFlows();
@@ -2210,7 +2211,14 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
                             if (isSsoDetected) {
                                 // SSO has priority over password
-                                mMode = MODE_LOGIN_SSO;
+                                if (!isTypePasswordDetected) {
+                                    final HomeServerConnectionConfig hsConfig = getHsConfig();
+
+                                    Intent intent = FallbackAuthenticationActivity.Companion
+                                            .getIntentToLoginWithSSO(LoginActivity.this, hsConfig.getHomeserverUri().toString());
+                                    startActivityForResult(intent, RequestCodesKt.FALLBACK_AUTHENTICATION_ACTIVITY_REQUEST_CODE);
+                                }
+                                mMode = MODE_LOGIN_SSO | (isTypePasswordDetected ? MODE_LOGIN : 0);
                                 refreshDisplay(true);
                             } else if (isTypePasswordDetected) {
                                 // In case we were previously in SSO mode
@@ -2360,12 +2368,13 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
         // Then show them depending on mode
         switch (mMode) {
+            case MODE_LOGIN|MODE_LOGIN_SSO:
             case MODE_LOGIN:
                 mLoginLayout.setVisibility(View.VISIBLE);
                 mPasswordForgottenTxtView.setVisibility(View.VISIBLE);
                 mLoginButton.setVisibility(View.VISIBLE);
                 mSwitchToRegisterButton.setVisibility(View.VISIBLE);
-                break;
+                if (mMode==MODE_LOGIN) break;
             case MODE_LOGIN_SSO:
                 mLoginSsoButton.setVisibility(View.VISIBLE);
                 break;
@@ -2569,7 +2578,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 mHomeserverConnectionConfig = null;
                 mRegistrationManager.reset();
 
-                if (mMode != MODE_LOGIN_SSO) {
+                if ((mMode & MODE_LOGIN_SSO) == 0) {
                     mHomeServerText.setText(null);
                     setActionButtonsEnabled(false);
                     checkFlows();
