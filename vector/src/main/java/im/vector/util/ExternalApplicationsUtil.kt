@@ -153,6 +153,36 @@ fun openCameraWithoutSavingVideoToGallery(activity: Activity, fileName: String, 
     return null
 }
 
+fun openCameraWithoutSavingVideoToGallery(fragment: Fragment, fileName: String, requestCode: Int): String? {
+    val activity = fragment.requireActivity()
+    Intent(MediaStore.ACTION_VIDEO_CAPTURE).also { takeVideoIntent ->
+        // Ensure that there's a camera activity to handle the intent
+        takeVideoIntent.resolveActivity(activity.packageManager)?.also {
+            // Create the File where the photo should go
+            val photoFile: File? = try {
+                createTemporaryFile(activity, fileName, ".mp4")
+            } catch (ex: IOException) {
+                // Error occurred while creating the File
+                return null
+            }
+            // Continue only if the File was successfully created
+            photoFile?.also {
+                val photoURI: Uri = FileProvider.getUriForFile(
+                        activity,
+                        BuildConfig.APPLICATION_ID + ".fileProvider",
+                        it
+                )
+                // lowest quality
+                takeVideoIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0)
+                takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                fragment.startActivityForResult(takeVideoIntent, requestCode)
+            }
+            return Uri.fromFile(photoFile).toString()
+        }
+    }
+    return null
+}
+
 @Throws(IOException::class)
 private fun createTemporaryFile(context: Context, fileName: String, extension: String): File {
     // Create an image file name
@@ -162,6 +192,34 @@ private fun createTemporaryFile(context: Context, fileName: String, extension: S
             extension, /* suffix */
             storageDir /* directory */
     )
+}
+
+fun openCameraWithoutSavingImageToGallery(fragment: Fragment, fileName: String, requestCode: Int): String? {
+    val activity = fragment.requireActivity()
+    Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+        // Ensure that there's a camera activity to handle the intent
+        takePictureIntent.resolveActivity(activity.packageManager)?.also {
+            // Create the File where the photo should go
+            val photoFile: File? = try {
+                createTemporaryFile(activity, fileName, ".jpg")
+            } catch (ex: IOException) {
+                // Error occurred while creating the File
+                return null
+            }
+            // Continue only if the File was successfully created
+            photoFile?.also {
+                val photoURI: Uri = FileProvider.getUriForFile(
+                        activity,
+                        BuildConfig.APPLICATION_ID + ".fileProvider",
+                        it
+                )
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                fragment.startActivityForResult(takePictureIntent, requestCode)
+            }
+            return Uri.fromFile(photoFile).toString()
+        }
+    }
+    return null
 }
 
 fun openCameraWithoutSavingImageToGallery(activity: Activity, fileName: String, requestCode: Int): String? {
