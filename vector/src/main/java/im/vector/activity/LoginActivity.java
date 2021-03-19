@@ -224,6 +224,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     @BindView(R.id.login_actions_bar)
     View mButtonsView;
 
+    @BindView(R.id.login_or)
+    TextView mLoginOr;
+
     // if the taps on login button
     // after updating the IS / HS urls
     // without selecting another item
@@ -470,6 +473,13 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     @Override
     public int getLayoutRes() {
         return R.layout.activity_vector_login;
+    }
+
+    private void removePhoneOptions(){
+        //mLoginPhoneNumberCountryCode.setVisibility(View.GONE);
+        mLoginPhoneNumber.setVisibility(View.GONE);
+        mLoginOr.setVisibility(View.GONE);
+        mSwitchToRegisterButton.setVisibility(View.GONE);
     }
 
     @Override
@@ -743,6 +753,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         }else{
             customServerUrlLayout.setVisibility(View.GONE);
         }
+        removePhoneOptions();
     }
 
     private void tryAutoDiscover(String possibleDomain) {
@@ -813,6 +824,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         mHomeServerText.setText(null);
                         mIdentityServerText.setText(null);
                         mUseCustomHomeServersCheckbox.performClick();
+                        mRegistrationNotAllowed = false;
+                        mHasCheckedRegistrationFlows = false;
                     }
                 } else {
                     if (!mUseCustomHomeServersCheckbox.isChecked()
@@ -1771,9 +1784,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     private void checkRegistrationFlows() {
         Log.d(LOG_TAG, "## checkRegistrationFlows(): IN");
         // should only check registration flows
-        if (mMode != MODE_ACCOUNT_CREATION) {
+        if (mMode != MODE_ACCOUNT_CREATION && mHasCheckedRegistrationFlows) {
             return;
         }
+        mHasCheckedRegistrationFlows = true;
 
         if (!mRegistrationManager.hasRegistrationResponse()) {
             try {
@@ -1853,6 +1867,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
                                 // start Login due to a pending email validation
                                 checkIfMailValidationPending();
+                            } else if (e.mStatus == 403) {
+                                onRegistrationNotAllowed();
                             }
                         }
                     });
@@ -1866,8 +1882,13 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         }
     }
 
+    private boolean mHasCheckedRegistrationFlows = false;
+    private boolean mRegistrationNotAllowed = false;
+
     private void onRegistrationNotAllowed() {
         // Registration not supported by the server
+        enableLoadingScreen(false);
+        mRegistrationNotAllowed = true;
         mMode = MODE_LOGIN;
         refreshDisplay(true);
 
@@ -2231,6 +2252,8 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                                 openLoginFallback();
                             }
                         }
+
+                        checkRegistrationFlows();
                     }
 
                     private void onError(String errorMessage) {
@@ -2344,6 +2367,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         // home server
         mHomeServerUrlsLayout.setVisibility(mUseCustomHomeServersCheckbox.isChecked() ? View.VISIBLE : View.GONE);
 
+        if (mUseCustomHomeServersCheckbox.isChecked()) {
+            mRegistrationNotAllowed = false;
+            mHasCheckedRegistrationFlows = false;
+        }
+
         // Hide views
         mLoginLayout.setVisibility(View.GONE);
         mCreationLayout.setVisibility(View.GONE);
@@ -2373,7 +2401,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                 mLoginLayout.setVisibility(View.VISIBLE);
                 mPasswordForgottenTxtView.setVisibility(View.VISIBLE);
                 mLoginButton.setVisibility(View.VISIBLE);
-                mSwitchToRegisterButton.setVisibility(View.VISIBLE);
+                mSwitchToRegisterButton.setVisibility(mRegistrationNotAllowed ? View.GONE : View.VISIBLE);
                 if (mMode==MODE_LOGIN) break;
             case MODE_LOGIN_SSO:
                 mLoginSsoButton.setVisibility(View.VISIBLE);

@@ -37,7 +37,7 @@
                 android:layout_marginRight="16dp"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/login_inputs_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -51,7 +51,10 @@
                         android:layout_width="match_parent"
                         style="@style/EditTextStyle"
                         android:layout_height="wrap_content"
-                        android:textColorHint="?attr/vctr_default_text_hint_color">
+                        android:textColorHint="?attr/vctr_default_text_hint_color"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/login_user_name"
@@ -65,25 +68,29 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
+                        android:id="@+id/login_or"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
                         android:layout_marginLeft="4dp"
                         android:text="@string/or"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toStartOf="@+id/login_phone_number"
+                        app:layout_constraintTop_toBottomOf="@+id/login_user_name_til" />
 
                     <LinearLayout
                         android:id="@+id/login_phone_number"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        app:layout_constraintTop_toBottomOf="@+id/login_or">
 
                         <!-- Add marginTop for better alignment with TextInputLayout. Using baseline does not work -->
                         <EditText
-                            android:layout_gravity="center_vertical"
                             android:id="@+id/login_phone_number_country"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
                             android:layout_marginTop="10dp"
                             android:layout_marginEnd="6dp"
                             android:layout_marginRight="6dp"
@@ -100,9 +107,9 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/login_phone_number_value_til"
+                            style="@style/EditTextStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            style="@style/EditTextStyle"
                             android:textColorHint="?attr/vctr_default_text_hint_color">
 
                             <com.google.android.material.textfield.TextInputEditText
@@ -124,7 +131,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         style="@style/EditTextStyle"
-                        android:textColorHint="?attr/vctr_default_text_hint_color">
+                        android:textColorHint="?attr/vctr_default_text_hint_color"
+                        app:layout_constraintTop_toBottomOf="@+id/login_phone_number">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/login_password"
@@ -137,7 +145,7 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <LinearLayout
                     android:id="@+id/forget_password_inputs_layout"
