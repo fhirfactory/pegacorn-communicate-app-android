@@ -76,14 +76,16 @@
                         android:text="@string/or"
                         android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="@+id/login_phone_number"
-                        app:layout_constraintTop_toBottomOf="@+id/login_user_name_til" />
+                        app:layout_constraintTop_toBottomOf="@+id/login_user_name_til"
+                        tools:visibility="gone" />
 
                     <LinearLayout
                         android:id="@+id/login_phone_number"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        app:layout_constraintTop_toBottomOf="@+id/login_or">
+                        app:layout_constraintTop_toBottomOf="@+id/login_or"
+                        tools:visibility="gone">
 
                         <!-- Add marginTop for better alignment with TextInputLayout. Using baseline does not work -->
                         <EditText
@@ -132,7 +134,9 @@
                         android:layout_marginTop="10dp"
                         style="@style/EditTextStyle"
                         android:textColorHint="?attr/vctr_default_text_hint_color"
-                        app:layout_constraintTop_toBottomOf="@+id/login_phone_number">
+                        app:layout_constraintTop_toBottomOf="@+id/login_phone_number"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/login_password"

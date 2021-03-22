@@ -101,6 +101,7 @@
     <bool name="settings_phone_clickable">false</bool>
     <bool name="settings_session_rename_button_visible">false</bool>
     <bool name="settings_session_delete_button_visible">false</bool>
+    <bool name="login_screen_disable_phone_input">true</bool>
 
     <!--Room Settings-->
     <bool name="room_settings_show_addresses">false</bool>

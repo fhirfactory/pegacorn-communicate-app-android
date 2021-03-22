@@ -42,6 +42,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -121,6 +122,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     public static final String EXTRA_RESTART_FROM_INVALID_CREDENTIALS = "EXTRA_RESTART_FROM_INVALID_CREDENTIALS";
     public static final String EXTRA_CONFIG = "EXTRA_CONFIG";
 
+    public static Boolean userLoggedOutInThisSession = false;
 
     // activity modes
     // either the user logs in
@@ -213,6 +215,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     @BindView(R.id.login_phone_number_country)
     EditText mLoginPhoneNumberCountryCode;
+
+    @BindView(R.id.login_phone_number)
+    LinearLayout mLoginPhoneNumberContainer;
 
     // the login password
     @BindView(R.id.login_password_til)
@@ -476,10 +481,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     }
 
     private void removePhoneOptions(){
-        //mLoginPhoneNumberCountryCode.setVisibility(View.GONE);
-        mLoginPhoneNumber.setVisibility(View.GONE);
+        if (!getApplicationContext().getResources().getBoolean(R.bool.login_screen_disable_phone_input))
+            return;
+        mLoginPhoneNumberContainer.setVisibility(View.GONE);
         mLoginOr.setVisibility(View.GONE);
-        mSwitchToRegisterButton.setVisibility(View.GONE);
+        mLoginLayout.invalidate();
     }
 
     @Override
@@ -750,9 +756,10 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         //hide/hide the custom server option according to config
         if(getResources().getBoolean(R.bool.show_custom_url_login)){
             customServerUrlLayout.setVisibility(View.VISIBLE);
-        }else{
+        }else {
             customServerUrlLayout.setVisibility(View.GONE);
         }
+
         removePhoneOptions();
     }
 
@@ -2232,7 +2239,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
                             if (isSsoDetected) {
                                 // SSO has priority over password
-                                if (!isTypePasswordDetected) {
+                                if (!isTypePasswordDetected && !userLoggedOutInThisSession) {
                                     final HomeServerConnectionConfig hsConfig = getHsConfig();
 
                                     Intent intent = FallbackAuthenticationActivity.Companion
@@ -2357,6 +2364,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
      * Refresh the visibility of mHomeServerText
      */
     private void refreshDisplay(boolean checkFlow) {
+
         // check if the device supported the dedicated mode
         if (checkFlow) {
             checkFlows();

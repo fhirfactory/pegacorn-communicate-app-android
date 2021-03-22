@@ -69,6 +69,7 @@ import java.util.Set;
 
 import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.KeysBackupManageActivity;
+import im.vector.activity.LoginActivity;
 import im.vector.activity.SplashActivity;
 import im.vector.analytics.MetricsListenerProxy;
 import im.vector.push.PushManager;
@@ -565,6 +566,8 @@ public class Matrix {
                                           final MXSession session,
                                           final boolean clearCredentials,
                                           final ApiCallback<Void> aCallback) {
+        LoginActivity.userLoggedOutInThisSession = true;
+
         if (!session.isAlive()) {
             Log.e(LOG_TAG, "## clearSession() " + session.getMyUserId() + " is already released");
             return;
