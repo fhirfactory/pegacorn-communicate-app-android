@@ -114,6 +114,7 @@ public class CommonActivityUtils {
     // power names
     public static final String UTILS_POWER_LEVEL_ADMIN_NAME = "Admin";
     public static final String UTILS_POWER_LEVEL_MODERATOR_NAME = "Moderator";
+    public static final String UTILS_POWER_LEVEL_DEFAULT_NAME = "Default";
 
     /**
      * Logout a sessions list

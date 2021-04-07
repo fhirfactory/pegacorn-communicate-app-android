@@ -360,7 +360,7 @@ public class VectorMessageListFragment extends MatrixMessageListFragment<VectorM
 
     @Override
     protected boolean canAddEvent(Event event) {
-        return TextUtils.equals(WidgetsManager.WIDGET_EVENT_TYPE, event.getType()) || super.canAddEvent(event);
+        return TextUtils.equals(WidgetsManager.WIDGET_EVENT_TYPE, event.getType()) || event.type.equals(EVENT_TYPE_STATE_ROOM_POWER_LEVELS) || super.canAddEvent(event);
     }
 
     /**

@@ -1635,4 +1635,5 @@ Why choose Riot.im?
     <string name="title_activity_service_detail">Service Detail</string>
     <string name="short_text">Short text</string>
     <string name="long_text">very long text very long text very long text very long text very long text very long text very long text</string>
+    <string name="power_level_change_message">%s changed the power level of %s from %s to %s.</string>
 </resources>

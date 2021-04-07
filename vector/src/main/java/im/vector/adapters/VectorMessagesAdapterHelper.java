@@ -1063,6 +1063,8 @@ class VectorMessagesAdapterHelper {
         } else if (Event.EVENT_TYPE_STATE_ROOM_CREATE.equals(eventType)) {
             final RoomCreateContent roomCreateContent = JsonUtils.toRoomCreateContent(event.getContent());
             return roomCreateContent != null && roomCreateContent.predecessor != null;
+        } else if (Event.EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(eventType)){
+            return true;
         }
         return false;
     }

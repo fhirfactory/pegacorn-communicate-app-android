@@ -56,6 +56,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import com.binaryfork.spanny.Spanny;
+import com.google.gson.JsonObject;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.adapters.AbstractMessagesAdapter;
@@ -100,6 +101,7 @@ import java.util.Set;
 
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.activity.CommonActivityUtils;
 import im.vector.extensions.MatrixSdkExtensionsKt;
 import im.vector.listeners.IMessagesAdapterActionsListener;
 import im.vector.settings.VectorLocale;
@@ -1074,7 +1076,8 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                         || EVENT_TYPE_STATE_ROOM_MEMBER.equals(eventType)
                         || EVENT_TYPE_STATE_ROOM_NAME.equals(eventType)
                         || EVENT_TYPE_STATE_ROOM_THIRD_PARTY_INVITE.equals(eventType)
-                        || Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)) {
+                        || Event.EVENT_TYPE_MESSAGE_ENCRYPTION.equals(eventType)
+                        || EVENT_TYPE_STATE_ROOM_POWER_LEVELS.equals(eventType)) {
             viewType = ROW_TYPE_ROOM_MEMBER;
 
         } else if (WidgetsManager.WIDGET_EVENT_TYPE.equals(eventType)) {
@@ -1444,6 +1447,16 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
         return convertView;
     }
 
+    private String getNameForPowerLevel(int power) {
+        if (power >= CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN) {
+            return CommonActivityUtils.UTILS_POWER_LEVEL_ADMIN_NAME;
+        } else if (power >= CommonActivityUtils.UTILS_POWER_LEVEL_MODERATOR) {
+            return CommonActivityUtils.UTILS_POWER_LEVEL_MODERATOR_NAME;
+        } else {
+            return CommonActivityUtils.UTILS_POWER_LEVEL_DEFAULT_NAME;
+        }
+    }
+
     /**
      * Notice and RoomMember message management
      *
@@ -1466,6 +1479,30 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
 
             EventDisplay display = new RiotEventDisplay(mContext);
             notice = row.getText(null, display);
+
+            if (msg.type.equals(EVENT_TYPE_STATE_ROOM_POWER_LEVELS)) {
+                JsonObject previous = msg.prev_content.getAsJsonObject().get("users").getAsJsonObject();
+                JsonObject current = msg.contentJson.getAsJsonObject().get("users").getAsJsonObject();
+                String userID = null;
+                int oldValue = 0;
+                int newValue = 0;
+                for (String i: current.keySet()) {
+                    if (previous.get(i) == null || current.get(i).getAsInt() != previous.get(i).getAsInt()){
+                        userID = i;
+                        newValue = current.get(i).getAsInt();
+                        oldValue = previous.get(i) == null ? msg.contentJson.getAsJsonObject().get("users_default").getAsInt() : previous.get(i).getAsInt();
+                        break;
+                    }
+                }
+
+                notice = String.format(
+                        getContext().getString(R.string.power_level_change_message),
+                        msg.getSender(),
+                        userID,
+                        getNameForPowerLevel(oldValue),
+                        getNameForPowerLevel(newValue)
+                );
+            }
 
             TextView noticeTextView = convertView.findViewById(R.id.messagesAdapter_body);
 
@@ -2069,7 +2106,9 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
                 }
             }
         }
-
+        if (text == null && event.type.equals(EVENT_TYPE_STATE_ROOM_POWER_LEVELS)) {
+            text = "Power Levels Changed";
+        }
         return text;
     }
 
