@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import im.vector.Matrix
 import im.vector.R
 import im.vector.directory.role.model.DummyRole
+import im.vector.microservices.DirectoryConnector
 import im.vector.util.VectorUtils
 import im.vector.view.VectorCircularImageView
 import kotlinx.android.synthetic.main.item_directory_people.view.*
@@ -43,6 +44,25 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: R
         this.roles.clear()
         this.roles.addAll(roles)
         notifyDataSetChanged()
+    }
+
+    fun addPage(roles: List<DummyRole>) {
+        this.roles.addAll(roles)
+        notifyDataSetChanged()
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        recyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+            var loading: Boolean = false
+            var page: Int = 0;
+            val pageSize: Int = 10;
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+
+            }
+        })
     }
 
     // Create new views (invoked by the layout manager)

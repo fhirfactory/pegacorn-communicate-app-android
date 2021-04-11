@@ -3,13 +3,16 @@ package im.vector.directory.role
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.transition.TransitionManager
 import im.vector.R
@@ -18,6 +21,7 @@ import im.vector.directory.people.model.TemporaryRoom
 import im.vector.directory.role.detail.RoleDetailActivity
 import im.vector.directory.role.model.*
 import im.vector.extensions.withArgs
+import im.vector.microservices.DirectoryConnector
 import kotlinx.android.synthetic.main.fragment_directory_role.*
 import org.matrix.androidsdk.data.Room
 
@@ -63,24 +67,6 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
         viewModel = ViewModelProviders.of(this).get(DirectoryRoleViewModel::class.java)
         val selectable = arguments?.getBoolean(SELECTABLE, false)
         subscribeUI()
-        cancelButton.setOnClickListener {
-            viewModel.toggleSearchView()
-        }
-
-        constraintCollapsed.clone(innerConstraintLayout)
-        constraintCollapsed.setVisibility(categoryLayout.id, GONE)
-        constraintCollapsed.setVisibility(organisationLayout.id, GONE)
-        constraintCollapsed.setVisibility(specialityLayout.id, GONE)
-        constraintCollapsed.setVisibility(locationLayout.id, GONE)
-        constraintCollapsed.setVisibility(applyButton.id, GONE)
-        constraintCollapsed.setVisibility(cancelButton.id, GONE)
-        constraintExpanded.clone(innerConstraintLayout)
-        constraintExpanded.setVisibility(categoryLayout.id, VISIBLE)
-        constraintExpanded.setVisibility(organisationLayout.id, VISIBLE)
-        constraintExpanded.setVisibility(specialityLayout.id, VISIBLE)
-        constraintExpanded.setVisibility(locationLayout.id, VISIBLE)
-        constraintExpanded.setVisibility(applyButton.id, VISIBLE)
-        constraintExpanded.setVisibility(cancelButton.id, VISIBLE)
 
 /*        categoryAdapter = DropDownAdapter(requireContext(), R.layout.drop_down_item)
         categoryEditText.threshold = 1
@@ -118,6 +104,7 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
 */
 
         val testRoleData = mutableListOf<DummyRole>()
+        /*
         testRoleData.add(DummyRole("1", "ED Acute SRMO", "Emergency Department  Acute Senior Resident Medical Officer Medical Officer", null, "ED {Emergency Department}", arrayListOf(Role("1", "Senior Resident Medical Officer", "Doctor")),
                 arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
 
@@ -141,9 +128,46 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
 
         testRoleData.add(DummyRole("8", "ED Acute North Nurse", "Emergency Department  Acute North Nurse", null, "ED {Emergency Department}", arrayListOf(Role("1", "Emergency Department Nurse", "Nursing and Midwifery")),
                 arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
+         */
+        paginate()
+        setupScrollListener()
 
         roleAdapter.setData(testRoleData)
         setHeader(header, R.string.total_number_of_roles, testRoleData.size)
+    }
+
+    var page = 0;
+    var loading = false;
+    var pageSize = 20;
+
+    fun paginate() {
+        if (!loading) {
+
+            val idx = roleRecyclerview.getChildAdapterPosition(roleRecyclerview.getChildAt(0))
+            val overHalfway: Boolean = idx >= (page * pageSize) / 2
+
+            if (overHalfway || roleRecyclerview.height == 0) {
+                page += 1
+                loading = true;
+                context?.let {
+                    DirectoryConnector.GetRoles(page, pageSize, it){
+                        it?.let {
+                            roleAdapter.addPage(it)
+                            loading = false
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun setupScrollListener() {
+        roleRecyclerview.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                paginate()
+            }
+        })
     }
 
     override fun onFavorite(enable: Boolean) {
@@ -167,9 +191,7 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
 
     private fun subscribeUI() {
         viewModel.advancedSearchVisibility.observe(viewLifecycleOwner, Observer {
-            TransitionManager.beginDelayedTransition(innerConstraintLayout)
             val constraint = if (it) constraintExpanded else constraintCollapsed
-            constraint.applyTo(innerConstraintLayout)
         })
     }
 
