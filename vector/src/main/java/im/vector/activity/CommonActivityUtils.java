@@ -111,6 +111,8 @@ public class CommonActivityUtils {
     public static final float UTILS_POWER_LEVEL_MODERATOR = 50;
     private static final int ROOM_SIZE_ONE_TO_ONE = 2;
 
+    public static final String APP_DID_LOGOUT = "APP_DID_LOGOUT";
+
     // power names
     public static final String UTILS_POWER_LEVEL_ADMIN_NAME = "Admin";
     public static final String UTILS_POWER_LEVEL_MODERATOR_NAME = "Moderator";
@@ -431,6 +433,7 @@ public class CommonActivityUtils {
                     // go to login page
                     Intent intent = new Intent(activeContext, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.putExtra(APP_DID_LOGOUT,true);
                     activeContext.startActivity(intent);
                 }
             }

@@ -482,13 +482,17 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
         mSwitchToRegisterButton.setVisibility(View.GONE);
     }
 
+    private boolean shouldAutoLogin = true;
+
     @Override
     public void initUiAndData() {
         if (null == getIntent()) {
             Log.d(LOG_TAG, "## onCreate(): IN with no intent");
         } else {
             Log.d(LOG_TAG, "## onCreate(): IN with flags " + Integer.toHexString(getIntent().getFlags()));
+            shouldAutoLogin = !getIntent().getBooleanExtra(CommonActivityUtils.APP_DID_LOGOUT,false);
         }
+
 
         // warn that the application has started.
         CommonActivityUtils.onApplicationStarted(this);
@@ -2232,12 +2236,13 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
                             if (isSsoDetected) {
                                 // SSO has priority over password
-                                if (!isTypePasswordDetected) {
+                                if (!isTypePasswordDetected && shouldAutoLogin) {
                                     final HomeServerConnectionConfig hsConfig = getHsConfig();
 
                                     Intent intent = FallbackAuthenticationActivity.Companion
                                             .getIntentToLoginWithSSO(LoginActivity.this, hsConfig.getHomeserverUri().toString());
                                     startActivityForResult(intent, RequestCodesKt.FALLBACK_AUTHENTICATION_ACTIVITY_REQUEST_CODE);
+                                    shouldAutoLogin = false;
                                 }
                                 mMode = MODE_LOGIN_SSO | (isTypePasswordDetected ? MODE_LOGIN : 0);
                                 refreshDisplay(true);
