@@ -80,6 +80,9 @@ class FallbackAuthenticationActivity : VectorAppCompatActivity() {
 
         mMode = intent.getIntExtra(EXTRA_IN_MODE, MODE_LOGIN)
 
+
+        mWebView.settings.setAppCacheEnabled(true)
+        mWebView.settings.setAppCachePath("/data/data$packageName/cache")
         mWebView.settings.javaScriptEnabled = true
 
         // Enable local storage to support SSO with Firefox accounts

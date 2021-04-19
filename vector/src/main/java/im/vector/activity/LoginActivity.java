@@ -42,6 +42,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -213,6 +214,9 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
     @BindView(R.id.login_phone_number_country)
     EditText mLoginPhoneNumberCountryCode;
+
+    @BindView(R.id.login_phone_number)
+    LinearLayout mLoginPhoneNumberContainer;
 
     // the login password
     @BindView(R.id.login_password_til)
@@ -476,10 +480,11 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     }
 
     private void removePhoneOptions(){
-        //mLoginPhoneNumberCountryCode.setVisibility(View.GONE);
-        mLoginPhoneNumber.setVisibility(View.GONE);
+        if (!getApplicationContext().getResources().getBoolean(R.bool.login_screen_disable_phone_input))
+            return;
+        mLoginPhoneNumberContainer.setVisibility(View.GONE);
         mLoginOr.setVisibility(View.GONE);
-        mSwitchToRegisterButton.setVisibility(View.GONE);
+        mLoginLayout.invalidate();
     }
 
     private boolean shouldAutoLogin = true;

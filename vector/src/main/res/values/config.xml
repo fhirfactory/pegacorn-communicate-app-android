@@ -151,4 +151,5 @@
     <bool name="show_permalink_menu_item">true</bool>
     <bool name="show_albums_in_camera">true</bool>
     <bool name="show_image_compression_dialog">true</bool>
+    <bool name="login_screen_disable_phone_input">false</bool>
 </resources>
