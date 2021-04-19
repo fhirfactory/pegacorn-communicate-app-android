@@ -6,7 +6,9 @@ data class FHIRIdentifier (
     @JvmField
     var use: String,
     @JvmField
-    var value: String
+    var value: String,
+    @JvmField
+    var leafValue: String
 ) {
     val fhirIdentifier: String
     get() {

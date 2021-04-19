@@ -8,11 +8,13 @@ data class FHIRPractitionerRole(
         @JvmField
         var displayName: String,
         @JvmField
+        var description: String,
+        @JvmField
         var systemManaged: Boolean,
         @JvmField
-        var primaryOrganizationID: FHIRIdentifier,
+        var primaryOrganizationID: String,
         @JvmField
-        var primaryLocationID: FHIRIdentifier,
+        var primaryLocationID: String,
         @JvmField
         var contactPoints: List<FHIRContactPoint>,
         @JvmField
