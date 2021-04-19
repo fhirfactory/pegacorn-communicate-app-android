@@ -9,4 +9,6 @@
 
     <integer name="number_of_emoji_per_line">4</integer>
 
+    <integer name="navigation_anim_time">250</integer>
+
 </resources>

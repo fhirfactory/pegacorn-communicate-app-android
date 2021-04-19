@@ -120,6 +120,8 @@ import im.vector.fragments.VectorReadReceiptsDialogFragment;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.fragments.roomwidgets.RoomWidgetPermissionBottomSheet;
 import im.vector.listeners.IMessagesAdapterActionsListener;
+import im.vector.patient.DemoPatient;
+import im.vector.patient.PatientTagActivity;
 import im.vector.util.CallsManager;
 import im.vector.util.ExternalApplicationsUtilKt;
 import im.vector.util.MatrixURLSpan;
@@ -140,6 +142,9 @@ import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
 import im.vector.widgets.model.JitsiWidgetProperties;
 import kotlin.Unit;
+
+import static im.vector.patient.PatientTagActivity.ROOM_MEDIA_MESSAGE_ARRAY_EXTRA;
+import static im.vector.patient.PatientTagFragment.PATIENT_EXTRA;
 
 /**
  * Displays a single room with messages.
@@ -193,6 +198,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private static final int INVITE_USER_REQUEST_CODE = 4;
     public static final int UNREAD_PREVIEW_REQUEST_CODE = 5;
     private static final int RECORD_AUDIO_REQUEST_CODE = 6;
+    private static final int PATIENT_TAG_REQUEST_CODE = 8;
 
     // media selection
     private static final int MEDIA_SOURCE_FILE = 1;
@@ -202,6 +208,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
     private static final int MEDIA_SOURCE_VIDEO = 5;
 
     private static final String CAMERA_VALUE_TITLE = "attachment"; // Samsung devices need a filepath to write to or else won't return a Uri (!!!)
+    private static final String IMAGE_VALUE_TITLE = "image"; // Samsung devices need a filepath to write to or else won't return a Uri (!!!)
+    private static final String VIDEO_VALUE_TITLE = "video"; // Samsung devices need a filepath to write to or else won't return a Uri (!!!)
     private String mLatestTakePictureCameraUri = null; // has to be String not Uri because of Serializable
 
     public static final int CONFIRM_MEDIA_REQUEST_CODE = 7;
@@ -801,7 +809,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     ? VectorMessageListFragment.PREVIEW_MODE_UNREAD_MESSAGE : null) : VectorMessageListFragment.PREVIEW_MODE_READ_ONLY;
             mVectorMessageListFragment = VectorMessageListFragment.newInstance(mMyUserId, roomId, mEventId,
                     previewMode,
-                    org.matrix.androidsdk.R.layout.fragment_matrix_message_list_fragment);
+                    R.layout.fragment_matrix_message_list_fragment);
             fm.beginTransaction().add(R.id.anchor_fragment_messages, mVectorMessageListFragment, TAG_FRAGMENT_MATRIX_MESSAGE_LIST).commit();
         } else {
             Log.d(LOG_TAG, "Reuse VectorMessageListFragment");
@@ -1281,8 +1289,11 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
 
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case REQUEST_FILES_REQUEST_CODE:
                 case TAKE_IMAGE_REQUEST_CODE:
+                    //sendMediasIntent(data);
+                    getPatientData(data);
+                    break;
+                case REQUEST_FILES_REQUEST_CODE:
                 case RECORD_AUDIO_REQUEST_CODE:
                     sendMediasIntent(data);
                     break;
@@ -1305,7 +1316,31 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
                     }
                     mVectorRoomMediasSender.sendMedias(sharedDataItems);
                     break;
+                case PATIENT_TAG_REQUEST_CODE:
+                    sendPatientMediasIntent(data);
+                    break;
             }
+        }
+    }
+
+    private void getPatientData(Intent intent) {
+        // sanity check
+        if ((null == intent) && (null == mLatestTakePictureCameraUri)) {
+            return;
+        }
+
+        ArrayList<RoomMediaMessage> sharedDataItems = new ArrayList<>();
+
+        if (null != intent) {
+            sharedDataItems = new ArrayList<>(RoomMediaMessage.listRoomMediaMessages(intent));
+        }
+
+        if (sharedDataItems.size() > 0) {
+            startActivityForResult(PatientTagActivity.Companion.intent(this, sharedDataItems), PATIENT_TAG_REQUEST_CODE);
+        } else if (mLatestTakePictureCameraUri != null) {
+            startActivityForResult(PatientTagActivity.Companion.intent(this, mLatestTakePictureCameraUri), PATIENT_TAG_REQUEST_CODE);
+        } else {
+            Toast.makeText(this, R.string.no_image, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -2014,6 +2049,26 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         }
     }
 
+    private void sendPatientMediasIntent(Intent intent) {
+        if (null != intent) {
+            Bundle bundle = intent.getExtras();
+            // sanity checks
+            if (null != bundle) {
+                if (bundle.containsKey(PATIENT_EXTRA)) {
+                    DemoPatient patient = bundle.getParcelable(PATIENT_EXTRA);
+                    Toast.makeText(this, patient == null ? "No Patient Tagged" : patient.getName(), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this,"No Patient Tagged", Toast.LENGTH_LONG).show();
+                }
+
+                if (bundle.containsKey(ROOM_MEDIA_MESSAGE_ARRAY_EXTRA)) {
+                    ArrayList<RoomMediaMessage> sharedDataItems = bundle.getParcelableArrayList(ROOM_MEDIA_MESSAGE_ARRAY_EXTRA);
+                    sendMediaMessages(intent, sharedDataItems==null? new ArrayList<>() : sharedDataItems);
+                }
+            }
+        }
+    }
+
     /**
      * Send the medias defined in the intent.
      * They are listed, checked and sent when it is possible.
@@ -2030,13 +2085,16 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
         if (null != intent) {
             sharedDataItems = new ArrayList<>(RoomMediaMessage.listRoomMediaMessages(intent));
         }
+        sendMediaMessages(intent, sharedDataItems);
+    }
 
+    private void sendMediaMessages(Intent intent, List<RoomMediaMessage> sharedDataItems){
         // check the extras
         if ((0 == sharedDataItems.size()) && (null != intent)) {
             Bundle bundle = intent.getExtras();
             // sanity checks
             if (null != bundle) {
-                if (bundle.containsKey(Intent.EXTRA_TEXT)) {
+                if (bundle.containsKey(Intent.EXTRA_TEXT) && bundle.getString(Intent.EXTRA_TEXT)!=null) {
                     mEditText.append(bundle.getString(Intent.EXTRA_TEXT));
 
                     mEditText.post(new Runnable() {
@@ -2366,8 +2424,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      */
     private void launchNativeVideoRecorder() {
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
-
-        ExternalApplicationsUtilKt.openVideoRecorder(this, TAKE_IMAGE_REQUEST_CODE);
+        ExternalApplicationsUtilKt.openCameraWithoutSavingVideoToGallery(this, VIDEO_VALUE_TITLE, TAKE_IMAGE_REQUEST_CODE);
     }
 
     /**
@@ -2375,8 +2432,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      */
     private void launchNativeCamera() {
         enableActionBarHeader(HIDE_ACTION_BAR_HEADER);
-
-        mLatestTakePictureCameraUri = ExternalApplicationsUtilKt.openCamera(this, CAMERA_VALUE_TITLE, TAKE_IMAGE_REQUEST_CODE);
+        mLatestTakePictureCameraUri = ExternalApplicationsUtilKt.openCameraWithoutSavingImageToGallery(this, IMAGE_VALUE_TITLE, TAKE_IMAGE_REQUEST_CODE);
     }
 
     /**
@@ -2461,7 +2517,7 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
      * Display UI buttons according to user input text.
      */
     private void manageSendMoreButtons() {
-        int img = getResources().getBoolean(R.bool.show_camera_icon_in_place_of_file_icon) ? R.drawable.ic_material_camera: R.drawable.ic_material_file;
+        int img = getResources().getBoolean(R.bool.show_camera_icon_in_place_of_file_icon) ? R.drawable.ic_material_camera : R.drawable.ic_material_file;
         if (!PreferencesManager.sendMessageWithEnter(this) && mEditText.getText().length() > 0) {
             img = R.drawable.ic_material_send_green;
         } else {

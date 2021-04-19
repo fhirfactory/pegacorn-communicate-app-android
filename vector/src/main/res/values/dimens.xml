@@ -27,4 +27,17 @@
 
     <dimen name="title_text_size">18sp</dimen>
     <dimen name="sub_title_text_size">16sp</dimen>
+
+    <dimen name="heading_padding">4dp</dimen>
+    <dimen name="min_button_width">140dp</dimen>
+    <dimen name="patient_tag_image_height">100dp</dimen>
+
+
+    <dimen name="key_size">64dp</dimen>
+    <dimen name="dialer_text_layout_margin">6dp</dimen>
+    <dimen name="dialer_image_margin">20dp</dimen>
+    <dimen name="dialer_font">28sp</dimen>
+    <dimen name="dialer_key_font">24sp</dimen>
+    <dimen name="detail_button_size">32dp</dimen>
+    <dimen name="detail_button_padding">6dp</dimen>
 </resources>

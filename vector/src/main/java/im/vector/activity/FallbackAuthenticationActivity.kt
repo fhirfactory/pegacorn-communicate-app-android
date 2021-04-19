@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.UrlQuerySanitizer
 import android.net.http.SslError
 import android.os.Build
 import android.text.TextUtils
@@ -32,11 +33,26 @@ import butterknife.BindView
 import com.google.gson.internal.LinkedTreeMap
 import com.google.gson.reflect.TypeToken
 import im.vector.R
+import im.vector.activity.sso.SSOLoginAPI
+import im.vector.activity.sso.SSORequestParameters
+import im.vector.activity.sso.SSORequestResponse
 import org.matrix.androidsdk.core.JsonUtils
 import org.matrix.androidsdk.core.Log
 import org.matrix.androidsdk.rest.model.login.Credentials
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.io.DataOutputStream
+import java.io.FileNotFoundException
+import java.net.URL
+import java.net.URLConnection
 import java.net.URLDecoder
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 import java.util.*
+import javax.net.ssl.HttpsURLConnection
 
 /**
  * FallbackAuthenticationActivity is the fallback login or create account activity
@@ -55,7 +71,7 @@ class FallbackAuthenticationActivity : VectorAppCompatActivity() {
 
     override fun getLayoutRes() = R.layout.activity_authentication_fallback
 
-    override fun getTitleRes() = if (mMode == MODE_LOGIN) R.string.login else R.string.create_account
+    override fun getTitleRes() = if (mMode == MODE_REGISTER) R.string.create_account else R.string.login
 
     override fun initUiAndData() {
         configureToolbar()
@@ -64,6 +80,9 @@ class FallbackAuthenticationActivity : VectorAppCompatActivity() {
 
         mMode = intent.getIntExtra(EXTRA_IN_MODE, MODE_LOGIN)
 
+
+        mWebView.settings.setAppCacheEnabled(true)
+        mWebView.settings.setAppCachePath("/data/data$packageName/cache")
         mWebView.settings.javaScriptEnabled = true
 
         // Enable local storage to support SSO with Firefox accounts
@@ -117,6 +136,9 @@ class FallbackAuthenticationActivity : VectorAppCompatActivity() {
     private fun launchWebView() {
         if (mMode == MODE_LOGIN) {
             mWebView.loadUrl(mHomeServerUrl!! + "_matrix/static/client/login/")
+        } else if (mMode == MODE_SSO){
+            val serverurl = mHomeServerUrl!! + "_matrix/client/r0/login/sso/redirect?redirectUrl=" + URLEncoder.encode(SSORedirectURL)
+            mWebView.loadUrl(serverurl)
         } else {
             // MODE_REGISTER
             mWebView.loadUrl(mHomeServerUrl!! + "_matrix/static/client/register/")
@@ -212,6 +234,45 @@ class FallbackAuthenticationActivity : VectorAppCompatActivity() {
              * @return
              */
             override fun shouldOverrideUrlLoading(view: WebView, url: String?): Boolean {
+                if (null != url && url.startsWith(SSORedirectURL)){
+                    val token = UrlQuerySanitizer(url).getValue("loginToken").removeSuffix("#")
+                    val requestURL = URL(mHomeServerUrl!! + "_matrix/client/r0/login")
+                    val retrofit = Retrofit.Builder()
+                            .baseUrl(mHomeServerUrl!!)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build()
+
+                    // Create Service
+                    val service = retrofit.create(SSOLoginAPI::class.java)
+                    val response = service.login(SSORequestParameters(token))
+                    response.enqueue(object: Callback<SSORequestResponse>{
+                        override fun onFailure(call: Call<SSORequestResponse>, t: Throwable) {
+                            TODO("Not yet implemented")
+                        }
+
+                        override fun onResponse(call: Call<SSORequestResponse>, response: Response<SSORequestResponse>) {
+                            val body = response.body()
+                            if (null != body) {
+                                val credentials = Credentials()
+
+                                credentials.userId = body.userID
+                                credentials.accessToken = body.accessToken
+                                credentials.homeServer = body.homeServer
+                                credentials.deviceId = body.deviceId
+
+                                runOnUiThread {
+                                    val returnIntent = Intent()
+                                    returnIntent.putExtra(EXTRA_OUT_SERIALIZED_CREDENTIALS, JsonUtils.getBasicGson().toJson(credentials))
+                                    setResult(RESULT_OK, returnIntent)
+
+                                    finish()
+                                }
+                            }
+                        }
+
+                    })
+                    return true
+                }
                 if (null != url && url.startsWith("js:")) {
                     var json = url.substring(3)
                     var parameters: Map<String, Any>? = null
@@ -219,9 +280,8 @@ class FallbackAuthenticationActivity : VectorAppCompatActivity() {
                     try {
                         // URL decode
                         json = URLDecoder.decode(json, "UTF-8")
-                        parameters = JsonUtils.getBasicGson().fromJson<Map<String, Any>>(json, object : TypeToken<HashMap<String, Any>>() {
+                        parameters = JsonUtils.getBasicGson().fromJson<Map<String, Any>>(json, object : TypeToken<HashMap<String, Any>>() {}.type)
 
-                        }.type)
                     } catch (e: Exception) {
                         Log.e(LOG_TAG, "## shouldOverrideUrlLoading() : fromJson failed " + e.message, e)
                     }
@@ -315,10 +375,13 @@ class FallbackAuthenticationActivity : VectorAppCompatActivity() {
 
         private const val MODE_LOGIN = 1
         private const val MODE_REGISTER = 2
+        private const val MODE_SSO = 3
 
         private const val EXTRA_IN_MODE = "FallbackAuthenticationActivity.EXTRA_IN_MODE"
         private const val EXTRA_IN_HOME_SERVER_URL = "FallbackAuthenticationActivity.EXTRA_IN_HOME_SERVER_URL"
         private const val EXTRA_OUT_SERIALIZED_CREDENTIALS = "FallbackAuthenticationActivity.EXTRA_OUT_SERIALIZED_CREDENTIALS"
+
+        private const val SSORedirectURL = "lingo://login";
 
         /* ==========================================================================================
          * IN
@@ -327,6 +390,13 @@ class FallbackAuthenticationActivity : VectorAppCompatActivity() {
         fun getIntentToLogin(context: Context, homeserverUrl: String): Intent {
             val intent = Intent(context, FallbackAuthenticationActivity::class.java)
             intent.putExtra(EXTRA_IN_MODE, MODE_LOGIN)
+            intent.putExtra(EXTRA_IN_HOME_SERVER_URL, homeserverUrl)
+            return intent
+        }
+
+        fun getIntentToLoginWithSSO(context: Context, homeserverUrl: String): Intent {
+            val intent = Intent(context, FallbackAuthenticationActivity::class.java)
+            intent.putExtra(EXTRA_IN_MODE, MODE_SSO)
             intent.putExtra(EXTRA_IN_HOME_SERVER_URL, homeserverUrl)
             return intent
         }

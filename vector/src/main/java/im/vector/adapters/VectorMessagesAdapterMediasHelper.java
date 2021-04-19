@@ -62,7 +62,7 @@ import im.vector.listeners.IMessagesAdapterActionsListener;
 /**
  * An helper to display medias information
  */
-class VectorMessagesAdapterMediasHelper {
+public class VectorMessagesAdapterMediasHelper {
     private static final String LOG_TAG = VectorMessagesAdapterMediasHelper.class.getSimpleName();
 
     private final MXSession mSession;
@@ -75,7 +75,7 @@ class VectorMessagesAdapterMediasHelper {
     private final int mNotSentMessageTextColor;
     private final int mDefaultMessageTextColor;
 
-    VectorMessagesAdapterMediasHelper(Context context,
+    public VectorMessagesAdapterMediasHelper(Context context,
                                       MXSession session,
                                       int maxImageWidth,
                                       int maxImageHeight,
@@ -184,15 +184,8 @@ class VectorMessagesAdapterMediasHelper {
     // to avoid flickering
     private Map<String, String> mUrlByBitmapIndex = new HashMap<>();
 
-    /**
-     * Manage the image/video download.
-     *
-     * @param convertView the parent view.
-     * @param event       the event
-     * @param message     the image / video message
-     * @param position    the message position
-     */
-    void managePendingImageVideoDownload(final View convertView, final Event event, final Message message, final int position) {
+
+    public void managePendingImageVideoDownload(final ImageView imageView, RelativeLayout informationLayout, View downloadProgressLayout, final Event event, final Message message, final int position) {
         int maxImageWidth = mMaxImageWidth;
         int maxImageHeight = mMaxImageHeight;
         int rotationAngle = 0;
@@ -256,7 +249,6 @@ class VectorMessagesAdapterMediasHelper {
             }
         }
 
-        ImageView imageView = convertView.findViewById(R.id.messagesAdapter_image);
 
         // reset the bitmap if the url is not the same than before
         if ((null == thumbUrl) || !TextUtils.equals(imageView.hashCode() + "", mUrlByBitmapIndex.get(thumbUrl))) {
@@ -266,8 +258,6 @@ class VectorMessagesAdapterMediasHelper {
             }
         }
 
-        RelativeLayout informationLayout = convertView.findViewById(R.id.messagesAdapter_image_layout);
-        final FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) informationLayout.getLayoutParams();
 
         // the thumbnails are always pre - rotated
         String downloadId = null;
@@ -305,8 +295,6 @@ class VectorMessagesAdapterMediasHelper {
                 imageView.setImageResource(R.drawable.sticker_placeholder);
             }
         }
-
-        final View downloadProgressLayout = convertView.findViewById(R.id.content_download_progress_layout);
 
         if (null == downloadProgressLayout) {
             return;
@@ -346,10 +334,13 @@ class VectorMessagesAdapterMediasHelper {
             frameWidth = mMaxImageWidth;
         }
 
-        // apply it the layout
-        // it avoid row jumping when the image is downloaded
-        layoutParams.height = frameHeight;
-        layoutParams.width = frameWidth;
+        if(informationLayout!=null) {
+            final FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) informationLayout.getLayoutParams();
+            // apply it the layout
+            // it avoid row jumping when the image is downloaded
+            layoutParams.height = frameHeight;
+            layoutParams.width = frameWidth;
+        }
 
         // no download in progress
         if (null != downloadId) {
@@ -396,7 +387,7 @@ class VectorMessagesAdapterMediasHelper {
                     if (TextUtils.equals(aDownloadId, (String) downloadProgressLayout.getTag())) {
                         downloadProgressLayout.setVisibility(View.GONE);
 
-                        if (null != mVectorMessagesAdapterEventsListener) {
+                        if (null != mVectorMessagesAdapterEventsListener && position > -1) {
                             mVectorMessagesAdapterEventsListener.onMediaDownloaded(position);
                         }
                     }
@@ -410,6 +401,22 @@ class VectorMessagesAdapterMediasHelper {
 
         imageView.setBackgroundColor(Color.TRANSPARENT);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+    }
+
+
+    /**
+     * Manage the image/video download.
+     *
+     * @param convertView the parent view.
+     * @param event       the event
+     * @param message     the image / video message
+     * @param position    the message position
+     */
+    void managePendingImageVideoDownload(final View convertView, final Event event, final Message message, final int position) {
+        ImageView imageView = convertView.findViewById(R.id.messagesAdapter_image);
+        RelativeLayout informationLayout = convertView.findViewById(R.id.messagesAdapter_image_layout);
+        final View downloadProgressLayout = convertView.findViewById(R.id.content_download_progress_layout);
+        managePendingImageVideoDownload(imageView, informationLayout, downloadProgressLayout, event, message, position);
     }
 
     /**
@@ -588,7 +595,7 @@ class VectorMessagesAdapterMediasHelper {
                     public void onClick(View v) {
                         if (event == cancelLayout.getTag()) {
                             if (null != mVectorMessagesAdapterEventsListener) {
-                                mVectorMessagesAdapterEventsListener.onEventAction(event, "", R.id.ic_action_vector_cancel_upload);
+                                mVectorMessagesAdapterEventsListener.onEventAction(event, "", R.id.ic_action_vector_cancel_upload, null);
                             }
                         }
                     }
@@ -729,7 +736,7 @@ class VectorMessagesAdapterMediasHelper {
                     public void onClick(View v) {
                         if (event == cancelLayout.getTag()) {
                             if (null != mVectorMessagesAdapterEventsListener) {
-                                mVectorMessagesAdapterEventsListener.onEventAction(event, "", R.id.ic_action_vector_cancel_download);
+                                mVectorMessagesAdapterEventsListener.onEventAction(event, "", R.id.ic_action_vector_cancel_download, null);
                             }
                         }
                     }

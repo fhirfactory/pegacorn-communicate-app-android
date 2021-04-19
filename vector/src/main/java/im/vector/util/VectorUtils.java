@@ -41,6 +41,7 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.collection.LruCache;
 import androidx.core.content.ContextCompat;
@@ -63,7 +64,9 @@ import org.matrix.androidsdk.rest.model.publicroom.PublicRoom;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,6 +78,7 @@ import im.vector.VectorApp;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.directory.people.model.DirectoryPeople;
 import im.vector.directory.role.model.DummyRole;
+import im.vector.directory.service.DummyService;
 import im.vector.settings.VectorLocale;
 
 public class VectorUtils {
@@ -303,10 +307,24 @@ public class VectorUtils {
      */
     public static String getInitials(String name){
         if(name != null) {
+            if (name.contains(",")) {
+                List<String> split = Arrays.asList((String[]) name.split(","));
+                Collections.reverse(split);
+                name = TextUtils.join(" ", split).trim();
+            }
             String[] names = name.split(" ");
             String initials = "";
-            if (names.length > 1) {
-                initials = getInitialLetter(names[0]) + getInitialLetter(names[names.length - 1]);
+            int namePosition = names.length - 1;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                while (!Character.isAlphabetic(names[namePosition].charAt(0)) && namePosition-- > 0);
+            } else {
+                //Not internationalized on old versions of android
+                // >= A, <=Z.
+                //if we ignore 6th bit, we make every character the same case. We can do that by bitwise & with bitwise not of 32.
+                while (!((names[namePosition].charAt(0) & ~32) >= 65 && (names[namePosition].charAt(0) & ~32) <= 90) && namePosition-- > 0);
+            }
+            if (namePosition > 0) {
+                initials = getInitialLetter(names[0]) + getInitialLetter(names[namePosition]);
             } else {
                 initials = getInitialLetter(names[0]);
             }
@@ -373,6 +391,13 @@ public class VectorUtils {
         if (null != role) {
             VectorUtils.loadUserAvatar(context,
                     session, imageView, role.getAvatarUrl(), role.getId(), role.getOfficialName());
+        }
+    }
+
+    public static void loadRoomAvatar(Context context, MXSession session, ImageView imageView, DummyService service) {
+        if (null != service) {
+            VectorUtils.loadUserAvatar(context,
+                    session, imageView, null, service.getId(), service.getName());
         }
     }
 
@@ -797,17 +822,7 @@ public class VectorUtils {
         return formattedString;
     }
 
-    /**
-     * Provide the user online status from his user Id.
-     * if refreshCallback is set, try to refresh the user presence if it is not known
-     *
-     * @param context         the context.
-     * @param session         the session.
-     * @param userId          the userId.
-     * @param refreshCallback the presence callback.
-     * @return the online status description.
-     */
-    public static String getUserOnlineStatus(final Context context,
+    public static User getUser(final Context context,
                                              final MXSession session,
                                              final String userId,
                                              final ApiCallback<Void> refreshCallback) {
@@ -871,11 +886,13 @@ public class VectorUtils {
             });
         }
 
-        // unknown user
+        return user;
+    }
+
+    public static String getPresenceText(final Context context, User user){
         if (null == user) {
             return null;
         }
-
         String presenceText = null;
         if (TextUtils.equals(user.presence, User.PRESENCE_ONLINE)) {
             presenceText = context.getString(R.string.room_participants_online);
@@ -894,8 +911,39 @@ public class VectorUtils {
                                 user.getAbsoluteLastActiveAgo() / 1000L));
             }
         }
-
         return presenceText;
+    }
+
+    public static int getPresenceIndicator(User user){
+        if (null != user && TextUtils.equals(user.presence, User.PRESENCE_ONLINE)) {
+            return R.drawable.avatar_indicator_online;
+        } else {
+            return R.drawable.avatar_indicator_offline;
+        }
+    }
+
+    /**
+     * Provide the user online status from his user Id.
+     * if refreshCallback is set, try to refresh the user presence if it is not known
+     *
+     * @param context         the context.
+     * @param session         the session.
+     * @param userId          the userId.
+     * @param refreshCallback the presence callback.
+     * @return the online status description.
+     */
+    public static String getUserOnlineStatus(final Context context,
+                                             final MXSession session,
+                                             final String userId,
+                                             final ApiCallback<Void> refreshCallback) {
+
+        User user = getUser(context, session, userId, refreshCallback);
+        // unknown user
+        if (null == user) {
+            return null;
+        }
+
+        return getPresenceText(context, user);
     }
 
     //==============================================================================================================

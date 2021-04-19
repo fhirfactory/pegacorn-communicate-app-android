@@ -94,7 +94,7 @@
     <string name="send_anyway">Send Anyway</string>
     <string name="or">or</string>
     <string name="invite">Invite</string>
-    <string name="offline">Offline</string>
+    <string name="offline">Online</string>
     <string name="online">Online</string>
     <string name="busy">Busy</string>
     <string name="accept">Accept</string>
@@ -133,6 +133,8 @@
     <string name="bottom_action_people">People</string>
     <string name="bottom_action_rooms">Rooms</string>
     <string name="bottom_action_groups">Communities</string>
+    <string name="bottom_action_roles">Roles</string>
+    <string name="bottom_action_gallery">Gallery</string>
 
     <!-- Home screen -->
     <string name="home_filter_placeholder_home">Filter room names</string>
@@ -451,7 +453,7 @@
     <string name="room_participants_create">Create</string>
 
     <string name="room_participants_online">Online</string>
-    <string name="room_participants_offline">Offline</string>
+    <string name="room_participants_offline">Online</string>
     <string name="room_participants_idle">Idle</string>
     <!--The variable is one of "Online", "Offline" or "Idle" states above.-->
     <string name="room_participants_now">%1$s now</string>
@@ -993,6 +995,9 @@
     <!-- Directory -->
     <string name="directory_title">Directory</string>
     <string name="settings_theme">Theme</string>
+
+    <!--Calls-->
+    <string name="calls_title">Calls</string>
 
     <!-- matrix error -->
     <string name="failed_to_load_timeline_position">%s was trying to load a specific point in this room’s timeline but was unable to find it.</string>
@@ -1590,6 +1595,18 @@ Why choose Riot.im?
         <item>People</item>
     </string-array>
 
+    <string-array name="call_tabs">
+        <item>Recent</item>
+        <item>Dialer</item>
+    </string-array>
+
+    <string-array name="create_chat_tabs">
+        <item>Roles</item>
+        <item>People</item>
+    </string-array>
+
+    <string name="advanced_search">advanced</string>
+    <string name="advanced_search_menu">Advanced Search</string>
     <string-array name="home_tabs">
         <item>Invites</item>
         <item>Favourites</item>
@@ -1597,26 +1614,69 @@ Why choose Riot.im?
         <item>Low Priority</item>
     </string-array>
 
+    <string name="favourite">Favourite</string>
     <string name="search_chats">Search Chats</string>
+    <string name="search_directory">Search Directory</string>
     <string name="rejecting">Declining the invitation</string>
     <string name="accepting">Accepting the invitation</string>
     <string name="invite_menu_title">Invites</string>
     <string name="invite_title">Invites</string>
     <string name="total_notification">Total Notifications</string>
+    <string name="search_role">Search roles</string>
+
     <string name="total_number_of_room"> Rooms: </string>
+    <string name="total_number_of_roles"> Roles: </string>
+    <string name="total_number_of_services"> Services: </string>
+    <string name="total_number_of_favourite_roles"> Favourite Roles: </string>
+    <string name="total_number_of_people"> People: </string>
+    <string name="total_number_of_member"> Member: </string>
+    <string name="total_number_of_favourite_people">Favourite People: </string>
+    <string name="total_number_of_favourite_service">Favourite Services: </string>
     <string name="total_number_of_invite">Invites: </string>
+    <string name="phone">Phone</string>
     <string name="no_invites">You do not have any invitations. </string>
-    <string name="search_role">Search for a role</string>
+
+    <string name="next">Next</string>
+
+    <string name="search_patient">Search patient\'s URN or name</string>
     <string name="category">Category</string>
     <string name="organisation_unit">Organisation Unit</string>
     <string name="speciality">Speciality</string>
     <string name="location">Location</string>
     <string name="apply">Apply</string>
     <string name="roles">Role</string>
+    <string name="roles_title">Roles</string>
+    <string name="people_title">People</string>
     <string name="title_activity_role_detail">Role Detail</string>
     <string name="search_people">Search for people</string>
+    <string name="one_to_one_room_search_hint">Search role or person</string>
+    <string name="public_room_detail">Make this room public. Public room can be found and joined by anyone.</string>
+    <string name="room_name_hint">Room Name</string>
+    <string name="room_topic_hint">Topic</string>
     <string name="title_activity_people_detail">Person Detail</string>
+    <string name="title_activity_service_detail">Service Detail</string>
     <string name="image_not_sent_error">Image could not be sent. Please try again.</string>
+    <string name="patient_tag_title">Tag Patient</string>
+    <string name="patient_tag_warning">Are you sure you want to save without tagging a patient?</string>
+    <string name="patient_tag_message">Please ensure CHS policy is followed when documenting patient consent.</string>
+    <string name="non_patient_media_button_text">Save Non-Patient Media</string>
+    <string name="tag_presence">This media has patient tag changes</string>
     <string name="short_text">Short text</string>
     <string name="long_text">very long text very long text very long text very long text very long text very long text very long text</string>
+
+    <string name="doctor">Doctor</string>
+    <string name="no_image">No image or video has been selected.</string>
+    <string name="description">Description</string>
+    <string name="photographer">Photographer</string>
+    <string name="designation">Designation</string>
+    <string name="select_designation">Select a designation</string>
+    <string name="adapter_patient_info">%1$s, %2$s - %3$s</string>
+    <string name="adapter_patient_dob">Dob: %1$s</string>
+    <string name="tag">Patient Tag</string>
+    <string name="update">Update</string>
+    <string name="taken">Taken</string>
+    <string name="previous_tags">Previous Tags</string>
+    <string name="include_active">Include inactive codes</string>
+    <string name="title_activity_code_detail">Code Event Detail</string>
+    <string name="work">Work</string>
 </resources>

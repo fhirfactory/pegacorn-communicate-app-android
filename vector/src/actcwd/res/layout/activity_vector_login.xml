@@ -70,7 +70,8 @@
                         android:layout_marginStart="4dp"
                         android:layout_marginLeft="4dp"
                         android:text="@string/or"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:id="@+id/login_or"/>
 
                     <LinearLayout
                         android:id="@+id/login_phone_number"
@@ -461,7 +462,8 @@
             android:layout_height="1dp"
             android:background="?vctr_list_divider_color" />
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp">
@@ -469,21 +471,23 @@
             <Button
                 android:id="@+id/button_login"
                 style="@style/VectorButtonStyle"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_marginEnd="@dimen/layout_horizontal_margin"
                 android:layout_marginRight="@dimen/layout_horizontal_margin"
-                android:text="@string/auth_login" />
+                android:text="@string/auth_login"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/button_switch_to_register"
                 style="@style/VectorButtonStyleFlat"
                 android:layout_marginEnd="@dimen/layout_horizontal_margin"
                 android:layout_marginRight="@dimen/layout_horizontal_margin"
-                android:layout_toStartOf="@+id/button_login"
-                android:layout_toLeftOf="@+id/button_login"
                 android:text="@string/auth_register"
-                android:textAllCaps="true" />
+                android:textAllCaps="true"
+                app:layout_constraintEnd_toStartOf="@+id/button_login"
+                app:layout_constraintRight_toLeftOf="@+id/button_login"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/button_register"
@@ -494,54 +498,56 @@
                 android:layout_marginRight="@dimen/layout_horizontal_margin"
                 android:text="@string/auth_register"
                 android:textAllCaps="true"
-                tools:layout_marginTop="48dp" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button_login"/>
 
             <Button
                 android:id="@+id/button_switch_to_login"
                 style="@style/VectorButtonStyleFlat"
                 android:layout_marginEnd="@dimen/layout_horizontal_margin"
                 android:layout_marginRight="@dimen/layout_horizontal_margin"
-                android:layout_toStartOf="@+id/button_register"
-                android:layout_toLeftOf="@+id/button_register"
                 android:text="@string/auth_login"
                 android:textAllCaps="true"
-                tools:layout_marginTop="48dp" />
+                app:layout_constraintEnd_toStartOf="@+id/button_register"
+                app:layout_constraintRight_toLeftOf="@+id/button_register"
+                app:layout_constraintTop_toTopOf="@+id/button_register"/>
 
             <Button
                 android:id="@+id/button_reset_password"
                 style="@style/VectorButtonStyle"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_marginEnd="@dimen/layout_horizontal_margin"
                 android:layout_marginRight="@dimen/layout_horizontal_margin"
                 android:text="@string/auth_send_reset_email"
                 android:visibility="gone"
-                tools:layout_marginTop="92dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button_register"
                 tools:visibility="visible" />
 
             <Button
                 android:id="@+id/button_forgot_email_validate"
                 style="@style/VectorButtonStyle"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_marginEnd="@dimen/layout_horizontal_margin"
                 android:layout_marginRight="@dimen/layout_horizontal_margin"
                 android:visibility="gone"
-                tools:layout_marginTop="138dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button_reset_password"
                 tools:text="@string/auth_reset_password_next_step_button"
                 tools:visibility="visible" />
 
             <Button
                 android:id="@+id/button_submit_three_pid"
                 style="@style/VectorButtonStyle"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_marginEnd="@dimen/layout_horizontal_margin"
                 android:layout_marginRight="@dimen/layout_horizontal_margin"
                 android:minWidth="94dp"
                 android:text="@string/auth_submit"
                 android:visibility="gone"
-                tools:layout_marginTop="184dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button_forgot_email_validate"
                 tools:visibility="visible" />
 
             <Button
@@ -549,25 +555,25 @@
                 style="@style/VectorButtonStyle"
                 android:layout_marginEnd="@dimen/layout_horizontal_margin"
                 android:layout_marginRight="@dimen/layout_horizontal_margin"
-                android:layout_toStartOf="@id/button_submit_three_pid"
-                android:layout_toLeftOf="@id/button_submit_three_pid"
                 android:minWidth="94dp"
                 android:text="@string/auth_skip"
                 android:visibility="gone"
-                tools:layout_marginTop="184dp"
+                app:layout_constraintEnd_toStartOf="@id/button_submit_three_pid"
+                app:layout_constraintRight_toLeftOf="@id/button_submit_three_pid"
+                app:layout_constraintTop_toTopOf="@+id/button_submit_three_pid"
                 tools:visibility="visible" />
 
             <Button
                 android:id="@+id/button_login_sso"
                 style="@style/VectorButtonStyle"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_marginEnd="@dimen/layout_horizontal_margin"
                 android:layout_marginRight="@dimen/layout_horizontal_margin"
                 android:text="@string/auth_login_sso"
-                tools:layout_marginTop="230dp" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button_submit_three_pid"/>
 
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <View
             android:layout_width="match_parent"
@@ -595,4 +601,3 @@
     </RelativeLayout>
 
 </RelativeLayout>
-

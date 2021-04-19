@@ -8,9 +8,11 @@
     <color name="vector_info_color">#2f9edb</color>
 
     <!-- main app colors -->
-    <color name="vector_fuchsia_color">#ff4b55</color>
+    <color name="vector_fuchsia_color">#B51F27</color>
     <color name="vector_silver_color">#FFC7C7C7</color>
     <color name="vector_dark_grey_color">#FF999999</color>
+    <color name="vector_light_grey_color">#E1E0E0</color>
+    <color name="vector_green_color">#70BF56</color>
 
     <!-- home activity tab bar color -->
     <color name="tab_favourites">#BD79CC</color>
@@ -157,4 +159,11 @@
     <!--  act gradient  -->
     <color name="act_gradient_color2">#00828c</color>
     <color name="act_gradient_color1">#002677</color>
+
+    <color name="heading_background">#ECECEC</color>
+    <color name="light_background">#F6F5F5</color>
+    <color name="act_gradient_color_alpha">#55002677</color>
+    <color name="blue">#3F51B5</color>
+    <color name="light_gray">#F0F0F0</color>
+    <color name="button_background_light">#ECECEC</color>
 </resources>

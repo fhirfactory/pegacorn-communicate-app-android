@@ -77,6 +77,8 @@ import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.activity.VectorRoomInviteMembersActivity;
 import im.vector.adapters.ParticipantAdapterItem;
 import im.vector.adapters.VectorRoomDetailsMembersAdapter;
+import im.vector.chat.CHAT_TYPE;
+import im.vector.chat.ChatCreateActivity;
 import im.vector.ui.themes.ThemeUtils;
 import im.vector.util.VectorUtils;
 
@@ -831,11 +833,15 @@ public class VectorRoomDetailsMembersFragment extends VectorBaseFragment {
             @Override
             public void onClick(View v) {
                 // pop to the home activity
-                Intent intent = new Intent(getActivity(), VectorRoomInviteMembersActivity.class);
-                intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
-                intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
-                intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_ADD_CONFIRMATION_DIALOG, true);
-                getActivity().startActivityForResult(intent, INVITE_USER_REQUEST_CODE);
+                if (getResources().getBoolean(R.bool.use_riot_create_room_activity)) {
+                    Intent intent = new Intent(getActivity(), VectorRoomInviteMembersActivity.class);
+                    intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_MATRIX_ID, mSession.getMyUserId());
+                    intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_ROOM_ID, mRoom.getRoomId());
+                    intent.putExtra(VectorRoomInviteMembersActivity.EXTRA_ADD_CONFIRMATION_DIALOG, true);
+                    getActivity().startActivityForResult(intent, INVITE_USER_REQUEST_CODE);
+                } else {
+                    startActivity(ChatCreateActivity.Companion.intent(requireActivity(), CHAT_TYPE.GROUP));
+                }
             }
         });
 

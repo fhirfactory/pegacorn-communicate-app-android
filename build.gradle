@@ -11,11 +11,12 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath 'com.android.tools.build:gradle:4.1.1'
         classpath 'com.google.gms:google-services:4.3.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2'
-
+        def nav_version = "2.3.1"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -23,8 +24,8 @@ buildscript {
 
 // global properties used in sub modules
 ext {
-    versionCodeProp = 90913
-    versionNameProp = "0.9.13-dev"
+    versionCodeProp = 90915
+    versionNameProp = "0.9.15-dev"
     versionBuild = System.getenv("BUILD_NUMBER") as Integer ?: 0
     buildNumberProp = "${versionBuild}"
 }

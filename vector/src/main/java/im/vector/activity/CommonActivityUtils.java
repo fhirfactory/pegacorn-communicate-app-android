@@ -111,6 +111,12 @@ public class CommonActivityUtils {
     public static final float UTILS_POWER_LEVEL_MODERATOR = 50;
     private static final int ROOM_SIZE_ONE_TO_ONE = 2;
 
+    public static final String APP_DID_LOGOUT = "APP_DID_LOGOUT";
+
+    // power names
+    public static final String UTILS_POWER_LEVEL_ADMIN_NAME = "Admin";
+    public static final String UTILS_POWER_LEVEL_MODERATOR_NAME = "Moderator";
+
     /**
      * Logout a sessions list
      *
@@ -427,6 +433,7 @@ public class CommonActivityUtils {
                     // go to login page
                     Intent intent = new Intent(activeContext, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.putExtra(APP_DID_LOGOUT,true);
                     activeContext.startActivity(intent);
                 }
             }
@@ -816,9 +823,9 @@ public class CommonActivityUtils {
      * @param fromActivity the caller activity
      * @param intent       the intent param
      */
-    public static void sendFilesTo(final Activity fromActivity, final Intent intent) {
+    public static void sendFilesTo(final Activity fromActivity, final Intent intent, final RoomSummary roomsummary) {
         if (Matrix.getMXSessions(fromActivity).size() == 1) {
-            sendFilesTo(fromActivity, intent, Matrix.getMXSession(fromActivity, null));
+            sendFilesTo(fromActivity, intent, Matrix.getMXSession(fromActivity, null), roomsummary);
         } else if (fromActivity instanceof FragmentActivity) {
             // TBD
         }
@@ -831,74 +838,81 @@ public class CommonActivityUtils {
      * @param intent       the intent param
      * @param session      the session/
      */
-    private static void sendFilesTo(final Activity fromActivity, final Intent intent, final MXSession session) {
+    private static void sendFilesTo(final Activity fromActivity, final Intent intent, final MXSession session, final RoomSummary roomsummary) {
         // sanity check
         if ((null == session) || !session.isAlive() || fromActivity.isFinishing()) {
             return;
         }
 
-        List<RoomSummary> mergedSummaries = new ArrayList<>(session.getDataHandler().getStore().getSummaries());
+        if(roomsummary!=null){
+            goToRoomPage(fromActivity, session, prepareMap(roomsummary, intent, session));
+        }else {
 
-        // keep only the joined room
-        for (int index = 0; index < mergedSummaries.size(); index++) {
-            RoomSummary summary = mergedSummaries.get(index);
-            Room room = session.getDataHandler().getRoom(summary.getRoomId());
+            List<RoomSummary> mergedSummaries = new ArrayList<>(session.getDataHandler().getStore().getSummaries());
 
-            if ((null == room) || room.isInvited() || room.isConferenceUserRoom()) {
-                mergedSummaries.remove(index);
-                index--;
+            // keep only the joined room
+            for (int index = 0; index < mergedSummaries.size(); index++) {
+                RoomSummary summary = mergedSummaries.get(index);
+                Room room = session.getDataHandler().getRoom(summary.getRoomId());
+
+                if ((null == room) || room.isInvited() || room.isConferenceUserRoom()) {
+                    mergedSummaries.remove(index);
+                    index--;
+                }
             }
+
+            Collections.sort(mergedSummaries, new Comparator<RoomSummary>() {
+                @Override
+                public int compare(RoomSummary lhs, RoomSummary rhs) {
+                    if (lhs == null || lhs.getLatestReceivedEvent() == null) {
+                        return 1;
+                    } else if (rhs == null || rhs.getLatestReceivedEvent() == null) {
+                        return -1;
+                    }
+
+                    if (lhs.getLatestReceivedEvent().getOriginServerTs() > rhs.getLatestReceivedEvent().getOriginServerTs()) {
+                        return -1;
+                    } else if (lhs.getLatestReceivedEvent().getOriginServerTs() < rhs.getLatestReceivedEvent().getOriginServerTs()) {
+                        return 1;
+                    }
+                    return 0;
+                }
+            });
+
+            VectorRoomsSelectionAdapter adapter = new VectorRoomsSelectionAdapter(fromActivity, R.layout.adapter_item_vector_recent_room, session);
+            adapter.addAll(mergedSummaries);
+
+            final List<RoomSummary> fMergedSummaries = mergedSummaries;
+
+            new AlertDialog.Builder(fromActivity)
+                    .setTitle(R.string.send_files_in)
+                    .setNegativeButton(R.string.cancel, null)
+                    .setAdapter(adapter,
+                            new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog, final int which) {
+                                    dialog.dismiss();
+
+                                    fromActivity.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            RoomSummary summary = fMergedSummaries.get(which);
+                                            goToRoomPage(fromActivity, session, prepareMap(summary, intent, session));
+                                        }
+                                    });
+                                }
+                            })
+                    .show();
         }
+    }
 
-        Collections.sort(mergedSummaries, new Comparator<RoomSummary>() {
-            @Override
-            public int compare(RoomSummary lhs, RoomSummary rhs) {
-                if (lhs == null || lhs.getLatestReceivedEvent() == null) {
-                    return 1;
-                } else if (rhs == null || rhs.getLatestReceivedEvent() == null) {
-                    return -1;
-                }
-
-                if (lhs.getLatestReceivedEvent().getOriginServerTs() > rhs.getLatestReceivedEvent().getOriginServerTs()) {
-                    return -1;
-                } else if (lhs.getLatestReceivedEvent().getOriginServerTs() < rhs.getLatestReceivedEvent().getOriginServerTs()) {
-                    return 1;
-                }
-                return 0;
-            }
-        });
-
-        VectorRoomsSelectionAdapter adapter = new VectorRoomsSelectionAdapter(fromActivity, R.layout.adapter_item_vector_recent_room, session);
-        adapter.addAll(mergedSummaries);
-
-        final List<RoomSummary> fMergedSummaries = mergedSummaries;
-
-        new AlertDialog.Builder(fromActivity)
-                .setTitle(R.string.send_files_in)
-                .setNegativeButton(R.string.cancel, null)
-                .setAdapter(adapter,
-                        new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog, final int which) {
-                                dialog.dismiss();
-
-                                fromActivity.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        RoomSummary summary = fMergedSummaries.get(which);
-
-                                        Map<String, Object> params = new HashMap<>();
-                                        params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
-                                        params.put(VectorRoomActivity.EXTRA_ROOM_ID, summary.getRoomId());
-                                        params.put(VectorRoomActivity.EXTRA_ROOM_INTENT, intent);
-
-                                        goToRoomPage(fromActivity, session, params);
-                                    }
-                                });
-                            }
-                        })
-                .show();
+    private static Map<String, Object> prepareMap(final RoomSummary summary, final Intent intent, final MXSession session){
+        Map<String, Object> params = new HashMap<>();
+        params.put(VectorRoomActivity.EXTRA_MATRIX_ID, session.getMyUserId());
+        params.put(VectorRoomActivity.EXTRA_ROOM_ID, summary.getRoomId());
+        params.put(VectorRoomActivity.EXTRA_ROOM_INTENT, intent);
+        return params;
     }
 
     //==============================================================================================================

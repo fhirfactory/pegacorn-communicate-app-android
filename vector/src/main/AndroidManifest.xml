@@ -164,6 +164,14 @@
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:label="@string/invite"/>
         <activity
+            android:name=".chat.ChatCreateActivity"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <activity
+            android:name=".code.detail.CodeEventDetailActivity"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
             android:name=".activity.AccountCreationCaptchaActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/create_account" />
@@ -179,6 +187,10 @@
             android:name=".directory.role.detail.RoleDetailActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_role_detail" />
+        <activity
+            android:name=".directory.service.detail.ServiceDetailActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_activity_service_detail" />
         <activity
             android:name=".directory.people.detail.PeopleDetailActivity"
             android:configChanges="orientation|screenSize"
@@ -418,6 +430,10 @@
             android:name=".activity.RoomDirectoryPickerActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/select_room_directory" />
+        <activity
+            android:name=".patient.PatientTagActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/patient_tag_title" />
         <activity
             android:name=".activity.PhoneNumberVerificationActivity"
             android:configChanges="orientation|screenSize"

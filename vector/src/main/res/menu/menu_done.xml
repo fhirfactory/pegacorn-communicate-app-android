@@ -4,7 +4,6 @@
 
     <item
         android:id="@+id/action_done"
-        android:icon="@drawable/ic_material_done_white"
         android:title="@string/done"
         app:showAsAction="always" />
 

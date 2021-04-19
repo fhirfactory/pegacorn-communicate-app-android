@@ -83,6 +83,8 @@
     <string name="ongoing_conference_call">Ongoing conference call.\nJoin as %1$s or %2$s</string>
     <string name="ongoing_conference_call_voice">Voice</string>
     <string name="ongoing_conference_call_video">Video</string>
+    <string name="video">Video</string>
+    <string name="chat">Chat</string>
     <string name="cannot_start_call">Cannot start the call, please try later</string>
     <string name="missing_permissions_warning">"Due to missing permissions, some features may be missing…</string>
     <string name="missing_permissions_error">"Due to missing permissions, this action is not possible.</string>
@@ -550,7 +552,7 @@
 
     <!-- Room Details -->
     <string name="room_details_title">Room Details</string>
-    <string name="room_details_people">People</string>
+    <string name="room_details_people">Members</string>
     <string name="room_details_files">Files</string>
     <string name="room_details_settings">Settings</string>
     <plurals name="room_details_selected">
@@ -569,7 +571,7 @@
 
     <!-- Search -->
     <string name="search_hint">Search</string>
-    <string name="search_members_hint">Filter room members</string>
+    <string name="search_members_hint">Search room members</string>
     <string name="search_no_results">No results</string>
     <string name="tab_title_search_rooms">ROOMS</string>
     <string name="tab_title_search_messages">MESSAGES</string>
@@ -583,9 +585,9 @@
     <string name="room_recents_conversations">ROOMS</string>
     <string name="room_recents_low_priority">LOW PRIORITY</string>
     <string name="room_recents_invites">INVITES</string>
-    <string name="room_recents_start_chat">Start chat</string>
-    <string name="room_recents_create_room">Create room</string>
-    <string name="room_recents_join_room">Join room</string>
+    <string name="room_recents_start_chat">Create Chat</string>
+    <string name="room_recents_create_room">Create Group Chat</string>
+    <string name="room_recents_join_room">Join Chat</string>
     <string name="room_recents_join_room_title">Join a room</string>
     <string name="room_recents_join_room_prompt">Type a room id or a room alias</string>
 
@@ -1616,6 +1618,7 @@ Why choose Riot.im?
     <string name="title_activity_role_detail">Role Detail</string>
     <string name="search_people">Search for people</string>
     <string name="title_activity_people_detail">Person Detail</string>
+    <string name="title_activity_service_detail">Service Detail</string>
     <string name="short_text">Short text</string>
     <string name="long_text">very long text very long text very long text very long text very long text very long text very long text</string>
 </resources>

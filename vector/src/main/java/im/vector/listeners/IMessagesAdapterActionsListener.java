@@ -21,6 +21,7 @@ import android.net.Uri;
 import androidx.annotation.Nullable;
 
 import org.matrix.androidsdk.crypto.data.MXDeviceInfo;
+import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.rest.model.Event;
 
 import java.util.List;
@@ -166,7 +167,7 @@ public interface IMessagesAdapterActionsListener {
      * @param textMsg the text message
      * @param action  an action ic_action_vector_XXX
      */
-    void onEventAction(final Event event, final String textMsg, final int action);
+    void onEventAction(final Event event, final String textMsg, final int action, final RoomSummary summary);
 
     /**
      * the user taps on the e2e icon
