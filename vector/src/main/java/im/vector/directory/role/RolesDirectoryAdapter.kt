@@ -17,6 +17,8 @@ import im.vector.Matrix
 import im.vector.R
 import im.vector.directory.role.model.DummyRole
 import im.vector.microservices.DirectoryConnector
+import im.vector.microservices.DirectoryServices
+import im.vector.microservices.FavouriteTypes
 import im.vector.util.VectorUtils
 import im.vector.view.VectorCircularImageView
 import kotlinx.android.synthetic.main.item_directory_people.view.*
@@ -135,6 +137,7 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var heading: TextView? = null
     var favouriteButton: ImageView? = null
     var roleFilledTextView: TextView? = null
+    var favourite: Boolean = false
 
     init {
         heading = itemView.findViewById(R.id.heading)
@@ -149,6 +152,16 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         locationText = itemView.findViewById(R.id.locationText)
         favouriteButton = itemView.favoriteIcon
         roleFilledTextView = itemView.findViewById(R.id.roleFilledTextView)
+        favourite = false
+    }
+
+    fun updateFavourite() {
+        if (favourite) {
+            favouriteButton?.setImageResource(R.drawable.ic_material_star_black)
+            this.favourite = true
+        } else {
+            favouriteButton?.setImageResource(R.drawable.ic_material_star_border_black)
+        }
     }
 
     fun bind(context: Context, session: MXSession?, role: DummyRole, onDataSetChange: OnDataSetChange, position: Int, onClickListener: RoleClickListener?, showHeader: Boolean = false, selection: Boolean? = false) {
@@ -186,6 +199,21 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 roleFilledTextView?.setTextColor(context.getColor(R.color.vector_warning_color))
             } else {
                 roleFilledTextView?.setTextColor(context.applicationContext.resources.getColor(R.color.vector_warning_color))
+            }
+        }
+
+        DirectoryConnector.CheckFavourite(context,FavouriteTypes.PractitionerRoles,role.id) {
+            this.favourite = it
+            this.updateFavourite()
+        }
+
+        favouriteButton?.setOnClickListener {
+            this.favourite = !this.favourite
+            this.updateFavourite()
+            if (this.favourite) {
+                DirectoryConnector.AddFavourite(context,FavouriteTypes.PractitionerRoles,role.id)
+            } else {
+                DirectoryConnector.RemoveFavourite(context,FavouriteTypes.PractitionerRoles,role.id)
             }
         }
 

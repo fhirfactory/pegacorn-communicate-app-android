@@ -28,6 +28,10 @@ class DirectoryServiceFragment : BaseDirectoryFragment(), ServiceClickListener {
         setHeader(header, if (enable) R.string.total_number_of_favourite_service else R.string.total_number_of_services, if (enable) 4 else 10)
     }
 
+    override fun filter(with: String?) {
+        //TODO("Not yet implemented")
+    }
+
     override fun getRooms(): MutableList<Room> {
         TODO("Not yet implemented")
     }
@@ -66,5 +70,9 @@ class DirectoryServiceFragment : BaseDirectoryFragment(), ServiceClickListener {
 
     override fun onServiceClick(service: DummyService) {
         startActivity(ServiceDetailActivity.intent(requireContext(), service))
+    }
+
+    override fun onServiceFavourite(service: DummyService) {
+        TODO("Not yet implemented")
     }
 }

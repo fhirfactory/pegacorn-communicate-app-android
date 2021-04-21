@@ -22,6 +22,7 @@ import im.vector.directory.role.detail.RoleDetailActivity
 import im.vector.directory.role.model.*
 import im.vector.extensions.withArgs
 import im.vector.microservices.DirectoryConnector
+import im.vector.microservices.FHIRPractitioner
 import kotlinx.android.synthetic.main.fragment_directory_role.*
 import org.matrix.androidsdk.data.Room
 
@@ -50,8 +51,13 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
         return R.layout.fragment_directory_role
     }
 
+    override fun filter(with: String?) {
+        //TODO("Not yet implemented")
+    }
+
     override fun onFilter(pattern: String?, listener: OnFilterListener?) {
         // TODO("Not yet implemented")
+        println(pattern)
     }
 
     override fun onResetFilter() {
@@ -62,10 +68,25 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
         TODO("Not yet implemented")
     }
 
+    fun initializeList() {
+        val selectable = arguments?.getBoolean(SELECTABLE, false)
+        roleAdapter = RolesDirectoryAdapter(requireContext(), this, selectable ?: false)
+        (roleRecyclerview.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        roleRecyclerview.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        roleRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+        roleRecyclerview.adapter = roleAdapter
+        roleRecyclerview.setHasFixedSize(true)
+
+        loading = false
+        page = 0
+        paginate()
+        setupScrollListener()
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(DirectoryRoleViewModel::class.java)
-        val selectable = arguments?.getBoolean(SELECTABLE, false)
+
         subscribeUI()
 
 /*        categoryAdapter = DropDownAdapter(requireContext(), R.layout.drop_down_item)
@@ -84,12 +105,7 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
         locationEditText.threshold = 1
         locationEditText.setAdapter(locationAdapter)*/
 
-        roleAdapter = RolesDirectoryAdapter(requireContext(), this, selectable ?: false)
-        (roleRecyclerview.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-        roleRecyclerview.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-        roleRecyclerview.layoutManager = LinearLayoutManager(requireContext())
-        roleRecyclerview.adapter = roleAdapter
-        roleRecyclerview.setHasFixedSize(true)
+
 
 /*
         //test data
@@ -102,8 +118,6 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
         specialityAdapter.addData(testDropDownData)
         locationAdapter.addData(testDropDownData)
 */
-
-        val testRoleData = mutableListOf<DummyRole>()
         /*
         testRoleData.add(DummyRole("1", "ED Acute SRMO", "Emergency Department  Acute Senior Resident Medical Officer Medical Officer", null, "ED {Emergency Department}", arrayListOf(Role("1", "Senior Resident Medical Officer", "Doctor")),
                 arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
@@ -129,11 +143,15 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
         testRoleData.add(DummyRole("8", "ED Acute North Nurse", "Emergency Department  Acute North Nurse", null, "ED {Emergency Department}", arrayListOf(Role("1", "Emergency Department Nurse", "Nursing and Midwifery")),
                 arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
          */
-        paginate()
-        setupScrollListener()
 
-        roleAdapter.setData(testRoleData)
-        setHeader(header, R.string.total_number_of_roles, testRoleData.size)
+        DirectoryConnector.InitializeWithPractitionerId("donald.duck@acme.org")
+
+        setHeader(header, R.string.total_number_of_roles, 0)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initializeList()
     }
 
     var page = 0;
@@ -144,7 +162,7 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
         if (!loading) {
 
             val idx = roleRecyclerview.getChildAdapterPosition(roleRecyclerview.getChildAt(0))
-            val overHalfway: Boolean = idx >= (page * pageSize) / 2
+            val overHalfway: Boolean = (idx >= (page * pageSize) / 2) || (idx == -1)
 
             if (overHalfway || roleRecyclerview.height == 0) {
                 page += 1

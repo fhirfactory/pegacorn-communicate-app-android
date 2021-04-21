@@ -59,10 +59,16 @@ class DirectoryFragment : BaseActFragment() {
 
     override fun onFilter(pattern: String?, listener: OnFilterListener?) {
         //TODO("Not yet implemented")
+        fragments.forEach { fragment ->
+            fragment.value.filter(pattern)
+        }
     }
 
     override fun onResetFilter() {
         //TODO("Not yet implemented")
+        fragments.forEach { fragment ->
+            fragment.value.filter(null)
+        }
     }
 
     inner class DirectoryPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {

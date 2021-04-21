@@ -12,5 +12,13 @@ data class FHIRPractitioner (
         @JvmField
         var otherNames: List<FHIRName>,
         @JvmField
-        var contactPoints: List<FHIRContactPoint>
-)
+        var contactPoints: List<FHIRContactPoint>,
+        @JvmField
+        var currentPractitionerRoles: List<String>
+) {
+        var roles: ArrayList<FHIRPractitionerRole> = ArrayList()
+        var dataChangeEventListeners: ArrayList<()->Unit> = ArrayList()
+        fun dataChanged(){
+                dataChangeEventListeners.forEach { it() }
+        }
+}

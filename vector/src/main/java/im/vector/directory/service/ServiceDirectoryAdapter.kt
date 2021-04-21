@@ -7,16 +7,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import im.vector.Matrix
+import com.facebook.drawee.gestures.GestureDetector
 import im.vector.R
-import im.vector.util.VectorUtils
-import im.vector.view.VectorCircularImageView
 import kotlinx.android.synthetic.main.item_directory_service.view.*
-import org.matrix.androidsdk.MXSession
 
 
 class ServiceDirectoryAdapter(val context: Context, private val onClickListener: ServiceClickListener) :
-        RecyclerView.Adapter<RoleViewHolder>(), OnDataSetChange {
+        RecyclerView.Adapter<ServiceViewHolder>(), OnDataSetChange {
     private val services = mutableListOf<DummyService>()
 
     fun setData(roles: MutableList<DummyService>) {
@@ -26,17 +23,17 @@ class ServiceDirectoryAdapter(val context: Context, private val onClickListener:
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(parent: ViewGroup,
-                                    viewType: Int): RoleViewHolder {
+                                    viewType: Int): ServiceViewHolder {
         // create a new view
         val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_directory_service, parent, false)
         // set the view's size, margins, paddings and layout parameters
 
-        return RoleViewHolder(view)
+        return ServiceViewHolder(view)
     }
 
     // Replace the contents of a view (invoked by the layout manager)
-    override fun onBindViewHolder(holder: RoleViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ServiceViewHolder, position: Int) {
         holder.bind(context, services[position], onClickListener)
     }
 
@@ -56,7 +53,7 @@ interface OnDataSetChange {
     fun onDataChange(position: Int)
 }
 
-class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class ServiceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var officialName: TextView? = null
     var locationCode: TextView? = null
     var locationDetail: TextView? = null
@@ -71,12 +68,15 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(context: Context, service: DummyService, onClickListener: ServiceClickListener?) {
         favoriteIcon?.setImageResource(if(service.isFavorite) R.drawable.filled_star else R.drawable.outline_star)
+        favoriteIcon?.setOnClickListener {
+            onClickListener?.onServiceFavourite(service)
+        }
         itemView.setOnClickListener {
             onClickListener?.onServiceClick(service)
         }
     }
 }
-
 interface ServiceClickListener {
     fun onServiceClick(service: DummyService)
+    fun onServiceFavourite(service: DummyService)
 }
