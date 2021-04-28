@@ -2,9 +2,10 @@ package im.vector.directory.people
 
 import android.os.Bundle
 import android.view.Menu
-import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import im.vector.R
 import im.vector.adapters.ParticipantAdapterItem
 import im.vector.adapters.VectorParticipantsAdapter
@@ -13,8 +14,9 @@ import im.vector.directory.people.detail.PeopleDetailActivity
 import im.vector.directory.people.model.DirectoryPeople
 import im.vector.directory.people.model.TemporaryRoom
 import im.vector.extensions.withArgs
-import kotlinx.android.synthetic.main.fragment_create_chat.*
+import im.vector.microservices.DirectoryConnector
 import kotlinx.android.synthetic.main.fragment_directory_people.*
+import kotlinx.android.synthetic.main.fragment_directory_people.header
 import org.matrix.androidsdk.data.Room
 
 class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
@@ -75,25 +77,68 @@ class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
 
 
         //test data
-        val testPeopleData = mutableListOf<DirectoryPeople>()
-//        testPeopleData.add(DirectoryPeople("1", "John Smith", "Registrar", null, "Emergency Department", "Hospital Department"))
-//        testPeopleData.add(DirectoryPeople("2", "Paul George", "Ward Nurse", null, "Emergency Department", "Hospital Department"))
-//        testPeopleData.add(DirectoryPeople("3", "Anthony Davis", "Nurse", null, "Emergency Department", "Hospital Department"))
-//        testPeopleData.add(DirectoryPeople("4", "Stephen Curry", "Emergency Consultant", null, "Emergency Department", "Hospital Department"))
-//        testPeopleData.add(DirectoryPeople("5", "James Harden", "Consultant", null, "Emergency Department", "Hospital Department"))
-//        testPeopleData.add(DirectoryPeople("6", "Mike Jones", "Consultant", null, "Emergency Department", "Hospital Department"))
-
-        peopleDirectoryAdapter.setData(testPeopleData)
-        setHeader(header, R.string.total_number_of_people, testPeopleData.size)
+//        val testPeopleData = mutableListOf<DirectoryPeople>()
+//        peopleDirectoryAdapter.setData(testPeopleData)
+//        setHeader(header, R.string.total_number_of_people, testPeopleData.size)
+        initializeList()
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         menu.findItem(R.id.ic_action_advanced_search)?.isVisible = false
     }
 
+    fun initializeList() {
+        val selectable = arguments?.getBoolean(SELECTABLE, false)
+        peopleDirectoryAdapter = PeopleDirectoryAdapter(requireContext(), this, selectable ?: false)
+        (peopleRecyclerview.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        peopleRecyclerview.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        peopleRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+        peopleRecyclerview.adapter = peopleDirectoryAdapter
+        peopleRecyclerview.setHasFixedSize(true)
+
+        loading = false
+        page = -1
+        paginate()
+        setupScrollListener()
+    }
+
+    var page = -1;
+    var loading = false;
+    var pageSize = 20;
+
+    fun paginate() {
+        if (!loading) {
+
+            val idx = peopleRecyclerview.getChildAdapterPosition(peopleRecyclerview.getChildAt(0))
+            val overHalfway: Boolean = page < 0 || (idx >= (page * pageSize) / 2) || (idx == -1)
+
+            if (overHalfway || peopleRecyclerview.height == 0) {
+                page += 1
+                loading = true;
+                context?.let {
+                    DirectoryConnector.getPractitioners(page, pageSize, it){
+                        it?.let {
+                            peopleDirectoryAdapter.addPage(it)
+                            loading = false
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun setupScrollListener() {
+        peopleRecyclerview.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                paginate()
+            }
+        })
+    }
+
     override fun onPeopleClick(directoryPeople: DirectoryPeople, forRemove: Boolean) {
         if (roomClickListener == null) {
-            startActivity(PeopleDetailActivity.intent(requireContext(), directoryPeople, false))
+            startActivity(PeopleDetailActivity.intent(requireContext(), directoryPeople, true))
         } else {
             roomClickListener?.onRoomClick(TemporaryRoom(directoryPeople, null), forRemove)
         }

@@ -91,15 +91,8 @@ class RolesDetailAdapter(val context: Context, private val onClickListener: Peop
     fun setData(role: DummyRole) {
         this.adapterModels.clear()
 
-        for (rl in role.roles) {
-            adapterModels.add(AdapterModel("Role", rl.name, rl.category, null, TYPE_ROLE))
-        }
-        for (sp in role.speciality) {
-            adapterModels.add(AdapterModel("Speciality", sp.name, null, null, TYPE_SPECIALITY))
-        }
-        for (lc in role.location) {
-            adapterModels.add(AdapterModel("Location", lc.name, null, null, TYPE_LOCATION))
-        }
+        adapterModels.add(AdapterModel("Role", role.fhirPractitionerRole.primaryRoleID, role.fhirPractitionerRole.primaryRoleCategoryID, null, TYPE_ROLE))
+        adapterModels.add(AdapterModel("Location", role.fhirPractitionerRole.primaryLocationID, null, null, TYPE_LOCATION))
         adapterModels.add(AdapterModel("Organization Unit", role.organizationUnit, null, null, TYPE_ORGANISATION_UNIT))
 
         notifyDataSetChanged()

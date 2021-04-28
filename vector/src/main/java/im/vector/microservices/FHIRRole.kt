@@ -4,15 +4,13 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class FHIRContactPoint (
+data class FHIRRole(
         @JvmField
-        var name: String,
+        var simplifiedID: String,
         @JvmField
-        var value: String,
+        var displayName: String,
         @JvmField
-        var rank: Int,
+        var roleCategory: String,
         @JvmField
-        var type: String,
-        @JvmField
-        var use: String?
+        var description: String?
 ) : Parcelable

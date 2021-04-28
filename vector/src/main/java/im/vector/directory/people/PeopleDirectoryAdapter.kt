@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ExpandableListAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -14,10 +13,18 @@ import im.vector.adapters.ParticipantAdapterItem
 import im.vector.adapters.VectorParticipantsAdapter
 import im.vector.directory.people.model.DirectoryPeople
 import im.vector.directory.role.OnDataSetChange
+import im.vector.microservices.DirectoryConnector
+import im.vector.microservices.FavouriteTypes
 import im.vector.ui.themes.ThemeUtils.getColor
 import im.vector.util.VectorUtils
 import im.vector.view.VectorCircularImageView
 import kotlinx.android.synthetic.main.item_directory_people.view.*
+import kotlinx.android.synthetic.main.item_directory_people.view.avatar
+import kotlinx.android.synthetic.main.item_directory_people.view.expandableIcon
+import kotlinx.android.synthetic.main.item_directory_people.view.favoriteIcon
+import kotlinx.android.synthetic.main.item_directory_people.view.officialName
+import kotlinx.android.synthetic.main.item_directory_people.view.selected
+import kotlinx.android.synthetic.main.item_directory_role.view.*
 import org.matrix.androidsdk.MXSession
 
 
@@ -43,12 +50,15 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
     inner class PeopleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var avatar: VectorCircularImageView? = null
         var favouriteButton: ImageView? = null
+        var favourite: Boolean = false
+
         var expandableIcon: ImageView? = null
         var officialName: TextView? = null
         var jobTitle: TextView? = null
         var selectionRadioImageView: ImageView? = null
         var organisationText: TextView? = null
         var businessUnitText: TextView? = null
+        var roleText: TextView? = null
         var statusText: TextView? = null
 
         init {
@@ -61,6 +71,15 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
             organisationText = itemView.organisationText
             businessUnitText = itemView.businessUnitText
             statusText = itemView.statusText
+            roleText = itemView.roleText
+        }
+
+        fun updateFavourite() {
+            if (favourite) {
+                favouriteButton?.setImageResource(R.drawable.ic_material_star_black)
+            } else {
+                favouriteButton?.setImageResource(R.drawable.ic_material_star_border_black)
+            }
         }
 
         fun bind(context: Context, session: MXSession?, people: DirectoryPeople, onDataSetChange: OnDataSetChange, position: Int, selection: Boolean? = false) {
@@ -70,6 +89,7 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
             jobTitle?.text = people.jobTitle
             organisationText?.text = "Organisation: ${people.organisations}"
             businessUnitText?.text = "Business Unit: ${people.businessUnits}"
+            roleText?.text = "Role: some role"
             statusText?.text = "online"
 
             if (people.expanded) {
@@ -85,7 +105,27 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
                 people.expanded = !people.expanded
                 onDataSetChange.onDataChange(position)
             }
+
+            DirectoryConnector.checkFavourite(context,FavouriteTypes.Practitioner,people.id) {
+                this.favourite = it
+                this.updateFavourite()
+            }
+
+            favouriteButton?.setOnClickListener {
+                this.favourite = !this.favourite
+                this.updateFavourite()
+                if (this.favourite) {
+                    DirectoryConnector.addFavourite(context, FavouriteTypes.Practitioner,people.id)
+                } else {
+                    DirectoryConnector.removeFavourite(context, FavouriteTypes.Practitioner,people.id)
+                }
+            }
         }
+    }
+
+    fun addPage(people: List<DirectoryPeople>) {
+        this.people.addAll(people)
+        notifyDataSetChanged()
     }
 
     fun setData(people: MutableList<DirectoryPeople>) {
@@ -99,7 +139,7 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
             for (j in 0 until participants.getChildrenCount(i)) {
                 val child: ParticipantAdapterItem = participants.getChild(i,j) as ParticipantAdapterItem
                 if (child.mUserId == null) continue
-                this.people.add(this.people.count(), DirectoryPeople(child.mUserId, child.mDisplayName, "Placeholder", child.mAvatarUrl, "Placeholder", "Placeholder"))
+                this.people.add(this.people.count(), DirectoryPeople(child.mUserId, child.mDisplayName, "Placeholder", child.mAvatarUrl, "Placeholder", "Placeholder", ArrayList()))
             }
         }
         notifyDataSetChanged()

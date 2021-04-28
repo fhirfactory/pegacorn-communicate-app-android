@@ -1,10 +1,7 @@
 package im.vector.directory.role
 
-import android.app.Application
 import android.content.Context
-import android.content.res.ColorStateList
 import android.os.Build
-import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -17,13 +14,10 @@ import im.vector.Matrix
 import im.vector.R
 import im.vector.directory.role.model.DummyRole
 import im.vector.microservices.DirectoryConnector
-import im.vector.microservices.DirectoryServices
 import im.vector.microservices.FavouriteTypes
 import im.vector.util.VectorUtils
 import im.vector.view.VectorCircularImageView
-import kotlinx.android.synthetic.main.item_directory_people.view.*
 import kotlinx.android.synthetic.main.item_directory_people.view.favoriteIcon
-import kotlinx.android.synthetic.main.item_directory_role.view.*
 import org.matrix.androidsdk.MXSession
 
 
@@ -78,8 +72,8 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: R
         return RoleViewHolder(view)
     }
 
-    private fun checkSelection(role: DummyRole): Boolean {
-        if (!selectable) return false
+    private fun checkSelection(role: DummyRole): Boolean? {
+        if (!selectable) return null
         selectedIds?.forEach { id ->
             if (id == role.id)
                 return true
@@ -100,7 +94,7 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: R
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: RoleViewHolder, position: Int) {
-        holder.bind(context, mSession, roles[position], this, position, onClickListener, checkSelection(roles[position]))
+        holder.bind(context, mSession, roles[position], this, position, onClickListener, false, checkSelection(roles[position]))
         holder.selectionRadioImageView?.visibility = if (selectable) VISIBLE else GONE
         holder.itemView.setOnClickListener {
             if (selectable) {
@@ -158,13 +152,12 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun updateFavourite() {
         if (favourite) {
             favouriteButton?.setImageResource(R.drawable.ic_material_star_black)
-            this.favourite = true
         } else {
             favouriteButton?.setImageResource(R.drawable.ic_material_star_border_black)
         }
     }
 
-    fun bind(context: Context, session: MXSession?, role: DummyRole, onDataSetChange: OnDataSetChange, position: Int, onClickListener: RoleClickListener?, showHeader: Boolean = false, selection: Boolean? = false) {
+    fun bind(context: Context, session: MXSession?, role: DummyRole, onDataSetChange: OnDataSetChange, position: Int, onClickListener: RoleClickListener?, showHeader: Boolean = false, selection: Boolean? = null) {
         VectorUtils.loadRoomAvatar(context, session, avatar, role)
         heading?.visibility = if (showHeader) VISIBLE else GONE
         officialName?.text = role.officialName
@@ -188,7 +181,7 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             categoryText?.visibility = GONE
             locationText?.visibility = GONE
         }
-        if (role.filled) {
+        if (role.fhirPractitionerRole.activePractitionerSet.count() > 0) {
             roleFilledTextView?.text = context.getText(R.string.role_filled)
             //stealing the default colour from another text view is like, the best viable way of doing this, apparently
             //otherwise, the color has to come from resource values -- so would be theme dependent (as it true of the use of vector_warning_color)
@@ -202,7 +195,7 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             }
         }
 
-        DirectoryConnector.CheckFavourite(context,FavouriteTypes.PractitionerRoles,role.id) {
+        DirectoryConnector.checkFavourite(context,FavouriteTypes.PractitionerRoles,role.id) {
             this.favourite = it
             this.updateFavourite()
         }
@@ -211,16 +204,16 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             this.favourite = !this.favourite
             this.updateFavourite()
             if (this.favourite) {
-                DirectoryConnector.AddFavourite(context,FavouriteTypes.PractitionerRoles,role.id)
+                DirectoryConnector.addFavourite(context,FavouriteTypes.PractitionerRoles,role.id)
             } else {
-                DirectoryConnector.RemoveFavourite(context,FavouriteTypes.PractitionerRoles,role.id)
+                DirectoryConnector.removeFavourite(context,FavouriteTypes.PractitionerRoles,role.id)
             }
         }
 
-        roleText?.text = "Role: ${role.roles.joinToString(", ")}"
-        orgUnitText?.text = "Org Unit: ${role.organizationUnit}"
-        categoryText?.text = "Category: ${role.speciality.joinToString(", ")}"
-        locationText?.text = "Location: ${role.location.joinToString(", ")}"
+        roleText?.text = "Role: ${role.fhirPractitionerRole.primaryRoleID}"
+        orgUnitText?.text = "Org Unit: ${role.fhirPractitionerRole.primaryOrganizationID}"
+        categoryText?.text = "Category: ${role.fhirPractitionerRole.primaryRoleCategoryID}"
+        locationText?.text = "Location: ${role.fhirPractitionerRole.primaryLocationID}"
 
         expandableIcon?.setOnClickListener {
             role.expanded = !role.expanded

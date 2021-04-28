@@ -3,18 +3,13 @@ package im.vector.directory.role
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
-import androidx.transition.TransitionManager
 import im.vector.R
 import im.vector.directory.BaseDirectoryFragment
 import im.vector.directory.people.model.TemporaryRoom
@@ -22,7 +17,6 @@ import im.vector.directory.role.detail.RoleDetailActivity
 import im.vector.directory.role.model.*
 import im.vector.extensions.withArgs
 import im.vector.microservices.DirectoryConnector
-import im.vector.microservices.FHIRPractitioner
 import kotlinx.android.synthetic.main.fragment_directory_role.*
 import org.matrix.androidsdk.data.Room
 
@@ -46,6 +40,7 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
     private lateinit var roleAdapter: RolesDirectoryAdapter
     private val constraintCollapsed = ConstraintSet()
     private val constraintExpanded = ConstraintSet()
+    private var filter: String? = null
 
     override fun getLayoutResId(): Int {
         return R.layout.fragment_directory_role
@@ -53,6 +48,10 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
 
     override fun filter(with: String?) {
         //TODO("Not yet implemented")
+        if (filter != with) {
+            filter = with
+            initializeList()
+        }
     }
 
     override fun onFilter(pattern: String?, listener: OnFilterListener?) {
@@ -77,8 +76,10 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
         roleRecyclerview.adapter = roleAdapter
         roleRecyclerview.setHasFixedSize(true)
 
+        roleRecyclerview.scrollToPosition(0)
+
         loading = false
-        page = 0
+        page = -1
         paginate()
         setupScrollListener()
     }
@@ -144,7 +145,7 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
                 arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
          */
 
-        DirectoryConnector.InitializeWithPractitionerId("donald.duck@acme.org")
+        DirectoryConnector.initializeWithPractitionerId("donald.duck@acme.org")
 
         setHeader(header, R.string.total_number_of_roles, 0)
     }
@@ -154,7 +155,7 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
         initializeList()
     }
 
-    var page = 0;
+    var page = -1;
     var loading = false;
     var pageSize = 20;
 
@@ -162,13 +163,13 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
         if (!loading) {
 
             val idx = roleRecyclerview.getChildAdapterPosition(roleRecyclerview.getChildAt(0))
-            val overHalfway: Boolean = (idx >= (page * pageSize) / 2) || (idx == -1)
+            val overHalfway: Boolean = page < 0 || (idx >= (page * pageSize) / 2) || (idx == -1)
 
             if (overHalfway || roleRecyclerview.height == 0) {
                 page += 1
                 loading = true;
                 context?.let {
-                    DirectoryConnector.GetRoles(page, pageSize, it){
+                    DirectoryConnector.getPractitionerRoles(page, pageSize, it, filter){
                         it?.let {
                             roleAdapter.addPage(it)
                             loading = false

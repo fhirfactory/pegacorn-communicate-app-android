@@ -1,5 +1,7 @@
 package im.vector.directory.role.model
 
 data class Location(
-        val reference: String
+        val identifier: String,
+        val displayName: String,
+        val description: String
 )

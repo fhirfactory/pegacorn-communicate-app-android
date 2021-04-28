@@ -42,15 +42,9 @@ class RoleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStackCh
         chatIcon.setOnClickListener { }
         videoCallIcon.setOnClickListener { }
 
-        //test data
-        val testPeopleData = mutableListOf<DirectoryPeople>()
-//        testPeopleData.add(DirectoryPeople("1", "Stephen Curry", "Doctor", null, "Emergency Department", "Hospital Department"))
-//        testPeopleData.add(DirectoryPeople("2", "John Smith", "Registrar", null, "Emergency Department", "Hospital Department"))
-//        testPeopleData.add(DirectoryPeople("3", "Paul George", "Gen Surg Reg", null, "Emergency Department", "Hospital Department"))
-//        testPeopleData.add(DirectoryPeople("4", "James Harden", "Consultant", null, "Emergency Department", "Hospital Department"))
-//        testPeopleData.add(DirectoryPeople("5", "Mike Jones", "Consultant", null, "Emergency Department", "Hospital Department"))
-
-        roleAdapter.setData(testPeopleData)
+        role.fetchPractitioners(applicationContext){
+            roleAdapter.setData(it)
+        }
     }
 
     override fun onDestroy() {
@@ -76,7 +70,8 @@ class RoleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStackCh
     }
 
     override fun onPeopleClick(directoryPeople: DirectoryPeople, forRemove: Boolean) {
-        startActivity(PeopleDetailActivity.intent(this, directoryPeople, false))
+        val newIntent = PeopleDetailActivity.intent(this, directoryPeople, intent.getBooleanExtra(PEOPLE_CLICKABLE, false))
+        startActivity(newIntent)
     }
 
     override fun onPeopleFavorite(directoryPeople: DirectoryPeople) {

@@ -154,6 +154,7 @@ import im.vector.util.VectorUtils;
 import im.vector.view.KeysBackupBanner;
 import im.vector.view.UnreadCounterBadgeView;
 import im.vector.view.VectorPendingCallView;
+import kotlin.Unit;
 
 /**
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
@@ -997,7 +998,12 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 Log.d(LOG_TAG, "onNavigationItemSelected PEOPLE");
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_PEOPLE);
                 if (fragment == null) {
-                    fragment = new DirectoryFragment();
+                    DirectoryFragment df = new DirectoryFragment();
+                    df.setChangeQueryText((x,y) -> {
+                        this.setQueryHint(x,y);
+                        return null;
+                    });
+                    fragment = df;
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_PEOPLE;
                 mSearchView.setVisibility(View.GONE);

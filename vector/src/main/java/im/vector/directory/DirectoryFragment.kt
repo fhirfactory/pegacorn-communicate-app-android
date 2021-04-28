@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import im.vector.R
@@ -17,6 +18,7 @@ import kotlinx.android.synthetic.main.fragment_view_pager_tab.*
 
 class DirectoryFragment : BaseActFragment() {
     var favouriteEnable = false
+    var changeQueryText: ((id: Int, id2: Int)->Unit)? = null
     private val fragments = mutableMapOf(DIRECTORY_FRAGMENTS.ROLE to DirectoryRoleFragment(), DIRECTORY_FRAGMENTS.PEOPLE to DirectoryPeopleFragment(), DIRECTORY_FRAGMENTS.SERVICE to DirectoryServiceFragment())
 
     override fun getLayoutResId() = R.layout.fragment_view_pager_tab
@@ -62,6 +64,7 @@ class DirectoryFragment : BaseActFragment() {
         fragments.forEach { fragment ->
             fragment.value.filter(pattern)
         }
+        listener?.onFilterDone(0)
     }
 
     override fun onResetFilter() {
@@ -77,6 +80,17 @@ class DirectoryFragment : BaseActFragment() {
         override fun getCount() = DIRECTORY_FRAGMENTS.values().size
 
         override fun getPageTitle(position: Int) = DIRECTORY_FRAGMENTS.values()[position].title
+
+        override fun finishUpdate(container: ViewGroup) {
+            super.finishUpdate(container)
+            changeQueryText?.let {
+                when (DIRECTORY_FRAGMENTS.values()[pager.currentItem]) {
+                    DIRECTORY_FRAGMENTS.ROLE -> it(R.string.home_filter_placeholder_people, R.string.search_directory_roles)
+                    DIRECTORY_FRAGMENTS.PEOPLE -> it(R.string.home_filter_placeholder_people, R.string.search_directory_people)
+                    DIRECTORY_FRAGMENTS.SERVICE -> it(R.string.home_filter_placeholder_people, R.string.search_directory_services)
+                }
+            }
+        }
     }
 
     enum class DIRECTORY_FRAGMENTS(val title: String) {
