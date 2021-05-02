@@ -13,15 +13,16 @@ data class FHIRPractitioner (
         var otherNames: List<FHIRName>,
         @JvmField
         var contactPoints: List<FHIRContactPoint>,
-//        @JvmField
-//        var currentPractitionerRoles: List<String>,
         @JvmField
-        var practitionerRoleHistories: FHIRRoleHistory
+        var currentPractitionerRoles: List<String>,
+        @JvmField
+        var practitionerRoleHistories: FHIRRoleHistory?
 ) {
-        val currentPractitionerRoles: List<String>
+        val assignedPractitionerRoles: List<String>
         get() {
-                println("")
-                return practitionerRoleHistories.roleHistories.filter { x -> x.endDate == null }.map { x -> x.identifier }
+                if (currentPractitionerRoles.count() > 0) return currentPractitionerRoles
+                practitionerRoleHistories?.let{ return it.roleHistories.filter { x -> x.endDate == null }.map { x -> x.identifier } }
+                return ArrayList()
         }
         var roles: ArrayList<FHIRPractitionerRole> = ArrayList()
         var dataChangeEventListeners: ArrayList<()->Unit> = ArrayList()

@@ -107,7 +107,7 @@ object DirectoryConnector {
     fun convertPractitioner(from: FHIRPractitioner): DirectoryPeople {
         return DirectoryPeople(from.identifiers.first().fhirIdentifier,
                 from.displayName,"","","","",
-                from.currentPractitionerRoles)
+                from.assignedPractitionerRoles)
     }
 
     fun getPractitioners(page: Int, pageSize: Int, context: Context, callback: (List<DirectoryPeople>?) -> Unit) {
@@ -157,7 +157,7 @@ object DirectoryConnector {
                     it.entry?.let{
                         it.roles = ArrayList()
                         it.dataChangeEventListeners = ArrayList()
-                        it.currentPractitionerRoles?.forEach { x -> getPractitionerRole(x,context) { role ->
+                        it.assignedPractitionerRoles?.forEach { x -> getPractitionerRole(x,context) { role ->
                             it.roles.add(role)
                             it.dataChanged()
                         }

@@ -2,7 +2,6 @@ package im.vector.microservices
 
 import android.content.Context
 import android.os.Parcelable
-import com.google.gson.annotations.SerializedName
 import im.vector.directory.people.model.DirectoryPeople
 import kotlinx.android.parcel.Parcelize
 
@@ -26,23 +25,28 @@ class FHIRPractitionerRole(
         var contactPoints: List<FHIRContactPoint>,
         @JvmField
         var primaryRoleCategoryID: String,
-//        @JvmField
-//        var activePractitionerSet: List<String>,
         @JvmField
-        var roleHistory: FHIRRoleHistory
+        var roleHistory: FHIRRoleHistory?,
+        @JvmField
+        var activePractitionerSet: List<String>
 ) : Parcelable {
-        val activePractitionerSet: List<String>
-        get() = roleHistory.roleHistories.filter { x -> x.endDate == null }.map { x -> x.identifier }
+        val assignedPractitioners: List<String>
+        get(){
+                if (activePractitionerSet.count() > 0)
+                        return activePractitionerSet
+                roleHistory?.let {return it.roleHistories.filter { x -> x.endDate == null }.map { x -> x.identifier } }
+                return ArrayList()
+        }
 
         fun fetchPractitioners(context: Context, callback: (ArrayList<DirectoryPeople>) -> Unit){
                 fetchPractitionersRecursive(callback, ArrayList(),0, context)
         }
         private fun fetchPractitionersRecursive(callback: (ArrayList<DirectoryPeople>) -> Unit, list: ArrayList<DirectoryPeople>, index: Int, context: Context) {
-                if (index >= activePractitionerSet.count()) {
+                if (index >= assignedPractitioners.count()) {
                         callback(list)
                         return
                 }
-                DirectoryConnector.getPractitioner(activePractitionerSet[index],context) {
+                DirectoryConnector.getPractitioner(assignedPractitioners[index],context) {
                         list.add(DirectoryConnector.convertPractitioner(it))
                         fetchPractitionersRecursive(callback, list, index + 1, context)
                 }
