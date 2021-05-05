@@ -8,30 +8,23 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.map
 import im.vector.R
-import im.vector.activity.CommonActivityUtils
 import im.vector.activity.VectorMediaPickerActivity
-import im.vector.activity.VectorRoomActivity
 import im.vector.chat.BaseTitleFragment
-import im.vector.directory.RoomClickListener
-import im.vector.directory.people.model.TemporaryRoom
+import im.vector.health.directory.RoomClickListener
+import im.vector.health.directory.people.model.TemporaryRoom
 import im.vector.util.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.util.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
 import im.vector.util.VectorUtils
 import im.vector.util.checkPermissions
 import kotlinx.android.synthetic.main.fragment_create_chat.selectedUserRecyclerView
 import kotlinx.android.synthetic.main.fragment_group_chat_create_detail.*
-import org.matrix.androidsdk.core.Log
 import org.matrix.androidsdk.core.callback.SimpleApiCallback
-import org.matrix.androidsdk.core.model.MatrixError
 import org.matrix.androidsdk.rest.model.CreateRoomParams
 import java.io.FileNotFoundException
-import java.util.*
 
 
 class GroupChatDetailFragment : BaseTitleFragment() {

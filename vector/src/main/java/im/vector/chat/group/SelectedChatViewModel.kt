@@ -2,7 +2,7 @@ package im.vector.chat.group
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import im.vector.directory.people.model.TemporaryRoom
+import im.vector.health.directory.people.model.TemporaryRoom
 import im.vector.extensions.notifyObserver
 
 class SelectedChatViewModel : ViewModel() {

@@ -19,8 +19,8 @@ import im.vector.R
 import im.vector.activity.SimpleFragmentActivity
 import im.vector.activity.SimpleFragmentActivityListener
 import im.vector.adapters.VectorMessagesAdapterMediasHelper
-import im.vector.directory.role.DropDownAdapter
-import im.vector.directory.role.model.DropDownItem
+import im.vector.health.directory.role.DropDownAdapter
+import im.vector.health.directory.role.model.DropDownItem
 import im.vector.home.BaseActFragment
 import im.vector.patient.PatientTagActivity.Companion.FILE_LOCATION_EXTRA
 import im.vector.patient.PatientTagActivity.Companion.ROOM_EVENT_EXTRA

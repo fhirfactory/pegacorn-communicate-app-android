@@ -1682,4 +1682,5 @@ Why choose Riot.im?
     <string name="include_active">Include inactive codes</string>
     <string name="title_activity_code_detail">Code Event Detail</string>
     <string name="work">Work</string>
+    <string name="select_roles">Select Roles</string>
 </resources>

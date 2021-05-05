@@ -41,7 +41,6 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.collection.LruCache;
 import androidx.core.content.ContextCompat;
@@ -76,9 +75,9 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.ParticipantAdapterItem;
-import im.vector.directory.people.model.DirectoryPeople;
-import im.vector.directory.role.model.DummyRole;
-import im.vector.directory.service.DummyService;
+import im.vector.health.directory.people.model.DirectoryPeople;
+import im.vector.health.directory.role.model.DummyRole;
+import im.vector.health.directory.service.DummyService;
 import im.vector.settings.VectorLocale;
 
 public class VectorUtils {

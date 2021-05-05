@@ -134,6 +134,7 @@
         android:label="@string/riot_app_name"
         android:largeHeap="true"
         android:resizeableActivity="true"
+        android:usesCleartextTraffic="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Light"
@@ -183,16 +184,19 @@
             android:name=".activity.FallbackAuthenticationActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/login" />
+        <activity android:name=".health.role_selection.RoleSelectionActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/select_roles"/>
         <activity
-            android:name=".directory.role.detail.RoleDetailActivity"
+            android:name="im.vector.health.directory.role.detail.RoleDetailActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_role_detail" />
         <activity
-            android:name=".directory.service.detail.ServiceDetailActivity"
+            android:name="im.vector.health.directory.service.detail.ServiceDetailActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_service_detail" />
         <activity
-            android:name=".directory.people.detail.PeopleDetailActivity"
+            android:name="im.vector.health.directory.people.detail.PeopleDetailActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_people_detail" />
         <activity

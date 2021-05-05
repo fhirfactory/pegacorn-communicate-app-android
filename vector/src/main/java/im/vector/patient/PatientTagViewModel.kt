@@ -2,7 +2,7 @@ package im.vector.patient
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import im.vector.directory.role.model.DropDownItem
+import im.vector.health.directory.role.model.DropDownItem
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.data.RoomMediaMessage
 import org.matrix.androidsdk.rest.model.Event

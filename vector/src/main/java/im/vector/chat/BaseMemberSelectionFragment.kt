@@ -3,17 +3,11 @@ package im.vector.chat
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import androidx.lifecycle.ViewModelProviders
 import im.vector.R
-import im.vector.directory.BaseDirectoryFragment
-import im.vector.directory.RoomClickListener
-import im.vector.directory.people.DirectoryPeopleFragment
-import im.vector.directory.role.DirectoryRoleFragment
-import im.vector.home.BaseActFragment
+import im.vector.health.directory.BaseDirectoryFragment
+import im.vector.health.directory.RoomClickListener
 import kotlinx.android.synthetic.main.fragment_create_chat.*
 
 abstract class BaseMemberSelectionFragment : BaseTitleFragment(), RoomClickListener {

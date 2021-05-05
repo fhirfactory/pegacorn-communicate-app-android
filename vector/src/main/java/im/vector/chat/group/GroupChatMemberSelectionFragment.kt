@@ -1,7 +1,6 @@
 package im.vector.chat.group
 
 import android.app.Activity
-import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -12,10 +11,10 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import im.vector.R
 import im.vector.chat.BaseMemberSelectionFragment
-import im.vector.directory.RoomClickListener
-import im.vector.directory.people.DirectoryPeopleFragment
-import im.vector.directory.people.model.TemporaryRoom
-import im.vector.directory.role.DirectoryRoleFragment
+import im.vector.health.directory.RoomClickListener
+import im.vector.health.directory.people.DirectoryPeopleFragment
+import im.vector.health.directory.people.model.TemporaryRoom
+import im.vector.health.directory.role.DirectoryRoleFragment
 import kotlinx.android.synthetic.main.fragment_create_chat.*
 
 

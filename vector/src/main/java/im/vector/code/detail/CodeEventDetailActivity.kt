@@ -2,16 +2,9 @@ package im.vector.code.detail
 
 import android.content.Context
 import android.content.Intent
-import androidx.fragment.app.FragmentManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import im.vector.Matrix
 import im.vector.R
 import im.vector.activity.MXCActionBarActivity
 import im.vector.code.CodeEvent
-import im.vector.directory.people.model.DirectoryPeople
-import im.vector.directory.role.model.DummyRole
-import im.vector.util.VectorUtils
-import kotlinx.android.synthetic.main.activity_role_detail.*
 
 class CodeEventDetailActivity : MXCActionBarActivity(){
 

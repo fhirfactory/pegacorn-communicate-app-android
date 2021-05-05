@@ -9,8 +9,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.Matrix
 import im.vector.R
-import im.vector.directory.RoomClickListener
-import im.vector.directory.people.model.TemporaryRoom
+import im.vector.health.directory.RoomClickListener
+import im.vector.health.directory.people.model.TemporaryRoom
 import im.vector.util.VectorUtils
 import im.vector.view.VectorCircularImageView
 import kotlinx.android.synthetic.main.item_directory_people.view.avatar

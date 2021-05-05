@@ -1,9 +1,6 @@
 package im.vector.calls
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -11,9 +8,6 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import im.vector.R
 import im.vector.calls.dialer.DialerFragment
 import im.vector.calls.recent.RecentCallFragment
-import im.vector.directory.DirectoryFragment
-import im.vector.directory.people.DirectoryPeopleFragment
-import im.vector.directory.role.DirectoryRoleFragment
 import im.vector.fragments.AbsHomeFragment
 import im.vector.ui.themes.ThemeUtils.getColor
 import im.vector.ui.themes.ThemeUtils.setTabLayoutTheme

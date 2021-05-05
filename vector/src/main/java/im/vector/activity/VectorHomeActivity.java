@@ -44,6 +44,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -124,18 +125,15 @@ import im.vector.adapters.model.UserRole;
 import im.vector.chat.CHAT_TYPE;
 import im.vector.chat.ChatCreateActivity;
 import im.vector.calls.CallsFragment;
-import im.vector.directory.DirectoryFragment;
+import im.vector.health.directory.DirectoryFragment;
 import im.vector.code.CodeEventFragment;
 import im.vector.extensions.ViewExtensionsKt;
 import im.vector.features.logout.ProposeLogout;
 import im.vector.fragments.AbsHomeFragment;
-import im.vector.fragments.GroupsFragment;
-import im.vector.fragments.RoomsFragment;
-import im.vector.fragments.VectorSearchRoomFilesListFragment;
-import im.vector.fragments.VectorSearchRoomsFilesListFragment;
 import im.vector.fragments.signout.SignOutBottomSheetDialogFragment;
 import im.vector.fragments.signout.SignOutViewModel;
 import im.vector.gallery.GalleryFragment;
+import im.vector.health.role_selection.RoleSelectionActivity;
 import im.vector.home.CommunicateHomeFragment;
 import im.vector.invite.InviteActivity;
 import im.vector.push.PushManager;
@@ -154,7 +152,6 @@ import im.vector.util.VectorUtils;
 import im.vector.view.KeysBackupBanner;
 import im.vector.view.UnreadCounterBadgeView;
 import im.vector.view.VectorPendingCallView;
-import kotlin.Unit;
 
 /**
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
@@ -1901,6 +1898,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         });
     }
 
+
+    WebView mWebView;
+
     /*
      * *********************************************************************************************
      * Sliding menu management
@@ -1923,7 +1923,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             public void onDrawerClosed(View view) {
                 switch (mSlidingMenuIndex) {
                     case R.id.sliding_menu_roles: {
-                        mBottomNavigationView.setSelectedItemId(R.id.bottom_action_favourites);
+                        //mBottomNavigationView.setSelectedItemId(R.id.bottom_action_favourites);
+                        Intent i = new Intent(getApplicationContext(), RoleSelectionActivity.class);
+                        startActivity(i);
                         break;
                     }
 
@@ -2126,10 +2128,10 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
             //test data
             List<UserRole> roles = new ArrayList<>();
-            //roles.add(new UserRole(false, "Med Reg"));
+            roles.add(new UserRole(false, "Med Reg"));
             roles.add(new UserRole(false, "ED AO"));
-            //roles.add(new UserRole(false, "Registrar"));
-            //roles.add(new UserRole(false, "Consultant"));
+            roles.add(new UserRole(false, "Registrar"));
+            roles.add(new UserRole(false, "Consultant"));
             rolesInNavigationBarAdapter.setData(roles);
         }
     }
