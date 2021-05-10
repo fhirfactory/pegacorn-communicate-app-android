@@ -134,7 +134,7 @@ class FallbackAuthenticationActivity : VectorAppCompatActivity() {
         if (mMode == MODE_LOGIN) {
             mWebView.loadUrl(mHomeServerUrl!! + "_matrix/static/client/login/")
         } else if (mMode == MODE_SSO){
-            val serverurl = mHomeServerUrl!! + "_matrix/client/r0/login/sso/redirect?redirectUrl=" + URLEncoder.encode(SSORedirectURL)
+            val serverurl = mHomeServerUrl!! + "_matrix/client/r0/login/sso/redirect?redirectUrl=" + URLEncoder.encode(getString(R.string.sso_redirect_url))
             mWebView.loadUrl(serverurl)
         } else {
             // MODE_REGISTER
@@ -231,7 +231,7 @@ class FallbackAuthenticationActivity : VectorAppCompatActivity() {
              * @return
              */
             override fun shouldOverrideUrlLoading(view: WebView, url: String?): Boolean {
-                if (null != url && url.startsWith(SSORedirectURL)){
+                if (null != url && url.startsWith(getString(R.string.sso_redirect_url))){
                     val token = UrlQuerySanitizer(url).getValue("loginToken").removeSuffix("#")
                     val requestURL = URL(mHomeServerUrl!! + "_matrix/client/r0/login")
                     val retrofit = Retrofit.Builder()
@@ -377,8 +377,6 @@ class FallbackAuthenticationActivity : VectorAppCompatActivity() {
         private const val EXTRA_IN_MODE = "FallbackAuthenticationActivity.EXTRA_IN_MODE"
         private const val EXTRA_IN_HOME_SERVER_URL = "FallbackAuthenticationActivity.EXTRA_IN_HOME_SERVER_URL"
         private const val EXTRA_OUT_SERIALIZED_CREDENTIALS = "FallbackAuthenticationActivity.EXTRA_OUT_SERIALIZED_CREDENTIALS"
-
-        private const val SSORedirectURL = "lingo://login";
 
         /* ==========================================================================================
          * IN

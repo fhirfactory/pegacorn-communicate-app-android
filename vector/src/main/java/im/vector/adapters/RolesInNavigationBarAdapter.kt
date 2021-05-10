@@ -11,11 +11,12 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.R
 import im.vector.adapters.model.UserRole
+import im.vector.health.directory.role.model.DummyRole
 
 
 class RolesInNavigationBarAdapter :
         RecyclerView.Adapter<RolesInNavigationBarAdapter.RoleViewHolder>() {
-    private val roles = mutableListOf<UserRole>()
+    private val roles = mutableListOf<DummyRole>()
 
     class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var mRoleName: TextView? = null
@@ -26,20 +27,20 @@ class RolesInNavigationBarAdapter :
             mIndicator = itemView.findViewById(R.id.indicator)
         }
 
-        fun bind(role: UserRole) {
-            mRoleName?.text = role.roleName
+        fun bind(role: DummyRole) {
+            mRoleName?.text = role.fhirPractitionerRole.identifiers.filter { x -> x.type == "ShortName" }.firstOrNull()?.value ?: role.officialName
 
             mIndicator?.apply {
-                if (role.active)
-                    setColorFilter(ContextCompat.getColor(context, android.R.color.holo_green_dark), PorterDuff.Mode.SRC_IN)
-                else
-                    setColorFilter(Color.LTGRAY, PorterDuff.Mode.SRC_IN)
+                //if (role.active)
+                setColorFilter(ContextCompat.getColor(context, android.R.color.holo_green_dark), PorterDuff.Mode.SRC_IN)
+                //else
+                //    setColorFilter(Color.LTGRAY, PorterDuff.Mode.SRC_IN)
             }
 
         }
     }
 
-    fun setData(roles: MutableList<UserRole>) {
+    fun setData(roles: MutableList<DummyRole>) {
         this.roles.clear()
         this.roles.addAll(roles)
     }

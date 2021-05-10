@@ -1,5 +1,6 @@
 package im.vector.health.role_selection
 
+import android.app.Activity
 import android.content.DialogInterface
 import android.net.Uri
 import android.net.http.SslError
@@ -44,6 +45,10 @@ class RoleSelectionActivity : VectorAppCompatActivity() {
                             }
                         }
                         return true
+                    } else if (url.toString() == getString(R.string.role_selector_redirect_link)) {
+                        setResult(Activity.RESULT_OK)
+                        finish()
+                        return true;
                     }
                 }
                 return false

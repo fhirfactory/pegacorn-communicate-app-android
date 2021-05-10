@@ -145,8 +145,6 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
                 arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
          */
 
-        DirectoryConnector.initializeWithPractitionerId("donald.duck@acme.org")
-
         setHeader(header, R.string.total_number_of_roles, 0)
     }
 

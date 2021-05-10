@@ -337,4 +337,12 @@ object DirectoryConnector {
             }
         }
     }
+
+    fun getActiveRoles(context:Context, callback: (List<DummyRole>?) -> Unit) {
+        getPractitioner(practitionerId,context) {practitioner ->
+            convertPractitioner(practitioner).FetchRoles(context) {loadedRoles ->
+                callback(loadedRoles)
+            }
+        }
+    }
 }

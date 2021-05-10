@@ -54,6 +54,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
@@ -133,6 +134,7 @@ import im.vector.fragments.AbsHomeFragment;
 import im.vector.fragments.signout.SignOutBottomSheetDialogFragment;
 import im.vector.fragments.signout.SignOutViewModel;
 import im.vector.gallery.GalleryFragment;
+import im.vector.health.microservices.DirectoryConnector;
 import im.vector.health.role_selection.RoleSelectionActivity;
 import im.vector.home.CommunicateHomeFragment;
 import im.vector.invite.InviteActivity;
@@ -202,6 +204,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     private static final String TAG_FRAGMENT_PEOPLE = "TAG_FRAGMENT_PEOPLE";
     private static final String TAG_FRAGMENT_ROOMS = "TAG_FRAGMENT_ROOMS";
     private static final String TAG_FRAGMENT_GROUPS = "TAG_FRAGMENT_GROUPS";
+
+    private static final int ROLE_SELECTION_REQUEST = 1;
 
     // Key used to restore the proper fragment after orientation change
     private static final String CURRENT_MENU_ID = "CURRENT_MENU_ID";
@@ -323,6 +327,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     @Override
     public void initUiAndData() {
+        DirectoryConnector.INSTANCE.initializeWithPractitionerId("joseph.fergusson@test.act.gov.au");
         mFragmentManager = getSupportFragmentManager();
 
         if (CommonActivityUtils.shouldRestartApp(this)) {
@@ -1899,6 +1904,14 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ROLE_SELECTION_REQUEST && resultCode == RESULT_OK) {
+            RefreshRoles();
+        }
+    }
+
     WebView mWebView;
 
     /*
@@ -1925,7 +1938,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     case R.id.sliding_menu_roles: {
                         //mBottomNavigationView.setSelectedItemId(R.id.bottom_action_favourites);
                         Intent i = new Intent(getApplicationContext(), RoleSelectionActivity.class);
-                        startActivity(i);
+                        startActivityForResult(i, ROLE_SELECTION_REQUEST);
                         break;
                     }
 
@@ -2125,15 +2138,19 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         if (null != roleRecyclerView) {
             roleRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             roleRecyclerView.setAdapter(rolesInNavigationBarAdapter);
+            RefreshRoles();
 
-            //test data
-            List<UserRole> roles = new ArrayList<>();
-            roles.add(new UserRole(false, "Med Reg"));
-            roles.add(new UserRole(false, "ED AO"));
-            roles.add(new UserRole(false, "Registrar"));
-            roles.add(new UserRole(false, "Consultant"));
-            rolesInNavigationBarAdapter.setData(roles);
         }
+    }
+
+    private void RefreshRoles() {
+        DirectoryConnector.INSTANCE.getActiveRoles(getApplicationContext(), (loadedRoles) -> {
+            rolesInNavigationBarAdapter.setData(loadedRoles);
+            RecyclerView roleRecyclerView = navigationView.findViewById(R.id.rolesRecyclerView);
+            roleRecyclerView.setAdapter(rolesInNavigationBarAdapter);
+            return null;
+        });
+
     }
 
     //==============================================================================================================
