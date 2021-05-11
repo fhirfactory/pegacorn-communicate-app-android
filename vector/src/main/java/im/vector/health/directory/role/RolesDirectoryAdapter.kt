@@ -182,10 +182,10 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             locationText?.visibility = GONE
         }
         if (role.fhirPractitionerRole.assignedPractitioners.count() > 0) {
-            roleFilledTextView?.text = context.getText(R.string.role_filled)
+            //roleFilledTextView?.text = context.getText(R.string.role_filled)
             //stealing the default colour from another text view is like, the best viable way of doing this, apparently
             //otherwise, the color has to come from resource values -- so would be theme dependent (as it true of the use of vector_warning_color)
-            roleFilledTextView?.setTextColor(officialName?.textColors)
+            //roleFilledTextView?.setTextColor(officialName?.textColors)
         } else {
             roleFilledTextView?.text = context.getText(R.string.role_unfilled)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

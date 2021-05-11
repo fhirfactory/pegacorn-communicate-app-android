@@ -6,11 +6,11 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class FHIRContactPoint (
         @JvmField
-        var name: String,
+        var name: String?,
         @JvmField
         var value: String,
         @JvmField
-        var rank: Int,
+        var rank: Int?,
         @JvmField
         var type: String,
         @JvmField

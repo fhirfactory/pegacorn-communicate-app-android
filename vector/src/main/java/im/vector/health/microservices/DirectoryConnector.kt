@@ -136,6 +136,34 @@ object DirectoryConnector {
         })
     }
 
+    fun getPractitioners(page: Int, pageSize: Int, context: Context, name: String?, callback: (List<DirectoryPeople>?) -> Unit) {
+        name?.let { query ->
+            val retrofit = Retrofit.Builder()
+                    .baseUrl(context.getString(R.string.microservice_server_url))
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+
+            // Create Service
+            val service = retrofit.create(DirectoryServices::class.java)
+            val response = service.getPractitioners(pageSize,page,query)
+            response.enqueue(object : Callback<List<FHIRPractitioner>> {
+                override fun onFailure(call: Call<List<FHIRPractitioner>>, t: Throwable) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onResponse(call: Call<List<FHIRPractitioner>>, response: Response<List<FHIRPractitioner>>) {
+                    //TODO("Not yet implemented")
+                    val people = response.body()?.map { x ->
+                        convertPractitioner(x)
+                    }
+                    callback(people)
+                }
+
+            })
+        }
+        if (name == null) return getPractitioners(page,pageSize,context,callback)
+    }
+
     //Takes practitioner ID (email address)
     fun getPractitioner(practitionerId: String, context: Context, callback: (FHIRPractitioner) -> Unit) {
         val retrofit = Retrofit.Builder()

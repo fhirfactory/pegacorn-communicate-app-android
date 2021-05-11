@@ -31,9 +31,14 @@ class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
     }
 
     private lateinit var peopleDirectoryAdapter: PeopleDirectoryAdapter
+    private var filter: String? = null
+
 
     override fun filter(with: String?) {
-        //TODO("Not yet implemented")
+        if (filter != with) {
+            filter = with
+            initializeList()
+        }
     }
 
     override fun onFilter(pattern: String?, listener: OnFilterListener?) {
@@ -116,7 +121,7 @@ class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
                 page += 1
                 loading = true;
                 context?.let {
-                    DirectoryConnector.getPractitioners(page, pageSize, it){
+                    DirectoryConnector.getPractitioners(page, pageSize, it, filter){
                         it?.let {
                             peopleDirectoryAdapter.addPage(it)
                             loading = false
