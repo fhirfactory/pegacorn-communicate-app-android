@@ -15,11 +15,11 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 object DirectoryConnector {
-    fun convertPractitionerRole(role: FHIRPractitionerRole): DummyRole = DummyRole(role.identifiers.first().fhirIdentifier,
+    fun convertPractitionerRole(role: FHIRPractitionerRole): DummyRole = DummyRole(role.simplifiedID,
             getNameForIdentifier(role.identifiers,"LongName")?:role.displayName,role.displayName,
             null,role.primaryOrganizationID,role)
 
-    fun convertRole(role: FHIRRole): Role = Role(role.simplifiedID,role.displayName,role.roleCategory, role.description)
+    fun convertRole(role: FHIRRole): Role = Role(role.displayName,role.displayName,role.roleCategory, role.description)
 
     private fun listRoles(page: Int, pageSize: Int, context: Context, callback: (List<DummyRole>?) -> Unit) {
 
@@ -105,7 +105,7 @@ object DirectoryConnector {
     }
 
     fun convertPractitioner(from: FHIRPractitioner): DirectoryPeople {
-        return DirectoryPeople(from.identifiers.first().fhirIdentifier,
+        return DirectoryPeople(from.simplifiedID,
                 from.displayName,"","","","",
                 from.assignedPractitionerRoles)
     }

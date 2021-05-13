@@ -8,6 +8,8 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 class FHIRPractitionerRole(
         @JvmField
+        var simplifiedID: String,
+        @JvmField
         var identifiers: List<FHIRIdentifier>,
         @JvmField
         var displayName: String,

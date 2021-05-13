@@ -2,6 +2,8 @@ package im.vector.health.microservices
 
 data class FHIRPractitioner (
         @JvmField
+        var simplifiedID: String,
+        @JvmField
         var identifiers: List<FHIRIdentifier>,
         @JvmField
         var displayName: String,
