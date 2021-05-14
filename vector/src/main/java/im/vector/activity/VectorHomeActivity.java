@@ -99,6 +99,7 @@ import org.matrix.androidsdk.data.RoomTag;
 import org.matrix.androidsdk.data.store.IMXStore;
 import org.matrix.androidsdk.listeners.MXEventListener;
 import org.matrix.androidsdk.rest.model.Event;
+import org.matrix.androidsdk.rest.model.pid.ThirdPartyIdentifier;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -327,7 +328,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     @Override
     public void initUiAndData() {
-        DirectoryConnector.INSTANCE.initializeWithPractitionerId("joseph.fergusson@test.act.gov.au");
+
         mFragmentManager = getSupportFragmentManager();
 
         if (CommonActivityUtils.shouldRestartApp(this)) {
@@ -351,6 +352,14 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         initSlidingMenu();
 
         mSession = Matrix.getInstance(this).getDefaultSession();
+
+        List<ThirdPartyIdentifier> emails = mSession.getMyUser().getlinkedEmails();
+        if (emails.size() > 0) {
+            //TODO: We may not be able to just use the first email, so think about how we can choose the correct one
+            DirectoryConnector.INSTANCE.initializeWithPractitionerId(emails.get(0).address);
+        }
+
+
         mRoomsViewModel = new HomeRoomsViewModel(mSession);
         // track if the application update
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
