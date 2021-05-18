@@ -17,7 +17,7 @@ package im.vector.push.fcm.troubleshoot
 
 import androidx.fragment.app.Fragment
 import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.common.GoogleApiAvailabilityLight
 import im.vector.R
 import im.vector.fragments.troubleshoot.TroubleshootTest
 import org.matrix.androidsdk.core.Log
@@ -28,7 +28,7 @@ import org.matrix.androidsdk.core.Log
 class TestPlayServices(val fragment: Fragment) : TroubleshootTest(R.string.settings_troubleshoot_test_play_services_title) {
 
     override fun perform() {
-        val apiAvailability = GoogleApiAvailability.getInstance()
+        val apiAvailability = GoogleApiAvailabilityLight.getInstance()
         val resultCode = apiAvailability.isGooglePlayServicesAvailable(fragment.context)
         if (resultCode == ConnectionResult.SUCCESS) {
             quickFix = null
@@ -39,7 +39,8 @@ class TestPlayServices(val fragment: Fragment) : TroubleshootTest(R.string.setti
                 quickFix = object : TroubleshootQuickFix(R.string.settings_troubleshoot_test_play_services_quickfix) {
                     override fun doFix() {
                         fragment.activity?.let {
-                            apiAvailability.getErrorDialog(it, resultCode, 9000 /*hey does the magic number*/).show()
+                            TODO("Implement neat failure state when we can't access play services")
+                            //apiAvailability.getErrorDialog(it, resultCode, 9000 /*hey does the magic number*/).show()
                         }
                     }
                 }

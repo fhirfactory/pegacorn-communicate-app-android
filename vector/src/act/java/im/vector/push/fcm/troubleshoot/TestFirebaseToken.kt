@@ -16,7 +16,7 @@
 package im.vector.push.fcm.troubleshoot
 
 import androidx.fragment.app.Fragment
-import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.installations.FirebaseInstallations
 import im.vector.R
 import im.vector.fragments.troubleshoot.NotificationTroubleshootTestManager
 import im.vector.fragments.troubleshoot.TroubleshootTest
@@ -33,7 +33,7 @@ class TestFirebaseToken(val fragment: Fragment) : TroubleshootTest(R.string.sett
         val activity = fragment.activity
         if (activity != null) {
             try {
-                FirebaseInstanceId.getInstance().instanceId
+                FirebaseInstallations.getInstance().id
                         .addOnCompleteListener(activity) { task ->
                             if (!task.isSuccessful) {
                                 val errorMsg = if (task.exception == null) "Unknown" else task.exception!!.localizedMessage
@@ -54,7 +54,7 @@ class TestFirebaseToken(val fragment: Fragment) : TroubleshootTest(R.string.sett
                                 }
                                 status = TestStatus.FAILED
                             } else {
-                                task.result?.token?.let {
+                                task.result?.let {
                                     val tok = it.substring(0, Math.min(8, it.length)) + "********************"
                                     description = fragment.getString(R.string.settings_troubleshoot_test_fcm_success, tok)
                                     Log.e(this::class.java.simpleName, "Retrieved FCM token success [$it].")

@@ -26,11 +26,10 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GoogleApiAvailabilityLight;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.installations.FirebaseInstallations;
 
 import org.matrix.androidsdk.core.Log;
 
@@ -82,11 +81,11 @@ public class FcmHelper {
             //'app should always check the device for a compatible Google Play services APK before accessing Google Play services features'
             if (checkPlayServices(activity)) {
                 try {
-                    FirebaseInstanceId.getInstance().getInstanceId()
-                            .addOnSuccessListener(activity, new OnSuccessListener<InstanceIdResult>() {
+                    FirebaseInstallations.getInstance().getId()
+                            .addOnSuccessListener(activity, new OnSuccessListener<String>() {
                                 @Override
-                                public void onSuccess(InstanceIdResult instanceIdResult) {
-                                    storeFcmToken(activity, instanceIdResult.getToken());
+                                public void onSuccess(String instanceIdResult) {
+                                    storeFcmToken(activity, instanceIdResult);
                                 }
                             })
                             .addOnFailureListener(activity, new OnFailureListener() {
@@ -111,7 +110,7 @@ public class FcmHelper {
      * the Google Play Store or enable it in the device's system settings.
      */
     private static boolean checkPlayServices(Activity activity) {
-        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        GoogleApiAvailabilityLight apiAvailability = GoogleApiAvailabilityLight.getInstance();
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(activity);
         if (resultCode != ConnectionResult.SUCCESS) {
             return false;
