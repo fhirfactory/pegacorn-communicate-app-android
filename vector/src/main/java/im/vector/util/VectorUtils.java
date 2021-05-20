@@ -306,28 +306,12 @@ public class VectorUtils {
      */
     public static String getInitials(String name){
         if(name != null) {
-            if (name.contains(",")) {
-                List<String> split = Arrays.asList((String[]) name.split(","));
-                Collections.reverse(split);
-                name = TextUtils.join(" ", split).trim();
-            }
-            String[] names = name.split(" ");
-            String initials = "";
-            int namePosition = names.length - 1;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                while (!Character.isAlphabetic(names[namePosition].charAt(0)) && namePosition-- > 0);
+            String[] nameSplit = name.split(" ");
+            if (nameSplit.length == 1) {
+                return "" + nameSplit[0].charAt(0);
             } else {
-                //Not internationalized on old versions of android
-                // >= A, <=Z.
-                //if we ignore 6th bit, we make every character the same case. We can do that by bitwise & with bitwise not of 32.
-                while (!((names[namePosition].charAt(0) & ~32) >= 65 && (names[namePosition].charAt(0) & ~32) <= 90) && namePosition-- > 0);
+                return "" + nameSplit[0].charAt(0) + nameSplit[nameSplit.length - 1].charAt(0);
             }
-            if (namePosition > 0) {
-                initials = getInitialLetter(names[0]) + getInitialLetter(names[namePosition]);
-            } else {
-                initials = getInitialLetter(names[0]);
-            }
-            return initials;
         }
         return "";
     }

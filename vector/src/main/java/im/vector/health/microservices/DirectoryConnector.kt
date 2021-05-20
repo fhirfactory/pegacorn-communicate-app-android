@@ -1,5 +1,6 @@
 package im.vector.health.microservices
 
+import android.app.AlertDialog
 import android.content.Context
 import im.vector.R
 import im.vector.health.directory.people.model.DirectoryPeople
@@ -58,8 +59,9 @@ object DirectoryConnector {
             val response = service.getPractitionerRoles(pageSize,page,query)
             response.enqueue(object : Callback<List<FHIRPractitionerRole>> {
                 override fun onFailure(call: Call<List<FHIRPractitionerRole>>, t: Throwable) {
-                    //TODO("Not yet implemented")
-                    println("")
+//                    AlertDialog.Builder(context).setTitle("Network Error").setMessage("Couldn't fetch practitionerRoles data from microservice. " + t.message).setPositiveButton("Ok"){ dialog, which ->
+//
+//                    }.create().show()
                 }
 
                 override fun onResponse(call: Call<List<FHIRPractitionerRole>>, response: Response<List<FHIRPractitionerRole>>) {
@@ -84,8 +86,7 @@ object DirectoryConnector {
         val response = service.getPractitionerRole(roleId)
         response.enqueue(object : Callback<FHIRDirectoryResponse<FHIRPractitionerRole>> {
             override fun onFailure(call: Call<FHIRDirectoryResponse<FHIRPractitionerRole>>, t: Throwable) {
-                //TODO("Not yet implemented")
-
+                //TODO("Handle failure more nicely")
             }
 
             override fun onResponse(call: Call<FHIRDirectoryResponse<FHIRPractitionerRole>>, response: Response<FHIRDirectoryResponse<FHIRPractitionerRole>>) {
@@ -122,7 +123,7 @@ object DirectoryConnector {
         val response = service.getPractitioners(pageSize,page)
         response.enqueue(object : Callback<List<FHIRPractitioner>> {
             override fun onFailure(call: Call<List<FHIRPractitioner>>, t: Throwable) {
-                TODO("Not yet implemented")
+                //TODO("Handle failure more nicely")
             }
 
             override fun onResponse(call: Call<List<FHIRPractitioner>>, response: Response<List<FHIRPractitioner>>) {
@@ -148,7 +149,7 @@ object DirectoryConnector {
             val response = service.getPractitioners(pageSize,page,query)
             response.enqueue(object : Callback<List<FHIRPractitioner>> {
                 override fun onFailure(call: Call<List<FHIRPractitioner>>, t: Throwable) {
-                    TODO("Not yet implemented")
+                    //TODO("Handle failure more nicely")
                 }
 
                 override fun onResponse(call: Call<List<FHIRPractitioner>>, response: Response<List<FHIRPractitioner>>) {
@@ -176,7 +177,7 @@ object DirectoryConnector {
         val response = service.getPractitioner(practitionerId)
         response.enqueue(object : Callback<FHIRDirectoryResponse<FHIRPractitioner>> {
             override fun onFailure(call: Call<FHIRDirectoryResponse<FHIRPractitioner>>, t: Throwable) {
-                TODO("Not yet implemented")
+                //TODO("Handle failure more nicely")
             }
 
             override fun onResponse(call: Call<FHIRDirectoryResponse<FHIRPractitioner>>, response: Response<FHIRDirectoryResponse<FHIRPractitioner>>) {
@@ -297,7 +298,7 @@ object DirectoryConnector {
         val response = service.getFavourites(practitionerId,favouriteTypes.path)
         response.enqueue(object: Callback<FavouritesObject>{
             override fun onFailure(call: Call<FavouritesObject>, t: Throwable) {
-                //TODO("Not yet implemented")
+                //TODO("Handle failure more nicely")
             }
 
             override fun onResponse(call: Call<FavouritesObject>, response: Response<FavouritesObject>) {
@@ -322,7 +323,7 @@ object DirectoryConnector {
         val response = service.putFavourites(practitionerId,favouriteTypes.path, FavouritesObject(favourites = newList))
         response.enqueue(object : Callback<Void> {
             override fun onFailure(call: Call<Void>, t: Throwable) {
-                //TODO("Not yet implemented")
+                //TODO("Handle failure more nicely")
             }
 
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
@@ -334,13 +335,13 @@ object DirectoryConnector {
     }
 
     fun addFavourite(context: Context, favouriteTypes: FavouriteTypes, favourite: String) {
-         getFavourites(context,favouriteTypes) {
-             if (!it.contains(favourite)) {
-                 val newList = ArrayList(it)
-                 newList.add(favourite)
-                 setFavourites(context,favouriteTypes,newList)
-             }
-         }
+        getFavourites(context,favouriteTypes) {
+            if (!it.contains(favourite)) {
+                val newList = ArrayList(it)
+                newList.add(favourite)
+                setFavourites(context,favouriteTypes,newList)
+            }
+        }
     }
 
     fun removeFavourite(context: Context, favouriteTypes: FavouriteTypes, favourite: String) {
