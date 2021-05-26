@@ -585,11 +585,11 @@
     <string name="room_recents_conversations">ROOMS</string>
     <string name="room_recents_low_priority">LOW PRIORITY</string>
     <string name="room_recents_invites">INVITES</string>
-    <string name="room_recents_start_chat">Create Chat</string>
-    <string name="room_recents_create_room">Create Group Chat</string>
-    <string name="room_recents_join_room">Join Chat</string>
-    <string name="room_recents_join_room_title">Join a room</string>
-    <string name="room_recents_join_room_prompt">Type a room id or a room alias</string>
+    <string name="room_recents_start_chat">Create Discussion</string>
+    <string name="room_recents_create_room">Create Group Discussion</string>
+    <string name="room_recents_join_room">Join Discussion</string>
+    <string name="room_recents_join_room_title">Join a discussion</string>
+    <string name="room_recents_join_room_prompt">Type a discussion name</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Browse directory</string>
@@ -1612,7 +1612,7 @@ Why choose Riot.im?
         <item>Low Priority</item>
     </string-array>
 
-    <string name="search_chats">Search Chats</string>
+    <string name="search_chats">Search Discussions</string>
     <string name="rejecting">Declining the invitation</string>
     <string name="accepting">Accepting the invitation</string>
     <string name="invite_menu_title">Invites</string>
