@@ -4,17 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?colorPrimary"
+    android:background="@drawable/act_gradient"
     android:minHeight="@dimen/navigation_view_height">
-
-    <!--<ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:adjustViewBounds="true"
-        android:rotationY="@integer/rtl_mirror_flip"
-        android:scaleType="centerCrop"
-        android:src="@drawable/bubbles_bg_portrait" />-->
 
     <im.vector.view.VectorCircularImageView
         android:id="@+id/home_menu_main_avatar"
@@ -79,6 +70,19 @@
         app:layout_constraintTop_toBottomOf="@+id/home_menu_main_displayname"
         tools:text="A matrix id here" />
 
+
+    <TextView
+        android:id="@+id/home_menu_main_matrix_no_role"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_menu_main_matrix_id"
+        tools:text="No roles currently selected" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rolesRecyclerView"
         android:layout_width="match_parent"
@@ -89,5 +93,5 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/home_menu_main_displayname" />
+        app:layout_constraintTop_toBottomOf="@+id/home_menu_main_matrix_no_role" />
 </androidx.constraintlayout.widget.ConstraintLayout>

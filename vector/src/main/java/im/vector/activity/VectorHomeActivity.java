@@ -123,7 +123,6 @@ import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.RolesInNavigationBarAdapter;
-import im.vector.adapters.model.UserRole;
 import im.vector.chat.CHAT_TYPE;
 import im.vector.chat.ChatCreateActivity;
 import im.vector.calls.CallsFragment;
@@ -2143,20 +2142,33 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             });
         }
 
+        TextView noRoleTextView = navigationView.findViewById(R.id.home_menu_main_matrix_no_role);
+        if (null != noRoleTextView) {
+            noRoleTextView.setText("No roles selected");
+        }
+
         RecyclerView roleRecyclerView = navigationView.findViewById(R.id.rolesRecyclerView);
+
         if (null != roleRecyclerView) {
             roleRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             roleRecyclerView.setAdapter(rolesInNavigationBarAdapter);
             RefreshRoles();
-
         }
     }
 
     private void RefreshRoles() {
         DirectoryConnector.INSTANCE.getActiveRoles(getApplicationContext(), (loadedRoles) -> {
-            rolesInNavigationBarAdapter.setData(loadedRoles);
             RecyclerView roleRecyclerView = navigationView.findViewById(R.id.rolesRecyclerView);
-            roleRecyclerView.setAdapter(rolesInNavigationBarAdapter);
+            TextView noRoleTextView = navigationView.findViewById(R.id.home_menu_main_matrix_no_role);
+            if (loadedRoles.isEmpty()) {
+                noRoleTextView.setVisibility(View.VISIBLE);
+                roleRecyclerView.setVisibility(View.GONE);
+            } else {
+                noRoleTextView.setVisibility(View.GONE);
+                roleRecyclerView.setVisibility(View.VISIBLE);
+                rolesInNavigationBarAdapter.setData(loadedRoles);
+                roleRecyclerView.setAdapter(rolesInNavigationBarAdapter);
+            }
             return null;
         });
 
