@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import im.vector.Matrix
 import im.vector.R
 import im.vector.health.directory.people.PeopleClickListener
-import im.vector.health.directory.people.model.DirectoryPeople
-import im.vector.health.directory.role.model.DummyRole
+import im.vector.health.directory.people.model.PractitionerItem
+import im.vector.health.microservices.Interfaces.IPractitionerRole
 import im.vector.util.VectorUtils
 import im.vector.view.VectorCircularImageView
 import kotlinx.android.synthetic.main.item_role_detail_category1.view.heading
@@ -76,8 +76,8 @@ class RolesDetailAdapter(val context: Context, private val onClickListener: Peop
 
         fun bind(context: Context, session: MXSession?, adapterModel: AdapterModel, showHeader: Boolean) {
             VectorUtils.loadRoomAvatar(context, session, avatar, adapterModel.people)
-            officialName?.text = adapterModel.people?.officialName
-            secondaryName?.text = adapterModel.people?.jobTitle
+            officialName?.text = adapterModel.people?.GetName()
+            //secondaryName?.text = adapterModel.people?.jobTitle
             heading?.text = adapterModel.title
             heading?.visibility = if (showHeader) VISIBLE else GONE
             itemView.setOnClickListener {
@@ -88,17 +88,17 @@ class RolesDetailAdapter(val context: Context, private val onClickListener: Peop
         }
     }
 
-    fun setData(role: DummyRole) {
+    fun setData(role: IPractitionerRole) {
         this.adapterModels.clear()
 
-        adapterModels.add(AdapterModel("Role", role.fhirPractitionerRole.primaryRoleID, role.fhirPractitionerRole.primaryRoleCategoryID, null, TYPE_ROLE))
-        adapterModels.add(AdapterModel("Location", role.fhirPractitionerRole.primaryLocationID, null, null, TYPE_LOCATION))
-        adapterModels.add(AdapterModel("Organization Unit", role.organizationUnit, null, null, TYPE_ORGANISATION_UNIT))
+        adapterModels.add(AdapterModel("Role", role.GetShortName(), role.GetRoleCategory(), null, TYPE_ROLE))
+        adapterModels.add(AdapterModel("Location", role.GetLocation(), null, null, TYPE_LOCATION))
+        adapterModels.add(AdapterModel("Organization Unit", role.GetOrgName(), null, null, TYPE_ORGANISATION_UNIT))
 
         notifyDataSetChanged()
     }
 
-    fun setData(people: List<DirectoryPeople>) {
+    fun setData(people: List<PractitionerItem>) {
         for (ppl in people) {
             adapterModels.add(AdapterModel("Practitioner in Role", null, null, ppl, TYPE_PRACTITIONER_IN_ROLE))
         }
@@ -136,5 +136,5 @@ class RolesDetailAdapter(val context: Context, private val onClickListener: Peop
     override fun getItemCount() = adapterModels.size
 }
 
-data class AdapterModel(val title: String, val primaryText: String?, val secondaryText: String?, val people: DirectoryPeople?,
+data class AdapterModel(val title: String, val primaryText: String?, val secondaryText: String?, val people: PractitionerItem?,
                         val rowType: Int)

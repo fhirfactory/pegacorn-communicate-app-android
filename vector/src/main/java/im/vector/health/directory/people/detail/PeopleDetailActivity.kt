@@ -7,34 +7,66 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.Matrix
 import im.vector.R
+import im.vector.activity.CommonActivityUtils
 import im.vector.activity.MXCActionBarActivity
-import im.vector.health.directory.people.model.DirectoryPeople
+import im.vector.activity.VectorMemberDetailsActivity
+import im.vector.activity.VectorRoomActivity
 import im.vector.health.directory.role.RoleClickListener
 import im.vector.health.directory.role.detail.RoleDetailActivity
-import im.vector.health.directory.role.model.*
+import im.vector.health.directory.role.model.PractitionerRoleItem
+import im.vector.health.microservices.Interfaces.IPractitioner
 import im.vector.util.VectorUtils
 import kotlinx.android.synthetic.main.activity_people_detail.*
-import kotlinx.android.synthetic.main.activity_people_detail.peopleRecyclerview
+import org.matrix.androidsdk.core.Log
+import org.matrix.androidsdk.core.callback.ApiCallback
+import org.matrix.androidsdk.core.model.MatrixError
+import java.util.*
 
 class PeopleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStackChangedListener, RoleClickListener {
     private lateinit var peopleDetailAdapter: PeopleDetailAdapter
 
     override fun getLayoutRes(): Int = R.layout.activity_people_detail
 
+    // direct message
+    /**
+     * callback for the creation of the direct message room
+     */
+    private val mCreateDirectMessageCallBack: ApiCallback<String> = object : ApiCallback<String> {
+        override fun onSuccess(roomId: String) {
+            val params: MutableMap<String, Any> = HashMap()
+            params[VectorRoomActivity.EXTRA_MATRIX_ID] = mSession.myUserId
+            params[VectorRoomActivity.EXTRA_ROOM_ID] = roomId
+            params[VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER] = true
+            CommonActivityUtils.goToRoomPage(this@PeopleDetailActivity, mSession, params)
+        }
+
+        override fun onMatrixError(e: MatrixError) {
+
+        }
+
+        override fun onNetworkError(e: Exception) {
+
+        }
+
+        override fun onUnexpectedError(e: Exception) {
+
+        }
+    }
+
     override fun initUiAndData() {
         configureToolbar()
         mSession = Matrix.getInstance(this).defaultSession
 
-        val people = intent.getParcelableExtra<DirectoryPeople>(PEOPLE_EXTRA)
+        val people = intent.getParcelableExtra<IPractitioner>(PEOPLE_EXTRA)
         val roleClickable = intent.getBooleanExtra(ROLE_CLICKABLE, false)
         supportActionBar?.let {
-            it.title = people.officialName
+            it.title = people.GetName()
         }
         VectorUtils.loadRoomAvatar(this, session, avatar, people)
 
-        jobTitle.text = people.jobTitle
-        organisation.text = people.organisations
-        businessUnit.text = people.businessUnits
+        jobTitle.text = "Job title"
+        organisation.text = "Organization"
+        businessUnit.text = "Business Unit"
 
         peopleDetailAdapter = PeopleDetailAdapter(this, if (roleClickable) this else null)
         peopleRecyclerview.layoutManager = LinearLayoutManager(this)
@@ -42,31 +74,16 @@ class PeopleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStack
         peopleRecyclerview.adapter = peopleDetailAdapter
         peopleDetailAdapter.setData(people)
 
-//        val testRoleData = mutableListOf<DummyRole>()
-//        testRoleData.add(DummyRole("1", "ED Acute SRMO", "Emergency Department  Acute Senior Resident Medical Officer Medical Officer", null, "ED {Emergency Department}", arrayListOf(Role("1", "Senior Resident Medical Officer", "Doctor")),
-//                arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute")), ArrayList()))
-//
-//        testRoleData.add(DummyRole("1", "ED Acute RMO", "Emergency Department  Acute Resident Medical Officer", null, "ED {Emergency Department}", arrayListOf(Role("1", "Resident", "Doctor")),
-//                arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute")), ArrayList()))
-//
-//        testRoleData.add(DummyRole("1", "ED Acute Intern", "Emergency Department  Acute Intern", null, "ED {Emergency Department}", arrayListOf(Role("1", "Intern", "Doctor")),
-//                arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute")), ArrayList()))
-//
-//        testRoleData.add(DummyRole("1", "ED Acute Consultant", "Emergency Department  Acute Consultant", null, "ED {Emergency Department}", arrayListOf(Role("1", "Consultant", "Doctor")),
-//                arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute")), ArrayList()))
-//
-//        testRoleData.add(DummyRole("1", "ED Acute East Nurse", "Emergency Department  Acute East Nurse", null, "ED {Emergency Department}", arrayListOf(Role("1", "Emergency Department Nurse", "Nursing and Midwifery")),
-//                arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute")), ArrayList()))
-//
-//        peopleDetailAdapter.setData(testRoleData)
-
-        people.FetchRoles(applicationContext) {roles ->
-            peopleDetailAdapter.setData(roles)
+        people.GetRoles{roles ->
+            peopleDetailAdapter.setData(roles.map { PractitionerRoleItem(it) })
         }
 
 
         callIcon.setOnClickListener { }
-        chatIcon.setOnClickListener { }
+        chatIcon.setOnClickListener {
+            //enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR)
+            mSession.createDirectMessageRoom(people.GetMatrixID(), mCreateDirectMessageCallBack)
+        }
         videoCallIcon.setOnClickListener { }
     }
 
@@ -84,7 +101,7 @@ class PeopleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStack
     companion object {
         private const val PEOPLE_EXTRA = "PEOPLE_EXTRA"
         private const val ROLE_CLICKABLE = "ROLE_CLICKABLE"
-        fun intent(context: Context, directoryPeople: DirectoryPeople, roleClickable: Boolean = false): Intent {
+        fun intent(context: Context, directoryPeople: IPractitioner, roleClickable: Boolean = false): Intent {
             return Intent(context, PeopleDetailActivity::class.java).also {
                 it.putExtra(PEOPLE_EXTRA, directoryPeople)
                 it.putExtra(ROLE_CLICKABLE, roleClickable)
@@ -92,7 +109,7 @@ class PeopleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStack
         }
     }
 
-    override fun onRoleClick(role: DummyRole, forRemove: Boolean) {
+    override fun onRoleClick(role: PractitionerRoleItem, forRemove: Boolean) {
         val newIntent = RoleDetailActivity.intent(this, role, intent.getBooleanExtra(ROLE_CLICKABLE, false))
         startActivity(newIntent)
     }

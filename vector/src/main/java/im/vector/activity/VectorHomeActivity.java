@@ -136,6 +136,7 @@ import im.vector.fragments.signout.SignOutBottomSheetDialogFragment;
 import im.vector.fragments.signout.SignOutViewModel;
 import im.vector.gallery.GalleryFragment;
 import im.vector.health.microservices.DirectoryConnector;
+import im.vector.health.microservices.DirectoryServicesSingleton;
 import im.vector.health.role_selection.RoleSelectionActivity;
 import im.vector.home.CommunicateHomeFragment;
 import im.vector.invite.InviteActivity;
@@ -353,10 +354,11 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
         mSession = Matrix.getInstance(this).getDefaultSession();
 
+        DirectoryServicesSingleton.Companion.Instance().SetBaseURL(getString(R.string.microservice_server_url));
         List<ThirdPartyIdentifier> emails = mSession.getMyUser().getlinkedEmails();
         if (emails.size() > 0) {
             //TODO: We may not be able to just use the first email, so think about how we can choose the correct one
-            DirectoryConnector.INSTANCE.initializeWithPractitionerId(emails.get(0).address);
+            DirectoryServicesSingleton.Companion.Instance().SetPractitionerID(emails.get(0).address);
         }
 
 
@@ -2153,13 +2155,12 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     }
 
     private void RefreshRoles() {
-        DirectoryConnector.INSTANCE.getActiveRoles(getApplicationContext(), (loadedRoles) -> {
+        DirectoryServicesSingleton.Companion.Instance().GetActiveRoles((loadedRoles) -> {
             rolesInNavigationBarAdapter.setData(loadedRoles);
             RecyclerView roleRecyclerView = navigationView.findViewById(R.id.rolesRecyclerView);
             roleRecyclerView.setAdapter(rolesInNavigationBarAdapter);
             return null;
         });
-
     }
 
     //==============================================================================================================

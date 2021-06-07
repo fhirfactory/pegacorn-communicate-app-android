@@ -14,8 +14,9 @@ import androidx.lifecycle.ViewModelProviders
 import im.vector.R
 import im.vector.activity.VectorMediaPickerActivity
 import im.vector.chat.BaseTitleFragment
+import im.vector.health.TemporaryRoom
 import im.vector.health.directory.RoomClickListener
-import im.vector.health.directory.people.model.TemporaryRoom
+
 import im.vector.util.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.util.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
 import im.vector.util.VectorUtils
@@ -129,7 +130,7 @@ class GroupChatDetailFragment : BaseTitleFragment() {
                     roomParams.topic = roomTopicEditText.text.toString()
                     roomParams.visibility = if (publicSwitch.isActivated) "public" else "private"
                     val roomMembers = selectedChatViewModel.selectedLiveItems.value?.mapNotNull { x ->
-                        if (x.people != null) x.people.id else if (x.role != null) x.role.id else null
+                        if (x.people != null) x.people.GetID() else if (x.role != null) x.role.GetID() else null
                     }
                     roomParams.invitedUserIds = roomMembers
                     mSession.createRoom(roomParams, object: SimpleApiCallback<String>(activity) {

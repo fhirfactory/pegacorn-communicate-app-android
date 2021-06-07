@@ -12,12 +12,15 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import im.vector.R
 import im.vector.health.directory.BaseDirectoryFragment
-import im.vector.health.directory.people.model.TemporaryRoom
 import im.vector.health.directory.role.detail.RoleDetailActivity
 import im.vector.health.directory.role.model.*
 import im.vector.extensions.withArgs
-import im.vector.health.microservices.DirectoryConnector
+import im.vector.health.TemporaryRoom
+import im.vector.health.microservices.DirectoryServicesSingleton
+import im.vector.health.microservices.Interfaces.IPractitionerRole
 import kotlinx.android.synthetic.main.fragment_directory_role.*
+import kotlinx.android.synthetic.main.fragment_directory_role.header
+import kotlinx.android.synthetic.main.fragment_directory_service.*
 import org.matrix.androidsdk.data.Room
 
 
@@ -90,61 +93,6 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
 
         subscribeUI()
 
-/*        categoryAdapter = DropDownAdapter(requireContext(), R.layout.drop_down_item)
-        categoryEditText.threshold = 1
-        categoryEditText.setAdapter(categoryAdapter)
-
-        organisationUnitAdapter = DropDownAdapter(requireContext(), R.layout.drop_down_item)
-        organisationEditText.threshold = 1
-        organisationEditText.setAdapter(organisationUnitAdapter)
-
-        specialityAdapter = DropDownAdapter(requireContext(), R.layout.drop_down_item)
-        specialityEditText.threshold = 1
-        specialityEditText.setAdapter(specialityAdapter)
-
-        locationAdapter = DropDownAdapter(requireContext(), R.layout.drop_down_item)
-        locationEditText.threshold = 1
-        locationEditText.setAdapter(locationAdapter)*/
-
-
-
-/*
-        //test data
-        val testDropDownData = mutableListOf<DropDownItem>()
-        for (i in 1..5) {
-            testDropDownData.add(DropDownItem(i, "Item 1"))
-        }
-        categoryAdapter.addData(testDropDownData)
-        organisationUnitAdapter.addData(testDropDownData)
-        specialityAdapter.addData(testDropDownData)
-        locationAdapter.addData(testDropDownData)
-*/
-        /*
-        testRoleData.add(DummyRole("1", "ED Acute SRMO", "Emergency Department  Acute Senior Resident Medical Officer Medical Officer", null, "ED {Emergency Department}", arrayListOf(Role("1", "Senior Resident Medical Officer", "Doctor")),
-                arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
-
-        testRoleData.add(DummyRole("2", "ED Acute RMO", "Emergency Department  Acute Resident Medical Officer", null, "ED {Emergency Department}", arrayListOf(Role("1", "Resident", "Doctor")),
-                arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
-
-        testRoleData.add(DummyRole("3", "ED Acute Intern", "Emergency Department  Acute Intern", null, "ED {Emergency Department}", arrayListOf(Role("1", "Intern", "Doctor")),
-                arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
-
-        testRoleData.add(DummyRole("4", "ED Acute Consultant", "Emergency Department  Acute Consultant", null, "ED {Emergency Department}", arrayListOf(Role("1", "Consultant", "Doctor")),
-                arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
-
-        testRoleData.add(DummyRole("5", "ED Acute East Nurse", "Emergency Department  Acute East Nurse", null, "ED {Emergency Department}", arrayListOf(Role("1", "Emergency Department Nurse", "Nursing and Midwifery")),
-                arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
-
-        testRoleData.add(DummyRole("6", "ED Acute East PL", "Emergency Department  Acute East Pod Leader", null, "ED {Emergency Department}", arrayListOf(Role("1", "Nursing Team Leader", "Nursing and Midwifery")),
-                arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
-
-        testRoleData.add(DummyRole("7", "ED Acute North Nurse", "Emergency Department  Acute North Nurse", null, "ED {Emergency Department}", arrayListOf(Role("1", "Emergency Department Nurse", "Nursing and Midwifery")),
-                arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
-
-        testRoleData.add(DummyRole("8", "ED Acute North Nurse", "Emergency Department  Acute North Nurse", null, "ED {Emergency Department}", arrayListOf(Role("1", "Emergency Department Nurse", "Nursing and Midwifery")),
-                arrayListOf(Speciality("1", "Emergency")), arrayListOf(DummyLocation("1", "CH {Canberra Hospital}")), arrayListOf(Team("1", "Emergency Department Acute"))))
-         */
-
         setHeader(header, R.string.total_number_of_roles, 0)
     }
 
@@ -167,9 +115,10 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
                 page += 1
                 loading = true;
                 context?.let {
-                    DirectoryConnector.getPractitionerRoles(page, pageSize, it, filter){
-                        it?.let {
-                            roleAdapter.addPage(it)
+                    DirectoryServicesSingleton.Instance().GetPractitionerRoles(filter, page, pageSize){ res, count ->
+                        setHeader(header, R.string.total_number_of_roles, count)
+                        res?.let { roles ->
+                            roleAdapter.addPage(roles.map { PractitionerRoleItem(it) })
                             loading = false
                         }
                     }
@@ -212,7 +161,7 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
         })
     }
 
-    override fun onRoleClick(role: DummyRole, forRemove: Boolean) {
+    override fun onRoleClick(role: PractitionerRoleItem, forRemove: Boolean) {
         if (roomClickListener == null) {
             startActivity(RoleDetailActivity.intent(requireContext(), role, true))
         } else {
@@ -220,11 +169,11 @@ class DirectoryRoleFragment : BaseDirectoryFragment(), RoleClickListener {
         }
     }
 
-    fun unSelectRole(role: DummyRole) {
-        roleAdapter.removeFromSelectedRoles(role.id)
+    fun unSelectRole(role: IPractitionerRole) {
+        roleAdapter.removeFromSelectedRoles(role.GetID())
     }
 
-    fun selectRole(role: DummyRole) {
-        roleAdapter.addToSelectedRoles(role.id)
+    fun selectRole(role: IPractitionerRole) {
+        roleAdapter.addToSelectedRoles(role.GetID())
     }
 }

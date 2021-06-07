@@ -8,16 +8,25 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.R
+import im.vector.health.directory.people.model.PractitionerItem
+import im.vector.health.directory.service.model.HealthcareServiceItem
+import im.vector.health.microservices.APIModel.FavouriteTypes
+import im.vector.health.microservices.DirectoryServicesSingleton
 import kotlinx.android.synthetic.main.item_directory_service.view.*
 
 
-class ServiceDirectoryAdapter(val context: Context, private val onClickListener: ServiceClickListener) :
+class ServiceDirectoryAdapter(val context: Context, private val onClickListener: ServiceClickListener, private val selectable: Boolean = false) :
         RecyclerView.Adapter<ServiceViewHolder>(), OnDataSetChange {
-    private val services = mutableListOf<DummyService>()
+    private val services = mutableListOf<HealthcareServiceItem>()
 
-    fun setData(roles: MutableList<DummyService>) {
+    fun setData(services: MutableList<HealthcareServiceItem>) {
         this.services.clear()
-        this.services.addAll(roles)
+        this.services.addAll(services)
+    }
+
+    fun addPage(services: List<HealthcareServiceItem>) {
+        this.services.addAll(services)
+        notifyDataSetChanged()
     }
 
     // Create new views (invoked by the layout manager)
@@ -44,10 +53,6 @@ class ServiceDirectoryAdapter(val context: Context, private val onClickListener:
     }
 }
 
-interface RoleClickListener {
-    fun onRoleClick(role: DummyService)
-}
-
 interface OnDataSetChange {
     fun onDataChange(position: Int)
 }
@@ -57,6 +62,15 @@ class ServiceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var locationCode: TextView? = null
     var locationDetail: TextView? = null
     var favoriteIcon: ImageView? = null
+    var favourite: Boolean = false
+
+    fun updateFavourite() {
+        if (favourite) {
+            favoriteIcon?.setImageResource(R.drawable.ic_material_star_black)
+        } else {
+            favoriteIcon?.setImageResource(R.drawable.ic_material_star_border_black)
+        }
+    }
 
     init {
         officialName = itemView.officialName
@@ -65,17 +79,34 @@ class ServiceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         favoriteIcon = itemView.favoriteIcon
     }
 
-    fun bind(context: Context, service: DummyService, onClickListener: ServiceClickListener?) {
-        favoriteIcon?.setImageResource(if(service.isFavorite) R.drawable.filled_star else R.drawable.outline_star)
+    fun bind(context: Context, service: HealthcareServiceItem, onClickListener: ServiceClickListener?) {
         favoriteIcon?.setOnClickListener {
             onClickListener?.onServiceFavourite(service)
         }
+        DirectoryServicesSingleton.Instance().CheckFavourite(FavouriteTypes.Service,service.GetID()) {
+            this.favourite = it
+            this.updateFavourite()
+        }
+
+        updateFavourite()
+        favoriteIcon?.setOnClickListener {
+            this.favourite = !this.favourite
+            this.updateFavourite()
+            if (this.favourite) {
+                DirectoryServicesSingleton.Instance().AddFavourite(FavouriteTypes.Service,service.GetID())
+            } else {
+                DirectoryServicesSingleton.Instance().RemoveFavourite(FavouriteTypes.Service,service.GetID())
+            }
+        }
+
+        officialName?.text = service.GetLongName()
+
         itemView.setOnClickListener {
             onClickListener?.onServiceClick(service)
         }
     }
 }
 interface ServiceClickListener {
-    fun onServiceClick(service: DummyService)
-    fun onServiceFavourite(service: DummyService)
+    fun onServiceClick(service: HealthcareServiceItem)
+    fun onServiceFavourite(service: HealthcareServiceItem)
 }

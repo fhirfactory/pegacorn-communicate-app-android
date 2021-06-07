@@ -1,12 +1,11 @@
 package im.vector.health.microservices
 
-import android.app.AlertDialog
-import android.content.Context
-import im.vector.R
-import im.vector.health.directory.people.model.DirectoryPeople
-import im.vector.health.directory.role.model.DummyRole
-import im.vector.health.directory.role.model.Location
-import im.vector.health.directory.role.model.Role
+import im.vector.health.microservices.APIModel.*
+import im.vector.health.microservices.Interfaces.IDirectoryServiceProvider
+import im.vector.health.microservices.Interfaces.IHealthcareService
+import im.vector.health.microservices.Interfaces.IPractitioner
+import im.vector.health.microservices.Interfaces.IPractitionerRole
+import im.vector.health.microservices.Model.HealthcareService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -14,18 +13,33 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 import kotlin.collections.ArrayList
+import im.vector.health.microservices.Model.PractitionerRole
+import im.vector.health.microservices.Model.Practitioner
 
-object DirectoryConnector {
-    fun convertPractitionerRole(role: FHIRPractitionerRole): DummyRole = DummyRole(role.simplifiedID,
-            getNameForIdentifier(role.identifiers,"LongName")?:role.displayName,role.displayName,
-            null,role.primaryOrganizationID,role)
 
-    fun convertRole(role: FHIRRole): Role = Role(role.displayName,role.displayName,role.roleCategory, role.description)
+class DirectoryConnector: IDirectoryServiceProvider {
 
-    private fun listRoles(page: Int, pageSize: Int, context: Context, callback: (List<DummyRole>?) -> Unit) {
+    lateinit var baseURL: String
+    var practitionerId: String = ""
+    set(value){
+        try {
+            if (value == this.practitionerId) return
+        } catch (e: NullPointerException) {
+            //this is fine, because we're setting the value
+        } finally {
+            this.cachedFavourites = EnumMap(FavouriteTypes::class.java)
+            field = value
+        }
+    }
+    get() {
+        if (field == "") throw NullPointerException("Practitioner ID not set")
+        return field
+    }
+
+    private fun listRoles(page: Int, pageSize: Int, callback: (List<PractitionerRole>?, Int) -> Unit) {
 
         val retrofit = Retrofit.Builder()
-                .baseUrl(context.getString(R.string.microservice_server_url))
+                .baseUrl(baseURL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
@@ -41,16 +55,17 @@ object DirectoryConnector {
             override fun onResponse(call: Call<List<FHIRPractitionerRole>>, response: Response<List<FHIRPractitionerRole>>) {
                 //TODO("Not yet implemented")
 
-                callback(response.body()?.map { x -> convertPractitionerRole(x) })
+                val practitionerRoles = response.body()?.map { PractitionerRole(it) }
+                val count = response.headers().get("X-Total-Count") ?: "0"
+                callback(practitionerRoles,Integer.parseInt(count))
             }
 
         })
     }
-
-    fun getPractitionerRoles(page: Int, pageSize: Int, context: Context, name:String?, callback: (List<DummyRole>?) -> Unit) {
+    private fun getPractitionerRoles(page: Int, pageSize: Int, name:String?, callback: (List<IPractitionerRole>?, Int) -> Unit) {
         name?.let {query ->
             val retrofit = Retrofit.Builder()
-                    .baseUrl(context.getString(R.string.microservice_server_url))
+                    .baseUrl(baseURL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
 
@@ -65,56 +80,20 @@ object DirectoryConnector {
                 }
 
                 override fun onResponse(call: Call<List<FHIRPractitionerRole>>, response: Response<List<FHIRPractitionerRole>>) {
-                    //TODO("Not yet implemented")
-
-                    callback(response.body()?.map { x -> convertPractitionerRole(x) })
+                    val practitionerRoles = response.body()?.map { PractitionerRole(it) }
+                    val count = response.headers().get("X-Total-Count") ?: "0"
+                    callback(practitionerRoles,Integer.parseInt(count))
                 }
 
             })
         }
-        if (name == null) listRoles(page,pageSize,context,callback)
+        if (name == null) listRoles(page,pageSize,callback)
     }
 
-    fun getPractitionerRole(roleId: String, context: Context, callback: (FHIRPractitionerRole) -> Unit){
-        val retrofit = Retrofit.Builder()
-                .baseUrl(context.getString(R.string.microservice_server_url))
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-
-        // Create Service
-        val service = retrofit.create(DirectoryServices::class.java)
-        val response = service.getPractitionerRole(roleId)
-        response.enqueue(object : Callback<FHIRDirectoryResponse<FHIRPractitionerRole>> {
-            override fun onFailure(call: Call<FHIRDirectoryResponse<FHIRPractitionerRole>>, t: Throwable) {
-                //TODO("Handle failure more nicely")
-            }
-
-            override fun onResponse(call: Call<FHIRDirectoryResponse<FHIRPractitionerRole>>, response: Response<FHIRDirectoryResponse<FHIRPractitionerRole>>) {
-                //TODO("Not yet implemented")
-                response.body()?.let {
-                    it.entry?.let {
-                        callback(it)
-                    }
-                }
-            }
-
-        })
-    }
-
-    private fun getNameForIdentifier(idList: List<FHIRIdentifier>, type: String): String? {
-        return idList.find { x -> x.type == type }?.value
-    }
-
-    fun convertPractitioner(from: FHIRPractitioner): DirectoryPeople {
-        return DirectoryPeople(from.simplifiedID,
-                from.displayName,"","","","",
-                from.assignedPractitionerRoles)
-    }
-
-    fun getPractitioners(page: Int, pageSize: Int, context: Context, callback: (List<DirectoryPeople>?) -> Unit) {
+    private fun getPractitioners(page: Int, pageSize: Int, callback: (List<Practitioner>?, Int) -> Unit) {
 
         val retrofit = Retrofit.Builder()
-                .baseUrl(context.getString(R.string.microservice_server_url))
+                .baseUrl(baseURL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
@@ -128,19 +107,17 @@ object DirectoryConnector {
 
             override fun onResponse(call: Call<List<FHIRPractitioner>>, response: Response<List<FHIRPractitioner>>) {
                 //TODO("Not yet implemented")
-                val people = response.body()?.map { x ->
-                    convertPractitioner(x)
-                }
-                callback(people)
+                val people = response.body()?.map { Practitioner(it) }
+                val count = response.headers().get("X-Total-Count") ?: "0"
+                callback(people,Integer.parseInt(count))
             }
 
         })
     }
-
-    fun getPractitioners(page: Int, pageSize: Int, context: Context, name: String?, callback: (List<DirectoryPeople>?) -> Unit) {
+    private fun getPractitioners(page: Int, pageSize: Int, name: String?, callback: (List<IPractitioner>?, Int) -> Unit) {
         name?.let { query ->
             val retrofit = Retrofit.Builder()
-                    .baseUrl(context.getString(R.string.microservice_server_url))
+                    .baseUrl(baseURL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
 
@@ -154,57 +131,21 @@ object DirectoryConnector {
 
                 override fun onResponse(call: Call<List<FHIRPractitioner>>, response: Response<List<FHIRPractitioner>>) {
                     //TODO("Not yet implemented")
-                    val people = response.body()?.map { x ->
-                        convertPractitioner(x)
-                    }
-                    callback(people)
+                    val people = response.body()?.map { Practitioner(it) }
+                    val count = response.headers().get("X-Total-Count") ?: "0"
+                    callback(people,Integer.parseInt(count))
                 }
 
             })
         }
-        if (name == null) return getPractitioners(page,pageSize,context,callback)
+        if (name == null) return getPractitioners(page,pageSize,callback)
     }
 
-    //Takes practitioner ID (email address)
-    fun getPractitioner(practitionerId: String, context: Context, callback: (FHIRPractitioner) -> Unit) {
-        val retrofit = Retrofit.Builder()
-                .baseUrl(context.getString(R.string.microservice_server_url))
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
 
-        // Create Service
-        val service = retrofit.create(DirectoryServices::class.java)
-        val response = service.getPractitioner(practitionerId)
-        response.enqueue(object : Callback<FHIRDirectoryResponse<FHIRPractitioner>> {
-            override fun onFailure(call: Call<FHIRDirectoryResponse<FHIRPractitioner>>, t: Throwable) {
-                //TODO("Handle failure more nicely")
-            }
-
-            override fun onResponse(call: Call<FHIRDirectoryResponse<FHIRPractitioner>>, response: Response<FHIRDirectoryResponse<FHIRPractitioner>>) {
-                response.body().toString()
-                response.body()?.let {
-                    it.entry?.let{
-                        it.roles = ArrayList()
-                        it.dataChangeEventListeners = ArrayList()
-                        it.assignedPractitionerRoles?.forEach { x -> getPractitionerRole(x,context) { role ->
-                            it.roles.add(role)
-                            it.dataChanged()
-                        }
-                        }
-                        callback(it)
-                    }
-                }
-            }
-
-        })
-    }
-
-    fun convertLocation(location: FHIRLocation): Location = Location(location.simplifiedID,location.displayName, location.description)
-
-    fun getLocations(page: Int, pageSize: Int, context: Context, callback: (List<Location>?) -> Unit) {
+    fun getLocations(page: Int, pageSize: Int, callback: (List<FHIRLocation>?) -> Unit) {
 
         val retrofit = Retrofit.Builder()
-                .baseUrl(context.getString(R.string.microservice_server_url))
+                .baseUrl(baseURL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
@@ -217,19 +158,15 @@ object DirectoryConnector {
             }
 
             override fun onResponse(call: Call<List<FHIRLocation>>, response: Response<List<FHIRLocation>>) {
-                //TODO("Not yet implemented")
-                val locationList = response.body()?.map { x ->
-                    convertLocation(x)
-                }
-                callback(locationList)
+                callback(response.body())
             }
 
         })
     }
 
-    fun getLocation(locationId: String, context: Context, callback: (FHIRLocation) -> Unit) {
+    fun getLocation(locationId: String, callback: (FHIRLocation) -> Unit) {
         val retrofit = Retrofit.Builder()
-                .baseUrl(context.getString(R.string.microservice_server_url))
+                .baseUrl(baseURL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
@@ -253,10 +190,10 @@ object DirectoryConnector {
         })
     }
 
-    fun getRoles(page: Int, pageSize: Int, context: Context, callback: (List<Role>?) -> Unit) {
+    fun getRoles(page: Int, pageSize: Int, callback: (List<FHIRRole>?) -> Unit) {
 
         val retrofit = Retrofit.Builder()
-                .baseUrl(context.getString(R.string.microservice_server_url))
+                .baseUrl(baseURL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
@@ -269,27 +206,17 @@ object DirectoryConnector {
             }
 
             override fun onResponse(call: Call<List<FHIRRole>>, response: Response<List<FHIRRole>>) {
-                //TODO("Not yet implemented")
-                val roleList = response.body()?.map { x ->
-                    convertRole(x)
-                }
-                callback(roleList)
+                callback(response.body())
             }
 
         })
     }
 
-    var cachedFavourites: EnumMap<FavouriteTypes,List<String>> = EnumMap(im.vector.health.microservices.FavouriteTypes::class.java)
-    var practitionerId: String = ""
-    fun initializeWithPractitionerId(practitionerId: String) {
-        if (practitionerId == this.practitionerId) return
-        this.practitionerId = practitionerId
-        this.cachedFavourites = EnumMap(im.vector.health.microservices.FavouriteTypes::class.java)
-    }
+    var cachedFavourites: EnumMap<FavouriteTypes,List<String>> = EnumMap(FavouriteTypes::class.java)
 
-    private fun getFavourites(context: Context, favouriteTypes: FavouriteTypes, callback: (List<String>) -> Unit){
+    private fun getFavourites(favouriteTypes: FavouriteTypes, callback: (List<String>) -> Unit){
         val retrofit = Retrofit.Builder()
-                .baseUrl(context.getString(R.string.microservice_server_url))
+                .baseUrl(baseURL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
@@ -312,9 +239,9 @@ object DirectoryConnector {
         })
     }
 
-    private fun setFavourites(context: Context, favouriteTypes: FavouriteTypes, newList: ArrayList<String>) {
+    private fun setFavourites(favouriteTypes: FavouriteTypes, newList: ArrayList<String>) {
         val retrofit = Retrofit.Builder()
-                .baseUrl(context.getString(R.string.microservice_server_url))
+                .baseUrl(baseURL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
@@ -334,44 +261,157 @@ object DirectoryConnector {
         cachedFavourites[favouriteTypes] = newList
     }
 
-    fun addFavourite(context: Context, favouriteTypes: FavouriteTypes, favourite: String) {
-        getFavourites(context,favouriteTypes) {
+    private fun addFavourite(favouriteTypes: FavouriteTypes, favourite: String) {
+        getFavourites(favouriteTypes) {
             if (!it.contains(favourite)) {
                 val newList = ArrayList(it)
                 newList.add(favourite)
-                setFavourites(context,favouriteTypes,newList)
+                setFavourites(favouriteTypes,newList)
             }
         }
     }
 
-    fun removeFavourite(context: Context, favouriteTypes: FavouriteTypes, favourite: String) {
-        getFavourites(context,favouriteTypes) {
+    private fun removeFavourite(favouriteTypes: FavouriteTypes, favourite: String) {
+        getFavourites(favouriteTypes) {
             if (it.contains(favourite)) {
                 val newList = ArrayList(it)
                 newList.removeAll { itm -> itm == favourite }
-                setFavourites(context,favouriteTypes,newList)
+                setFavourites(favouriteTypes,newList)
             }
         }
     }
 
-    fun checkFavourite(context: Context, favouriteTypes: FavouriteTypes, favourite: String, callback: (Boolean) -> Unit) {
+    private fun checkFavourite(favouriteTypes: FavouriteTypes, favourite: String, callback: (Boolean) -> Unit) {
         if (cachedFavourites[favouriteTypes]?.contains(favourite) == true) {
             callback(true)
         } else if (cachedFavourites[favouriteTypes]?.count() ?: 0 > 0) {
             callback(false)
         } else {
-            getFavourites(context,favouriteTypes) {
+            getFavourites(favouriteTypes) {
                 if (it.contains(favourite)) callback(true)
                 else callback(false)
             }
         }
     }
 
-    fun getActiveRoles(context:Context, callback: (List<DummyRole>?) -> Unit) {
-        getPractitioner(practitionerId,context) {practitioner ->
-            convertPractitioner(practitioner).FetchRoles(context) {loadedRoles ->
-                callback(loadedRoles)
-            }
+    private fun getActiveRoles(callback: (List<IPractitionerRole>?) -> Unit) {
+        GetPractitioner(practitionerId) { prac ->
+            if (prac==null) return@GetPractitioner
+            prac.GetRoles(callback)
         }
     }
+
+    private fun listHealthcareServices(page: Int, pageSize: Int, callback: (List<IHealthcareService>?, Int) -> Unit) {
+        val retrofit = Retrofit.Builder()
+                .baseUrl(baseURL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+        val service = retrofit.create(DirectoryServices::class.java)
+        val response = service.getHealthcareServices(pageSize,page)
+        response.enqueue(object : Callback<List<FHIRHealthcareService>> {
+            override fun onFailure(call: Call<List<FHIRHealthcareService>>, t: Throwable) {
+
+            }
+
+            override fun onResponse(call: Call<List<FHIRHealthcareService>>, response: Response<List<FHIRHealthcareService>>) {
+                val practitionerRoles = response.body()?.map { HealthcareService(it) }
+                val count = response.headers().get("X-Total-Count") ?: "0"
+                callback(practitionerRoles,Integer.parseInt(count))
+            }
+
+        })
+    }
+
+    private fun getHealthcareServices(page: Int, pageSize: Int, name:String?, callback: (List<IHealthcareService>?, Int) -> Unit) {
+        name?.let {query ->
+            val retrofit = Retrofit.Builder()
+                    .baseUrl(baseURL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+
+            // Create Service
+            val service = retrofit.create(DirectoryServices::class.java)
+            val response = service.getHealthcareServices(pageSize,page,query)
+            response.enqueue(object : Callback<List<FHIRHealthcareService>> {
+                override fun onFailure(call: Call<List<FHIRHealthcareService>>, t: Throwable) {
+
+                }
+
+                override fun onResponse(call: Call<List<FHIRHealthcareService>>, response: Response<List<FHIRHealthcareService>>) {
+                    val practitionerRoles = response.body()?.map { HealthcareService(it) }
+                    val count = response.headers().get("X-Total-Count") ?: "0"
+                    callback(practitionerRoles,Integer.parseInt(count))
+                }
+
+            })
+        }
+        if (name == null) listHealthcareServices(page,pageSize,callback)
+    }
+
+    fun getDirectoryServices(): DirectoryServices = Retrofit.Builder().baseUrl(baseURL).addConverterFactory(GsonConverterFactory.create()).build().create(DirectoryServices::class.java)
+
+    fun <T> getItemFromID(call: Call<FHIRDirectoryResponse<T>>, callback: (T?) -> Unit) {
+        call.enqueue(object: Callback<FHIRDirectoryResponse<T>> {
+            override fun onFailure(call: Call<FHIRDirectoryResponse<T>>, t: Throwable) {
+                callback(null)
+            }
+
+            override fun onResponse(call: Call<FHIRDirectoryResponse<T>>, response: Response<FHIRDirectoryResponse<T>>) {
+                response.body()?.let {
+                    it.entry?.let{value ->
+                        callback(value)
+                        return
+                    }
+                }
+                callback(null)
+            }
+
+        })
+    }
+
+    override fun GetPractitioners(query: String?, page: Int, pageSize: Int, callback: (List<IPractitioner>?, Int) -> Unit) = getPractitioners(page,pageSize,query,callback)
+
+    override fun GetPractitionerRoles(query: String?, page: Int, pageSize: Int, callback: (List<IPractitionerRole>?, Int) -> Unit) = getPractitionerRoles(page,pageSize,query,callback)
+    override fun GetHealthcareServices(query: String?, page: Int, pageSize: Int, callback: (List<IHealthcareService>?, Int) -> Unit) = getHealthcareServices(page,pageSize,query,callback)
+
+    override fun GetPractitioner(id: String, callback: (IPractitioner?) -> Unit) = getItemFromID(getDirectoryServices().getPractitioner(id)) {
+        it?.let {
+            callback(Practitioner(it))
+            return@getItemFromID
+        }
+        callback(null)
+    }
+
+    override fun GetPractitionerRole(id: String, callback: (IPractitionerRole?) -> Unit) = getItemFromID(getDirectoryServices().getPractitionerRole(id)) {
+        it?.let {
+            callback(PractitionerRole(it))
+            return@getItemFromID
+        }
+        callback(null)
+    }
+
+    override fun GetHealthcareService(id: String, callback: (IHealthcareService?) -> Unit) = getItemFromID(getDirectoryServices().getHealthcareService(id)) {
+        it?.let {
+            callback(HealthcareService(it))
+            return@getItemFromID
+        }
+        callback(null)
+    }
+
+
+    override fun SetBaseURL(url: String) {
+        baseURL = url
+    }
+
+    override fun SetPractitionerID(id: String) {
+        practitionerId = id
+    }
+
+    override fun GetActiveRoles(callback: (List<IPractitionerRole>?) -> Unit) = getActiveRoles(callback)
+
+    override fun CheckFavourite(favouriteTypes: FavouriteTypes, favourite: String, callback: (Boolean) -> Unit) = checkFavourite(favouriteTypes,favourite,callback)
+
+    override fun RemoveFavourite(favouriteTypes: FavouriteTypes, favourite: String) = removeFavourite(favouriteTypes,favourite)
+
+    override fun AddFavourite(favouriteTypes: FavouriteTypes, favourite: String) = addFavourite(favouriteTypes,favourite)
 }

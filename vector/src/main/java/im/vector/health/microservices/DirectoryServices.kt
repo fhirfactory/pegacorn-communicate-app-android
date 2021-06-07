@@ -1,4 +1,5 @@
 package im.vector.health.microservices
+import im.vector.health.microservices.APIModel.*
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -44,4 +45,13 @@ interface DirectoryServices {
 
     @GET("pegacorn/operations/directory/r1/Location")
     fun getLocations(@Query("pageSize") pageSize: Int, @Query("page") page: Int): Call<List<FHIRLocation>>
+
+    @GET("pegacorn/operations/directory/r1/HealthcareService")
+    fun getHealthcareServices(@Query("pageSize") pageSize: Int, @Query("page") page: Int): Call<List<FHIRHealthcareService>>
+
+    @GET("pegacorn/operations/directory/r1/HealthcareService/search")
+    fun getHealthcareServices(@Query("pageSize") pageSize: Int, @Query("page") page: Int, @Query("displayName") displayName: String): Call<List<FHIRHealthcareService>>
+
+    @GET("pegacorn/operations/directory/r1/HealthcareService/{id}")
+    fun getHealthcareService(@Path("id") locationId: String): Call<FHIRDirectoryResponse<FHIRHealthcareService>>
 }

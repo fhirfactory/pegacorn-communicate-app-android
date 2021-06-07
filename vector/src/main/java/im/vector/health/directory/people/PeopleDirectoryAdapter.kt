@@ -11,10 +11,12 @@ import im.vector.Matrix
 import im.vector.R
 import im.vector.adapters.ParticipantAdapterItem
 import im.vector.adapters.VectorParticipantsAdapter
-import im.vector.health.directory.people.model.DirectoryPeople
+import im.vector.health.directory.people.model.PractitionerItem
 import im.vector.health.directory.role.OnDataSetChange
 import im.vector.health.microservices.DirectoryConnector
-import im.vector.health.microservices.FavouriteTypes
+import im.vector.health.microservices.APIModel.FavouriteTypes
+import im.vector.health.microservices.DirectoryServicesSingleton
+import im.vector.health.microservices.Interfaces.IPractitioner
 import im.vector.ui.themes.ThemeUtils.getColor
 import im.vector.util.VectorUtils
 import im.vector.view.VectorCircularImageView
@@ -30,7 +32,7 @@ import org.matrix.androidsdk.MXSession
 
 class PeopleDirectoryAdapter(val context: Context, private val onClickListener: PeopleClickListener, private val selectable: Boolean = false) :
         RecyclerView.Adapter<PeopleDirectoryAdapter.PeopleViewHolder>(), OnDataSetChange {
-    private val people = mutableListOf<DirectoryPeople>()
+    private val people = mutableListOf<PractitionerItem>()
     var mSession: MXSession? = null
     var textSize: Float = 0.0F
     var spanTextBackgroundColor: Int
@@ -82,13 +84,13 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
             }
         }
 
-        fun bind(context: Context, session: MXSession?, people: DirectoryPeople, onDataSetChange: OnDataSetChange, position: Int, selection: Boolean? = false) {
+        fun bind(context: Context, session: MXSession?, people: PractitionerItem, onDataSetChange: OnDataSetChange, position: Int, selection: Boolean? = false) {
             VectorUtils.loadRoomAvatar(context, session, avatar, people)
             selectionRadioImageView?.setImageResource(if (selection == true) R.drawable.ic_radio_button_checked else R.drawable.ic_radio_button_unchecked)
-            officialName?.text = people.officialName
-            jobTitle?.text = people.jobTitle
-            organisationText?.text = "Organisation: ${people.organisations}"
-            businessUnitText?.text = "Business Unit: ${people.businessUnits}"
+            officialName?.text = people.GetName()
+            //jobTitle?.text = people.jobTitle
+            //organisationText?.text = "Organisation: ${people.organisations}"
+            //businessUnitText?.text = "Business Unit: ${people.businessUnits}"
             roleText?.text = "Role: some role"
             statusText?.text = "online"
 
@@ -106,7 +108,7 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
                 onDataSetChange.onDataChange(position)
             }
 
-            DirectoryConnector.checkFavourite(context,FavouriteTypes.Practitioner,people.id) {
+            DirectoryServicesSingleton.Instance().CheckFavourite(FavouriteTypes.Practitioner,people.GetID()) {
                 this.favourite = it
                 this.updateFavourite()
             }
@@ -115,20 +117,20 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
                 this.favourite = !this.favourite
                 this.updateFavourite()
                 if (this.favourite) {
-                    DirectoryConnector.addFavourite(context, FavouriteTypes.Practitioner,people.id)
+                    DirectoryServicesSingleton.Instance().AddFavourite(FavouriteTypes.Practitioner,people.GetID())
                 } else {
-                    DirectoryConnector.removeFavourite(context, FavouriteTypes.Practitioner,people.id)
+                    DirectoryServicesSingleton.Instance().RemoveFavourite(FavouriteTypes.Practitioner,people.GetID())
                 }
             }
         }
     }
 
-    fun addPage(people: List<DirectoryPeople>) {
+    fun addPage(people: List<PractitionerItem>) {
         this.people.addAll(people)
         notifyDataSetChanged()
     }
 
-    fun setData(people: MutableList<DirectoryPeople>) {
+    fun setData(people: MutableList<PractitionerItem>) {
         this.people.clear()
         this.people.addAll(people)
     }
@@ -139,7 +141,7 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
             for (j in 0 until participants.getChildrenCount(i)) {
                 val child: ParticipantAdapterItem = participants.getChild(i,j) as ParticipantAdapterItem
                 if (child.mUserId == null) continue
-                this.people.add(this.people.count(), DirectoryPeople(child.mUserId, child.mDisplayName, "Placeholder", child.mAvatarUrl, "Placeholder", "Placeholder", ArrayList()))
+                //this.people.add(this.people.count(), DirectoryPeople(child.mUserId, child.mDisplayName, "Placeholder", child.mAvatarUrl, "Placeholder", "Placeholder", ArrayList()))
             }
         }
         notifyDataSetChanged()
@@ -162,9 +164,9 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
         holder.selectionRadioImageView?.visibility = if (selectable) View.VISIBLE else View.GONE
         holder.itemView.setOnClickListener {
             if (selectable) {
-                val added = selectedIds?.add(people[position].id)
+                val added = selectedIds?.add(people[position].GetID())
                 if (added == false) {
-                    selectedIds?.remove(people[position].id)
+                    selectedIds?.remove(people[position].GetID())
                 }
                 notifyItemChanged(position)
                 onClickListener.onPeopleClick(people[position], !(added ?: true))
@@ -174,10 +176,10 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
         }
     }
 
-    private fun checkSelection(people: DirectoryPeople): Boolean {
+    private fun checkSelection(people: PractitionerItem): Boolean {
         if (!selectable) return false
         selectedIds?.forEach { id ->
-            if (id == people.id)
+            if (id == people.GetID())
                 return true
         }
         return false
@@ -203,6 +205,6 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
 }
 
 interface PeopleClickListener {
-    fun onPeopleClick(directoryPeople: DirectoryPeople, forRemove: Boolean = false)
-    fun onPeopleFavorite(directoryPeople: DirectoryPeople)
+    fun onPeopleClick(directoryPeople: PractitionerItem, forRemove: Boolean = false)
+    fun onPeopleFavorite(directoryPeople: PractitionerItem)
 }

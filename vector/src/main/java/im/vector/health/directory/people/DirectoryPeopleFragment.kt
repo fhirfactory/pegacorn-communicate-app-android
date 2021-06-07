@@ -11,12 +11,15 @@ import im.vector.adapters.ParticipantAdapterItem
 import im.vector.adapters.VectorParticipantsAdapter
 import im.vector.health.directory.BaseDirectoryFragment
 import im.vector.health.directory.people.detail.PeopleDetailActivity
-import im.vector.health.directory.people.model.DirectoryPeople
-import im.vector.health.directory.people.model.TemporaryRoom
 import im.vector.extensions.withArgs
+import im.vector.health.TemporaryRoom
+import im.vector.health.directory.people.model.PractitionerItem
 import im.vector.health.microservices.DirectoryConnector
+import im.vector.health.microservices.DirectoryServicesSingleton
+import im.vector.health.microservices.Interfaces.IPractitioner
 import kotlinx.android.synthetic.main.fragment_directory_people.*
 import kotlinx.android.synthetic.main.fragment_directory_people.header
+import kotlinx.android.synthetic.main.fragment_directory_role.*
 import org.matrix.androidsdk.data.Room
 
 class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
@@ -121,9 +124,10 @@ class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
                 page += 1
                 loading = true;
                 context?.let {
-                    DirectoryConnector.getPractitioners(page, pageSize, it, filter){
-                        it?.let {
-                            peopleDirectoryAdapter.addPage(it)
+                    DirectoryServicesSingleton.Instance().GetPractitioners(filter, page, pageSize){ practitioners, count ->
+                        setHeader(header, R.string.total_number_of_people, count)
+                        practitioners?.let {
+                            peopleDirectoryAdapter.addPage(it.map { PractitionerItem(it,false) })
                             loading = false
                         }
                     }
@@ -141,23 +145,23 @@ class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
         })
     }
 
-    override fun onPeopleClick(directoryPeople: DirectoryPeople, forRemove: Boolean) {
+    override fun onPeopleClick(directoryPeople: PractitionerItem, forRemove: Boolean) {
         if (roomClickListener == null) {
             startActivity(PeopleDetailActivity.intent(requireContext(), directoryPeople, true))
         } else {
-            roomClickListener?.onRoomClick(TemporaryRoom(directoryPeople, null), forRemove)
+            roomClickListener?.onRoomClick(TemporaryRoom(directoryPeople.practitioner, null), forRemove)
         }
     }
 
-    override fun onPeopleFavorite(directoryPeople: DirectoryPeople) {
+    override fun onPeopleFavorite(directoryPeople: PractitionerItem) {
 
     }
 
-    fun unSelectPeople(people: DirectoryPeople) {
-        peopleDirectoryAdapter.removeFromSelectedPeople(people.id)
+    fun unSelectPeople(people: IPractitioner) {
+        peopleDirectoryAdapter.removeFromSelectedPeople(people.GetID())
     }
 
-    fun selectPeople(people: DirectoryPeople) {
-        peopleDirectoryAdapter.addToSelectedPeople(people.id)
+    fun selectPeople(people: IPractitioner) {
+        peopleDirectoryAdapter.addToSelectedPeople(people.GetID())
     }
 }

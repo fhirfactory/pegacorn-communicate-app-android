@@ -74,10 +74,11 @@ import java.util.regex.Pattern;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.adapters.ParticipantAdapterItem;
-import im.vector.health.directory.people.model.DirectoryPeople;
-import im.vector.health.directory.role.model.DummyRole;
-import im.vector.health.directory.service.DummyService;
+import im.vector.health.microservices.Interfaces.IHealthcareService;
+import im.vector.health.microservices.Interfaces.IPractitioner;
+import im.vector.health.microservices.Interfaces.IPractitionerRole;
 import im.vector.settings.VectorLocale;
 
 public class VectorUtils {
@@ -386,17 +387,17 @@ public class VectorUtils {
      * @param imageView the image view
      * @param role      the role
      */
-    public static void loadRoomAvatar(Context context, MXSession session, ImageView imageView, DummyRole role) {
+    public static void loadRoomAvatar(Context context, MXSession session, ImageView imageView, IPractitionerRole role) {
         if (null != role) {
             VectorUtils.loadUserAvatar(context,
-                    session, imageView, role.getAvatarUrl(), role.getId(), role.getOfficialName());
+                    session, imageView, null, role.GetID(), role.GetLongName());
         }
     }
 
-    public static void loadRoomAvatar(Context context, MXSession session, ImageView imageView, DummyService service) {
+    public static void loadRoomAvatar(Context context, MXSession session, ImageView imageView, IHealthcareService service) {
         if (null != service) {
             VectorUtils.loadUserAvatar(context,
-                    session, imageView, null, service.getId(), service.getName());
+                    session, imageView, null, service.GetID(), service.GetLongName());
         }
     }
 
@@ -406,13 +407,19 @@ public class VectorUtils {
      * @param context   the context
      * @param session   the session
      * @param imageView the image view
-     * @param directoryPeople      the directoryPeople
+     * @param practitioner      the practitioner
      */
-    public static void loadRoomAvatar(Context context, MXSession session, ImageView imageView, DirectoryPeople directoryPeople) {
-        if (null != directoryPeople) {
-            VectorUtils.loadUserAvatar(context,
-                    session, imageView, directoryPeople.getAvatarUrl(), directoryPeople.getId(), directoryPeople.getOfficialName());
-        }
+    public static void loadRoomAvatar(Context context, MXSession session, ImageView imageView, IPractitioner practitioner) {
+        User user = getUser(context, session, practitioner.GetMatrixID(), new SimpleApiCallback<Void>() {
+            @Override
+            public void onSuccess(Void info) {
+                User user = VectorUtils.getUser(context, session, practitioner.GetMatrixID(), null);
+                VectorUtils.loadUserAvatar(context,
+                        session, imageView, user.getAvatarUrl(), practitioner.GetMatrixID(), practitioner.GetName());
+            }
+        });
+        VectorUtils.loadUserAvatar(context,
+                session, imageView, null, practitioner.GetMatrixID(), practitioner.GetName());
     }
 
     /**

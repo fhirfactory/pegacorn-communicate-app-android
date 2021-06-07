@@ -11,9 +11,9 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import im.vector.R
 import im.vector.chat.BaseMemberSelectionFragment
+import im.vector.health.TemporaryRoom
 import im.vector.health.directory.RoomClickListener
 import im.vector.health.directory.people.DirectoryPeopleFragment
-import im.vector.health.directory.people.model.TemporaryRoom
 import im.vector.health.directory.role.DirectoryRoleFragment
 import kotlinx.android.synthetic.main.fragment_create_chat.*
 

@@ -58,8 +58,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import im.vector.R;
-import im.vector.patient.DemoPatient;
-import im.vector.patient.PatientAdapter;
+import im.vector.health.patient.DemoPatient;
+import im.vector.health.patient.PatientAdapter;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.view.PieFractionView;
 

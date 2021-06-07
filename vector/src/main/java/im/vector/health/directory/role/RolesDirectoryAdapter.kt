@@ -12,9 +12,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.Matrix
 import im.vector.R
-import im.vector.health.directory.role.model.DummyRole
+import im.vector.health.directory.role.model.PractitionerRoleItem
 import im.vector.health.microservices.DirectoryConnector
-import im.vector.health.microservices.FavouriteTypes
+import im.vector.health.microservices.APIModel.FavouriteTypes
+import im.vector.health.microservices.DirectoryServicesSingleton
+import im.vector.health.microservices.Interfaces.IPractitionerRole
 import im.vector.util.VectorUtils
 import im.vector.view.VectorCircularImageView
 import kotlinx.android.synthetic.main.item_directory_people.view.favoriteIcon
@@ -23,7 +25,7 @@ import org.matrix.androidsdk.MXSession
 
 class RolesDirectoryAdapter(val context: Context, private val onClickListener: RoleClickListener, private val selectable: Boolean = false) :
         RecyclerView.Adapter<RoleViewHolder>(), OnDataSetChange {
-    private val roles = mutableListOf<DummyRole>()
+    private val roles = mutableListOf<PractitionerRoleItem>()
     var mSession: MXSession? = null
     var textSize: Float = 0.0F
     var selectedIds: MutableSet<String>? = null
@@ -36,13 +38,13 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: R
         }
     }
 
-    fun setData(roles: MutableList<DummyRole>) {
+    fun setData(roles: MutableList<PractitionerRoleItem>) {
         this.roles.clear()
         this.roles.addAll(roles)
         notifyDataSetChanged()
     }
 
-    fun addPage(roles: List<DummyRole>) {
+    fun addPage(roles: List<PractitionerRoleItem>) {
         this.roles.addAll(roles)
         notifyDataSetChanged()
     }
@@ -72,10 +74,10 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: R
         return RoleViewHolder(view)
     }
 
-    private fun checkSelection(role: DummyRole): Boolean? {
+    private fun checkSelection(role: PractitionerRoleItem): Boolean? {
         if (!selectable) return null
         selectedIds?.forEach { id ->
-            if (id == role.id)
+            if (id == role.GetID())
                 return true
         }
         return false
@@ -98,9 +100,9 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: R
         holder.selectionRadioImageView?.visibility = if (selectable) VISIBLE else GONE
         holder.itemView.setOnClickListener {
             if (selectable) {
-                val added = selectedIds?.add(roles[position].id)
+                val added = selectedIds?.add(roles[position].GetID())
                 if (added == false) {
-                    selectedIds?.remove(roles[position].id)
+                    selectedIds?.remove(roles[position].GetID())
                 }
                 notifyItemChanged(position)
                 onClickListener.onRoleClick(roles[position], !(added ?: true))
@@ -157,11 +159,11 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
     }
 
-    fun bind(context: Context, session: MXSession?, role: DummyRole, onDataSetChange: OnDataSetChange, position: Int, onClickListener: RoleClickListener?, showHeader: Boolean = false, selection: Boolean? = null) {
+    fun bind(context: Context, session: MXSession?, role: PractitionerRoleItem, onDataSetChange: OnDataSetChange, position: Int, onClickListener: RoleClickListener?, showHeader: Boolean = false, selection: Boolean? = null) {
         VectorUtils.loadRoomAvatar(context, session, avatar, role)
         heading?.visibility = if (showHeader) VISIBLE else GONE
-        officialName?.text = role.officialName
-        secondaryName?.text = role.secondaryName
+        officialName?.text = role.GetLongName()
+        secondaryName?.text = role.GetShortName()
         if(selection==null){
             selectionRadioImageView?.visibility = GONE
         } else {
@@ -181,7 +183,7 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             categoryText?.visibility = GONE
             locationText?.visibility = GONE
         }
-        if (role.fhirPractitionerRole.assignedPractitioners.count() > 0) {
+        if (role.GetActive()) {
             //roleFilledTextView?.text = context.getText(R.string.role_filled)
             //stealing the default colour from another text view is like, the best viable way of doing this, apparently
             //otherwise, the color has to come from resource values -- so would be theme dependent (as it true of the use of vector_warning_color)
@@ -195,7 +197,7 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             }
         }
 
-        DirectoryConnector.checkFavourite(context,FavouriteTypes.PractitionerRoles,role.id) {
+        DirectoryServicesSingleton.Instance().CheckFavourite(FavouriteTypes.PractitionerRoles,role.GetID()) {
             this.favourite = it
             this.updateFavourite()
         }
@@ -204,16 +206,16 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             this.favourite = !this.favourite
             this.updateFavourite()
             if (this.favourite) {
-                DirectoryConnector.addFavourite(context,FavouriteTypes.PractitionerRoles,role.id)
+                DirectoryServicesSingleton.Instance().AddFavourite(FavouriteTypes.PractitionerRoles,role.GetID())
             } else {
-                DirectoryConnector.removeFavourite(context,FavouriteTypes.PractitionerRoles,role.id)
+                DirectoryServicesSingleton.Instance().RemoveFavourite(FavouriteTypes.PractitionerRoles,role.GetID())
             }
         }
 
-        roleText?.text = "Role: ${role.fhirPractitionerRole.primaryRoleID}"
-        orgUnitText?.text = "Org Unit: ${role.fhirPractitionerRole.primaryOrganizationID}"
-        categoryText?.text = "Category: ${role.fhirPractitionerRole.primaryRoleCategoryID}"
-        locationText?.text = "Location: ${role.fhirPractitionerRole.primaryLocationID}"
+        roleText?.text = "Role: ${role.GetRoleName()}"
+        orgUnitText?.text = "Org Unit: ${role.GetOrgName()}"
+        categoryText?.text = "Category: ${role.GetRoleCategory()}"
+        locationText?.text = "Location: ${role.GetLocation()}"
 
         expandableIcon?.setOnClickListener {
             role.expanded = !role.expanded
@@ -223,7 +225,7 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 }
 
 interface RoleClickListener {
-    fun onRoleClick(role: DummyRole, forRemove: Boolean = false)
+    fun onRoleClick(role: PractitionerRoleItem, forRemove: Boolean = false)
 }
 
 interface OnDataSetChange {

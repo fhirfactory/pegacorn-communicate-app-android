@@ -9,8 +9,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.Matrix
 import im.vector.R
+import im.vector.health.TemporaryRoom
 import im.vector.health.directory.RoomClickListener
-import im.vector.health.directory.people.model.TemporaryRoom
 import im.vector.util.VectorUtils
 import im.vector.view.VectorCircularImageView
 import kotlinx.android.synthetic.main.item_directory_people.view.avatar
@@ -60,10 +60,10 @@ class SelectedRoomAdapter(val context: Context, val removeListener: RoomClickLis
     override fun onBindViewHolder(holder: SelectableRoomViewHolder, position: Int) {
         if (rooms[position].people == null) {
             VectorUtils.loadRoomAvatar(context, mSession, holder.itemView.avatar, rooms[position].role)
-            holder.itemView.name.text = rooms[position].role?.officialName
+            holder.itemView.name.text = rooms[position].role?.GetLongName()
         } else {
             VectorUtils.loadRoomAvatar(context, mSession, holder.itemView.avatar, rooms[position].people)
-            holder.itemView.name.text = rooms[position].people?.officialName
+            holder.itemView.name.text = rooms[position].people?.GetName()
         }
 
         holder.itemView.closeButton.setOnClickListener {

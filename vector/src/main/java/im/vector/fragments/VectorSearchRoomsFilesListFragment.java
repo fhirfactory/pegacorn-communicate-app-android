@@ -29,7 +29,6 @@ import androidx.annotation.NonNull;
 
 import org.matrix.androidsdk.adapters.MessageRow;
 import org.matrix.androidsdk.core.JsonUtils;
-import org.matrix.androidsdk.data.RoomSummary;
 import org.matrix.androidsdk.rest.model.Event;
 import org.matrix.androidsdk.rest.model.message.FileMessage;
 import org.matrix.androidsdk.rest.model.message.Message;
@@ -37,17 +36,10 @@ import org.matrix.androidsdk.rest.model.message.Message;
 import java.util.ArrayList;
 import java.util.List;
 
-import im.vector.R;
 import im.vector.activity.VectorMediaViewerActivity;
 import im.vector.adapters.VectorMessagesAdapter;
 import im.vector.adapters.VectorSearchFilesListAdapter;
-import im.vector.patient.PatientTagActivity;
 import im.vector.util.SlidableMediaInfo;
-
-import static android.app.Activity.RESULT_OK;
-import static im.vector.activity.VectorMediaViewerActivity.SELECTED_EVENT;
-import static im.vector.activity.VectorMediaViewerActivity.SELECTED_EVENT_TO_TAG;
-import static im.vector.activity.VectorMediaViewerActivity.SELECTED_ROOM_TO_FORWARD;
 
 public class VectorSearchRoomsFilesListFragment extends VectorSearchMessagesListFragment {
     /**

@@ -10,11 +10,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.Matrix
 import im.vector.R
-import im.vector.health.directory.people.model.DirectoryPeople
 import im.vector.health.directory.role.OnDataSetChange
 import im.vector.health.directory.role.RoleClickListener
 import im.vector.health.directory.role.RoleViewHolder
-import im.vector.health.directory.role.model.DummyRole
+import im.vector.health.directory.role.model.PractitionerRoleItem
+import im.vector.health.microservices.Interfaces.IPractitioner
+import im.vector.health.microservices.Interfaces.IPractitionerRole
 import im.vector.ui.themes.ThemeUtils
 import kotlinx.android.synthetic.main.item_role_detail_category1.view.*
 import org.matrix.androidsdk.MXSession
@@ -62,14 +63,15 @@ class PeopleDetailAdapter(val context: Context, private val onClickListener: Rol
         }
     }
 
-    fun setData(people: DirectoryPeople) {
+    fun setData(people: IPractitioner) {
         this.models.clear()
+
         this.models.add(PeopleDetailAdapterModel("something@act.gov.au", null, TYPE_EMAIL))
         this.models.add(PeopleDetailAdapterModel("0455552522", null, TYPE_PHONE))
         notifyDataSetChanged()
     }
 
-    fun setData(roles: MutableList<DummyRole>) {
+    fun setData(roles: List<PractitionerRoleItem>) {
         for (role in roles) {
             this.models.add(PeopleDetailAdapterModel(null, role, TYPE_ROLE))
         }
@@ -115,4 +117,4 @@ class PeopleDetailAdapter(val context: Context, private val onClickListener: Rol
     }
 }
 
-data class PeopleDetailAdapterModel(val value: String?, val role: DummyRole?, val type: Int)
+data class PeopleDetailAdapterModel(val value: String?, val role: PractitionerRoleItem?, val type: Int)

@@ -435,7 +435,7 @@
             android:configChanges="orientation|screenSize"
             android:label="@string/select_room_directory" />
         <activity
-            android:name=".patient.PatientTagActivity"
+            android:name="im.vector.health.patient.PatientTagActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/patient_tag_title" />
         <activity

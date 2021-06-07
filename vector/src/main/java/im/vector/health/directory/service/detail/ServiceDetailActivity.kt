@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentManager
 import im.vector.Matrix
 import im.vector.R
 import im.vector.activity.MXCActionBarActivity
-import im.vector.health.directory.service.DummyService
+import im.vector.health.directory.service.model.HealthcareServiceItem
 import im.vector.util.VectorUtils
 import kotlinx.android.synthetic.main.activity_role_detail.*
 
@@ -19,9 +19,9 @@ class ServiceDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStac
         configureToolbar()
         mSession = Matrix.getInstance(this).defaultSession
 
-        val service = intent.getParcelableExtra<DummyService>(SERVICE_EXTRA)
+        val service = intent.getParcelableExtra<HealthcareServiceItem>(SERVICE_EXTRA)
         supportActionBar?.let {
-            it.title = service.name
+            it.title = service.GetLongName()
         }
         VectorUtils.loadRoomAvatar(this, session, avatar, service)
     }
@@ -39,9 +39,9 @@ class ServiceDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStac
 
     companion object {
         private const val SERVICE_EXTRA = "SERVICE_EXTRA"
-        fun intent(context: Context, dummyService: DummyService): Intent {
+        fun intent(context: Context, service: HealthcareServiceItem): Intent {
             return Intent(context, ServiceDetailActivity::class.java).also {
-                it.putExtra(SERVICE_EXTRA, dummyService)
+                it.putExtra(SERVICE_EXTRA, service)
             }
         }
     }

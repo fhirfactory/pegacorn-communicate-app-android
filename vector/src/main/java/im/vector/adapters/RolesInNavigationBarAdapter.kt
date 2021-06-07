@@ -10,13 +10,12 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.R
-import im.vector.adapters.model.UserRole
-import im.vector.health.directory.role.model.DummyRole
+import im.vector.health.microservices.Interfaces.IPractitionerRole
 
 
 class RolesInNavigationBarAdapter :
         RecyclerView.Adapter<RolesInNavigationBarAdapter.RoleViewHolder>() {
-    private val roles = mutableListOf<DummyRole>()
+    private val roles = mutableListOf<IPractitionerRole>()
 
     class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var mRoleName: TextView? = null
@@ -27,8 +26,8 @@ class RolesInNavigationBarAdapter :
             mIndicator = itemView.findViewById(R.id.indicator)
         }
 
-        fun bind(role: DummyRole) {
-            mRoleName?.text = role.fhirPractitionerRole.identifiers.filter { x -> x.type == "ShortName" }.firstOrNull()?.value ?: role.officialName
+        fun bind(role: IPractitionerRole) {
+            mRoleName?.text = role.GetShortName()
 
             mIndicator?.apply {
                 //if (role.active)
@@ -40,7 +39,7 @@ class RolesInNavigationBarAdapter :
         }
     }
 
-    fun setData(roles: MutableList<DummyRole>) {
+    fun setData(roles: List<IPractitionerRole>) {
         this.roles.clear()
         this.roles.addAll(roles)
     }

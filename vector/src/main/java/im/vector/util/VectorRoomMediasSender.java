@@ -51,7 +51,6 @@ import im.vector.R;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.fragments.ImageSizeSelectionDialogFragment;
 import im.vector.fragments.VectorMessageListFragment;
-import im.vector.patient.PatientTagActivity;
 
 // VectorRoomMediasSender helps the vectorRoomActivity to manage medias .
 public class VectorRoomMediasSender {

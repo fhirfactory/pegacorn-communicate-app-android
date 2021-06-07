@@ -3,8 +3,8 @@ package im.vector.chat.onetoone
 import android.os.Bundle
 import im.vector.R
 import im.vector.chat.BaseMemberSelectionFragment
+import im.vector.health.TemporaryRoom
 import im.vector.health.directory.people.DirectoryPeopleFragment
-import im.vector.health.directory.people.model.TemporaryRoom
 import im.vector.health.directory.role.DirectoryRoleFragment
 
 class OneToOneChatMemberSelectionFragment : BaseMemberSelectionFragment() {

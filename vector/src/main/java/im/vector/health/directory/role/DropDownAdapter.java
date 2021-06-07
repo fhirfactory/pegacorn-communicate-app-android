@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import im.vector.R;
-import im.vector.health.directory.role.model.DropDownItem;
 
 
 public class DropDownAdapter extends ArrayAdapter<DropDownItem> {

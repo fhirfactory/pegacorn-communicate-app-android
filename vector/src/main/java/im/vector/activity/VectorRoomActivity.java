@@ -120,8 +120,8 @@ import im.vector.fragments.VectorReadReceiptsDialogFragment;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.fragments.roomwidgets.RoomWidgetPermissionBottomSheet;
 import im.vector.listeners.IMessagesAdapterActionsListener;
-import im.vector.patient.DemoPatient;
-import im.vector.patient.PatientTagActivity;
+import im.vector.health.patient.DemoPatient;
+import im.vector.health.patient.PatientTagActivity;
 import im.vector.util.CallsManager;
 import im.vector.util.ExternalApplicationsUtilKt;
 import im.vector.util.MatrixURLSpan;
@@ -143,8 +143,8 @@ import im.vector.widgets.WidgetsManager;
 import im.vector.widgets.model.JitsiWidgetProperties;
 import kotlin.Unit;
 
-import static im.vector.patient.PatientTagActivity.ROOM_MEDIA_MESSAGE_ARRAY_EXTRA;
-import static im.vector.patient.PatientTagFragment.PATIENT_EXTRA;
+import static im.vector.health.patient.PatientTagActivity.ROOM_MEDIA_MESSAGE_ARRAY_EXTRA;
+import static im.vector.health.patient.PatientTagFragment.PATIENT_EXTRA;
 
 /**
  * Displays a single room with messages.
