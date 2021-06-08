@@ -13,7 +13,7 @@ import im.vector.dialogs.DialogListItem.*
 import im.vector.dialogs.DialogSendItemAdapter
 import im.vector.fragments.AbsHomeFragment
 import im.vector.fragments.VectorSearchRoomFilesListFragment
-import im.vector.health.patient.DemoPatient
+import im.vector.health.microservices.Interfaces.IPatient
 import im.vector.health.patient.PatientTagActivity
 import im.vector.health.patient.PatientTagActivity.Companion.intent
 import im.vector.health.patient.PatientTagFragment
@@ -133,8 +133,8 @@ class GalleryFragment : AbsHomeFragment() {
             // sanity checks
             if (null != bundle) {
                 if (bundle.containsKey(PatientTagFragment.PATIENT_EXTRA)) {
-                    val patient: DemoPatient? = bundle.getParcelable(PatientTagFragment.PATIENT_EXTRA)
-                    Toast.makeText(requireContext(), patient?.name ?: "No Patient Tagged", Toast.LENGTH_LONG).show()
+                    val patient: IPatient? = bundle.getParcelable(PatientTagFragment.PATIENT_EXTRA)
+                    Toast.makeText(requireContext(), patient?.GetName() ?: "No Patient Tagged", Toast.LENGTH_LONG).show()
                 } else {
                     Toast.makeText(requireContext(), "No Patient Tagged", Toast.LENGTH_LONG).show()
                 }

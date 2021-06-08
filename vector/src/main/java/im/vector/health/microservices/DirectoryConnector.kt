@@ -1,10 +1,8 @@
 package im.vector.health.microservices
 
 import im.vector.health.microservices.APIModel.*
-import im.vector.health.microservices.Interfaces.IDirectoryServiceProvider
-import im.vector.health.microservices.Interfaces.IHealthcareService
-import im.vector.health.microservices.Interfaces.IPractitioner
-import im.vector.health.microservices.Interfaces.IPractitionerRole
+import im.vector.health.microservices.Interfaces.*
+import im.vector.health.microservices.Mock.MockPatient
 import im.vector.health.microservices.Model.HealthcareService
 import retrofit2.Call
 import retrofit2.Callback
@@ -373,6 +371,24 @@ class DirectoryConnector: IDirectoryServiceProvider {
 
     override fun GetPractitionerRoles(query: String?, page: Int, pageSize: Int, callback: (List<IPractitionerRole>?, Int) -> Unit) = getPractitionerRoles(page,pageSize,query,callback)
     override fun GetHealthcareServices(query: String?, page: Int, pageSize: Int, callback: (List<IHealthcareService>?, Int) -> Unit) = getHealthcareServices(page,pageSize,query,callback)
+    override fun GetPatients(query: String?, page: Int, pageSize: Int, callback: (List<IPatient>?, Int) -> Unit) {
+        val list = (1..275)
+        val filtered = list.filter {itm ->
+            query?.let {
+                return@filter itm.toString().contains(it
+                    .toLowerCase()
+                    .replace("patient","")
+                    .trim())
+            }
+            return@filter true
+        }
+        val final = filtered
+            .drop(pageSize * page)
+            .take(pageSize)
+            .map { MockPatient("Patient "+it.toString(), it.toString(), Date()) }
+
+        callback(final,list.count())
+    }
 
     override fun GetPractitioner(id: String, callback: (IPractitioner?) -> Unit) = getItemFromID(getDirectoryServices().getPractitioner(id)) {
         it?.let {

@@ -6,15 +6,16 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.R
+import im.vector.health.microservices.Interfaces.IPatient
 import kotlinx.android.synthetic.main.item_patient.view.*
 
 
 class PatientAdapter(private val onClickListener: PatientClickListener?) :
         RecyclerView.Adapter<PatientViewHolder>() {
-    private val patients = mutableListOf<DemoPatient>()
+    private val patients = mutableListOf<IPatient>()
 
 
-    fun setData(patients: MutableList<DemoPatient>) {
+    fun setData(patients: List<IPatient>) {
         this.patients.clear()
         this.patients.addAll(patients)
         notifyDataSetChanged()
@@ -36,7 +37,7 @@ class PatientAdapter(private val onClickListener: PatientClickListener?) :
 }
 
 interface PatientClickListener {
-    fun onPatientClick(patient: DemoPatient)
+    fun onPatientClick(patient: IPatient)
 }
 
 class PatientViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -50,9 +51,9 @@ class PatientViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         patientDobTextView = itemView.patientDobTextView
     }
 
-    fun bind(patient: DemoPatient) {
-        patientNameTextView?.text = patient.name
-        patientURNTextView?.text = patient.urn
-        patientDobTextView?.text = patient.dob
+    fun bind(patient: IPatient) {
+        patientNameTextView?.text = patient.GetName()
+        patientURNTextView?.text = patient.GetURN()
+        patientDobTextView?.text = patient.GetDOB().toString()
     }
 }

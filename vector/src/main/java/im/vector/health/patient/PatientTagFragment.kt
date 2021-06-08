@@ -25,6 +25,7 @@ import im.vector.home.BaseActFragment
 import im.vector.health.patient.PatientTagActivity.Companion.FILE_LOCATION_EXTRA
 import im.vector.health.patient.PatientTagActivity.Companion.ROOM_EVENT_EXTRA
 import im.vector.health.patient.PatientTagActivity.Companion.ROOM_MEDIA_MESSAGE_ARRAY_EXTRA
+import im.vector.health.microservices.Interfaces.IPatient
 import kotlinx.android.synthetic.main.fragment_patient_tag.*
 import kotlinx.android.synthetic.main.item_patient.*
 import kotlinx.android.synthetic.main.layout_designation.*
@@ -190,9 +191,9 @@ class PatientTagFragment : BaseActFragment(), PatientClickListener {
                 designationLayout.visibility = VISIBLE
                 selectedPatient.visibility = VISIBLE
                 cross.visibility = VISIBLE
-                patientNameTextView?.text = patient.name
-                patientURNTextView?.text = patient.urn
-                patientDobTextView?.text = patient.dob
+                patientNameTextView?.text = patient.GetName()
+                patientURNTextView?.text = patient.GetURN()
+                patientDobTextView?.text = patient.GetDOB().toString()
             }
         })
     }
@@ -211,7 +212,7 @@ class PatientTagFragment : BaseActFragment(), PatientClickListener {
         activity?.finish()
     }
 
-    override fun onPatientClick(patient: DemoPatient) {
+    override fun onPatientClick(patient: IPatient) {
         viewModel.addSelectedPatient(patient)
     }
 

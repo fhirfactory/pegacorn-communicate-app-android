@@ -55,9 +55,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import im.vector.R;
+import im.vector.health.microservices.Interfaces.IPatient;
+import im.vector.health.microservices.Mock.MockPatient;
 import im.vector.health.patient.DemoPatient;
 import im.vector.health.patient.PatientAdapter;
 import im.vector.util.SlidableMediaInfo;
@@ -436,9 +439,9 @@ public class VectorMediaViewerAdapter extends PagerAdapter {
         PatientAdapter adapter = new PatientAdapter(null);
         recyclerView.setAdapter(adapter);
         //TODO get the previous patients
-        ArrayList<DemoPatient> patients = new ArrayList<>();
-        patients.add(new DemoPatient("Lance Christie", "12345678", "01-Jan-1900"));
-        patients.add(new DemoPatient("Mark Hunter", "12345678", "01-Jan-1900"));
+        ArrayList<IPatient> patients = new ArrayList<>();
+        patients.add(new MockPatient("Lance Christie", "12345678", new Date()));
+        patients.add(new MockPatient("Mark Hunter", "12345678", new Date()));
         adapter.setData(patients);
 
         final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(position);

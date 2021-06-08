@@ -141,6 +141,7 @@ import im.vector.view.VectorPendingCallView;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
 import im.vector.widgets.model.JitsiWidgetProperties;
+import im.vector.health.microservices.Interfaces.IPatient;
 import kotlin.Unit;
 
 import static im.vector.health.patient.PatientTagActivity.ROOM_MEDIA_MESSAGE_ARRAY_EXTRA;
@@ -2055,8 +2056,8 @@ public class VectorRoomActivity extends MXCActionBarActivity implements
             // sanity checks
             if (null != bundle) {
                 if (bundle.containsKey(PATIENT_EXTRA)) {
-                    DemoPatient patient = bundle.getParcelable(PATIENT_EXTRA);
-                    Toast.makeText(this, patient == null ? "No Patient Tagged" : patient.getName(), Toast.LENGTH_LONG).show();
+                    IPatient patient = bundle.getParcelable(PATIENT_EXTRA);
+                    Toast.makeText(this, patient == null ? "No Patient Tagged" : patient.GetName(), Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(this,"No Patient Tagged", Toast.LENGTH_LONG).show();
                 }

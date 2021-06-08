@@ -3,9 +3,14 @@ package im.vector.health.patient
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import im.vector.health.directory.role.DropDownItem
+import im.vector.health.microservices.Interfaces.IPatient
+import im.vector.health.microservices.Mock.MockPatient
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.data.RoomMediaMessage
 import org.matrix.androidsdk.rest.model.Event
+import java.util.*
+import java.util.Date
+import kotlin.collections.ArrayList
 
 class PatientTagViewModel : ViewModel() {
     var session: MXSession? = null
@@ -13,10 +18,10 @@ class PatientTagViewModel : ViewModel() {
     var selectedDesignation :DropDownItem? = null
     var mediaMessageArray: ArrayList<RoomMediaMessage>? = null
     var event: Event? = null
-    val patients = MutableLiveData<MutableList<DemoPatient>>()
+    val patients = MutableLiveData<MutableList<IPatient>>()
     val designations = MutableLiveData<MutableList<DropDownItem>>()
-    val selectedPatient = MutableLiveData<DemoPatient?>()
-    private val fakePatients = mutableListOf<DemoPatient>()
+    val selectedPatient = MutableLiveData<IPatient?>()
+    private val fakePatients = mutableListOf<IPatient>()
     private val designationList = mutableListOf<DropDownItem>()
 
     fun initSession(session: MXSession) {
@@ -29,13 +34,13 @@ class PatientTagViewModel : ViewModel() {
         selectedPatient.postValue(null)
     }
 
-    fun addSelectedPatient(patient: DemoPatient) {
+    fun addSelectedPatient(patient: IPatient) {
         selectedPatient.postValue(patient)
     }
 
     fun filterPatient(text: String) {
-        val filterList = fakePatients.filter { it.name.contains(text, true) }
-        patients.postValue(filterList as MutableList<DemoPatient>?)
+        val filterList = fakePatients.filter { it.GetName().contains(text, true) }
+        patients.postValue(filterList as MutableList<IPatient>?)
     }
 
 
@@ -46,11 +51,11 @@ class PatientTagViewModel : ViewModel() {
     }
 
     fun prepareFakePatientData() {
-        fakePatients.add(DemoPatient("Test Patient", "12345678", "01-Sep-1979"))
-        fakePatients.add(DemoPatient("Rafi Sadat", "12345678", "01-Jan-1900"))
-        fakePatients.add(DemoPatient("Mark Hunter", "12345678", "01-Jan-1900"))
-        fakePatients.add(DemoPatient("Emma Mcdonald", "12345678", "01-Jan-1900"))
-        fakePatients.add(DemoPatient("Craig Mcdonald", "12345678", "01-Jan-1900"))
-        fakePatients.add(DemoPatient("Lance Christie", "12345678", "01-Jan-1900"))
+        fakePatients.add(MockPatient("Test Patient", "12345678", Date()))
+        fakePatients.add(MockPatient("Rafi Sadat", "12345678", Date()))
+        fakePatients.add(MockPatient("Mark Hunter", "12345678", Date()))
+        fakePatients.add(MockPatient("Emma Mcdonald", "12345678", Date()))
+        fakePatients.add(MockPatient("Craig Mcdonald", "12345678", Date()))
+        fakePatients.add(MockPatient("Lance Christie", "12345678", Date()))
     }
 }
