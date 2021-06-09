@@ -10,22 +10,23 @@ import androidx.recyclerview.widget.RecyclerView
 import im.vector.R
 import im.vector.health.directory.people.model.PractitionerItem
 import im.vector.health.directory.service.model.HealthcareServiceItem
+import im.vector.health.directory.shared.IStandardDirectoryAdapter
 import im.vector.health.microservices.APIModel.FavouriteTypes
 import im.vector.health.microservices.DirectoryServicesSingleton
 import kotlinx.android.synthetic.main.item_directory_service.view.*
 
 
 class ServiceDirectoryAdapter(val context: Context, private val onClickListener: ServiceClickListener, private val selectable: Boolean = false) :
-        RecyclerView.Adapter<ServiceViewHolder>(), OnDataSetChange {
+        RecyclerView.Adapter<ServiceViewHolder>(), OnDataSetChange, IStandardDirectoryAdapter<HealthcareServiceItem> {
     private val services = mutableListOf<HealthcareServiceItem>()
 
-    fun setData(services: MutableList<HealthcareServiceItem>) {
+    override fun setData(items: List<HealthcareServiceItem>) {
         this.services.clear()
-        this.services.addAll(services)
+        this.services.addAll(items)
     }
 
-    fun addPage(services: List<HealthcareServiceItem>) {
-        this.services.addAll(services)
+    override fun addPage(items: List<HealthcareServiceItem>) {
+        this.services.addAll(items)
         notifyDataSetChanged()
     }
 

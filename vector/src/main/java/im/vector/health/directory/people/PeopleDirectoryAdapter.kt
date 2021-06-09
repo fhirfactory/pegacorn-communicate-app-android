@@ -13,10 +13,9 @@ import im.vector.adapters.ParticipantAdapterItem
 import im.vector.adapters.VectorParticipantsAdapter
 import im.vector.health.directory.people.model.PractitionerItem
 import im.vector.health.directory.role.OnDataSetChange
-import im.vector.health.microservices.DirectoryConnector
+import im.vector.health.directory.shared.IStandardDirectoryAdapter
 import im.vector.health.microservices.APIModel.FavouriteTypes
 import im.vector.health.microservices.DirectoryServicesSingleton
-import im.vector.health.microservices.Interfaces.IPractitioner
 import im.vector.ui.themes.ThemeUtils.getColor
 import im.vector.util.VectorUtils
 import im.vector.view.VectorCircularImageView
@@ -31,7 +30,7 @@ import org.matrix.androidsdk.MXSession
 
 
 class PeopleDirectoryAdapter(val context: Context, private val onClickListener: PeopleClickListener, private val selectable: Boolean = false) :
-        RecyclerView.Adapter<PeopleDirectoryAdapter.PeopleViewHolder>(), OnDataSetChange {
+        RecyclerView.Adapter<PeopleDirectoryAdapter.PeopleViewHolder>(), OnDataSetChange, IStandardDirectoryAdapter<PractitionerItem> {
     private val people = mutableListOf<PractitionerItem>()
     var mSession: MXSession? = null
     var textSize: Float = 0.0F
@@ -125,14 +124,14 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
         }
     }
 
-    fun addPage(people: List<PractitionerItem>) {
-        this.people.addAll(people)
+    override fun addPage(items: List<PractitionerItem>) {
+        this.people.addAll(items)
         notifyDataSetChanged()
     }
 
-    fun setData(people: MutableList<PractitionerItem>) {
+    override fun setData(items: List<PractitionerItem>) {
         this.people.clear()
-        this.people.addAll(people)
+        this.people.addAll(items)
     }
 
     fun setData(participants: VectorParticipantsAdapter){

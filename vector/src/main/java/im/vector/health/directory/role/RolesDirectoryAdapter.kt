@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import im.vector.Matrix
 import im.vector.R
 import im.vector.health.directory.role.model.PractitionerRoleItem
+import im.vector.health.directory.shared.IStandardDirectoryAdapter
 import im.vector.health.microservices.DirectoryConnector
 import im.vector.health.microservices.APIModel.FavouriteTypes
 import im.vector.health.microservices.DirectoryServicesSingleton
@@ -24,7 +25,7 @@ import org.matrix.androidsdk.MXSession
 
 
 class RolesDirectoryAdapter(val context: Context, private val onClickListener: RoleClickListener, private val selectable: Boolean = false) :
-        RecyclerView.Adapter<RoleViewHolder>(), OnDataSetChange {
+        RecyclerView.Adapter<RoleViewHolder>(), OnDataSetChange, IStandardDirectoryAdapter<PractitionerRoleItem> {
     private val roles = mutableListOf<PractitionerRoleItem>()
     var mSession: MXSession? = null
     var textSize: Float = 0.0F
@@ -38,29 +39,15 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: R
         }
     }
 
-    fun setData(roles: MutableList<PractitionerRoleItem>) {
+    override fun setData(items: List<PractitionerRoleItem>) {
         this.roles.clear()
-        this.roles.addAll(roles)
+        this.roles.addAll(items)
         notifyDataSetChanged()
     }
 
-    fun addPage(roles: List<PractitionerRoleItem>) {
-        this.roles.addAll(roles)
+    override fun addPage(items: List<PractitionerRoleItem>) {
+        this.roles.addAll(items)
         notifyDataSetChanged()
-    }
-
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
-        recyclerView.addOnScrollListener(object: RecyclerView.OnScrollListener() {
-            var loading: Boolean = false
-            var page: Int = 0;
-            val pageSize: Int = 10;
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-
-
-            }
-        })
     }
 
     // Create new views (invoked by the layout manager)

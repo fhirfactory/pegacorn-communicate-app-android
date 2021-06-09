@@ -33,6 +33,12 @@ abstract class BaseActFragment : AbsHomeFragment() {
         headingView.text = str
     }
 
+    open fun setHeader(headingView: TextView, title: String) {
+        val str = SpannableStringBuilder(title)
+        str.setSpan(StyleSpan(Typeface.BOLD), 0, title.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        headingView.text = str
+    }
+
     override fun getRooms(): MutableList<Room> {
         return ArrayList(mSession.dataHandler.store?.rooms)
     }

@@ -120,7 +120,6 @@ import im.vector.fragments.VectorReadReceiptsDialogFragment;
 import im.vector.fragments.VectorUnknownDevicesFragment;
 import im.vector.fragments.roomwidgets.RoomWidgetPermissionBottomSheet;
 import im.vector.listeners.IMessagesAdapterActionsListener;
-import im.vector.health.patient.DemoPatient;
 import im.vector.health.patient.PatientTagActivity;
 import im.vector.util.CallsManager;
 import im.vector.util.ExternalApplicationsUtilKt;

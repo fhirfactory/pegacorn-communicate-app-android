@@ -6,7 +6,7 @@ import im.vector.health.microservices.Interfaces.IPatient
 import java.util.*
 
 @Parcelize
-class DemoPatient(val embeddedPatient: IPatient) : IPatient {
+class PatientItem(val embeddedPatient: IPatient) : IPatient {
     override fun GetName(): String = embeddedPatient.GetName()
 
     override fun GetDOB(): Date = embeddedPatient.GetDOB()

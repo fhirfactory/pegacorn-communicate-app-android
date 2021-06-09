@@ -1,5 +1,6 @@
-package im.vector.health.directory
+package im.vector.health.directory.shared
 
+import im.vector.health.directory.RoomClickListener
 import im.vector.home.BaseActFragment
 
 abstract class BaseDirectoryFragment : BaseActFragment() {

@@ -1,31 +1,17 @@
 package im.vector.health.directory.people
 
-import android.os.Bundle
-import android.view.Menu
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SimpleItemAnimator
+import android.content.Context
 import im.vector.R
-import im.vector.adapters.ParticipantAdapterItem
-import im.vector.adapters.VectorParticipantsAdapter
-import im.vector.health.directory.BaseDirectoryFragment
 import im.vector.health.directory.people.detail.PeopleDetailActivity
 import im.vector.extensions.withArgs
 import im.vector.health.TemporaryRoom
 import im.vector.health.directory.people.model.PractitionerItem
-import im.vector.health.microservices.DirectoryConnector
+import im.vector.health.directory.shared.StandardDirectoryFragment
 import im.vector.health.microservices.DirectoryServicesSingleton
 import im.vector.health.microservices.Interfaces.IPractitioner
-import kotlinx.android.synthetic.main.fragment_directory_people.*
-import kotlinx.android.synthetic.main.fragment_directory_people.header
-import kotlinx.android.synthetic.main.fragment_directory_role.*
-import org.matrix.androidsdk.data.Room
 
-class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
+class DirectoryPeopleFragment: StandardDirectoryFragment<PeopleDirectoryAdapter, PeopleDirectoryAdapter.PeopleViewHolder, PractitionerItem>() {
     companion object {
-        private const val SELECTABLE = "SELECTABLE"
-
         fun newInstance(selectable: Boolean = false): DirectoryPeopleFragment {
             return DirectoryPeopleFragment().withArgs {
                 putBoolean(SELECTABLE, selectable)
@@ -33,135 +19,41 @@ class DirectoryPeopleFragment : BaseDirectoryFragment(), PeopleClickListener {
         }
     }
 
-    private lateinit var peopleDirectoryAdapter: PeopleDirectoryAdapter
-    private var filter: String? = null
-
-
-    override fun filter(with: String?) {
-        if (filter != with) {
-            filter = with
-            initializeList()
-        }
-    }
-
-    override fun onFilter(pattern: String?, listener: OnFilterListener?) {
-        // TODO("Not yet implemented")
-        val participantsAdapter: VectorParticipantsAdapter = VectorParticipantsAdapter(context,
-                R.layout.adapter_item_vector_add_participants,
-                R.layout.adapter_item_vector_people_header,
-                mSession, null, true)
-        val participantAdapterItem = ParticipantAdapterItem(null,null,null,false)
-        participantsAdapter.setSearchedPattern(pattern,participantAdapterItem) {count ->
-            peopleDirectoryAdapter.setData(participantsAdapter)
-            listener?.onFilterDone(count)
-        }
-    }
-
-    override fun onResetFilter() {
-        // TODO("Not yet implemented")
-    }
-
-    override fun getRooms(): MutableList<Room> {
-        TODO("Not yet implemented")
-    }
-
-    override fun onFavorite(enable: Boolean) {
-        //Temporary
-        setHeader(header, if (enable) R.string.total_number_of_favourite_people else R.string.total_number_of_people, if (enable) 4 else 10)
-    }
-
-    override fun getLayoutResId(): Int {
-        return R.layout.fragment_directory_people
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        val selectable = arguments?.getBoolean(SELECTABLE, false)
-
-        peopleDirectoryAdapter = PeopleDirectoryAdapter(requireContext(), this, selectable ?: false)
-        peopleRecyclerview.layoutManager = LinearLayoutManager(requireContext())
-        peopleRecyclerview.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-        peopleRecyclerview.adapter = peopleDirectoryAdapter
-
-
-        //test data
-//        val testPeopleData = mutableListOf<DirectoryPeople>()
-//        peopleDirectoryAdapter.setData(testPeopleData)
-//        setHeader(header, R.string.total_number_of_people, testPeopleData.size)
-        initializeList()
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.findItem(R.id.ic_action_advanced_search)?.isVisible = false
-    }
-
-    fun initializeList() {
-        val selectable = arguments?.getBoolean(SELECTABLE, false)
-        peopleDirectoryAdapter = PeopleDirectoryAdapter(requireContext(), this, selectable ?: false)
-        (peopleRecyclerview.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-        peopleRecyclerview.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-        peopleRecyclerview.layoutManager = LinearLayoutManager(requireContext())
-        peopleRecyclerview.adapter = peopleDirectoryAdapter
-        peopleRecyclerview.setHasFixedSize(true)
-
-        loading = false
-        page = -1
-        paginate()
-        setupScrollListener()
-    }
-
-    var page = -1;
-    var loading = false;
-    var pageSize = 20;
-
-    fun paginate() {
-        if (!loading) {
-
-            val idx = peopleRecyclerview.getChildAdapterPosition(peopleRecyclerview.getChildAt(0))
-            val overHalfway: Boolean = page < 0 || (idx >= (page * pageSize) / 2) || (idx == -1)
-
-            if (overHalfway || peopleRecyclerview.height == 0) {
-                page += 1
-                loading = true;
-                context?.let {
-                    DirectoryServicesSingleton.Instance().GetPractitioners(filter, page, pageSize){ practitioners, count ->
-                        setHeader(header, R.string.total_number_of_people, count)
-                        practitioners?.let {
-                            peopleDirectoryAdapter.addPage(it.map { PractitionerItem(it,false) })
-                            loading = false
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    fun setupScrollListener() {
-        peopleRecyclerview.addOnScrollListener(object: RecyclerView.OnScrollListener(){
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                paginate()
-            }
-        })
-    }
-
-    override fun onPeopleClick(directoryPeople: PractitionerItem, forRemove: Boolean) {
-        if (roomClickListener == null) {
-            startActivity(PeopleDetailActivity.intent(requireContext(), directoryPeople, true))
-        } else {
-            roomClickListener?.onRoomClick(TemporaryRoom(directoryPeople.practitioner, null), forRemove)
-        }
-    }
-
-    override fun onPeopleFavorite(directoryPeople: PractitionerItem) {
-
-    }
-
     fun unSelectPeople(people: IPractitioner) {
-        peopleDirectoryAdapter.removeFromSelectedPeople(people.GetID())
+        listItemAdapter.removeFromSelectedPeople(people.GetID())
     }
 
     fun selectPeople(people: IPractitioner) {
-        peopleDirectoryAdapter.addToSelectedPeople(people.GetID())
+        listItemAdapter.addToSelectedPeople(people.GetID())
+    }
+
+    override fun constructAdapter(context: Context, selectable: Boolean): PeopleDirectoryAdapter {
+        return PeopleDirectoryAdapter(context, object : PeopleClickListener {
+            override fun onPeopleClick(directoryPeople: PractitionerItem, forRemove: Boolean) {
+                if (roomClickListener == null) {
+                    startActivity(PeopleDetailActivity.intent(requireContext(), directoryPeople, true))
+                } else {
+                    roomClickListener?.onRoomClick(TemporaryRoom(directoryPeople.practitioner, null), forRemove)
+                }
+            }
+
+            override fun onPeopleFavorite(directoryPeople: PractitionerItem) {
+                //TODO("Not yet implemented")
+            }
+        }, selectable)
+    }
+
+    override fun getHeaderText(count: Int, favourites: Boolean): String = (if (favourites) getString(R.string.total_number_of_favourite_people) else getString(R.string.total_number_of_people)) + " " + count.toString()
+
+    override fun getData(forPage: Int, withPageSize: Int, query: String?, addItem: (List<PractitionerItem>?, Int) -> Unit) {
+        DirectoryServicesSingleton.Instance().GetPractitioners(query, page, pageSize){ practitioners, count ->
+            addItem(practitioners?.map { PractitionerItem(it,false) }, count)
+        }
+    }
+
+    override fun getDataFavourites(forPage: Int, withPageSize: Int, query: String?, addItem: (List<PractitionerItem>?, Int) -> Unit) {
+        DirectoryServicesSingleton.Instance().GetPractitioners(query, page, pageSize){ practitioners, count ->
+            addItem(practitioners?.map { PractitionerItem(it,false) }, count)
+        }
     }
 }

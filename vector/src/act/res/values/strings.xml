@@ -140,6 +140,8 @@
     <string name="home_filter_placeholder_home">Filter room names</string>
     <string name="home_filter_placeholder_favorites">Filter favourites</string>
     <string name="home_filter_placeholder_people">Filter people</string>
+    <string name="home_filter_placeholder_roles">Filter roles</string>
+    <string name="home_filter_placeholder_patients">Filter patients</string>
     <string name="home_filter_placeholder_rooms">Filter room names</string>
     <string name="home_filter_placeholder_groups">Filter community names</string>
 

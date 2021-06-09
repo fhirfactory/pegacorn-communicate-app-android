@@ -1620,6 +1620,7 @@ Why choose Riot.im?
     <string name="search_directory_roles">Search Roles Directory</string>
     <string name="search_directory_people">Search People Directory</string>
     <string name="search_directory_services">Search Service Directory</string>
+    <string name="search_directory_patients">Search Patient Directory</string>
     <string name="rejecting">Declining the invitation</string>
     <string name="accepting">Accepting the invitation</string>
     <string name="invite_menu_title">Invites</string>

@@ -6,18 +6,24 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.R
+import im.vector.health.directory.shared.IStandardDirectoryAdapter
 import im.vector.health.microservices.Interfaces.IPatient
 import kotlinx.android.synthetic.main.item_patient.view.*
 
 
 class PatientAdapter(private val onClickListener: PatientClickListener?) :
-        RecyclerView.Adapter<PatientViewHolder>() {
+        RecyclerView.Adapter<PatientViewHolder>(), IStandardDirectoryAdapter<PatientItem> {
     private val patients = mutableListOf<IPatient>()
 
 
-    fun setData(patients: List<IPatient>) {
+    override fun setData(items: List<PatientItem>) {
         this.patients.clear()
-        this.patients.addAll(patients)
+        this.patients.addAll(items)
+        notifyDataSetChanged()
+    }
+
+    override fun addPage(items: List<PatientItem>) {
+        this.patients.addAll(items)
         notifyDataSetChanged()
     }
 

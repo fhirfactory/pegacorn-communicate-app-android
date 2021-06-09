@@ -6,7 +6,7 @@ import android.text.TextWatcher
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import im.vector.R
-import im.vector.health.directory.BaseDirectoryFragment
+import im.vector.health.directory.shared.BaseDirectoryFragment
 import im.vector.health.directory.RoomClickListener
 import kotlinx.android.synthetic.main.fragment_create_chat.*
 

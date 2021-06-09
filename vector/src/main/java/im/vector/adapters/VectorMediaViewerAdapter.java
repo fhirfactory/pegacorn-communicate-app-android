@@ -61,7 +61,6 @@ import java.util.List;
 import im.vector.R;
 import im.vector.health.microservices.Interfaces.IPatient;
 import im.vector.health.microservices.Mock.MockPatient;
-import im.vector.health.patient.DemoPatient;
 import im.vector.health.patient.PatientAdapter;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.view.PieFractionView;
@@ -442,7 +441,7 @@ public class VectorMediaViewerAdapter extends PagerAdapter {
         ArrayList<IPatient> patients = new ArrayList<>();
         patients.add(new MockPatient("Lance Christie", "12345678", new Date()));
         patients.add(new MockPatient("Mark Hunter", "12345678", new Date()));
-        adapter.setData(patients);
+        //adapter.setData(patients);
 
         final SlidableMediaInfo mediaInfo = mMediasMessagesList.get(position);
         String mediaUrl = mediaInfo.mMediaUrl;

@@ -166,7 +166,7 @@ class PatientTagFragment : BaseActFragment(), PatientClickListener {
 
     private fun subscribeUI() {
         viewModel.patients.observe(viewLifecycleOwner, Observer { patientList ->
-            patientAdapter.setData(patientList)
+            //patientAdapter.setData(patientList)
         })
 
         viewModel.designations.observe(viewLifecycleOwner, Observer { designations ->
