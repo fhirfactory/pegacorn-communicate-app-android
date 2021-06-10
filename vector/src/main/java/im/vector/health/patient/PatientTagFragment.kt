@@ -41,7 +41,6 @@ class PatientTagFragment : BaseActFragment(), PatientClickListener {
     private var LOG_TAG = "PatientTagFragment"
     private lateinit var viewModel: PatientTagViewModel
     private var simpleFragmentActivityListener: SimpleFragmentActivityListener? = null
-    private lateinit var patientAdapter: PatientAdapter
     private lateinit var designationAdapter: DropDownAdapter
     private lateinit var patientSelectionFragment: DirectoryPatientFragment
     private var mMediasHelper: VectorMessagesAdapterMediasHelper? = null
@@ -115,7 +114,6 @@ class PatientTagFragment : BaseActFragment(), PatientClickListener {
 //        patientsFragmentContainer.adapter = patientAdapter
 
         subscribeUI()
-        viewModel.prepareFakePatientData()
         viewModel.getDesignations()
 
         cross.setOnClickListener {
