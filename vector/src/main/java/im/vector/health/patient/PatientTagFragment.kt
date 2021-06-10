@@ -19,6 +19,7 @@ import im.vector.R
 import im.vector.activity.SimpleFragmentActivity
 import im.vector.activity.SimpleFragmentActivityListener
 import im.vector.adapters.VectorMessagesAdapterMediasHelper
+import im.vector.health.directory.patient.DirectoryPatientFragment
 import im.vector.health.directory.role.DropDownAdapter
 import im.vector.health.directory.role.DropDownItem
 import im.vector.home.BaseActFragment
@@ -42,6 +43,7 @@ class PatientTagFragment : BaseActFragment(), PatientClickListener {
     private var simpleFragmentActivityListener: SimpleFragmentActivityListener? = null
     private lateinit var patientAdapter: PatientAdapter
     private lateinit var designationAdapter: DropDownAdapter
+    private lateinit var patientSelectionFragment: DirectoryPatientFragment
     private var mMediasHelper: VectorMessagesAdapterMediasHelper? = null
 
 
@@ -108,9 +110,9 @@ class PatientTagFragment : BaseActFragment(), PatientClickListener {
             progressBar.visibility = GONE
             Glide.with(this).load(if (viewModel.fileLocation == null) viewModel.mediaMessageArray?.get(0)?.uri else viewModel.fileLocation).into(imageView)
         }
-        patientsRecyclerView.setHasFixedSize(true)
-        patientAdapter = PatientAdapter(this)
-        patientsRecyclerView.adapter = patientAdapter
+//        patientsFragmentContainer.setHasFixedSize(true)
+//        patientAdapter = PatientAdapter(this)
+//        patientsFragmentContainer.adapter = patientAdapter
 
         subscribeUI()
         viewModel.prepareFakePatientData()
@@ -130,10 +132,9 @@ class PatientTagFragment : BaseActFragment(), PatientClickListener {
                 ) { newText ->
                     newText?.let {
                         if (it.isEmpty()) {
-                            //so that nothing comes up, possibly temporary
-                            viewModel.filterPatient("###########")
+                            patientSelectionFragment.filter(null)
                         } else if (it.length > 2) {
-                            viewModel.filterPatient(it)
+                            patientSelectionFragment.filter(it)
                         }
                     }
                 })
@@ -153,6 +154,13 @@ class PatientTagFragment : BaseActFragment(), PatientClickListener {
                 sendPatientBackToPreviousActivity()
             }
         }
+
+        patientSelectionFragment = DirectoryPatientFragment()
+        childFragmentManager.beginTransaction().apply {
+            add(R.id.patientsFragmentContainer,patientSelectionFragment)
+            commit()
+        }
+        patientSelectionFragment.patientClickedCallback = { onPatientClick(it) }
     }
 
     fun initMediaAdapterHelper() {
@@ -170,7 +178,7 @@ class PatientTagFragment : BaseActFragment(), PatientClickListener {
         })
 
         viewModel.designations.observe(viewLifecycleOwner, Observer { designations ->
-            //designationAdapter.addData(designations)
+            designationAdapter.addData(designations)
         })
 
         viewModel.selectedPatient.observe(viewLifecycleOwner, Observer { patient ->
@@ -179,7 +187,7 @@ class PatientTagFragment : BaseActFragment(), PatientClickListener {
                 cross.visibility = GONE
                 designationLayout.visibility = GONE
                 searchInputLayout.visibility = VISIBLE
-                patientsRecyclerView.visibility = VISIBLE
+                patientsFragmentContainer.visibility = VISIBLE
                 saveButton.isEnabled = true
                 viewModel.selectedDesignation = null
             } else {
@@ -187,7 +195,7 @@ class PatientTagFragment : BaseActFragment(), PatientClickListener {
                 simpleFragmentActivityListener?.hideKeyboard()
                 saveButton.isEnabled = false
                 searchInputLayout.visibility = GONE
-                patientsRecyclerView.visibility = GONE
+                patientsFragmentContainer.visibility = GONE
                 designationLayout.visibility = VISIBLE
                 selectedPatient.visibility = VISIBLE
                 cross.visibility = VISIBLE

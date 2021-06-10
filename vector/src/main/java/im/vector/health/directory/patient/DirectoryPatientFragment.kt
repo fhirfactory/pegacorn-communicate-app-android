@@ -10,10 +10,13 @@ import im.vector.health.patient.PatientItem
 import im.vector.health.patient.PatientViewHolder
 
 class DirectoryPatientFragment: StandardDirectoryFragment<PatientAdapter,PatientViewHolder,PatientItem>() {
+
+    var patientClickedCallback: ((IPatient) -> Unit)? = null
+
     override fun constructAdapter(context: Context, selectable: Boolean): PatientAdapter {
         return PatientAdapter(object: PatientClickListener{
             override fun onPatientClick(patient: IPatient) {
-                TODO("Not yet implemented")
+                patientClickedCallback?.let { it(patient) }
             }
         })
     }

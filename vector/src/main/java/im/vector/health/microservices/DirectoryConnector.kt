@@ -387,7 +387,7 @@ class DirectoryConnector: IDirectoryServiceProvider {
             .take(pageSize)
             .map { MockPatient("Patient "+it.toString(), it.toString(), Date()) }
 
-        callback(final,list.count())
+        callback(final,filtered.count())
     }
 
     override fun GetPractitioner(id: String, callback: (IPractitioner?) -> Unit) = getItemFromID(getDirectoryServices().getPractitioner(id)) {

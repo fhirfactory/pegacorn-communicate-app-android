@@ -26,7 +26,7 @@ class DirectoryFragment : BaseActFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        pager.offscreenPageLimit = 2
+        pager.offscreenPageLimit = fragments.size - 1
         pager.adapter = DirectoryPagerAdapter(childFragmentManager)
         tabLayout.setupWithViewPager(pager)
         activity?.let { activity ->
@@ -62,9 +62,7 @@ class DirectoryFragment : BaseActFragment() {
 
     override fun onFilter(pattern: String?, listener: OnFilterListener?) {
         //TODO("Not yet implemented")
-        fragments.forEach { fragment ->
-            fragment.value.filter(pattern)
-        }
+        fragments[DIRECTORY_FRAGMENTS.values()[pager.currentItem]]?.filter(pattern)
         listener?.onFilterDone(0)
     }
 

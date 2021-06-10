@@ -3,10 +3,8 @@ package im.vector.health.directory.shared
 import android.content.Context
 import android.os.Bundle
 import android.view.Menu
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SimpleItemAnimator
+import android.view.View
+import androidx.recyclerview.widget.*
 import im.vector.R
 import im.vector.fragments.AbsHomeFragment
 import kotlinx.android.synthetic.main.fragment_directory_list.*
@@ -56,21 +54,30 @@ abstract class StandardDirectoryFragment<Adapter,ViewHolder : RecyclerView.ViewH
         TODO("Not yet implemented")
     }
 
-    fun initializeList() {
-        val selectable = arguments?.getBoolean(SELECTABLE, false) ?: false
-        listItemAdapter = constructAdapter(requireContext(),selectable)
+    fun firstLoadListSetup() {
         (listView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         listView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         listView.layoutManager = LinearLayoutManager(requireContext())
         listView.adapter = listItemAdapter
         listView.setHasFixedSize(true)
+        initializeList()
+    }
 
+    fun initializeList() {
         listView.scrollToPosition(0)
 
+        loadNumber = 0
+        listItemAdapter.setData(ArrayList())
         loading = false
         page = -1
         paginate()
         setupScrollListener()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        listView.invalidate()
+        listView.adapter = listItemAdapter
     }
 
     abstract fun constructAdapter(context: Context, selectable: Boolean):Adapter
@@ -88,12 +95,15 @@ abstract class StandardDirectoryFragment<Adapter,ViewHolder : RecyclerView.ViewH
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         completeActivityCreation()
-        initializeList()
+        val selectable = arguments?.getBoolean(SELECTABLE, false) ?: false
+        listItemAdapter = constructAdapter(requireContext(),selectable)
+        firstLoadListSetup()
     }
 
     var page = -1;
     var loading = false;
     var pageSize = 20;
+    var loadNumber = 0
 
     fun paginate() {
         if (!loading) {
@@ -104,21 +114,24 @@ abstract class StandardDirectoryFragment<Adapter,ViewHolder : RecyclerView.ViewH
             if (overHalfway || listView.height == 0) {
                 page += 1
                 loading = true;
+                loadNumber += 1
+                val request = loadNumber
                 context?.let {
                     if (!favourites) {
                         getData(page, pageSize, filter) { res, count ->
-                            setHeader(header, getHeaderText(count,favourites))
+                            if (loadNumber != request || header == null) return@getData
                             res?.let {
-                                listItemAdapter.addPage(it)
+                                setHeader(header, getHeaderText(count,favourites))
+                                if (page == 0) listItemAdapter.setData(it) else listItemAdapter.addPage(it)
                                 loading = false
                             }
                         }
                     } else {
                         getDataFavourites(page, pageSize, filter) { res, count ->
-                            setHeader(header, getHeaderText(count,favourites))
-
+                            if (loadNumber != request || header == null) return@getDataFavourites
                             res?.let {
-                                listItemAdapter.addPage(it)
+                                setHeader(header, getHeaderText(count,favourites))
+                                if (page == 0) listItemAdapter.setData(it) else listItemAdapter.addPage(it)
                                 loading = false
                             }
                         }
