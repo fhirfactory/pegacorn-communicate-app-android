@@ -3,7 +3,7 @@ package im.vector.health.patient
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import im.vector.health.directory.role.DropDownItem
-import im.vector.health.microservices.Interfaces.IPatient
+import im.vector.health.microservices.interfaces.IPatient
 import org.matrix.androidsdk.MXSession
 import org.matrix.androidsdk.data.RoomMediaMessage
 import org.matrix.androidsdk.rest.model.Event

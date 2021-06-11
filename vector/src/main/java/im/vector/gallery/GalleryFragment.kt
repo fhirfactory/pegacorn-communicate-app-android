@@ -13,7 +13,7 @@ import im.vector.dialogs.DialogListItem.*
 import im.vector.dialogs.DialogSendItemAdapter
 import im.vector.fragments.AbsHomeFragment
 import im.vector.fragments.VectorSearchRoomFilesListFragment
-import im.vector.health.microservices.Interfaces.IPatient
+import im.vector.health.microservices.interfaces.IPatient
 import im.vector.health.patient.PatientTagActivity
 import im.vector.health.patient.PatientTagActivity.Companion.intent
 import im.vector.health.patient.PatientTagFragment

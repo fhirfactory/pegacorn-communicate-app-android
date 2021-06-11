@@ -140,7 +140,7 @@ import im.vector.view.VectorPendingCallView;
 import im.vector.widgets.Widget;
 import im.vector.widgets.WidgetsManager;
 import im.vector.widgets.model.JitsiWidgetProperties;
-import im.vector.health.microservices.Interfaces.IPatient;
+import im.vector.health.microservices.interfaces.IPatient;
 import kotlin.Unit;
 
 import static im.vector.health.patient.PatientTagActivity.ROOM_MEDIA_MESSAGE_ARRAY_EXTRA;

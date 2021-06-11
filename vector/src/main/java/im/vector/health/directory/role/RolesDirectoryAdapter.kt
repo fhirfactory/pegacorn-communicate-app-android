@@ -14,10 +14,8 @@ import im.vector.Matrix
 import im.vector.R
 import im.vector.health.directory.role.model.PractitionerRoleItem
 import im.vector.health.directory.shared.IStandardDirectoryAdapter
-import im.vector.health.microservices.DirectoryConnector
 import im.vector.health.microservices.APIModel.FavouriteTypes
 import im.vector.health.microservices.DirectoryServicesSingleton
-import im.vector.health.microservices.Interfaces.IPractitionerRole
 import im.vector.util.VectorUtils
 import im.vector.view.VectorCircularImageView
 import kotlinx.android.synthetic.main.item_directory_people.view.favoriteIcon

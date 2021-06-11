@@ -1480,7 +1480,7 @@ public class VectorMessagesAdapter extends AbstractMessagesAdapter {
             EventDisplay display = new RiotEventDisplay(mContext);
             notice = row.getText(null, display);
 
-            if (msg.type.equals(EVENT_TYPE_STATE_ROOM_POWER_LEVELS)) {
+            if (msg.type.equals(EVENT_TYPE_STATE_ROOM_POWER_LEVELS) && msg.prev_content != null) {
                 JsonObject previous = msg.prev_content.getAsJsonObject().get("users").getAsJsonObject();
                 JsonObject current = msg.contentJson.getAsJsonObject().get("users").getAsJsonObject();
                 String userID = null;

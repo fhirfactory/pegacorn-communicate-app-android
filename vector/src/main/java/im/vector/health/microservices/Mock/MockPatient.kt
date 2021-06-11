@@ -1,6 +1,6 @@
-package im.vector.health.microservices.Mock
+package im.vector.health.microservices.mock
 
-import im.vector.health.microservices.Interfaces.IPatient
+import im.vector.health.microservices.interfaces.IPatient
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 

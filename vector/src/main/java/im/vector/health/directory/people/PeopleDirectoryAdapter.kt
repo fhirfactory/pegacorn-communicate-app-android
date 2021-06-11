@@ -1,6 +1,7 @@
 package im.vector.health.directory.people
 
 import android.content.Context
+import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import im.vector.adapters.VectorParticipantsAdapter
 import im.vector.health.directory.people.model.PractitionerItem
 import im.vector.health.directory.role.OnDataSetChange
 import im.vector.health.directory.shared.IStandardDirectoryAdapter
+import im.vector.health.directory.shared.MatrixChatActionHandler
 import im.vector.health.microservices.APIModel.FavouriteTypes
 import im.vector.health.microservices.DirectoryServicesSingleton
 import im.vector.ui.themes.ThemeUtils.getColor
@@ -27,9 +29,12 @@ import kotlinx.android.synthetic.main.item_directory_people.view.officialName
 import kotlinx.android.synthetic.main.item_directory_people.view.selected
 import kotlinx.android.synthetic.main.item_directory_role.view.*
 import org.matrix.androidsdk.MXSession
+import kotlinx.android.synthetic.main.item_directory_people.view.beginChatIcon as beginChatIcon
+import kotlinx.android.synthetic.main.item_directory_people.view.voiceCallIcon as beginVoiceCallIcon
+import kotlinx.android.synthetic.main.item_directory_people.view.videoCallIcon as beginVideoCallIcon
 
 
-class PeopleDirectoryAdapter(val context: Context, private val onClickListener: PeopleClickListener, private val selectable: Boolean = false) :
+class PeopleDirectoryAdapter(val context: Context, private val onClickListener: PeopleClickListener, private val selectable: Boolean = false, private val matrixHandler: MatrixChatActionHandler) :
         RecyclerView.Adapter<PeopleDirectoryAdapter.PeopleViewHolder>(), OnDataSetChange, IStandardDirectoryAdapter<PractitionerItem> {
     private val people = mutableListOf<PractitionerItem>()
     var mSession: MXSession? = null
@@ -62,6 +67,10 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
         var roleText: TextView? = null
         var statusText: TextView? = null
 
+        var chatIcon: ImageView? = null
+        var voiceCallIcon: ImageView? = null
+        var videoCallIcon: ImageView? = null
+
         init {
             avatar = itemView.avatar
             favouriteButton = itemView.favoriteIcon
@@ -73,6 +82,10 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
             businessUnitText = itemView.businessUnitText
             statusText = itemView.statusText
             roleText = itemView.roleText
+            chatIcon = itemView.beginChatIcon
+            voiceCallIcon = itemView.beginVoiceCallIcon
+            videoCallIcon = itemView.beginVideoCallIcon
+
         }
 
         fun updateFavourite() {
@@ -87,14 +100,15 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
             VectorUtils.loadRoomAvatar(context, session, avatar, people)
             selectionRadioImageView?.setImageResource(if (selection == true) R.drawable.ic_radio_button_checked else R.drawable.ic_radio_button_unchecked)
             officialName?.text = people.GetName()
-            //jobTitle?.text = people.jobTitle
-            //organisationText?.text = "Organisation: ${people.organisations}"
-            //businessUnitText?.text = "Business Unit: ${people.businessUnits}"
+            jobTitle?.text = people.GetJobTitle()
+            organisationText?.text = "Organisation: ${people.GetOrganization()}"
+            businessUnitText?.text = "Business Unit: ${people.GetBusinessUnit()}"
             roleText?.text = "Role: some role"
             statusText?.text = "online"
 
             if (people.expanded) {
                 expandableIcon?.animate()?.setDuration(200)?.rotation(180F)
+
                 organisationText?.visibility = View.VISIBLE
                 businessUnitText?.visibility = View.VISIBLE
             } else {
@@ -104,12 +118,29 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
             }
             expandableIcon?.setOnClickListener {
                 people.expanded = !people.expanded
+
+                //This is needed, otherwise when we set the visibility to VISIBLE from GONE, Android gets confused and doesn't actually make the TextViews visible.
+                organisationText?.visibility = View.INVISIBLE
+                businessUnitText?.visibility = View.INVISIBLE
+
                 onDataSetChange.onDataChange(position)
             }
 
             DirectoryServicesSingleton.Instance().CheckFavourite(FavouriteTypes.Practitioner,people.GetID()) {
                 this.favourite = it
                 this.updateFavourite()
+            }
+
+            chatIcon?.setOnClickListener {
+                matrixHandler.startChat(people.GetMatrixID())
+            }
+
+            videoCallIcon?.setOnClickListener {
+                matrixHandler.call(true,people.GetMatrixID())
+            }
+
+            voiceCallIcon?.setOnClickListener {
+                matrixHandler.call(false,people.GetMatrixID())
             }
 
             favouriteButton?.setOnClickListener {

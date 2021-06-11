@@ -14,8 +14,7 @@ import im.vector.health.directory.role.OnDataSetChange
 import im.vector.health.directory.role.RoleClickListener
 import im.vector.health.directory.role.RoleViewHolder
 import im.vector.health.directory.role.model.PractitionerRoleItem
-import im.vector.health.microservices.Interfaces.IPractitioner
-import im.vector.health.microservices.Interfaces.IPractitionerRole
+import im.vector.health.microservices.interfaces.IPractitioner
 import im.vector.ui.themes.ThemeUtils
 import kotlinx.android.synthetic.main.item_role_detail_category1.view.*
 import org.matrix.androidsdk.MXSession
@@ -65,9 +64,13 @@ class PeopleDetailAdapter(val context: Context, private val onClickListener: Rol
 
     fun setData(people: IPractitioner) {
         this.models.clear()
+        people.GetEmailAddress()?.let { emailAddress ->
+            this.models.add(PeopleDetailAdapterModel(emailAddress, null, TYPE_EMAIL))
+        }
+        people.GetPhoneNumber()?.let { phoneNumber ->
+            this.models.add(PeopleDetailAdapterModel(phoneNumber, null, TYPE_PHONE))
+        }
 
-        this.models.add(PeopleDetailAdapterModel("something@act.gov.au", null, TYPE_EMAIL))
-        this.models.add(PeopleDetailAdapterModel("0455552522", null, TYPE_PHONE))
         notifyDataSetChanged()
     }
 

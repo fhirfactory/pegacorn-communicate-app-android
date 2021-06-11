@@ -26,7 +26,7 @@ import im.vector.home.BaseActFragment
 import im.vector.health.patient.PatientTagActivity.Companion.FILE_LOCATION_EXTRA
 import im.vector.health.patient.PatientTagActivity.Companion.ROOM_EVENT_EXTRA
 import im.vector.health.patient.PatientTagActivity.Companion.ROOM_MEDIA_MESSAGE_ARRAY_EXTRA
-import im.vector.health.microservices.Interfaces.IPatient
+import im.vector.health.microservices.interfaces.IPatient
 import kotlinx.android.synthetic.main.fragment_patient_tag.*
 import kotlinx.android.synthetic.main.item_patient.*
 import kotlinx.android.synthetic.main.layout_designation.*

@@ -10,7 +10,8 @@
 <!--    <string name="default_hs_server_url" translatable="false">https://matrix.org</string>-->
     <string name="matrix_org_server_url" translatable="false">https://lingo-server.health.test.act.gov.au</string>
     <string name="default_hs_server_url" translatable="false">https://lingo-server.health.test.act.gov.au</string>
-    <string name="microservice_server_url" translatable="false">https://lingo-server.health.test.act.gov.au/</string>
+<!--    <string name="microservice_server_url" translatable="false">https://lingo-server.health.test.act.gov.au/</string>-->
+    <string name="microservice_server_url" translatable="false">http://10.0.0.4:12121/</string>
     <string name="role_selector_url" translatable="false">https://lingo-server.health.test.act.gov.au/role-selection/</string>
     <string name="role_selector_redirect_link" translatable="false">https://lingo.health.test.act.gov.au/</string>
     <string name="sso_redirect_url" translatable="false">lingo://login</string>

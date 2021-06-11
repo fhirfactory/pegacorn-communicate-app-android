@@ -8,13 +8,13 @@ interface DirectoryServices {
     fun getPractitionerRoles(@Query("pageSize") pageSize: Int, @Query("page") page: Int): Call<List<FHIRPractitionerRole>>
 
     @GET("pegacorn/operations/directory/r1/PractitionerRole/search")
-    fun getPractitionerRoles(@Query("pageSize") pageSize: Int, @Query("page") page: Int, @Query("displayName") displayName: String): Call<List<FHIRPractitionerRole>>
+    fun getPractitionerRoles(@Query("pageSize") pageSize: Int, @Query("page") page: Int, @Query("allName") allName: String): Call<List<FHIRPractitionerRole>>
 
     @GET("pegacorn/operations/directory/r1/Practitioner")
     fun getPractitioners(@Query("pageSize") pageSize: Int, @Query("page") page: Int): Call<List<FHIRPractitioner>>
 
     @GET("pegacorn/operations/directory/r1/Practitioner/search")
-    fun getPractitioners(@Query("pageSize") pageSize: Int, @Query("page") page: Int, @Query("displayName") displayName: String): Call<List<FHIRPractitioner>>
+    fun getPractitioners(@Query("pageSize") pageSize: Int, @Query("page") page: Int, @Query("allName") allName: String): Call<List<FHIRPractitioner>>
 
     @GET("pegacorn/operations/directory/r1/Practitioner/{id}")
     fun getPractitioner(@Path("id") userID: String): Call<FHIRDirectoryResponse<FHIRPractitioner>>
@@ -50,7 +50,7 @@ interface DirectoryServices {
     fun getHealthcareServices(@Query("pageSize") pageSize: Int, @Query("page") page: Int): Call<List<FHIRHealthcareService>>
 
     @GET("pegacorn/operations/directory/r1/HealthcareService/search")
-    fun getHealthcareServices(@Query("pageSize") pageSize: Int, @Query("page") page: Int, @Query("displayName") displayName: String): Call<List<FHIRHealthcareService>>
+    fun getHealthcareServices(@Query("pageSize") pageSize: Int, @Query("page") page: Int, @Query("allName") allName: String): Call<List<FHIRHealthcareService>>
 
     @GET("pegacorn/operations/directory/r1/HealthcareService/{id}")
     fun getHealthcareService(@Path("id") locationId: String): Call<FHIRDirectoryResponse<FHIRHealthcareService>>

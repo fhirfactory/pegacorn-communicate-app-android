@@ -59,8 +59,8 @@ import java.util.Date;
 import java.util.List;
 
 import im.vector.R;
-import im.vector.health.microservices.Interfaces.IPatient;
-import im.vector.health.microservices.Mock.MockPatient;
+import im.vector.health.microservices.interfaces.IPatient;
+import im.vector.health.microservices.mock.MockPatient;
 import im.vector.health.patient.PatientAdapter;
 import im.vector.util.SlidableMediaInfo;
 import im.vector.view.PieFractionView;

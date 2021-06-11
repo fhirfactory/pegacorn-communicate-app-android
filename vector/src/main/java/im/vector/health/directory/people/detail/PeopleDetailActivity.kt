@@ -8,50 +8,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.Matrix
 import im.vector.R
 import im.vector.activity.CommonActivityUtils
-import im.vector.activity.MXCActionBarActivity
-import im.vector.activity.VectorMemberDetailsActivity
-import im.vector.activity.VectorRoomActivity
 import im.vector.health.directory.role.RoleClickListener
 import im.vector.health.directory.role.detail.RoleDetailActivity
 import im.vector.health.directory.role.model.PractitionerRoleItem
-import im.vector.health.microservices.Interfaces.IPractitioner
+import im.vector.health.directory.shared.DirectoryDetailActivityWithMessaging
+import im.vector.health.microservices.DirectoryServicesSingleton
+import im.vector.health.microservices.interfaces.IPractitioner
 import im.vector.util.VectorUtils
 import kotlinx.android.synthetic.main.activity_people_detail.*
-import org.matrix.androidsdk.core.Log
-import org.matrix.androidsdk.core.callback.ApiCallback
-import org.matrix.androidsdk.core.model.MatrixError
-import java.util.*
 
-class PeopleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStackChangedListener, RoleClickListener {
+class PeopleDetailActivity : DirectoryDetailActivityWithMessaging(), FragmentManager.OnBackStackChangedListener, RoleClickListener {
     private lateinit var peopleDetailAdapter: PeopleDetailAdapter
 
     override fun getLayoutRes(): Int = R.layout.activity_people_detail
-
-    // direct message
-    /**
-     * callback for the creation of the direct message room
-     */
-    private val mCreateDirectMessageCallBack: ApiCallback<String> = object : ApiCallback<String> {
-        override fun onSuccess(roomId: String) {
-            val params: MutableMap<String, Any> = HashMap()
-            params[VectorRoomActivity.EXTRA_MATRIX_ID] = mSession.myUserId
-            params[VectorRoomActivity.EXTRA_ROOM_ID] = roomId
-            params[VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER] = true
-            CommonActivityUtils.goToRoomPage(this@PeopleDetailActivity, mSession, params)
-        }
-
-        override fun onMatrixError(e: MatrixError) {
-
-        }
-
-        override fun onNetworkError(e: Exception) {
-
-        }
-
-        override fun onUnexpectedError(e: Exception) {
-
-        }
-    }
 
     override fun initUiAndData() {
         configureToolbar()
@@ -64,9 +33,9 @@ class PeopleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStack
         }
         VectorUtils.loadRoomAvatar(this, session, avatar, people)
 
-        jobTitle.text = "Job title"
-        organisation.text = "Organization"
-        businessUnit.text = "Business Unit"
+        jobTitle.text = people.GetJobTitle()
+        organisation.text = people.GetOrganization()
+        businessUnit.text = people.GetBusinessUnit()
 
         peopleDetailAdapter = PeopleDetailAdapter(this, if (roleClickable) this else null)
         peopleRecyclerview.layoutManager = LinearLayoutManager(this)
@@ -74,17 +43,41 @@ class PeopleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStack
         peopleRecyclerview.adapter = peopleDetailAdapter
         peopleDetailAdapter.setData(people)
 
-        people.GetRoles{roles ->
-            peopleDetailAdapter.setData(roles.map { PractitionerRoleItem(it) })
+        //we need to get the fully populated person object, rather than the version without practitioner roles
+        DirectoryServicesSingleton.Instance().GetPractitioner(people.GetID()) {
+            it?.let { person ->
+                person.GetRoles{roles ->
+                    peopleDetailAdapter.setData(roles.map { role -> PractitionerRoleItem(role) })
+                }
+            }
         }
 
 
-        callIcon.setOnClickListener { }
+
+        callIcon.setOnClickListener {
+            call(false, people.GetMatrixID())
+        }
         chatIcon.setOnClickListener {
-            //enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR)
-            mSession.createDirectMessageRoom(people.GetMatrixID(), mCreateDirectMessageCallBack)
+            enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR)
+            startChat(people.GetMatrixID())
         }
-        videoCallIcon.setOnClickListener { }
+        videoCallIcon.setOnClickListener {
+            call(true, people.GetMatrixID())
+        }
+    }
+
+    /**
+     * Helper method to enable/disable the progress bar view used when a
+     * remote server action is on progress.
+     *
+     * @param aIsProgressBarDisplayed true to show the progress bar screen, false to hide it
+     */
+    private fun enableProgressBarView(aIsProgressBarDisplayed: Boolean) {
+        if (aIsProgressBarDisplayed) {
+            showWaitingView()
+        } else {
+            hideWaitingView()
+        }
     }
 
     override fun onDestroy() {

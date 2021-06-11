@@ -1,4 +1,4 @@
-package im.vector.health.microservices.Interfaces
+package im.vector.health.microservices.interfaces
 
 import im.vector.health.microservices.APIModel.FavouriteTypes
 

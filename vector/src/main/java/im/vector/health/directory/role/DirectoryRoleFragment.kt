@@ -8,8 +8,7 @@ import im.vector.extensions.withArgs
 import im.vector.health.TemporaryRoom
 import im.vector.health.directory.shared.StandardDirectoryFragment
 import im.vector.health.microservices.DirectoryServicesSingleton
-import im.vector.health.microservices.Interfaces.IPractitioner
-import im.vector.health.microservices.Interfaces.IPractitionerRole
+import im.vector.health.microservices.interfaces.IPractitionerRole
 
 
 class DirectoryRoleFragment: StandardDirectoryFragment<RolesDirectoryAdapter, RoleViewHolder, PractitionerRoleItem>() {

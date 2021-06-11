@@ -1,6 +1,6 @@
 package im.vector.health.microservices
 
-import im.vector.health.microservices.Interfaces.IDirectoryServiceProvider
+import im.vector.health.microservices.interfaces.IDirectoryServiceProvider
 
 class DirectoryServicesSingleton {
     companion object {

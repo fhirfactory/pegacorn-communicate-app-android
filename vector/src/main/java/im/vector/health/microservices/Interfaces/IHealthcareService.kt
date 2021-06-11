@@ -1,4 +1,4 @@
-package im.vector.health.microservices.Interfaces
+package im.vector.health.microservices.interfaces
 
 import android.os.Parcelable
 

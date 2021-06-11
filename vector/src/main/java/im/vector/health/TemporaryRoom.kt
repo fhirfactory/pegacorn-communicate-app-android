@@ -1,7 +1,6 @@
 package im.vector.health
 
-import android.os.Parcelable
-import im.vector.health.microservices.Interfaces.IPractitioner
-import im.vector.health.microservices.Interfaces.IPractitionerRole
+import im.vector.health.microservices.interfaces.IPractitioner
+import im.vector.health.microservices.interfaces.IPractitionerRole
 
 class TemporaryRoom(val people: IPractitioner?, val role: IPractitionerRole?)

@@ -29,5 +29,5 @@ class FHIRPractitionerRole(
         @JvmField
         var roleHistory: FHIRRoleHistory?,
         @JvmField
-        var activePractitionerSet: List<String>
+        var activePractitionerSet: List<FHIRPractitioner>
 ) : Parcelable

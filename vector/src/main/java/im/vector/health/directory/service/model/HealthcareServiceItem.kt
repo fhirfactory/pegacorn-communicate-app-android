@@ -1,7 +1,6 @@
 package im.vector.health.directory.service.model
 
-import android.os.Parcelable
-import im.vector.health.microservices.Interfaces.IHealthcareService
+import im.vector.health.microservices.interfaces.IHealthcareService
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize

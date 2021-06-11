@@ -1,8 +1,7 @@
 package im.vector.health.patient
 
-import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
-import im.vector.health.microservices.Interfaces.IPatient
+import im.vector.health.microservices.interfaces.IPatient
 import java.util.*
 
 @Parcelize

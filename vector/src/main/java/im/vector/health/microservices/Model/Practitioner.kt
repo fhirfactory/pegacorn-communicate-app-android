@@ -1,41 +1,27 @@
-package im.vector.health.microservices.Model
+package im.vector.health.microservices.model
 
 import android.os.Parcelable
 import im.vector.health.microservices.APIModel.FHIRPractitioner
-import im.vector.health.microservices.APIModel.FHIRPractitionerRole
-import im.vector.health.microservices.DirectoryConnector
-import im.vector.health.microservices.DirectoryServicesSingleton
-import im.vector.health.microservices.Interfaces.IPractitioner
-import im.vector.health.microservices.Interfaces.IPractitionerRole
+import im.vector.health.microservices.interfaces.IPractitioner
+import im.vector.health.microservices.interfaces.IPractitionerRole
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 open class Practitioner(var innerPractitioner: FHIRPractitioner): IPractitioner, Parcelable {
-
     override fun GetName(): String = innerPractitioner.displayName
-    override fun GetRoles(callback: (List<IPractitionerRole>) -> Unit) {
-        FetchRoles{practitionerRoles ->
-            val roles = practitionerRoles.map { it }
-            callback(roles)
-        }
+    override fun GetRoles(callback: (List<IPractitionerRole>) -> Unit) = callback(innerPractitioner.currentPractitionerRoles.map { PractitionerRole(it) })
+    override fun GetJobTitle(): String = innerPractitioner.mainJobTitle ?: ""
+    override fun GetBusinessUnit(): String {
+        if (innerPractitioner.organisationStructure.count() > 4) return innerPractitioner.organisationStructure[4].value
+        return ""
     }
 
-    fun FetchRoles(callback: (ArrayList<IPractitionerRole>) -> Unit){
-        FetchRolesRecursive(callback, ArrayList(),0)
+    override fun GetOrganization(): String {
+        if (innerPractitioner.organisationStructure.count() > 4) return innerPractitioner.organisationStructure[1].value
+        return ""
     }
-    private fun FetchRolesRecursive(callback: (ArrayList<IPractitionerRole>) -> Unit, list: ArrayList<IPractitionerRole>, index: Int) {
-        if (index >= innerPractitioner.currentPractitionerRoles.count()) {
-            callback(list)
-            return
-        }
-        DirectoryServicesSingleton.Instance().GetPractitionerRole(innerPractitioner.currentPractitionerRoles[index].role) {
-            it?.let {
-                list.add(it)
-            }
-            FetchRolesRecursive(callback, list, index + 1)
-        }
-    }
-
     override fun GetID(): String = innerPractitioner.simplifiedID
     override fun GetMatrixID(): String = innerPractitioner.matrixId
+    override fun GetEmailAddress(): String? = innerPractitioner.identifiers.find { x -> x.type == "EmailAddress" }?.value
+    override fun GetPhoneNumber(): String? = innerPractitioner.contactPoints.find { x -> x.type == "MOBILE" }?.value
 }

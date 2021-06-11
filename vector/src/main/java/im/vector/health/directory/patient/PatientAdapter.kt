@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.R
 import im.vector.health.directory.shared.IStandardDirectoryAdapter
-import im.vector.health.microservices.Interfaces.IPatient
+import im.vector.health.microservices.interfaces.IPatient
 import kotlinx.android.synthetic.main.item_patient.view.*
 
 

@@ -1,8 +1,8 @@
 package im.vector.health.directory.role.model
 
 import android.os.Parcelable
-import im.vector.health.microservices.Interfaces.IPractitioner
-import im.vector.health.microservices.Interfaces.IPractitionerRole
+import im.vector.health.microservices.interfaces.IPractitioner
+import im.vector.health.microservices.interfaces.IPractitionerRole
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize

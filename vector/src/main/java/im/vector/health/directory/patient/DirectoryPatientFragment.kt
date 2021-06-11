@@ -3,7 +3,7 @@ package im.vector.health.directory.patient
 import android.content.Context
 import im.vector.health.directory.shared.StandardDirectoryFragment
 import im.vector.health.microservices.DirectoryServicesSingleton
-import im.vector.health.microservices.Interfaces.IPatient
+import im.vector.health.microservices.interfaces.IPatient
 import im.vector.health.patient.PatientAdapter
 import im.vector.health.patient.PatientClickListener
 import im.vector.health.patient.PatientItem

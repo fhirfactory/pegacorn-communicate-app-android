@@ -7,10 +7,11 @@ import im.vector.extensions.withArgs
 import im.vector.health.TemporaryRoom
 import im.vector.health.directory.people.model.PractitionerItem
 import im.vector.health.directory.shared.StandardDirectoryFragment
+import im.vector.health.directory.shared.StandardDirectoryFragmentWithMessaging
 import im.vector.health.microservices.DirectoryServicesSingleton
-import im.vector.health.microservices.Interfaces.IPractitioner
+import im.vector.health.microservices.interfaces.IPractitioner
 
-class DirectoryPeopleFragment: StandardDirectoryFragment<PeopleDirectoryAdapter, PeopleDirectoryAdapter.PeopleViewHolder, PractitionerItem>() {
+class DirectoryPeopleFragment: StandardDirectoryFragmentWithMessaging<PeopleDirectoryAdapter, PeopleDirectoryAdapter.PeopleViewHolder, PractitionerItem>() {
     companion object {
         fun newInstance(selectable: Boolean = false): DirectoryPeopleFragment {
             return DirectoryPeopleFragment().withArgs {
@@ -40,7 +41,7 @@ class DirectoryPeopleFragment: StandardDirectoryFragment<PeopleDirectoryAdapter,
             override fun onPeopleFavorite(directoryPeople: PractitionerItem) {
                 //TODO("Not yet implemented")
             }
-        }, selectable)
+        }, selectable, this)
     }
 
     override fun getHeaderText(count: Int, favourites: Boolean): String = (if (favourites) getString(R.string.total_number_of_favourite_people) else getString(R.string.total_number_of_people)) + " " + count.toString()

@@ -20,7 +20,11 @@ data class FHIRPractitioner (
         @JvmField
         var contactPoints: List<FHIRContactPoint>,
         @JvmField
-        var currentPractitionerRoles: List<FHIRSelectedPractitionerRole>,
+        var currentPractitionerRoles: List<FHIRPractitionerRole>,
         @JvmField
-        var matrixId: String
+        var matrixId: String,
+        @JvmField
+        var organisationStructure: List<FHIROrganizationItem>,
+        @JvmField
+        var mainJobTitle: String?
 ) : Parcelable

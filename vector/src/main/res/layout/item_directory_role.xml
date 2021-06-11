@@ -106,7 +106,7 @@
         app:layout_constraintTop_toTopOf="@+id/voiceCallIcon" />
 
     <ImageView
-        android:id="@+id/videoCallIcon2"
+        android:id="@+id/beginChatIcon"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginEnd="@dimen/layout_horizontal_margin_half"
@@ -243,8 +243,8 @@
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:layout_marginRight="@dimen/layout_horizontal_margin"
         android:text="@string/chat"
-        app:layout_constraintBottom_toBottomOf="@+id/videoCallIcon2"
+        app:layout_constraintBottom_toBottomOf="@+id/beginChatIcon"
         app:layout_constraintEnd_toStartOf="@+id/videoCallIcon"
-        app:layout_constraintTop_toTopOf="@+id/videoCallIcon2" />
+        app:layout_constraintTop_toTopOf="@+id/beginChatIcon" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

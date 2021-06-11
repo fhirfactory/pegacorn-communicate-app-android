@@ -74,11 +74,10 @@ import java.util.regex.Pattern;
 import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
-import im.vector.activity.VectorMemberDetailsActivity;
 import im.vector.adapters.ParticipantAdapterItem;
-import im.vector.health.microservices.Interfaces.IHealthcareService;
-import im.vector.health.microservices.Interfaces.IPractitioner;
-import im.vector.health.microservices.Interfaces.IPractitionerRole;
+import im.vector.health.microservices.interfaces.IHealthcareService;
+import im.vector.health.microservices.interfaces.IPractitioner;
+import im.vector.health.microservices.interfaces.IPractitionerRole;
 import im.vector.settings.VectorLocale;
 
 public class VectorUtils {

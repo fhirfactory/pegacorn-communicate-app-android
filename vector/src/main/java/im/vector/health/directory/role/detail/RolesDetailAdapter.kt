@@ -12,7 +12,7 @@ import im.vector.Matrix
 import im.vector.R
 import im.vector.health.directory.people.PeopleClickListener
 import im.vector.health.directory.people.model.PractitionerItem
-import im.vector.health.microservices.Interfaces.IPractitionerRole
+import im.vector.health.microservices.interfaces.IPractitionerRole
 import im.vector.util.VectorUtils
 import im.vector.view.VectorCircularImageView
 import kotlinx.android.synthetic.main.item_role_detail_category1.view.heading

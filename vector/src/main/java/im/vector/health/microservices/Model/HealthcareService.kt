@@ -1,8 +1,8 @@
-package im.vector.health.microservices.Model
+package im.vector.health.microservices.model
 
 import im.vector.health.microservices.APIModel.FHIRHealthcareService
 import im.vector.health.microservices.APIModel.FHIRTools
-import im.vector.health.microservices.Interfaces.IHealthcareService
+import im.vector.health.microservices.interfaces.IHealthcareService
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
