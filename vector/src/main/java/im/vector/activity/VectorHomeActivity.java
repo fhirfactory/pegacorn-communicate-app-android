@@ -2142,11 +2142,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             });
         }
 
-        TextView noRoleTextView = navigationView.findViewById(R.id.home_menu_main_matrix_no_role);
-        if (null != noRoleTextView) {
-            noRoleTextView.setText("No roles selected");
-        }
-
         RecyclerView roleRecyclerView = navigationView.findViewById(R.id.rolesRecyclerView);
 
         if (null != roleRecyclerView) {

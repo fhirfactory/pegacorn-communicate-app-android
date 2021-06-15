@@ -79,6 +79,7 @@
         android:layout_marginTop="16dp"
         android:textColor="@android:color/white"
         android:textSize="12sp"
+        android:text="@string/room_sliding_menu_no_roles_text"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/home_menu_main_matrix_id"
         tools:text="No roles currently selected" />

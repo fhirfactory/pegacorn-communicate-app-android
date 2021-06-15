@@ -626,6 +626,7 @@
     <string name="room_sliding_menu_privacy_policy">Privacy policy</string>
     <string name="room_sliding_menu_credit">Credits</string>
     <string name="room_sliding_menu_role">Roles</string>
+    <string name="room_sliding_menu_no_roles_text">No roles selected</string>
 
     <!-- Vector Settings -->
 
