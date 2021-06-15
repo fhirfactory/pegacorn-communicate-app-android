@@ -592,7 +592,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
      * Display the Floating Action Menu if it is required
      */
     private void showFloatingActionMenuIfRequired() {
-        if ((mCurrentMenuId == R.id.bottom_action_favourites) || (mCurrentMenuId == R.id.bottom_action_groups) || (mCurrentMenuId == R.id.bottom_action_rooms)) {
+        if ((mCurrentMenuId == R.id.bottom_action_favourites) /*|| (mCurrentMenuId == R.id.bottom_action_groups)*/ || (mCurrentMenuId == R.id.bottom_action_rooms)) {
             concealFloatingActionMenu();
         } else {
             revealFloatingActionMenu();
@@ -1029,14 +1029,14 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 mSearchView.setVisibility(View.GONE);
                 setActionBarTitle(R.string.calls_title);
                 break;
-            case R.id.bottom_action_groups:
+            /*case R.id.bottom_action_groups:
                 Log.d(LOG_TAG, "onNavigationItemSelected GROUPS");
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_GROUPS);
                 if (fragment == null) {
                     fragment = new CodeEventFragment();
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_GROUPS;
-                break;
+                break;*/
             /*case R.id.bottom_action_favourites:
                 Log.d(LOG_TAG, "onNavigationItemSelected ROLE");
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_ROLES);
@@ -1194,9 +1194,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 case R.id.bottom_action_rooms:
                     setQueryHint(R.string.home_filter_placeholder_rooms, R.string.search_chats);
                     break;
-                case R.id.bottom_action_groups:
+                /*case R.id.bottom_action_groups:
                     setQueryHint(R.string.home_filter_placeholder_groups, R.string.search_chats);
-                    break;
+                    break;*/
             }
         }
     }
@@ -1356,9 +1356,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             case R.id.bottom_action_rooms:
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_ROOMS);
                 break;
-            case R.id.bottom_action_groups:
+            /*case R.id.bottom_action_groups:
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_GROUPS);
-                break;
+                break;*/
 
         }
 
@@ -2400,10 +2400,10 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 }
             } else if (id == R.id.bottom_action_rooms) {
                 filterNormalRoomSet(filteredRoomIdsSet, directChatInvitations, roomSummaryByRoom);
-            } else if (id == R.id.bottom_action_groups) {
+            } /*else if (id == R.id.bottom_action_groups) {
                 // Display number of groups invitation in the badge of groups
                 roomCount = mSession.getGroupsManager().getInvitedGroups().size();
-            } else if (id == R.id.bottom_action_home) {
+            }*/ else if (id == R.id.bottom_action_home) {
                 for (Room room : roomSummaryByRoom.keySet()) {
                     if (!room.isInvited()) {
                         filteredRoomIdsSet.add(room.getRoomId());

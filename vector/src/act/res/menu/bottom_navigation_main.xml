@@ -34,6 +34,6 @@
         android:contentDescription="@string/bottom_action_groups"
         android:enabled="true"
         android:icon="@drawable/ic_notifications"
-        android:title="" />
+        android:title=""/>
 
 </menu>
