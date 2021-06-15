@@ -72,12 +72,17 @@ abstract class StandardDirectoryFragment<Adapter,ViewHolder : RecyclerView.ViewH
         page = -1
         paginate()
         setupScrollListener()
+        reloadList()
+    }
+
+    fun reloadList(){
+        listView.invalidate()
+        listView.adapter = listItemAdapter
     }
 
     override fun onResume() {
         super.onResume()
-        listView.invalidate()
-        listView.adapter = listItemAdapter
+        reloadList()
     }
 
     abstract fun constructAdapter(context: Context, selectable: Boolean):Adapter
@@ -125,6 +130,7 @@ abstract class StandardDirectoryFragment<Adapter,ViewHolder : RecyclerView.ViewH
                                 if (page == 0) listItemAdapter.setData(it) else listItemAdapter.addPage(it)
                                 loading = false
                             }
+                            if (page == 0) reloadList()
                         }
                     } else {
                         getDataFavourites(page, pageSize, filter) { res, count ->
@@ -134,8 +140,10 @@ abstract class StandardDirectoryFragment<Adapter,ViewHolder : RecyclerView.ViewH
                                 if (page == 0) listItemAdapter.setData(it) else listItemAdapter.addPage(it)
                                 loading = false
                             }
+                            if (page == 0) reloadList()
                         }
                     }
+
                 }
             }
         }

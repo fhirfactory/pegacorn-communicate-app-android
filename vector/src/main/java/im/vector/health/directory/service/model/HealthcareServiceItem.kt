@@ -8,5 +8,5 @@ class HealthcareServiceItem(val innerService: IHealthcareService, var expanded: 
     override fun GetLongName(): String = innerService.GetLongName()
     override fun GetShortName(): String = innerService.GetShortName()
     override fun GetID(): String = innerService.GetID()
-    override fun GetDescription(): String = innerService.GetDescription()
+    override fun GetOrganisationUnit(): String = innerService.GetOrganisationUnit()
 }

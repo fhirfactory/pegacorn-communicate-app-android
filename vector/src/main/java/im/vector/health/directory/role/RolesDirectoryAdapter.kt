@@ -148,7 +148,7 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         VectorUtils.loadRoomAvatar(context, session, avatar, role)
         heading?.visibility = if (showHeader) VISIBLE else GONE
         officialName?.text = role.GetLongName()
-        secondaryName?.text = role.GetShortName()
+        secondaryName?.text = role.GetOrgName()
         if(selection==null){
             selectionRadioImageView?.visibility = GONE
         } else {

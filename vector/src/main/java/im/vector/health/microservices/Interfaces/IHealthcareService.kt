@@ -6,5 +6,5 @@ interface IHealthcareService: Parcelable {
     fun GetLongName():String
     fun GetShortName():String
     fun GetID():String
-    fun GetDescription():String
+    fun GetOrganisationUnit():String
 }

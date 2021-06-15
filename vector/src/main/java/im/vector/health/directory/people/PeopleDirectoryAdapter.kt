@@ -103,7 +103,7 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
             jobTitle?.text = people.GetJobTitle()
             organisationText?.text = "Organisation: ${people.GetOrganization()}"
             businessUnitText?.text = "Business Unit: ${people.GetBusinessUnit()}"
-            roleText?.text = "Role: some role"
+            //roleText?.text = "Role: some role"
             statusText?.text = "online"
 
             if (people.expanded) {
@@ -141,6 +141,13 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
 
             voiceCallIcon?.setOnClickListener {
                 matrixHandler.call(false,people.GetMatrixID())
+            }
+
+            if (people.GetMatrixID() == mSession?.myUserId) {
+                voiceCallIcon?.isEnabled = false
+                videoCallIcon?.isEnabled = false
+                voiceCallIcon?.visibility = View.GONE
+                videoCallIcon?.visibility = View.GONE
             }
 
             favouriteButton?.setOnClickListener {

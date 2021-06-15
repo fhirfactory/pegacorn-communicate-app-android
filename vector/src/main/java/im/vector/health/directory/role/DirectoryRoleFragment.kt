@@ -49,7 +49,7 @@ class DirectoryRoleFragment: StandardDirectoryFragment<RolesDirectoryAdapter, Ro
     }
 
     override fun getDataFavourites(forPage: Int, withPageSize: Int, query: String?, addItem: (List<PractitionerRoleItem>?, Int) -> Unit) {
-        DirectoryServicesSingleton.Instance().GetPractitionerRoles(query, page, pageSize){ res, count ->
+        DirectoryServicesSingleton.Instance().GetPractitionerRoleFavourites(query, page, pageSize){ res, count ->
             addItem(res?.map { PractitionerRoleItem(it) }, count)
         }
     }

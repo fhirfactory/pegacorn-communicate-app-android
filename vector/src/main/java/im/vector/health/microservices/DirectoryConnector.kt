@@ -88,6 +88,60 @@ class DirectoryConnector: IDirectoryServiceProvider {
         if (name == null) listRoles(page,pageSize,callback)
     }
 
+    private fun listRoleFavourites(page: Int, pageSize: Int, callback: (List<PractitionerRole>?, Int) -> Unit) {
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl(baseURL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        // Create Service
+        val service = retrofit.create(DirectoryServices::class.java)
+        val response = service.getPractitionerRoleFavourites(practitionerId,pageSize,page)
+        response.enqueue(object : Callback<List<FHIRPractitionerRole>> {
+            override fun onFailure(call: Call<List<FHIRPractitionerRole>>, t: Throwable) {
+                //TODO("Not yet implemented")
+                println("")
+            }
+
+            override fun onResponse(call: Call<List<FHIRPractitionerRole>>, response: Response<List<FHIRPractitionerRole>>) {
+                //TODO("Not yet implemented")
+
+                val practitionerRoles = response.body()?.map { PractitionerRole(it) }
+                val count = response.headers().get("X-Total-Count") ?: "0"
+                callback(practitionerRoles,Integer.parseInt(count))
+            }
+
+        })
+    }
+    private fun getPractitionerRoleFavourites(page: Int, pageSize: Int, name:String?, callback: (List<IPractitionerRole>?, Int) -> Unit) {
+        name?.let {query ->
+            val retrofit = Retrofit.Builder()
+                .baseUrl(baseURL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+            // Create Service
+            val service = retrofit.create(DirectoryServices::class.java)
+            val response = service.getPractitionerRoleFavourites(practitionerId,pageSize,page,query)
+            response.enqueue(object : Callback<List<FHIRPractitionerRole>> {
+                override fun onFailure(call: Call<List<FHIRPractitionerRole>>, t: Throwable) {
+//                    AlertDialog.Builder(context).setTitle("Network Error").setMessage("Couldn't fetch practitionerRoles data from microservice. " + t.message).setPositiveButton("Ok"){ dialog, which ->
+//
+//                    }.create().show()
+                }
+
+                override fun onResponse(call: Call<List<FHIRPractitionerRole>>, response: Response<List<FHIRPractitionerRole>>) {
+                    val practitionerRoles = response.body()?.map { PractitionerRole(it) }
+                    val count = response.headers().get("X-Total-Count") ?: "0"
+                    callback(practitionerRoles,Integer.parseInt(count))
+                }
+
+            })
+        }
+        if (name == null) listRoleFavourites(page,pageSize,callback)
+    }
+
     private fun getPractitioners(page: Int, pageSize: Int, callback: (List<Practitioner>?, Int) -> Unit) {
 
         val retrofit = Retrofit.Builder()
@@ -137,6 +191,57 @@ class DirectoryConnector: IDirectoryServiceProvider {
             })
         }
         if (name == null) return getPractitioners(page,pageSize,callback)
+    }
+
+    private fun getPractitionerFavourites(page: Int, pageSize: Int, callback: (List<Practitioner>?, Int) -> Unit) {
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl(baseURL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        // Create Service
+        val service = retrofit.create(DirectoryServices::class.java)
+        val response = service.getPractitionerFavourites(practitionerId,pageSize,page)
+        response.enqueue(object : Callback<List<FHIRPractitioner>> {
+            override fun onFailure(call: Call<List<FHIRPractitioner>>, t: Throwable) {
+                //TODO("Handle failure more nicely")
+            }
+
+            override fun onResponse(call: Call<List<FHIRPractitioner>>, response: Response<List<FHIRPractitioner>>) {
+                //TODO("Not yet implemented")
+                val people = response.body()?.map { Practitioner(it) }
+                val count = response.headers().get("X-Total-Count") ?: "0"
+                callback(people,Integer.parseInt(count))
+            }
+
+        })
+    }
+    private fun getPractitionerFavourites(page: Int, pageSize: Int, name: String?, callback: (List<IPractitioner>?, Int) -> Unit) {
+        name?.let { query ->
+            val retrofit = Retrofit.Builder()
+                .baseUrl(baseURL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+            // Create Service
+            val service = retrofit.create(DirectoryServices::class.java)
+            val response = service.getPractitionerFavourites(practitionerId,pageSize,page,query)
+            response.enqueue(object : Callback<List<FHIRPractitioner>> {
+                override fun onFailure(call: Call<List<FHIRPractitioner>>, t: Throwable) {
+                    //TODO("Handle failure more nicely")
+                }
+
+                override fun onResponse(call: Call<List<FHIRPractitioner>>, response: Response<List<FHIRPractitioner>>) {
+                    //TODO("Not yet implemented")
+                    val people = response.body()?.map { Practitioner(it) }
+                    val count = response.headers().get("X-Total-Count") ?: "0"
+                    callback(people,Integer.parseInt(count))
+                }
+
+            })
+        }
+        if (name == null) return getPractitionerFavourites(page,pageSize,callback)
     }
 
 
@@ -319,7 +424,6 @@ class DirectoryConnector: IDirectoryServiceProvider {
 
         })
     }
-
     private fun getHealthcareServices(page: Int, pageSize: Int, name:String?, callback: (List<IHealthcareService>?, Int) -> Unit) {
         name?.let {query ->
             val retrofit = Retrofit.Builder()
@@ -346,6 +450,52 @@ class DirectoryConnector: IDirectoryServiceProvider {
         if (name == null) listHealthcareServices(page,pageSize,callback)
     }
 
+    private fun listHealthcareServiceFavourites(page: Int, pageSize: Int, callback: (List<IHealthcareService>?, Int) -> Unit) {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(baseURL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        val service = retrofit.create(DirectoryServices::class.java)
+        val response = service.getHealthcareServiceFavourites(practitionerId,pageSize,page)
+        response.enqueue(object : Callback<List<FHIRHealthcareService>> {
+            override fun onFailure(call: Call<List<FHIRHealthcareService>>, t: Throwable) {
+
+            }
+
+            override fun onResponse(call: Call<List<FHIRHealthcareService>>, response: Response<List<FHIRHealthcareService>>) {
+                val practitionerRoles = response.body()?.map { HealthcareService(it) }
+                val count = response.headers().get("X-Total-Count") ?: "0"
+                callback(practitionerRoles,Integer.parseInt(count))
+            }
+
+        })
+    }
+    private fun getHealthcareServiceFavourites(page: Int, pageSize: Int, name:String?, callback: (List<IHealthcareService>?, Int) -> Unit) {
+        name?.let {query ->
+            val retrofit = Retrofit.Builder()
+                .baseUrl(baseURL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+            // Create Service
+            val service = retrofit.create(DirectoryServices::class.java)
+            val response = service.getHealthcareServiceFavourites(practitionerId,pageSize,page,query)
+            response.enqueue(object : Callback<List<FHIRHealthcareService>> {
+                override fun onFailure(call: Call<List<FHIRHealthcareService>>, t: Throwable) {
+
+                }
+
+                override fun onResponse(call: Call<List<FHIRHealthcareService>>, response: Response<List<FHIRHealthcareService>>) {
+                    val practitionerRoles = response.body()?.map { HealthcareService(it) }
+                    val count = response.headers().get("X-Total-Count") ?: "0"
+                    callback(practitionerRoles,Integer.parseInt(count))
+                }
+
+            })
+        }
+        if (name == null) listHealthcareServiceFavourites(page,pageSize,callback)
+    }
+
     fun getDirectoryServices(): DirectoryServices = Retrofit.Builder().baseUrl(baseURL).addConverterFactory(GsonConverterFactory.create()).build().create(DirectoryServices::class.java)
 
     fun <T> getItemFromID(call: Call<FHIRDirectoryResponse<T>>, callback: (T?) -> Unit) {
@@ -368,9 +518,35 @@ class DirectoryConnector: IDirectoryServiceProvider {
     }
 
     override fun GetPractitioners(query: String?, page: Int, pageSize: Int, callback: (List<IPractitioner>?, Int) -> Unit) = getPractitioners(page,pageSize,query,callback)
+    override fun GetPractitionerFavourites(
+        query: String?,
+        page: Int,
+        pageSize: Int,
+        callback: (List<IPractitioner>?, Int) -> Unit
+    ) {
+        getPractitionerFavourites(page,pageSize,query,callback)
+    }
 
     override fun GetPractitionerRoles(query: String?, page: Int, pageSize: Int, callback: (List<IPractitionerRole>?, Int) -> Unit) = getPractitionerRoles(page,pageSize,query,callback)
+    override fun GetPractitionerRoleFavourites(
+        query: String?,
+        page: Int,
+        pageSize: Int,
+        callback: (List<IPractitionerRole>?, Int) -> Unit
+    ) {
+        getPractitionerRoleFavourites(page,pageSize,query,callback)
+    }
+
     override fun GetHealthcareServices(query: String?, page: Int, pageSize: Int, callback: (List<IHealthcareService>?, Int) -> Unit) = getHealthcareServices(page,pageSize,query,callback)
+    override fun GetHealthcareServiceFavourites(
+        query: String?,
+        page: Int,
+        pageSize: Int,
+        callback: (List<IHealthcareService>?, Int) -> Unit
+    ) {
+        getHealthcareServiceFavourites(page,pageSize,query,callback)
+    }
+
     override fun GetPatients(query: String?, page: Int, pageSize: Int, callback: (List<IPatient>?, Int) -> Unit) {
         val list = (1..275)
         val filtered = list.filter {itm ->

@@ -25,9 +25,11 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.core.BingRulesManager;
 import org.matrix.androidsdk.core.Log;
@@ -49,6 +51,7 @@ import im.vector.activity.CommonActivityUtils;
 import im.vector.activity.VectorHomeActivity;
 import im.vector.activity.VectorRoomActivity;
 import im.vector.adapters.AbsAdapter;
+import im.vector.health.directory.shared.IMatrixActivity;
 import im.vector.ui.badge.BadgeProxy;
 import im.vector.util.HomeRoomsViewModel;
 import im.vector.util.RoomUtils;
@@ -59,7 +62,8 @@ import im.vector.util.RoomUtils;
 public abstract class AbsHomeFragment extends VectorBaseFragment implements
         AbsAdapter.RoomInvitationListener,
         AbsAdapter.MoreRoomActionListener,
-        RoomUtils.MoreActionListener {
+        RoomUtils.MoreActionListener,
+        IMatrixActivity {
 
     private static final String LOG_TAG = AbsHomeFragment.class.getSimpleName();
     private static final String CURRENT_FILTER = "CURRENT_FILTER";
@@ -69,6 +73,20 @@ public abstract class AbsHomeFragment extends VectorBaseFragment implements
     String mCurrentFilter;
 
     public MXSession mSession;
+
+    @Override
+    @NotNull
+    public MXSession getCurrentSession() {
+        return mSession;
+    }
+
+    @Override
+    public void setCurrentSession(@Nullable MXSession mSession) {
+        this.mSession = mSession;
+    }
+
+
+
     OnRoomChangedListener mOnRoomChangedListener;
 
     final RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {

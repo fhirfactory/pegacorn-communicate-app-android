@@ -8,7 +8,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.R
-import im.vector.health.directory.people.model.PractitionerItem
 import im.vector.health.directory.service.model.HealthcareServiceItem
 import im.vector.health.directory.shared.IStandardDirectoryAdapter
 import im.vector.health.microservices.APIModel.FavouriteTypes
@@ -61,7 +60,7 @@ interface OnDataSetChange {
 class ServiceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var officialName: TextView? = null
     var locationCode: TextView? = null
-    var locationDetail: TextView? = null
+    var serviceOrgUnit: TextView? = null
     var favoriteIcon: ImageView? = null
     var favourite: Boolean = false
 
@@ -76,7 +75,7 @@ class ServiceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     init {
         officialName = itemView.officialName
         locationCode = itemView.locationCode
-        locationDetail = itemView.locationDetail
+        serviceOrgUnit = itemView.locationDetail
         favoriteIcon = itemView.favoriteIcon
     }
 
@@ -101,6 +100,7 @@ class ServiceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
 
         officialName?.text = service.GetLongName()
+        serviceOrgUnit?.text = service.GetOrganisationUnit()
 
         itemView.setOnClickListener {
             onClickListener?.onServiceClick(service)

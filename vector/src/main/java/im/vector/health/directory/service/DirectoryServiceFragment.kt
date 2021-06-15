@@ -39,7 +39,7 @@ class DirectoryServiceFragment: StandardDirectoryFragment<ServiceDirectoryAdapte
     }
 
     override fun getDataFavourites(forPage: Int, withPageSize: Int, query: String?, addItem: (List<HealthcareServiceItem>?, Int) -> Unit) {
-        DirectoryServicesSingleton.Instance().GetHealthcareServices(query, page, pageSize){ res, count ->
+        DirectoryServicesSingleton.Instance().GetHealthcareServiceFavourites(query, page, pageSize){ res, count ->
             addItem(res?.map { HealthcareServiceItem(it,false) }, count)
         }
     }

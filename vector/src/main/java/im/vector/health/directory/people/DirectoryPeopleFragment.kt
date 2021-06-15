@@ -6,12 +6,12 @@ import im.vector.health.directory.people.detail.PeopleDetailActivity
 import im.vector.extensions.withArgs
 import im.vector.health.TemporaryRoom
 import im.vector.health.directory.people.model.PractitionerItem
+import im.vector.health.directory.shared.MessagingSupport
 import im.vector.health.directory.shared.StandardDirectoryFragment
-import im.vector.health.directory.shared.StandardDirectoryFragmentWithMessaging
 import im.vector.health.microservices.DirectoryServicesSingleton
 import im.vector.health.microservices.interfaces.IPractitioner
 
-class DirectoryPeopleFragment: StandardDirectoryFragmentWithMessaging<PeopleDirectoryAdapter, PeopleDirectoryAdapter.PeopleViewHolder, PractitionerItem>() {
+class DirectoryPeopleFragment: StandardDirectoryFragment<PeopleDirectoryAdapter, PeopleDirectoryAdapter.PeopleViewHolder, PractitionerItem>(), MessagingSupport {
     companion object {
         fun newInstance(selectable: Boolean = false): DirectoryPeopleFragment {
             return DirectoryPeopleFragment().withArgs {
@@ -53,7 +53,7 @@ class DirectoryPeopleFragment: StandardDirectoryFragmentWithMessaging<PeopleDire
     }
 
     override fun getDataFavourites(forPage: Int, withPageSize: Int, query: String?, addItem: (List<PractitionerItem>?, Int) -> Unit) {
-        DirectoryServicesSingleton.Instance().GetPractitioners(query, page, pageSize){ practitioners, count ->
+        DirectoryServicesSingleton.Instance().GetPractitionerFavourites(query, page, pageSize){ practitioners, count ->
             addItem(practitioners?.map { PractitionerItem(it,false) }, count)
         }
     }

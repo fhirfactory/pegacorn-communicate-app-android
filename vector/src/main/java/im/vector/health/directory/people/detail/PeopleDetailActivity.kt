@@ -2,22 +2,26 @@ package im.vector.health.directory.people.detail
 
 import android.content.Context
 import android.content.Intent
+import android.view.View
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import im.vector.Matrix
 import im.vector.R
 import im.vector.activity.CommonActivityUtils
+import im.vector.activity.MXCActionBarActivity
 import im.vector.health.directory.role.RoleClickListener
 import im.vector.health.directory.role.detail.RoleDetailActivity
 import im.vector.health.directory.role.model.PractitionerRoleItem
-import im.vector.health.directory.shared.DirectoryDetailActivityWithMessaging
+import im.vector.health.directory.shared.MessagingSupport
 import im.vector.health.microservices.DirectoryServicesSingleton
 import im.vector.health.microservices.interfaces.IPractitioner
 import im.vector.util.VectorUtils
 import kotlinx.android.synthetic.main.activity_people_detail.*
+import org.matrix.androidsdk.MXSession
 
-class PeopleDetailActivity : DirectoryDetailActivityWithMessaging(), FragmentManager.OnBackStackChangedListener, RoleClickListener {
+class PeopleDetailActivity : MXCActionBarActivity(), MessagingSupport, FragmentManager.OnBackStackChangedListener, RoleClickListener {
     private lateinit var peopleDetailAdapter: PeopleDetailAdapter
 
     override fun getLayoutRes(): Int = R.layout.activity_people_detail
@@ -64,6 +68,17 @@ class PeopleDetailActivity : DirectoryDetailActivityWithMessaging(), FragmentMan
         videoCallIcon.setOnClickListener {
             call(true, people.GetMatrixID())
         }
+        if (people.GetMatrixID() == mSession?.myUserId) {
+            chatIcon?.isEnabled = false
+            videoCallIcon?.isEnabled = false
+            chatIcon?.visibility = View.INVISIBLE
+            videoCallIcon?.visibility = View.INVISIBLE
+            callIcon?.setImageResource(R.drawable.ic_material_message_black)
+            callIcon.setOnClickListener {
+                enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR)
+                startChat(people.GetMatrixID())
+            }
+        }
     }
 
     /**
@@ -106,4 +121,7 @@ class PeopleDetailActivity : DirectoryDetailActivityWithMessaging(), FragmentMan
         val newIntent = RoleDetailActivity.intent(this, role, intent.getBooleanExtra(ROLE_CLICKABLE, false))
         startActivity(newIntent)
     }
+
+    override var currentSession: MXSession = Matrix.getInstance(this).defaultSession
+    override fun getActivity(): FragmentActivity = this
 }

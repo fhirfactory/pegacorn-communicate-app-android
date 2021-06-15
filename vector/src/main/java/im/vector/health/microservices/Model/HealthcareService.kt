@@ -13,6 +13,6 @@ class HealthcareService (val innerHealthcareService: FHIRHealthcareService): IHe
 
     override fun GetID(): String = innerHealthcareService.simplifiedID
 
-    override fun GetDescription(): String = innerHealthcareService.description
+    override fun GetOrganisationUnit(): String = innerHealthcareService.organisationalUnit
 
 }
