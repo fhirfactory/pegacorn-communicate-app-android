@@ -160,4 +160,6 @@
 
     <bool name="fab_join_room_visible">false</bool>
     <bool name="fab_start_chat_visible">false</bool>
+
+    <bool name="tab_codes_visible">false</bool>
 </resources>

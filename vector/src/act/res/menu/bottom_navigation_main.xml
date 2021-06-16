@@ -30,10 +30,11 @@
         android:title="" />
 
     <item
-        android:id="@+id/bottom_action_groups"
+        android:id="@+id/bottom_action_codes"
         android:contentDescription="@string/bottom_action_groups"
         android:enabled="true"
         android:icon="@drawable/ic_notifications"
-        android:title="" />
+        android:title=""
+        android:visible="@bool/tab_codes_visible"/>
 
 </menu>

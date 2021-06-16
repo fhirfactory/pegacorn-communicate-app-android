@@ -123,7 +123,6 @@ import im.vector.PublicRoomsManager;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.RolesInNavigationBarAdapter;
-import im.vector.adapters.model.UserRole;
 import im.vector.chat.CHAT_TYPE;
 import im.vector.chat.ChatCreateActivity;
 import im.vector.calls.CallsFragment;
@@ -135,7 +134,6 @@ import im.vector.fragments.AbsHomeFragment;
 import im.vector.fragments.signout.SignOutBottomSheetDialogFragment;
 import im.vector.fragments.signout.SignOutViewModel;
 import im.vector.gallery.GalleryFragment;
-import im.vector.health.microservices.DirectoryConnector;
 import im.vector.health.microservices.DirectoryServicesSingleton;
 import im.vector.health.role_selection.RoleSelectionActivity;
 import im.vector.home.CommunicateHomeFragment;
@@ -332,6 +330,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     public void initUiAndData() {
 
         mFragmentManager = getSupportFragmentManager();
+//        findViewById(R.id.bottom_action_codes).setVisibility(View.GONE);
 
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application.");
@@ -367,7 +366,10 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         List<ThirdPartyIdentifier> emails = mSession.getMyUser().getlinkedEmails();
         if (emails.size() > 0) {
             //TODO: We may not be able to just use the first email, so think about how we can choose the correct one
-            DirectoryServicesSingleton.Companion.Instance().SetPractitionerID(emails.get(0).address,(err) -> {
+            DirectoryServicesSingleton.Companion.Instance().SetPractitionerID(emails.get(0).address,() -> {
+                RefreshRoles();
+                return Unit.INSTANCE;
+            },(err) -> {
                 Toast.makeText(VectorHomeActivity.this,err.GetDescription(),Toast.LENGTH_LONG).show();
                 return Unit.INSTANCE;
             });
@@ -607,7 +609,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
      * Display the Floating Action Menu if it is required
      */
     private void showFloatingActionMenuIfRequired() {
-        if ((mCurrentMenuId == R.id.bottom_action_favourites) || (mCurrentMenuId == R.id.bottom_action_groups) || (mCurrentMenuId == R.id.bottom_action_rooms)) {
+        if ((mCurrentMenuId == R.id.bottom_action_favourites) || (mCurrentMenuId == R.id.bottom_action_codes) || (mCurrentMenuId == R.id.bottom_action_rooms)) {
             concealFloatingActionMenu();
         } else {
             revealFloatingActionMenu();
@@ -1044,7 +1046,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 mSearchView.setVisibility(View.GONE);
                 setActionBarTitle(R.string.calls_title);
                 break;
-            case R.id.bottom_action_groups:
+            case R.id.bottom_action_codes:
                 Log.d(LOG_TAG, "onNavigationItemSelected GROUPS");
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_GROUPS);
                 if (fragment == null) {
@@ -1209,7 +1211,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 case R.id.bottom_action_rooms:
                     setQueryHint(R.string.home_filter_placeholder_rooms, R.string.search_chats);
                     break;
-                case R.id.bottom_action_groups:
+                case R.id.bottom_action_codes:
                     setQueryHint(R.string.home_filter_placeholder_groups, R.string.search_chats);
                     break;
             }
@@ -1371,7 +1373,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             case R.id.bottom_action_rooms:
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_ROOMS);
                 break;
-            case R.id.bottom_action_groups:
+            case R.id.bottom_action_codes:
                 fragment = mFragmentManager.findFragmentByTag(TAG_FRAGMENT_GROUPS);
                 break;
 
@@ -2158,6 +2160,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         }
 
         RecyclerView roleRecyclerView = navigationView.findViewById(R.id.rolesRecyclerView);
+
         if (null != roleRecyclerView) {
             roleRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             roleRecyclerView.setAdapter(rolesInNavigationBarAdapter);
@@ -2167,14 +2170,26 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     }
 
     private void RefreshRoles() {
+        if (!DirectoryServicesSingleton.Companion.Instance().CheckValidPractitionerSignIn()) return;
         DirectoryServicesSingleton.Companion.Instance().GetActiveRoles((loadedRoles) -> {
             rolesInNavigationBarAdapter.setData(loadedRoles);
             RecyclerView roleRecyclerView = navigationView.findViewById(R.id.rolesRecyclerView);
-            roleRecyclerView.setAdapter(rolesInNavigationBarAdapter);
+            TextView noRoleTextView = navigationView.findViewById(R.id.home_menu_main_matrix_no_role);
+            if (loadedRoles.isEmpty()) {
+                noRoleTextView.setVisibility(View.VISIBLE);
+                roleRecyclerView.setVisibility(View.GONE);
+            } else {
+                noRoleTextView.setVisibility(View.GONE);
+                roleRecyclerView.setVisibility(View.VISIBLE);
+                rolesInNavigationBarAdapter.setData(loadedRoles);
+                roleRecyclerView.setAdapter(rolesInNavigationBarAdapter);
+            }
             return null;
         }, (error) -> {
+            Toast.makeText(VectorHomeActivity.this,error.GetDescription(),Toast.LENGTH_SHORT).show();
             return Unit.INSTANCE;
         });
+
     }
 
     //==============================================================================================================
@@ -2408,7 +2423,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                 }
             } else if (id == R.id.bottom_action_rooms) {
                 filterNormalRoomSet(filteredRoomIdsSet, directChatInvitations, roomSummaryByRoom);
-            } else if (id == R.id.bottom_action_groups) {
+            } else if (id == R.id.bottom_action_codes) {
                 // Display number of groups invitation in the badge of groups
                 roomCount = mSession.getGroupsManager().getInvitedGroups().size();
             } else if (id == R.id.bottom_action_home) {

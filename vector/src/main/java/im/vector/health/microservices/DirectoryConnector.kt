@@ -623,13 +623,14 @@ class DirectoryConnector: IDirectoryServiceProvider {
         baseURL = url
     }
 
-    override fun SetPractitionerID(id: String, failure: (APIError) -> Unit) {
+    override fun SetPractitionerID(id: String, callback: () -> Unit, failure: (APIError) -> Unit) {
         practitionerId = id
         signedIn = false
         if (id != "") {
             GetPractitioner(id, { practitioner ->
                 practitioner?.let {
                     signedIn = true
+                    callback()
                 }
             }, failure)
         }

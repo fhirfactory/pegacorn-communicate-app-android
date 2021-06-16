@@ -14,7 +14,7 @@ interface IDirectoryServiceProvider {
     fun GetPractitionerRole(id: String, callback: (IPractitionerRole?) -> Unit, failure: (APIError) -> Unit)
     fun GetHealthcareService(id: String, callback: (IHealthcareService?) -> Unit, failure: (APIError) -> Unit)
     fun SetBaseURL(url: String, failure: (APIError) -> Unit)
-    fun SetPractitionerID(id: String, failure: (APIError) -> Unit)
+    fun SetPractitionerID(id: String, callback: () -> Unit, failure: (APIError) -> Unit)
     fun GetActiveRoles(callback: (List<IPractitionerRole>?) -> Unit, failure: (APIError) -> Unit)
     fun CheckFavourite(favouriteTypes: FavouriteTypes, favourite: String, callback: (Boolean) -> Unit, failure: (APIError) -> Unit)
     fun RemoveFavourite(favouriteTypes: FavouriteTypes, favourite: String, failure: (APIError) -> Unit)
