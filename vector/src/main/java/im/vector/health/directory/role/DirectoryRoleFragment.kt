@@ -9,6 +9,7 @@ import im.vector.health.directory.role.model.*
 import im.vector.extensions.withArgs
 import im.vector.health.TemporaryRoom
 import im.vector.health.directory.MemberClickListener
+import im.vector.health.directory.shared.HandlesAPIErrors
 import im.vector.health.directory.shared.IMatrixDirectorySelectionFragment
 import im.vector.health.directory.shared.IProvidesMatrixItems
 import im.vector.health.directory.shared.StandardDirectoryFragment
@@ -18,7 +19,7 @@ import im.vector.health.microservices.interfaces.IPractitionerRole
 import im.vector.health.microservices.interfaces.MatrixItem
 
 
-class DirectoryRoleFragment: StandardDirectoryFragment<RolesDirectoryAdapter, RoleViewHolder, PractitionerRoleItem>(), IMatrixDirectorySelectionFragment<IPractitionerRole> {
+class DirectoryRoleFragment: StandardDirectoryFragment<RolesDirectoryAdapter, RoleViewHolder, PractitionerRoleItem>(), IMatrixDirectorySelectionFragment<IPractitionerRole>, HandlesAPIErrors {
     companion object {
         fun newInstance(selectable: Boolean = false): DirectoryRoleFragment {
             return DirectoryRoleFragment().withArgs {
@@ -46,14 +47,18 @@ class DirectoryRoleFragment: StandardDirectoryFragment<RolesDirectoryAdapter, Ro
     }
 
     override fun getData(forPage: Int, withPageSize: Int, query: String?, addItem: (List<PractitionerRoleItem>?, Int) -> Unit) {
-        DirectoryServicesSingleton.Instance().GetPractitionerRoles(query, page, pageSize){ res, count ->
+        DirectoryServicesSingleton.Instance().GetPractitionerRoles(query, page, pageSize, { res, count ->
             addItem(res?.map { PractitionerRoleItem(it) }, count)
+        }){
+            displayError(it)
         }
     }
 
     override fun getDataFavourites(forPage: Int, withPageSize: Int, query: String?, addItem: (List<PractitionerRoleItem>?, Int) -> Unit) {
-        DirectoryServicesSingleton.Instance().GetPractitionerRoleFavourites(query, page, pageSize){ res, count ->
+        DirectoryServicesSingleton.Instance().GetPractitionerRoleFavourites(query, page, pageSize, { res, count ->
             addItem(res?.map { PractitionerRoleItem(it) }, count)
+        }){
+            displayError(it)
         }
     }
 
@@ -74,4 +79,6 @@ class DirectoryRoleFragment: StandardDirectoryFragment<RolesDirectoryAdapter, Ro
     override fun receivesItem(item: MatrixItem): Boolean = item is IPractitionerRole
 
     override fun getSelectionTitleResource(): Int = R.string.create_chat_roles
+
+    override fun getCurrentContext(): Context = requireContext()
 }

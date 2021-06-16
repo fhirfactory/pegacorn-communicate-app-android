@@ -22,14 +22,18 @@ class DirectoryPatientFragment: StandardDirectoryFragment<PatientAdapter,Patient
     }
 
     override fun getData(forPage: Int, withPageSize: Int, query: String?, addItem: (List<PatientItem>?, Int) -> Unit) {
-        DirectoryServicesSingleton.Instance().GetPatients(query, page, pageSize){ res, count ->
+        DirectoryServicesSingleton.Instance().GetPatients(query, page, pageSize, { res, count ->
             addItem(res?.map { PatientItem(it) }, count)
+        }){
+            TODO("Handle Error")
         }
     }
 
     override fun getDataFavourites(forPage: Int, withPageSize: Int, query: String?, addItem: (List<PatientItem>?, Int) -> Unit) {
-        DirectoryServicesSingleton.Instance().GetPatients(query, page, pageSize){ res, count ->
+        DirectoryServicesSingleton.Instance().GetPatients(query, page, pageSize,{ res, count ->
             addItem(res?.map { PatientItem(it) }, count)
+        }){
+            TODO("Handle Error")
         }
     }
 }

@@ -14,6 +14,7 @@ import im.vector.activity.MXCActionBarActivity
 import im.vector.health.directory.role.RoleClickListener
 import im.vector.health.directory.role.detail.RoleDetailActivity
 import im.vector.health.directory.role.model.PractitionerRoleItem
+import im.vector.health.directory.shared.HandlesAPIErrors
 import im.vector.health.directory.shared.MessagingSupport
 import im.vector.health.microservices.DirectoryServicesSingleton
 import im.vector.health.microservices.interfaces.IPractitioner
@@ -21,7 +22,7 @@ import im.vector.util.VectorUtils
 import kotlinx.android.synthetic.main.activity_people_detail.*
 import org.matrix.androidsdk.MXSession
 
-class PeopleDetailActivity : MXCActionBarActivity(), MessagingSupport, FragmentManager.OnBackStackChangedListener, RoleClickListener {
+class PeopleDetailActivity : MXCActionBarActivity(), MessagingSupport, FragmentManager.OnBackStackChangedListener, RoleClickListener, HandlesAPIErrors {
     private lateinit var peopleDetailAdapter: PeopleDetailAdapter
 
     override fun getLayoutRes(): Int = R.layout.activity_people_detail
@@ -48,12 +49,14 @@ class PeopleDetailActivity : MXCActionBarActivity(), MessagingSupport, FragmentM
         peopleDetailAdapter.setData(people)
 
         //we need to get the fully populated person object, rather than the version without practitioner roles
-        DirectoryServicesSingleton.Instance().GetPractitioner(people.GetID()) {
+        DirectoryServicesSingleton.Instance().GetPractitioner(people.GetID(), {
             it?.let { person ->
                 person.GetRoles{roles ->
                     peopleDetailAdapter.setData(roles.map { role -> PractitionerRoleItem(role) })
                 }
             }
+        }){
+            displayError(it)
         }
 
 
@@ -108,4 +111,5 @@ class PeopleDetailActivity : MXCActionBarActivity(), MessagingSupport, FragmentM
 
     override var currentSession: MXSession = Matrix.getInstance(this).defaultSession
     override fun getActivity(): FragmentActivity = this
+    override fun getCurrentContext(): Context = this
 }

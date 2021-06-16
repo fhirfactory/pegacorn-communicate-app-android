@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.R
 import im.vector.health.directory.service.model.HealthcareServiceItem
+import im.vector.health.directory.shared.HandlesAPIErrors
 import im.vector.health.directory.shared.IStandardDirectoryAdapter
 import im.vector.health.microservices.APIModel.FavouriteTypes
 import im.vector.health.microservices.DirectoryServicesSingleton
@@ -57,12 +58,13 @@ interface OnDataSetChange {
     fun onDataChange(position: Int)
 }
 
-class ServiceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class ServiceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), HandlesAPIErrors {
     var officialName: TextView? = null
     var locationCode: TextView? = null
     var serviceOrgUnit: TextView? = null
     var favoriteIcon: ImageView? = null
     var favourite: Boolean = false
+    lateinit var context: Context
 
     fun updateFavourite() {
         if (favourite) {
@@ -80,12 +82,15 @@ class ServiceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     fun bind(context: Context, service: HealthcareServiceItem, onClickListener: ServiceClickListener?) {
+        this.context = context
         favoriteIcon?.setOnClickListener {
             onClickListener?.onServiceFavourite(service)
         }
-        DirectoryServicesSingleton.Instance().CheckFavourite(FavouriteTypes.Service,service.GetID()) {
+        DirectoryServicesSingleton.Instance().CheckFavourite(FavouriteTypes.Service,service.GetID(), {
             this.favourite = it
             this.updateFavourite()
+        }){
+
         }
 
         updateFavourite()
@@ -93,9 +98,13 @@ class ServiceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             this.favourite = !this.favourite
             this.updateFavourite()
             if (this.favourite) {
-                DirectoryServicesSingleton.Instance().AddFavourite(FavouriteTypes.Service,service.GetID())
+                DirectoryServicesSingleton.Instance().AddFavourite(FavouriteTypes.Service,service.GetID()){
+                    displayError(it)
+                }
             } else {
-                DirectoryServicesSingleton.Instance().RemoveFavourite(FavouriteTypes.Service,service.GetID())
+                DirectoryServicesSingleton.Instance().RemoveFavourite(FavouriteTypes.Service,service.GetID()){
+                    displayError(it)
+                }
             }
         }
 
@@ -105,7 +114,10 @@ class ServiceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.setOnClickListener {
             onClickListener?.onServiceClick(service)
         }
+
     }
+
+    override fun getCurrentContext(): Context = context
 }
 interface ServiceClickListener {
     fun onServiceClick(service: HealthcareServiceItem)

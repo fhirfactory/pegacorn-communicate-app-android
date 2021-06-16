@@ -35,7 +35,7 @@ import kotlinx.android.synthetic.main.item_directory_people.view.videoCallIcon a
 
 
 class PeopleDirectoryAdapter(val context: Context, private val onClickListener: PeopleClickListener, private val selectable: Boolean = false, private val matrixHandler: MatrixChatActionHandler, private val l18n: ILocalisationProvider) :
-        RecyclerView.Adapter<PeopleDirectoryAdapter.PeopleViewHolder>(), OnDataSetChange, IStandardDirectoryAdapter<PractitionerItem> {
+        RecyclerView.Adapter<PeopleDirectoryAdapter.PeopleViewHolder>(), OnDataSetChange, IStandardDirectoryAdapter<PractitionerItem>, HandlesAPIErrors {
     private val people = mutableListOf<PractitionerItem>()
     var mSession: MXSession? = null
     var textSize: Float = 0.0F
@@ -126,9 +126,11 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
                 onDataSetChange.onDataChange(position)
             }
 
-            DirectoryServicesSingleton.Instance().CheckFavourite(FavouriteTypes.Practitioner,people.GetID()) {
+            DirectoryServicesSingleton.Instance().CheckFavourite(FavouriteTypes.Practitioner,people.GetID(), {
                 this.favourite = it
                 this.updateFavourite()
+            }){
+
             }
 
             chatIcon?.setOnClickListener {
@@ -154,13 +156,19 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
                 this.favourite = !this.favourite
                 this.updateFavourite()
                 if (this.favourite) {
-                    DirectoryServicesSingleton.Instance().AddFavourite(FavouriteTypes.Practitioner,people.GetID())
+                    DirectoryServicesSingleton.Instance().AddFavourite(FavouriteTypes.Practitioner,people.GetID()){
+                        displayError(it)
+                    }
                 } else {
-                    DirectoryServicesSingleton.Instance().RemoveFavourite(FavouriteTypes.Practitioner,people.GetID())
+                    DirectoryServicesSingleton.Instance().RemoveFavourite(FavouriteTypes.Practitioner,people.GetID()){
+                        displayError(it)
+                    }
                 }
             }
         }
     }
+
+    override fun getCurrentContext(): Context = this.context
 
     override fun addPage(items: List<PractitionerItem>) {
         this.people.addAll(items)

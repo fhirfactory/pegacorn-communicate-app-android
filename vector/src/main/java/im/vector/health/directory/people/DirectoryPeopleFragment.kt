@@ -8,15 +8,12 @@ import im.vector.extensions.withArgs
 import im.vector.health.TemporaryRoom
 import im.vector.health.directory.MemberClickListener
 import im.vector.health.directory.people.model.PractitionerItem
-import im.vector.health.directory.shared.IMatrixDirectorySelectionFragment
-import im.vector.health.directory.shared.IProvidesMatrixItems
-import im.vector.health.directory.shared.MessagingSupport
-import im.vector.health.directory.shared.StandardDirectoryFragment
+import im.vector.health.directory.shared.*
 import im.vector.health.microservices.DirectoryServicesSingleton
 import im.vector.health.microservices.interfaces.IPractitioner
 import im.vector.health.microservices.interfaces.MatrixItem
 
-class DirectoryPeopleFragment: StandardDirectoryFragment<PeopleDirectoryAdapter, PeopleDirectoryAdapter.PeopleViewHolder, PractitionerItem>(), MessagingSupport, IMatrixDirectorySelectionFragment<IPractitioner> {
+class DirectoryPeopleFragment: StandardDirectoryFragment<PeopleDirectoryAdapter, PeopleDirectoryAdapter.PeopleViewHolder, PractitionerItem>(), MessagingSupport, IMatrixDirectorySelectionFragment<IPractitioner>, HandlesAPIErrors {
     companion object {
         fun newInstance(selectable: Boolean = false): DirectoryPeopleFragment {
             return DirectoryPeopleFragment().withArgs {
@@ -44,14 +41,18 @@ class DirectoryPeopleFragment: StandardDirectoryFragment<PeopleDirectoryAdapter,
     override fun getHeaderText(count: Int, favourites: Boolean): String = (if (favourites) getString(R.string.total_number_of_favourite_people) else getString(R.string.total_number_of_people)) + " " + count.toString()
 
     override fun getData(forPage: Int, withPageSize: Int, query: String?, addItem: (List<PractitionerItem>?, Int) -> Unit) {
-        DirectoryServicesSingleton.Instance().GetPractitioners(query, page, pageSize){ practitioners, count ->
+        DirectoryServicesSingleton.Instance().GetPractitioners(query, page, pageSize, { practitioners, count ->
             addItem(practitioners?.map { PractitionerItem(it,false) }, count)
+        }){
+            displayError(it)
         }
     }
 
     override fun getDataFavourites(forPage: Int, withPageSize: Int, query: String?, addItem: (List<PractitionerItem>?, Int) -> Unit) {
-        DirectoryServicesSingleton.Instance().GetPractitionerFavourites(query, page, pageSize){ practitioners, count ->
+        DirectoryServicesSingleton.Instance().GetPractitionerFavourites(query, page, pageSize, { practitioners, count ->
             addItem(practitioners?.map { PractitionerItem(it,false) }, count)
+        }){
+            displayError(it)
         }
     }
 
@@ -72,4 +73,6 @@ class DirectoryPeopleFragment: StandardDirectoryFragment<PeopleDirectoryAdapter,
     override fun receivesItem(item: MatrixItem): Boolean = item is IPractitioner
 
     override fun getSelectionTitleResource(): Int = R.string.create_chat_people
+
+    override fun getCurrentContext(): Context = requireContext()
 }

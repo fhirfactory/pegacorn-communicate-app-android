@@ -11,12 +11,13 @@ import im.vector.activity.MXCActionBarActivity
 import im.vector.health.directory.people.PeopleClickListener
 import im.vector.health.directory.people.detail.PeopleDetailActivity
 import im.vector.health.directory.people.model.PractitionerItem
+import im.vector.health.directory.shared.HandlesAPIErrors
 import im.vector.health.microservices.DirectoryServicesSingleton
 import im.vector.health.microservices.interfaces.IPractitionerRole
 import im.vector.util.VectorUtils
 import kotlinx.android.synthetic.main.activity_role_detail.*
 
-class RoleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStackChangedListener, PeopleClickListener {
+class RoleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStackChangedListener, PeopleClickListener, HandlesAPIErrors {
     private lateinit var roleAdapter: RolesDetailAdapter
 
     override fun getLayoutRes(): Int = R.layout.activity_role_detail
@@ -43,12 +44,14 @@ class RoleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStackCh
         chatIcon.setOnClickListener { }
         videoCallIcon.setOnClickListener { }
 
-        DirectoryServicesSingleton.Instance().GetPractitionerRole(role.GetID()) {
+        DirectoryServicesSingleton.Instance().GetPractitionerRole(role.GetID(), {
             it?.let { practitionerRole ->
                 practitionerRole.GetPractitioners{ practitioners ->
                     roleAdapter.setData(practitioners.map { practitioner -> PractitionerItem(practitioner, false) })
                 }
             }
+        }){
+            displayError(it)
         }
     }
 
@@ -82,4 +85,6 @@ class RoleDetailActivity : MXCActionBarActivity(), FragmentManager.OnBackStackCh
     override fun onPeopleFavorite(directoryPeople: PractitionerItem) {
         //TODO("Not yet implemented")
     }
+
+    override fun getCurrentContext(): Context = this
 }

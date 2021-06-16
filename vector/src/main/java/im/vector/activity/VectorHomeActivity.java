@@ -156,6 +156,7 @@ import im.vector.util.VectorUtils;
 import im.vector.view.KeysBackupBanner;
 import im.vector.view.UnreadCounterBadgeView;
 import im.vector.view.VectorPendingCallView;
+import kotlin.Unit;
 
 /**
  * Displays the main screen of the app, with rooms the user has joined and the ability to create
@@ -362,11 +363,14 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         }
 
 
-        DirectoryServicesSingleton.Companion.Instance().SetBaseURL(getString(R.string.microservice_server_url));
+        DirectoryServicesSingleton.Companion.Instance().SetBaseURL(getString(R.string.microservice_server_url),(fail) -> Unit.INSTANCE);
         List<ThirdPartyIdentifier> emails = mSession.getMyUser().getlinkedEmails();
         if (emails.size() > 0) {
             //TODO: We may not be able to just use the first email, so think about how we can choose the correct one
-            DirectoryServicesSingleton.Companion.Instance().SetPractitionerID(emails.get(0).address);
+            DirectoryServicesSingleton.Companion.Instance().SetPractitionerID(emails.get(0).address,(err) -> {
+                Toast.makeText(VectorHomeActivity.this,err.GetDescription(),Toast.LENGTH_LONG).show();
+                return Unit.INSTANCE;
+            });
         }
 
 
@@ -2168,6 +2172,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             RecyclerView roleRecyclerView = navigationView.findViewById(R.id.rolesRecyclerView);
             roleRecyclerView.setAdapter(rolesInNavigationBarAdapter);
             return null;
+        }, (error) -> {
+            return Unit.INSTANCE;
         });
     }
 

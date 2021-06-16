@@ -5,10 +5,11 @@ import im.vector.R
 import im.vector.extensions.withArgs
 import im.vector.health.directory.service.detail.ServiceDetailActivity
 import im.vector.health.directory.service.model.HealthcareServiceItem
+import im.vector.health.directory.shared.HandlesAPIErrors
 import im.vector.health.directory.shared.StandardDirectoryFragment
 import im.vector.health.microservices.DirectoryServicesSingleton
 
-class DirectoryServiceFragment: StandardDirectoryFragment<ServiceDirectoryAdapter,ServiceViewHolder,HealthcareServiceItem>(){
+class DirectoryServiceFragment: StandardDirectoryFragment<ServiceDirectoryAdapter,ServiceViewHolder,HealthcareServiceItem>(), HandlesAPIErrors {
     companion object {
         fun newInstance(selectable: Boolean = false): DirectoryServiceFragment {
             return DirectoryServiceFragment().withArgs {
@@ -33,14 +34,20 @@ class DirectoryServiceFragment: StandardDirectoryFragment<ServiceDirectoryAdapte
     override fun getHeaderText(count: Int, favourites: Boolean): String = (if (favourites) getString(R.string.total_number_of_favourite_service) else getString(R.string.total_number_of_services)) + " " + count.toString()
 
     override fun getData(forPage: Int, withPageSize: Int, query: String?, addItem: (List<HealthcareServiceItem>?, Int) -> Unit) {
-        DirectoryServicesSingleton.Instance().GetHealthcareServices(query, page, pageSize){ res, count ->
+        DirectoryServicesSingleton.Instance().GetHealthcareServices(query, page, pageSize, { res, count ->
             addItem(res?.map { HealthcareServiceItem(it,false) }, count)
+        }){
+            displayError(it)
         }
     }
 
     override fun getDataFavourites(forPage: Int, withPageSize: Int, query: String?, addItem: (List<HealthcareServiceItem>?, Int) -> Unit) {
-        DirectoryServicesSingleton.Instance().GetHealthcareServiceFavourites(query, page, pageSize){ res, count ->
+        DirectoryServicesSingleton.Instance().GetHealthcareServiceFavourites(query, page, pageSize, { res, count ->
             addItem(res?.map { HealthcareServiceItem(it,false) }, count)
+        }){
+            displayError(it)
         }
     }
+
+    override fun getCurrentContext(): Context = requireContext()
 }

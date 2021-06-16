@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import im.vector.Matrix
 import im.vector.R
 import im.vector.health.directory.role.model.PractitionerRoleItem
+import im.vector.health.directory.shared.HandlesAPIErrors
 import im.vector.health.directory.shared.IStandardDirectoryAdapter
 import im.vector.health.microservices.APIModel.FavouriteTypes
 import im.vector.health.microservices.DirectoryServicesSingleton
@@ -105,7 +106,7 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: R
     }
 }
 
-class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), HandlesAPIErrors {
     var avatar: VectorCircularImageView? = null
     var expandableIcon: ImageView? = null
     var selectionRadioImageView: ImageView? = null
@@ -119,6 +120,7 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var favouriteButton: ImageView? = null
     var roleFilledTextView: TextView? = null
     var favourite: Boolean = false
+    lateinit var context: Context
 
     init {
         heading = itemView.findViewById(R.id.heading)
@@ -146,6 +148,7 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(context: Context, session: MXSession?, role: PractitionerRoleItem, onDataSetChange: OnDataSetChange, position: Int, onClickListener: RoleClickListener?, showHeader: Boolean = false, selection: Boolean? = null) {
         VectorUtils.loadRoomAvatar(context, session, avatar, role)
+        this.context = context
         heading?.visibility = if (showHeader) VISIBLE else GONE
         officialName?.text = role.GetLongName()
         secondaryName?.text = role.GetOrgName()
@@ -182,18 +185,24 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             }
         }
 
-        DirectoryServicesSingleton.Instance().CheckFavourite(FavouriteTypes.PractitionerRoles,role.GetID()) {
+        DirectoryServicesSingleton.Instance().CheckFavourite(FavouriteTypes.PractitionerRoles,role.GetID(),  {
             this.favourite = it
             this.updateFavourite()
+        }){
+
         }
 
         favouriteButton?.setOnClickListener {
             this.favourite = !this.favourite
             this.updateFavourite()
             if (this.favourite) {
-                DirectoryServicesSingleton.Instance().AddFavourite(FavouriteTypes.PractitionerRoles,role.GetID())
+                DirectoryServicesSingleton.Instance().AddFavourite(FavouriteTypes.PractitionerRoles,role.GetID()) {
+                    displayError(it)
+                }
             } else {
-                DirectoryServicesSingleton.Instance().RemoveFavourite(FavouriteTypes.PractitionerRoles,role.GetID())
+                DirectoryServicesSingleton.Instance().RemoveFavourite(FavouriteTypes.PractitionerRoles,role.GetID()) {
+                    displayError(it)
+                }
             }
         }
 
@@ -207,6 +216,8 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             onDataSetChange.onDataChange(position)
         }
     }
+
+    override fun getCurrentContext(): Context = context
 }
 
 interface RoleClickListener {
