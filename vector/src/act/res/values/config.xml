@@ -11,7 +11,7 @@
     <string name="matrix_org_server_url" translatable="false">https://lingo-server.health.test.act.gov.au</string>
     <string name="default_hs_server_url" translatable="false">https://lingo-server.health.test.act.gov.au</string>
 <!--    <string name="microservice_server_url" translatable="false">https://lingo-server.health.test.act.gov.au/</string>-->
-    <string name="microservice_server_url" translatable="false">http://192.168.1.13:12121/</string>
+    <string name="microservice_server_url" translatable="false">http://10.0.0.4:12121/</string>
     <string name="role_selector_url" translatable="false">https://lingo-server.health.test.act.gov.au/role-selection/</string>
     <string name="role_selector_redirect_link" translatable="false">https://lingo.health.test.act.gov.au/</string>
     <string name="sso_redirect_url" translatable="false">lingo://login</string>
@@ -157,4 +157,7 @@
     <bool name="show_permalink_menu_item">false</bool>
     <bool name="show_albums_in_camera">false</bool>
     <bool name="show_image_compression_dialog">false</bool>
+
+    <bool name="fab_join_room_visible">false</bool>
+    <bool name="fab_start_chat_visible">false</bool>
 </resources>

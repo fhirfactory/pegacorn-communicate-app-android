@@ -354,6 +354,14 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
         mSession = Matrix.getInstance(this).getDefaultSession();
 
+        if (!getResources().getBoolean(R.bool.fab_join_room_visible)){
+            mFabJoinRoom.setVisibility(View.GONE);
+        }
+        if (!getResources().getBoolean(R.bool.fab_start_chat_visible)){
+            mFabStartChat.setVisibility(View.GONE);
+        }
+
+
         DirectoryServicesSingleton.Companion.Instance().SetBaseURL(getString(R.string.microservice_server_url));
         List<ThirdPartyIdentifier> emails = mSession.getMyUser().getlinkedEmails();
         if (emails.size() > 0) {

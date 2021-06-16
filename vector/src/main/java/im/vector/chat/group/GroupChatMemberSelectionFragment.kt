@@ -11,17 +11,18 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import im.vector.R
 import im.vector.chat.BaseMemberSelectionFragment
-import im.vector.health.TemporaryRoom
-import im.vector.health.directory.RoomClickListener
+import im.vector.health.directory.MemberClickListener
 import im.vector.health.directory.people.DirectoryPeopleFragment
 import im.vector.health.directory.role.DirectoryRoleFragment
+import im.vector.health.directory.shared.IMatrixDirectorySelectionFragment
+import im.vector.health.microservices.interfaces.MatrixItem
 import kotlinx.android.synthetic.main.fragment_create_chat.*
 
 
 class GroupChatMemberSelectionFragment : BaseMemberSelectionFragment() {
-    override val fragments = listOf(DirectoryRoleFragment.newInstance(true), DirectoryPeopleFragment.newInstance(true))
+    override val selectionFragments = listOf(DirectoryPeopleFragment.newInstance(true) as IMatrixDirectorySelectionFragment<*>)//listOf(DirectoryRoleFragment.newInstance(true) as IMatrixDirectorySelectionFragment<*>, DirectoryPeopleFragment.newInstance(true) as IMatrixDirectorySelectionFragment<*>)
     lateinit var selectedChatViewModel: SelectedChatViewModel
-    lateinit var selectedRoomAdapter: SelectedRoomAdapter
+    lateinit var selectedMemberAdapter: SelectedMemberAdapter
     override fun getMenuRes() = R.menu.next
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -34,17 +35,18 @@ class GroupChatMemberSelectionFragment : BaseMemberSelectionFragment() {
 
         selectedUserRecyclerView.visibility = VISIBLE
 
-        selectedRoomAdapter = SelectedRoomAdapter(requireContext(), object : RoomClickListener {
-            override fun onRoomClick(temporaryRoom: TemporaryRoom, forRemove: Boolean) {
-                selectedChatViewModel.removeRoom(temporaryRoom)
-                if (temporaryRoom.role != null) {
-                    (fragments[0] as DirectoryRoleFragment).unSelectRole(temporaryRoom.role)
-                } else if (temporaryRoom.people != null) {
-                    (fragments[1] as DirectoryPeopleFragment).unSelectPeople(temporaryRoom.people)
+        selectedMemberAdapter = SelectedMemberAdapter(requireContext(), object : MemberClickListener {
+            override fun onMemberClick(member: MatrixItem, forRemove: Boolean) {
+                selectedChatViewModel.removeMember(member)
+                for (fragment in selectionFragments) {
+                    if (fragment.receivesItem(member)) {
+                        fragment.unsafeDeselectItem(member)
+                        break
+                    }
                 }
             }
         })
-        selectedUserRecyclerView.adapter = selectedRoomAdapter
+        selectedUserRecyclerView.adapter = selectedMemberAdapter
         subscribeUI()
     }
 
@@ -55,24 +57,17 @@ class GroupChatMemberSelectionFragment : BaseMemberSelectionFragment() {
 
     fun subscribeUI() {
         selectedChatViewModel.selectedLiveItems.observe(viewLifecycleOwner, Observer { rooms ->
-            selectedRoomAdapter.setData(rooms)
-            rooms.forEach { room ->
-                if (room.role != null) {
-                    (fragments[0] as DirectoryRoleFragment).selectRole(room.role)
-                } else if (room.people != null) {
-                    (fragments[1] as DirectoryPeopleFragment).selectPeople(room.people)
+            selectedMemberAdapter.setData(rooms)
+            rooms.forEach { itm ->
+                for (fragment in selectionFragments) {
+                    if (fragment.receivesItem(itm)) {
+                        fragment.unsafeSelectItem(itm)
+                        break
+                    }
                 }
             }
             activity?.invalidateOptionsMenu()
         })
-    }
-
-    override fun onRoomClick(temporaryRoom: TemporaryRoom, forRemove: Boolean) {
-        if (forRemove) {
-            selectedChatViewModel.removeRoom(temporaryRoom)
-        } else {
-            selectedChatViewModel.addRoom(temporaryRoom)
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -83,6 +78,14 @@ class GroupChatMemberSelectionFragment : BaseMemberSelectionFragment() {
             }
         }
         return false
+    }
+
+    override fun onMemberClick(member: MatrixItem, forRemove: Boolean) {
+        if (forRemove) {
+            selectedChatViewModel.removeMember(member)
+        } else {
+            selectedChatViewModel.addMember(member)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

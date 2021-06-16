@@ -9,8 +9,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.Matrix
 import im.vector.R
-import im.vector.health.TemporaryRoom
-import im.vector.health.directory.RoomClickListener
+import im.vector.health.directory.MemberClickListener
+import im.vector.health.microservices.interfaces.MatrixItem
 import im.vector.util.VectorUtils
 import im.vector.view.VectorCircularImageView
 import kotlinx.android.synthetic.main.item_directory_people.view.avatar
@@ -18,9 +18,9 @@ import kotlinx.android.synthetic.main.item_selectable_room.view.*
 import org.matrix.androidsdk.MXSession
 
 
-class SelectedRoomAdapter(val context: Context, val removeListener: RoomClickListener) :
-        RecyclerView.Adapter<SelectedRoomAdapter.SelectableRoomViewHolder>() {
-    private val rooms = mutableListOf<TemporaryRoom>()
+class SelectedMemberAdapter(val context: Context, val removeListener: MemberClickListener) :
+        RecyclerView.Adapter<SelectedMemberAdapter.SelectableRoomViewHolder>() {
+    private val members = mutableListOf<MatrixItem>()
     var mSession: MXSession? = null
 
     init {
@@ -39,9 +39,9 @@ class SelectedRoomAdapter(val context: Context, val removeListener: RoomClickLis
         }
     }
 
-    fun setData(rooms: MutableList<TemporaryRoom>) {
-        this.rooms.clear()
-        this.rooms.addAll(rooms)
+    fun setData(rooms: MutableList<MatrixItem>) {
+        this.members.clear()
+        this.members.addAll(rooms)
         notifyDataSetChanged()
     }
 
@@ -58,19 +58,14 @@ class SelectedRoomAdapter(val context: Context, val removeListener: RoomClickLis
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: SelectableRoomViewHolder, position: Int) {
-        if (rooms[position].people == null) {
-            VectorUtils.loadRoomAvatar(context, mSession, holder.itemView.avatar, rooms[position].role)
-            holder.itemView.name.text = rooms[position].role?.GetLongName()
-        } else {
-            VectorUtils.loadRoomAvatar(context, mSession, holder.itemView.avatar, rooms[position].people)
-            holder.itemView.name.text = rooms[position].people?.GetName()
-        }
+        VectorUtils.loadRoomAvatar(context, mSession, holder.itemView.avatar, members[position])
+        holder.itemView.name.text = members[position].GetDisplayName()
 
         holder.itemView.closeButton.setOnClickListener {
-            removeListener.onRoomClick(rooms[position], true)
+            removeListener.onMemberClick(members[position], true)
         }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
-    override fun getItemCount() = rooms.size
+    override fun getItemCount() = members.size
 }

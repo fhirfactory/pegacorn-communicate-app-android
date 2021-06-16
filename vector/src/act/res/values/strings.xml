@@ -1597,10 +1597,8 @@ Why choose Riot.im?
         <item>People</item>
     </string-array>
 
-    <string-array name="create_chat_tabs">
-        <item>Roles</item>
-        <item>People</item>
-    </string-array>
+    <string name="create_chat_roles">Roles</string>
+    <string name="create_chat_people">People</string>
 
     <string-array name="call_tabs">
         <item>Recent</item>
@@ -1642,4 +1640,8 @@ Why choose Riot.im?
     <string name="notes_room_topic">Notes to self</string>
     <string name="organisation">Organisation: %s</string>
     <string name="business_unit">Business Unit: %s</string>
+    <string name="org_unit">Org Unit: %s</string>
+    <string name="role_name">Role: %s</string>
+    <string name="role_location">Location: %s</string>
+    <string name="role_category">Category: %s</string>
 </resources>

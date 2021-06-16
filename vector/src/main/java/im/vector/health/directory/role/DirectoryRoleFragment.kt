@@ -1,27 +1,30 @@
 package im.vector.health.directory.role
 
 import android.content.Context
+import androidx.annotation.StringRes
+import androidx.fragment.app.Fragment
 import im.vector.R
 import im.vector.health.directory.role.detail.RoleDetailActivity
 import im.vector.health.directory.role.model.*
 import im.vector.extensions.withArgs
 import im.vector.health.TemporaryRoom
+import im.vector.health.directory.MemberClickListener
+import im.vector.health.directory.shared.IMatrixDirectorySelectionFragment
+import im.vector.health.directory.shared.IProvidesMatrixItems
 import im.vector.health.directory.shared.StandardDirectoryFragment
 import im.vector.health.microservices.DirectoryServicesSingleton
+import im.vector.health.microservices.interfaces.IPractitioner
 import im.vector.health.microservices.interfaces.IPractitionerRole
+import im.vector.health.microservices.interfaces.MatrixItem
 
 
-class DirectoryRoleFragment: StandardDirectoryFragment<RolesDirectoryAdapter, RoleViewHolder, PractitionerRoleItem>() {
+class DirectoryRoleFragment: StandardDirectoryFragment<RolesDirectoryAdapter, RoleViewHolder, PractitionerRoleItem>(), IMatrixDirectorySelectionFragment<IPractitionerRole> {
     companion object {
         fun newInstance(selectable: Boolean = false): DirectoryRoleFragment {
             return DirectoryRoleFragment().withArgs {
                 putBoolean(SELECTABLE, selectable)
             }
         }
-    }
-
-    fun unSelectRole(role: IPractitionerRole) {
-        listItemAdapter.removeFromSelectedRoles(role.GetID())
     }
 
     fun selectRole(role: IPractitionerRole) {
@@ -33,10 +36,10 @@ class DirectoryRoleFragment: StandardDirectoryFragment<RolesDirectoryAdapter, Ro
     override fun constructAdapter(context: Context, selectable: Boolean): RolesDirectoryAdapter {
         return RolesDirectoryAdapter(context,object: RoleClickListener {
             override fun onRoleClick(role: PractitionerRoleItem, forRemove: Boolean) {
-                if (roomClickListener == null) {
+                if (memberClickListener == null) {
                     startActivity(RoleDetailActivity.intent(requireContext(), role, true))
                 } else {
-                    roomClickListener?.onRoomClick(TemporaryRoom(null, role), forRemove)
+                    memberClickListener?.onMemberClick(role.practitionerRole, forRemove)
                 }
             }
         }, selectable)
@@ -53,4 +56,22 @@ class DirectoryRoleFragment: StandardDirectoryFragment<RolesDirectoryAdapter, Ro
             addItem(res?.map { PractitionerRoleItem(it) }, count)
         }
     }
+
+    override fun selectItem(item: IPractitionerRole) {
+        listItemAdapter.addToSelectedRoles(item.GetID())
+    }
+
+    override fun deselectItem(item: IPractitionerRole) {
+        listItemAdapter.removeFromSelectedRoles(item.GetID())
+    }
+
+    override fun provideMemberClickListener(listener: MemberClickListener) {
+        memberClickListener = listener
+    }
+
+    override fun getFragment(): Fragment = this
+
+    override fun receivesItem(item: MatrixItem): Boolean = item is IPractitionerRole
+
+    override fun getSelectionTitleResource(): Int = R.string.create_chat_roles
 }

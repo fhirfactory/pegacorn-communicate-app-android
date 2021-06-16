@@ -151,4 +151,7 @@
     <bool name="show_permalink_menu_item">true</bool>
     <bool name="show_albums_in_camera">true</bool>
     <bool name="show_image_compression_dialog">true</bool>
+
+    <bool name="fab_join_room_visible">false</bool>
+    <bool name="fab_start_chat_visible">false</bool>
 </resources>

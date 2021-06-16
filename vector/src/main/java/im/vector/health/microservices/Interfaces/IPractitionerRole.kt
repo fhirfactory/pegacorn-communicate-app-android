@@ -2,7 +2,7 @@ package im.vector.health.microservices.interfaces
 
 import android.os.Parcelable
 
-interface IPractitionerRole: Parcelable {
+interface IPractitionerRole: Parcelable, MatrixItem {
     fun GetLongName():String
     fun GetShortName():String
     fun GetOrgName():String
@@ -12,4 +12,6 @@ interface IPractitionerRole: Parcelable {
     fun GetPractitioners(callback: (List<IPractitioner>) -> Unit)
     fun GetID():String
     fun GetActive():Boolean
+    override fun GetMatrixID(): String = "placeholder-room-id"
+    override fun GetDisplayName(): String = GetLongName()
 }

@@ -197,10 +197,10 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             }
         }
 
-        roleText?.text = "Role: ${role.GetRoleName()}"
-        orgUnitText?.text = "Org Unit: ${role.GetOrgName()}"
-        categoryText?.text = "Category: ${role.GetRoleCategory()}"
-        locationText?.text = "Location: ${role.GetLocation()}"
+        roleText?.text = context.getString(R.string.role_name,role.GetRoleName())
+        orgUnitText?.text = context.getString(R.string.org_unit,role.GetOrgName())
+        categoryText?.text = context.getString(R.string.role_category, role.GetRoleCategory())
+        locationText?.text = context.getString(R.string.role_location, role.GetLocation())
 
         expandableIcon?.setOnClickListener {
             role.expanded = !role.expanded

@@ -1,17 +1,22 @@
 package im.vector.health.directory.people
 
 import android.content.Context
+import androidx.fragment.app.Fragment
 import im.vector.R
 import im.vector.health.directory.people.detail.PeopleDetailActivity
 import im.vector.extensions.withArgs
 import im.vector.health.TemporaryRoom
+import im.vector.health.directory.MemberClickListener
 import im.vector.health.directory.people.model.PractitionerItem
+import im.vector.health.directory.shared.IMatrixDirectorySelectionFragment
+import im.vector.health.directory.shared.IProvidesMatrixItems
 import im.vector.health.directory.shared.MessagingSupport
 import im.vector.health.directory.shared.StandardDirectoryFragment
 import im.vector.health.microservices.DirectoryServicesSingleton
 import im.vector.health.microservices.interfaces.IPractitioner
+import im.vector.health.microservices.interfaces.MatrixItem
 
-class DirectoryPeopleFragment: StandardDirectoryFragment<PeopleDirectoryAdapter, PeopleDirectoryAdapter.PeopleViewHolder, PractitionerItem>(), MessagingSupport {
+class DirectoryPeopleFragment: StandardDirectoryFragment<PeopleDirectoryAdapter, PeopleDirectoryAdapter.PeopleViewHolder, PractitionerItem>(), MessagingSupport, IMatrixDirectorySelectionFragment<IPractitioner> {
     companion object {
         fun newInstance(selectable: Boolean = false): DirectoryPeopleFragment {
             return DirectoryPeopleFragment().withArgs {
@@ -20,21 +25,13 @@ class DirectoryPeopleFragment: StandardDirectoryFragment<PeopleDirectoryAdapter,
         }
     }
 
-    fun unSelectPeople(people: IPractitioner) {
-        listItemAdapter.removeFromSelectedPeople(people.GetID())
-    }
-
-    fun selectPeople(people: IPractitioner) {
-        listItemAdapter.addToSelectedPeople(people.GetID())
-    }
-
     override fun constructAdapter(context: Context, selectable: Boolean): PeopleDirectoryAdapter {
         return PeopleDirectoryAdapter(context, object : PeopleClickListener {
             override fun onPeopleClick(directoryPeople: PractitionerItem, forRemove: Boolean) {
-                if (roomClickListener == null) {
+                if (memberClickListener == null) {
                     startActivity(PeopleDetailActivity.intent(requireContext(), directoryPeople, true))
                 } else {
-                    roomClickListener?.onRoomClick(TemporaryRoom(directoryPeople.practitioner, null), forRemove)
+                    memberClickListener?.onMemberClick(directoryPeople.practitioner, forRemove)
                 }
             }
 
@@ -57,4 +54,22 @@ class DirectoryPeopleFragment: StandardDirectoryFragment<PeopleDirectoryAdapter,
             addItem(practitioners?.map { PractitionerItem(it,false) }, count)
         }
     }
+
+    override fun selectItem(item: IPractitioner) {
+        listItemAdapter.addToSelectedPeople(item.GetID())
+    }
+
+    override fun deselectItem(item: IPractitioner) {
+        listItemAdapter.removeFromSelectedPeople(item.GetID())
+    }
+
+    override fun provideMemberClickListener(listener: MemberClickListener) {
+        memberClickListener = listener
+    }
+
+    override fun getFragment(): Fragment = this
+
+    override fun receivesItem(item: MatrixItem): Boolean = item is IPractitioner
+
+    override fun getSelectionTitleResource(): Int = R.string.create_chat_people
 }

@@ -14,8 +14,8 @@ import androidx.lifecycle.ViewModelProviders
 import im.vector.R
 import im.vector.activity.VectorMediaPickerActivity
 import im.vector.chat.BaseTitleFragment
-import im.vector.health.TemporaryRoom
-import im.vector.health.directory.RoomClickListener
+import im.vector.health.directory.MemberClickListener
+import im.vector.health.microservices.interfaces.MatrixItem
 
 import im.vector.util.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.util.PERMISSION_REQUEST_CODE_LAUNCH_CAMERA
@@ -30,7 +30,7 @@ import java.io.FileNotFoundException
 
 class GroupChatDetailFragment : BaseTitleFragment() {
     lateinit var selectedChatViewModel: SelectedChatViewModel
-    lateinit var selectedRoomAdapter: SelectedRoomAdapter
+    lateinit var selectedMemberAdapter: SelectedMemberAdapter
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -39,12 +39,12 @@ class GroupChatDetailFragment : BaseTitleFragment() {
             selectedChatViewModel = ViewModelProviders.of(this).get(SelectedChatViewModel::class.java)
         } ?: throw Throwable("invalid activity")
 
-        selectedRoomAdapter = SelectedRoomAdapter(requireContext(), object : RoomClickListener {
-            override fun onRoomClick(temporaryRoom: TemporaryRoom, forRemove: Boolean) {
-                selectedChatViewModel.removeRoom(temporaryRoom)
+        selectedMemberAdapter = SelectedMemberAdapter(requireContext(), object : MemberClickListener {
+            override fun onMemberClick(member: MatrixItem, forRemove: Boolean) {
+                selectedChatViewModel.removeMember(member)
             }
         })
-        selectedUserRecyclerView.adapter = selectedRoomAdapter
+        selectedUserRecyclerView.adapter = selectedMemberAdapter
 
         avatar.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_material_camera))
         avatar.setOnClickListener {
@@ -112,7 +112,7 @@ class GroupChatDetailFragment : BaseTitleFragment() {
 
     fun subscribeUI() {
         selectedChatViewModel.selectedLiveItems.observe(viewLifecycleOwner, Observer { rooms ->
-            selectedRoomAdapter.setData(rooms)
+            selectedMemberAdapter.setData(rooms)
             rooms?.size?.let { setHeader(header, R.string.total_number_of_member, it) }
             activity?.invalidateOptionsMenu()
         })
@@ -130,7 +130,7 @@ class GroupChatDetailFragment : BaseTitleFragment() {
                     roomParams.topic = roomTopicEditText.text.toString()
                     roomParams.visibility = if (publicSwitch.isActivated) "public" else "private"
                     val roomMembers = selectedChatViewModel.selectedLiveItems.value?.mapNotNull { x ->
-                        if (x.people != null) x.people.GetMatrixID() else if (x.role != null) x.role.GetID() else null
+                        x.GetMatrixID()
                     }
                     roomParams.invitedUserIds = roomMembers
                     mSession.createRoom(roomParams, object: SimpleApiCallback<String>(activity) {

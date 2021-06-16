@@ -75,6 +75,7 @@ import im.vector.Matrix;
 import im.vector.R;
 import im.vector.VectorApp;
 import im.vector.adapters.ParticipantAdapterItem;
+import im.vector.health.microservices.interfaces.MatrixItem;
 import im.vector.health.microservices.interfaces.IHealthcareService;
 import im.vector.health.microservices.interfaces.IPractitioner;
 import im.vector.health.microservices.interfaces.IPractitionerRole;
@@ -390,6 +391,13 @@ public class VectorUtils {
         if (null != role) {
             VectorUtils.loadUserAvatar(context,
                     session, imageView, null, role.GetID(), role.GetLongName());
+        }
+    }
+
+    public static void loadRoomAvatar(Context context, MXSession session, ImageView imageView, MatrixItem item) {
+        if (null != item) {
+            VectorUtils.loadUserAvatar(context,
+                    session, imageView, item.GetAvatarUrl(), item.GetMatrixID(), item.GetDisplayName());
         }
     }
 

@@ -3,22 +3,28 @@ package im.vector.chat
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import im.vector.R
-import im.vector.health.directory.shared.BaseDirectoryFragment
-import im.vector.health.directory.RoomClickListener
+import im.vector.health.directory.MemberClickListener
+import im.vector.health.directory.shared.IMatrixDirectorySelectionFragment
 import kotlinx.android.synthetic.main.fragment_create_chat.*
 
-abstract class BaseMemberSelectionFragment : BaseTitleFragment(), RoomClickListener {
-    abstract val fragments: List<BaseDirectoryFragment>
+abstract class BaseMemberSelectionFragment : BaseTitleFragment(), MemberClickListener {
+    abstract val selectionFragments: List<IMatrixDirectorySelectionFragment<*>>
 
     override fun getLayoutResId() = R.layout.fragment_create_chat
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        pager.adapter = CreateChatTabAdapter(childFragmentManager, resources.getStringArray(R.array.create_chat_tabs))
+        pager.adapter = CreateChatTabAdapter(childFragmentManager)
+        
+        if (selectionFragments.size <= 1) {
+            tabLayout.visibility = View.GONE
+        }
+
         tabLayout.setupWithViewPager(pager)
 
         searchEditText.addTextChangedListener(object : TextWatcher {
@@ -35,30 +41,30 @@ abstract class BaseMemberSelectionFragment : BaseTitleFragment(), RoomClickListe
             }
         })
 
-        fragments.forEach { fragment ->
-            fragment.roomClickListener = this
+        selectionFragments.forEach { fragment ->
+            fragment.provideMemberClickListener(this)
         }
     }
 
     override fun onFilter(pattern: String?, listener: OnFilterListener?) {
-        fragments.forEach { fragment ->
+        selectionFragments.forEach { fragment ->
             fragment.applyFilter(pattern)
         }
     }
 
     override fun onResetFilter() {
-        fragments.forEach { fragment ->
+        selectionFragments.forEach { fragment ->
             fragment.applyFilter("")
         }
     }
 
-    inner class CreateChatTabAdapter(fm: FragmentManager, val titles: Array<String>) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-        override fun getItem(position: Int) = fragments[position]
+    inner class CreateChatTabAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+        override fun getItem(position: Int) = selectionFragments[position].getFragment()
 
-        override fun getCount(): Int = titles.size
+        override fun getCount(): Int = selectionFragments.size
 
         override fun getPageTitle(position: Int): CharSequence {
-            return titles[position]
+            return getString(selectionFragments[position].getSelectionTitleResource())
         }
     }
 }
