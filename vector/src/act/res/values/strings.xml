@@ -1638,4 +1638,8 @@ Why choose Riot.im?
     <string name="short_text">Short text</string>
     <string name="long_text">very long text very long text very long text very long text very long text very long text very long text</string>
     <string name="power_level_change_message">%s changed the power level of %s from %s to %s.</string>
+    <string name="notes_room_name">My Notes</string>
+    <string name="notes_room_topic">Notes to self</string>
+    <string name="organisation">Organisation: %s</string>
+    <string name="business_unit">Business Unit: %s</string>
 </resources>

@@ -41,7 +41,7 @@ class DirectoryPeopleFragment: StandardDirectoryFragment<PeopleDirectoryAdapter,
             override fun onPeopleFavorite(directoryPeople: PractitionerItem) {
                 //TODO("Not yet implemented")
             }
-        }, selectable, this)
+        }, selectable, this, this)
     }
 
     override fun getHeaderText(count: Int, favourites: Boolean): String = (if (favourites) getString(R.string.total_number_of_favourite_people) else getString(R.string.total_number_of_people)) + " " + count.toString()

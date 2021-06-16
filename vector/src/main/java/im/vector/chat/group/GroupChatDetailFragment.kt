@@ -130,7 +130,7 @@ class GroupChatDetailFragment : BaseTitleFragment() {
                     roomParams.topic = roomTopicEditText.text.toString()
                     roomParams.visibility = if (publicSwitch.isActivated) "public" else "private"
                     val roomMembers = selectedChatViewModel.selectedLiveItems.value?.mapNotNull { x ->
-                        if (x.people != null) x.people.GetID() else if (x.role != null) x.role.GetID() else null
+                        if (x.people != null) x.people.GetMatrixID() else if (x.role != null) x.role.GetID() else null
                     }
                     roomParams.invitedUserIds = roomMembers
                     mSession.createRoom(roomParams, object: SimpleApiCallback<String>(activity) {

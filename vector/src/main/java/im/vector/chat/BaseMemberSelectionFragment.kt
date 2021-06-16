@@ -47,7 +47,9 @@ abstract class BaseMemberSelectionFragment : BaseTitleFragment(), RoomClickListe
     }
 
     override fun onResetFilter() {
-        // TODO("Not yet implemented")
+        fragments.forEach { fragment ->
+            fragment.applyFilter("")
+        }
     }
 
     inner class CreateChatTabAdapter(fm: FragmentManager, val titles: Array<String>) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {

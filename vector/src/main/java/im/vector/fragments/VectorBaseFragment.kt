@@ -25,18 +25,21 @@ import androidx.fragment.app.Fragment
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import im.vector.activity.VectorAppCompatActivity
+import im.vector.health.directory.shared.ILocalisationProvider
 import org.matrix.androidsdk.core.Log
 
 
 /**
  * Parent class for all Fragment in Vector application
  */
-abstract class VectorBaseFragment : Fragment() {
+abstract class VectorBaseFragment : Fragment(), ILocalisationProvider {
 
     // Butterknife unbinder
     private var mUnBinder: Unbinder? = null
 
     protected var vectorActivity: VectorAppCompatActivity? = null
+
+    override fun getStringRes(resId: Int): String? = getString(resId)
 
     /* ==========================================================================================
      * Life cycle

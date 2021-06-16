@@ -18,11 +18,13 @@
 package im.vector.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.Nullable;
@@ -38,16 +40,43 @@ import im.vector.Matrix;
 import im.vector.MyPresenceManager;
 import im.vector.R;
 import im.vector.VectorApp;
+import im.vector.health.directory.shared.ILocalisationProvider;
+import im.vector.health.directory.shared.IProgressBarPresenter;
 
 /**
  * extends ActionBarActivity to manage the rageshake
  */
-public abstract class   MXCActionBarActivity extends VectorAppCompatActivity {
+public abstract class   MXCActionBarActivity extends VectorAppCompatActivity implements IProgressBarPresenter, ILocalisationProvider {
     // TODO Make this protected
     public static final String EXTRA_MATRIX_ID = "MXCActionBarActivity.EXTRA_MATRIX_ID";
 
     protected MXSession mSession = null;
     Room mRoom = null;
+
+    private Dialog overlayDialog;
+
+    @Nullable
+    @Override
+    public String getStringRes(int resId) {
+        return getString(resId);
+    }
+
+    @Override
+    public void showProgressBar() {
+        if (overlayDialog == null) {
+            overlayDialog = new Dialog(MXCActionBarActivity.this, android.R.style.Theme_Panel);
+            overlayDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_UNCHANGED);
+            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+            View v = overlayDialog.getLayoutInflater().inflate(R.layout.dialog_progress_view,null);
+            overlayDialog.addContentView(v,lp);
+        }
+        overlayDialog.show();
+    }
+
+    @Override
+    public void hideProgressBar() {
+        overlayDialog.cancel();
+    }
 
     @Override
     public void onLowMemory() {

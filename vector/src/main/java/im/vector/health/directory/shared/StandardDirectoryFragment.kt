@@ -42,16 +42,25 @@ abstract class StandardDirectoryFragment<Adapter,ViewHolder : RecyclerView.ViewH
         }
     }
 
+    fun filter(with: String?, callback: (Int) -> Unit) {
+        if (filter != with) {
+            filter = with
+            initializeList(callback)
+        }
+    }
+
     override fun getRooms(): MutableList<Room> {
         TODO("Not yet implemented")
     }
 
     override fun onFilter(pattern: String?, listener: AbsHomeFragment.OnFilterListener?) {
-        TODO("Not yet implemented")
+        filter(pattern) {
+            listener?.onFilterDone(it)
+        }
     }
 
     override fun onResetFilter() {
-        TODO("Not yet implemented")
+        filter(null)
     }
 
     fun firstLoadListSetup() {
@@ -63,14 +72,14 @@ abstract class StandardDirectoryFragment<Adapter,ViewHolder : RecyclerView.ViewH
         initializeList()
     }
 
-    fun initializeList() {
+    fun initializeList(callback: ((Int) -> Unit)? = null) {
         listView.scrollToPosition(0)
 
         loadNumber = 0
         listItemAdapter.setData(ArrayList())
         loading = false
         page = -1
-        paginate()
+        paginate(callback)
         setupScrollListener()
         reloadList()
     }
@@ -110,7 +119,7 @@ abstract class StandardDirectoryFragment<Adapter,ViewHolder : RecyclerView.ViewH
     var pageSize = 20;
     var loadNumber = 0
 
-    fun paginate() {
+    fun paginate(filterCallback: ((Int) -> Unit)? = null) {
         if (!loading) {
 
             val idx = listView.getChildAdapterPosition(listView.getChildAt(0))
@@ -131,6 +140,7 @@ abstract class StandardDirectoryFragment<Adapter,ViewHolder : RecyclerView.ViewH
                                 loading = false
                             }
                             if (page == 0) reloadList()
+                            filterCallback?.let { it(count) }
                         }
                     } else {
                         getDataFavourites(page, pageSize, filter) { res, count ->
@@ -141,6 +151,7 @@ abstract class StandardDirectoryFragment<Adapter,ViewHolder : RecyclerView.ViewH
                                 loading = false
                             }
                             if (page == 0) reloadList()
+                            filterCallback?.let { it(count) }
                         }
                     }
 

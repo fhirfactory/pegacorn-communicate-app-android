@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.widget.Toast
 import com.facebook.react.bridge.UiThreadUtil
+import im.vector.R
 import im.vector.activity.CommonActivityUtils
 import im.vector.activity.VectorCallViewActivity
 import im.vector.activity.VectorRoomActivity
@@ -115,6 +116,7 @@ interface MessagingSupport: IMatrixActivity, MatrixChatActionHandler {
      */
     fun getCreateMessageCallback(): ApiCallback<String> = object : ApiCallback<String> {
         override fun onSuccess(roomId: String) {
+            hideProgressBar()
             val params: MutableMap<String, Any> = HashMap()
             params[VectorRoomActivity.EXTRA_MATRIX_ID] = currentSession.myUserId
             params[VectorRoomActivity.EXTRA_ROOM_ID] = roomId
@@ -126,15 +128,15 @@ interface MessagingSupport: IMatrixActivity, MatrixChatActionHandler {
         }
 
         override fun onMatrixError(e: MatrixError) {
-
+            hideProgressBar()
         }
 
         override fun onNetworkError(e: Exception) {
-
+            hideProgressBar()
         }
 
         override fun onUnexpectedError(e: Exception) {
-
+            hideProgressBar()
         }
     }
 
@@ -152,7 +154,7 @@ interface MessagingSupport: IMatrixActivity, MatrixChatActionHandler {
                     params[VectorRoomActivity.EXTRA_EXPAND_ROOM_HEADER] = true
                     CommonActivityUtils.goToRoomPage(this@MessagingSupport.getActivity() as Activity, currentSession, params)
                     return
-                } else if (room.isDirect && room.numberOfMembers == 2 && room.getMember(matrixID) != null) {
+                } else if (currentSession.myUserId != matrixID && room.isDirect && room.numberOfMembers == 2 && room.getMember(matrixID) != null) {
                     val params: MutableMap<String, Any> = HashMap()
                     params[VectorRoomActivity.EXTRA_MATRIX_ID] = currentSession.myUserId
                     params[VectorRoomActivity.EXTRA_ROOM_ID] = room.roomId
@@ -163,11 +165,13 @@ interface MessagingSupport: IMatrixActivity, MatrixChatActionHandler {
             }
         }
         if (matrixID == currentSession.myUserId) {
-            currentSession.createRoom("My Notes","Notes to self",null, object: ApiCallback<String> {
+            showProgressBar()
+            currentSession.createRoom(getStringRes(R.string.notes_room_name),getStringRes(R.string.notes_room_topic),null, object: ApiCallback<String> {
                 override fun onSuccess(info: String?) {
                     info?.let{ roomID ->
                         RoomUtils.updateRoomTag(currentSession,roomID,2.0,"note", object: ApiCallback<Void> {
                             override fun onSuccess(info: Void?) {
+                                hideProgressBar()
                                 val params: MutableMap<String, Any> = HashMap()
                                 params[VectorRoomActivity.EXTRA_MATRIX_ID] = currentSession.myUserId
                                 params[VectorRoomActivity.EXTRA_ROOM_ID] = roomID
@@ -176,15 +180,15 @@ interface MessagingSupport: IMatrixActivity, MatrixChatActionHandler {
                             }
 
                             override fun onUnexpectedError(e: java.lang.Exception?) {
-                                //TODO("Not yet implemented")
+                                hideProgressBar()
                             }
 
                             override fun onNetworkError(e: java.lang.Exception?) {
-                                //TODO("Not yet implemented")
+                                hideProgressBar()
                             }
 
                             override fun onMatrixError(e: MatrixError?) {
-                                //TODO("Not yet implemented")
+                                hideProgressBar()
                             }
 
                         })
@@ -192,20 +196,21 @@ interface MessagingSupport: IMatrixActivity, MatrixChatActionHandler {
                 }
 
                 override fun onUnexpectedError(e: java.lang.Exception?) {
-                    TODO("Not yet implemented")
+                    hideProgressBar()
                 }
 
                 override fun onNetworkError(e: java.lang.Exception?) {
-                    TODO("Not yet implemented")
+                    hideProgressBar()
                 }
 
                 override fun onMatrixError(e: MatrixError?) {
-                    TODO("Not yet implemented")
+                    hideProgressBar()
                 }
 
             })
             return
         } else {
+            showProgressBar()
             currentSession.createDirectMessageRoom(matrixID, getCreateMessageCallback())
         }
     }

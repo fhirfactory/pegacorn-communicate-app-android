@@ -62,7 +62,6 @@ class PeopleDetailActivity : MXCActionBarActivity(), MessagingSupport, FragmentM
             call(false, people.GetMatrixID())
         }
         chatIcon.setOnClickListener {
-            enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR)
             startChat(people.GetMatrixID())
         }
         videoCallIcon.setOnClickListener {
@@ -75,23 +74,8 @@ class PeopleDetailActivity : MXCActionBarActivity(), MessagingSupport, FragmentM
             videoCallIcon?.visibility = View.INVISIBLE
             callIcon?.setImageResource(R.drawable.ic_material_message_black)
             callIcon.setOnClickListener {
-                enableProgressBarView(CommonActivityUtils.UTILS_DISPLAY_PROGRESS_BAR)
                 startChat(people.GetMatrixID())
             }
-        }
-    }
-
-    /**
-     * Helper method to enable/disable the progress bar view used when a
-     * remote server action is on progress.
-     *
-     * @param aIsProgressBarDisplayed true to show the progress bar screen, false to hide it
-     */
-    private fun enableProgressBarView(aIsProgressBarDisplayed: Boolean) {
-        if (aIsProgressBarDisplayed) {
-            showWaitingView()
-        } else {
-            hideWaitingView()
         }
     }
 

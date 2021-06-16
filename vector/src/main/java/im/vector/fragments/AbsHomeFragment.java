@@ -17,11 +17,13 @@
 
 package im.vector.fragments;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.CallSuper;
@@ -85,7 +87,23 @@ public abstract class AbsHomeFragment extends VectorBaseFragment implements
         this.mSession = mSession;
     }
 
+    private Dialog overlayDialog;
+    @Override
+    public void showProgressBar() {
+        if (overlayDialog == null) {
+            overlayDialog = new Dialog(requireContext(), android.R.style.Theme_Panel);
+            overlayDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_UNCHANGED);
+            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+            View v = overlayDialog.getLayoutInflater().inflate(R.layout.dialog_progress_view,null);
+            overlayDialog.addContentView(v,lp);
+        }
+        overlayDialog.show();
+    }
 
+    @Override
+    public void hideProgressBar() {
+        overlayDialog.cancel();
+    }
 
     OnRoomChangedListener mOnRoomChangedListener;
 
