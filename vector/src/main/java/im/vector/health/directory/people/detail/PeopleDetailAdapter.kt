@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.Matrix
 import im.vector.R
+import im.vector.health.directory.role.DisplayContext
 import im.vector.health.directory.role.OnDataSetChange
 import im.vector.health.directory.role.RoleClickListener
 import im.vector.health.directory.role.RoleViewHolder
@@ -98,7 +99,7 @@ class PeopleDetailAdapter(val context: Context, private val onClickListener: Rol
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (models[position].type) {
             TYPE_ROLE -> {
-                (holder as RoleViewHolder).bind(context, mSession, models[position].role!!,  this, position, onClickListener, showHeader(position))
+                (holder as RoleViewHolder).bind(context, mSession, models[position].role!!,  this, position, onClickListener, showHeader(position), displayContext = DisplayContext.PeopleDetail)
                 holder.itemView.setOnClickListener {
                     onClickListener?.onRoleClick(models[position].role!!)
                 }

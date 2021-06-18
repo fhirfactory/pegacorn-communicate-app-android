@@ -43,7 +43,7 @@ class DirectoryRoleFragment: StandardDirectoryFragment<RolesDirectoryAdapter, Ro
                     memberClickListener?.onMemberClick(role.practitionerRole, forRemove)
                 }
             }
-        }, selectable)
+        }, selectable, DisplayContext.Directory)
     }
 
     override fun getData(forPage: Int, withPageSize: Int, query: String?, addItem: (List<PractitionerRoleItem>?, Int) -> Unit) {

@@ -5,15 +5,12 @@ import im.vector.health.microservices.interfaces.APIError
 import im.vector.health.microservices.interfaces.*
 import im.vector.health.microservices.mock.MockPatient
 import im.vector.health.microservices.model.HealthcareService
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 import kotlin.collections.ArrayList
 import im.vector.health.microservices.model.PractitionerRole
 import im.vector.health.microservices.model.Practitioner
+import retrofit2.*
 
 
 class DirectoryConnector: IDirectoryServiceProvider {
@@ -50,8 +47,6 @@ class DirectoryConnector: IDirectoryServiceProvider {
             }
 
             override fun onResponse(call: Call<List<FHIRPractitionerRole>>, response: Response<List<FHIRPractitionerRole>>) {
-                //TODO("Not yet implemented")
-
                 val practitionerRoles = response.body()?.map { PractitionerRole(it) }
                 val count = response.headers().get("X-Total-Count") ?: "0"
                 callback(practitionerRoles,Integer.parseInt(count))

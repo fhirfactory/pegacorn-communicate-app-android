@@ -4,8 +4,7 @@ import android.content.Context
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -23,7 +22,7 @@ import kotlinx.android.synthetic.main.item_directory_people.view.favoriteIcon
 import org.matrix.androidsdk.MXSession
 
 
-class RolesDirectoryAdapter(val context: Context, private val onClickListener: RoleClickListener, private val selectable: Boolean = false) :
+class RolesDirectoryAdapter(val context: Context, private val onClickListener: RoleClickListener, private val selectable: Boolean = false, private val displayContext: DisplayContext) :
         RecyclerView.Adapter<RoleViewHolder>(), OnDataSetChange, IStandardDirectoryAdapter<PractitionerRoleItem> {
     private val roles = mutableListOf<PractitionerRoleItem>()
     var mSession: MXSession? = null
@@ -82,7 +81,7 @@ class RolesDirectoryAdapter(val context: Context, private val onClickListener: R
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: RoleViewHolder, position: Int) {
-        holder.bind(context, mSession, roles[position], this, position, onClickListener, false, checkSelection(roles[position]))
+        holder.bind(context, mSession, roles[position], this, position, onClickListener, false, checkSelection(roles[position]), displayContext)
         holder.selectionRadioImageView?.visibility = if (selectable) VISIBLE else GONE
         holder.itemView.setOnClickListener {
             if (selectable) {
@@ -146,11 +145,11 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), Handle
         }
     }
 
-    fun bind(context: Context, session: MXSession?, role: PractitionerRoleItem, onDataSetChange: OnDataSetChange, position: Int, onClickListener: RoleClickListener?, showHeader: Boolean = false, selection: Boolean? = null) {
+    fun bind(context: Context, session: MXSession?, role: PractitionerRoleItem, onDataSetChange: OnDataSetChange, position: Int, onClickListener: RoleClickListener?, showHeader: Boolean = false, selection: Boolean? = null, displayContext: DisplayContext) {
         VectorUtils.loadRoomAvatar(context, session, avatar, role)
         this.context = context
         heading?.visibility = if (showHeader) VISIBLE else GONE
-        officialName?.text = role.GetLongName()
+        officialName?.text = role.GetShortName()
         secondaryName?.text = role.GetOrgName()
         if(selection==null){
             selectionRadioImageView?.visibility = GONE
@@ -171,12 +170,20 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), Handle
             categoryText?.visibility = GONE
             locationText?.visibility = GONE
         }
-        if (role.GetActive()) {
+
+        //role.GetActive() won't work when we're viewing the role as a member of the people detail view
+        //as the returned role won't have attached practitioners so as to prevent circular references
+        //we could fetch each role from the server to ensure that it is populated, but instead we assume
+        //that if we're viewing it from the people detail page, (and so it's a role held by the person
+        //we're viewing), then the role is filled.
+        if (role.GetActive() || displayContext == DisplayContext.PeopleDetail) {
             //roleFilledTextView?.text = context.getText(R.string.role_filled)
             //stealing the default colour from another text view is like, the best viable way of doing this, apparently
             //otherwise, the color has to come from resource values -- so would be theme dependent (as it true of the use of vector_warning_color)
             //roleFilledTextView?.setTextColor(officialName?.textColors)
+            roleFilledTextView?.visibility = GONE
         } else {
+            roleFilledTextView?.visibility = VISIBLE
             roleFilledTextView?.text = context.getText(R.string.role_unfilled)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 roleFilledTextView?.setTextColor(context.getColor(R.color.vector_warning_color))
@@ -218,6 +225,11 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), Handle
     }
 
     override fun getCurrentContext(): Context = context
+}
+
+enum class DisplayContext {
+    Directory,
+    PeopleDetail
 }
 
 interface RoleClickListener {

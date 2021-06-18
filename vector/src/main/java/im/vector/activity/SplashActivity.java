@@ -304,6 +304,7 @@ public class SplashActivity extends MXCActionBarActivity {
 
             for (MXSession session : sessions) {
                 matrixIds.add(session.getCredentials().userId);
+
             }
 
             Matrix.getInstance(this).mHasBeenDisconnected = false;

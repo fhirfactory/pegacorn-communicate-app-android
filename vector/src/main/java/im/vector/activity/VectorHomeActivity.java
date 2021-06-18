@@ -211,6 +211,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     // Key used to restore the proper fragment after orientation change
     private static final String CURRENT_MENU_ID = "CURRENT_MENU_ID";
 
+    // Key used to check if a first-time login has occurred
+    public static final String NEW_LOGIN = "NEW_LOGIN";
+
     // switch to a room activity
     private Map<String, Object> mAutomaticallyOpenedRoomParams = null;
 
@@ -330,7 +333,6 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     public void initUiAndData() {
 
         mFragmentManager = getSupportFragmentManager();
-//        findViewById(R.id.bottom_action_codes).setVisibility(View.GONE);
 
         if (CommonActivityUtils.shouldRestartApp(this)) {
             Log.e(LOG_TAG, "Restart the application.");
@@ -601,6 +603,13 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         // initialize the public rooms list
         PublicRoomsManager.getInstance().setSession(mSession);
         PublicRoomsManager.getInstance().refreshPublicRoomsCount(null);
+
+
+        // Launch the role selector for new logins only
+        if (!intent.hasExtra(NEW_LOGIN)) {
+            Intent i = new Intent(getApplicationContext(), RoleSelectionActivity.class);
+            startActivityForResult(i, ROLE_SELECTION_REQUEST);
+        }
 
         initViews();
     }
@@ -2157,6 +2166,11 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                     refreshSlidingMenu();
                 }
             });
+        }
+
+        TextView noRoleTextView = navigationView.findViewById(R.id.home_menu_main_matrix_no_role);
+        if (null != noRoleTextView) {
+            noRoleTextView.setText("No roles selected");
         }
 
         RecyclerView roleRecyclerView = navigationView.findViewById(R.id.rolesRecyclerView);

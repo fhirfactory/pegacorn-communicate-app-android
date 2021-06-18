@@ -77,7 +77,7 @@ class RolesDetailAdapter(val context: Context, private val onClickListener: Peop
         fun bind(context: Context, session: MXSession?, adapterModel: AdapterModel, showHeader: Boolean) {
             VectorUtils.loadRoomAvatar(context, session, avatar, adapterModel.people)
             officialName?.text = adapterModel.people?.GetName()
-            //secondaryName?.text = adapterModel.people?.jobTitle
+            secondaryName?.text = adapterModel.people?.GetJobTitle()
             heading?.text = adapterModel.title
             heading?.visibility = if (showHeader) VISIBLE else GONE
             itemView.setOnClickListener {
