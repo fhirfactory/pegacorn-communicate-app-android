@@ -210,6 +210,9 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
     // Key used to restore the proper fragment after orientation change
     private static final String CURRENT_MENU_ID = "CURRENT_MENU_ID";
 
+    // Key used to check if a first-time login has occurred
+    public static final String NEW_LOGIN = "NEW_LOGIN";
+
     // switch to a room activity
     private Map<String, Object> mAutomaticallyOpenedRoomParams = null;
 
@@ -584,6 +587,13 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         // initialize the public rooms list
         PublicRoomsManager.getInstance().setSession(mSession);
         PublicRoomsManager.getInstance().refreshPublicRoomsCount(null);
+
+
+        // Launch the role selector for new logins only
+        if (!intent.hasExtra(NEW_LOGIN)) {
+            Intent i = new Intent(getApplicationContext(), RoleSelectionActivity.class);
+            startActivityForResult(i, ROLE_SELECTION_REQUEST);
+        }
 
         initViews();
     }

@@ -1188,7 +1188,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
     /**
      * Some sessions have been registered, skip the login process.
      */
-    private void goToSplash() {
+    private void goToSplash(boolean newLogin) {
         Log.d(LOG_TAG, "## gotoSplash(): Go to splash.");
 
         Intent intent = new Intent(this, SplashActivity.class);
@@ -1196,7 +1196,15 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
             intent.putExtra(VectorUniversalLinkReceiver.EXTRA_UNIVERSAL_LINK_URI, mUniversalLinkUri);
         }
 
+        if (!newLogin) {
+            intent.putExtra(VectorHomeActivity.NEW_LOGIN,true);
+        }
+
         startActivity(intent);
+    }
+
+    private void goToSplash() {
+        goToSplash(false);
     }
 
     private void saveServerUrlsIfCustomValuesHasBeenEntered() {
@@ -2130,7 +2138,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
                     saveServerUrlsIfCustomValuesHasBeenEntered();
 
-                    goToSplash();
+                    goToSplash(true);
                     finish();
                 }
 
@@ -2598,7 +2606,7 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
 
                 saveServerUrlsIfCustomValuesHasBeenEntered();
 
-                goToSplash();
+                goToSplash(true);
                 finish();
             } else if (resultCode == RESULT_CANCELED) {
                 Log.d(LOG_TAG, "## onActivityResult(): fallback cancelled");
@@ -2845,14 +2853,14 @@ public class LoginActivity extends MXCActionBarActivity implements RegistrationM
                         public void onClick(DialogInterface dialog, int which) {
                             saveServerUrlsIfCustomValuesHasBeenEntered();
 
-                            goToSplash();
+                            goToSplash(true);
                             finish();
                         }
                     })
                     .show();
         } else {
             saveServerUrlsIfCustomValuesHasBeenEntered();
-            goToSplash();
+            goToSplash(true);
             finish();
         }
     }

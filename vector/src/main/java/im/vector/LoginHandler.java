@@ -70,6 +70,8 @@ public class LoginHandler {
             Matrix.getInstance(appCtx).addSession(session);
         }
 
+        System.out.println("login success");
+
         callback.onSuccess(null);
     }
 
