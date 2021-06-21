@@ -171,6 +171,7 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), Handle
             locationText?.visibility = GONE
         }
 
+        roleFilledTextView?.visibility = GONE
         //role.GetActive() won't work when we're viewing the role as a member of the people detail view
         //as the returned role won't have attached practitioners so as to prevent circular references
         //we could fetch each role from the server to ensure that it is populated, but instead we assume
@@ -181,7 +182,13 @@ class RoleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), Handle
             //stealing the default colour from another text view is like, the best viable way of doing this, apparently
             //otherwise, the color has to come from resource values -- so would be theme dependent (as it true of the use of vector_warning_color)
             //roleFilledTextView?.setTextColor(officialName?.textColors)
-            roleFilledTextView?.visibility = GONE
+            roleFilledTextView?.visibility = VISIBLE
+            roleFilledTextView?.text = context.getText(R.string.role_filled)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                roleFilledTextView?.setTextColor(context.getColor(R.color.vector_success_color))
+            } else {
+                roleFilledTextView?.setTextColor(context.applicationContext.resources.getColor(R.color.vector_success_color))
+            }
         } else {
             roleFilledTextView?.visibility = VISIBLE
             roleFilledTextView?.text = context.getText(R.string.role_unfilled)

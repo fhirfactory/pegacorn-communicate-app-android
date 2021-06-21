@@ -30,6 +30,7 @@ import com.google.android.gms.common.GoogleApiAvailabilityLight;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.installations.FirebaseInstallations;
+import com.google.firebase.installations.InstallationTokenResult;
 
 import org.matrix.androidsdk.core.Log;
 
@@ -81,13 +82,19 @@ public class FcmHelper {
             //'app should always check the device for a compatible Google Play services APK before accessing Google Play services features'
             if (checkPlayServices(activity)) {
                 try {
-                    FirebaseInstallations.getInstance().getId()
-                            .addOnSuccessListener(activity, new OnSuccessListener<String>() {
+                    FirebaseInstallations.getInstance().getToken(true)
+                            .addOnSuccessListener(activity, new OnSuccessListener<InstallationTokenResult>() {
                                 @Override
-                                public void onSuccess(String instanceIdResult) {
-                                    storeFcmToken(activity, instanceIdResult);
+                                public void onSuccess(InstallationTokenResult installationTokenResult) {
+                                    storeFcmToken(activity,installationTokenResult.getToken());
                                 }
                             })
+//                            .addOnSuccessListener(activity, new OnSuccessListener<String>() {
+//                                @Override
+//                                public void onSuccess(String instanceIdResult) {
+//                                    storeFcmToken(activity, instanceIdResult);
+//                                }
+//                            })
                             .addOnFailureListener(activity, new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {

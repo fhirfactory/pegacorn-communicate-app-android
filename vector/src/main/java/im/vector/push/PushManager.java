@@ -28,6 +28,7 @@ import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import org.matrix.androidsdk.MXSession;
 import org.matrix.androidsdk.core.Log;
@@ -39,6 +40,7 @@ import org.matrix.androidsdk.data.Pusher;
 import org.matrix.androidsdk.rest.model.PushersResponse;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -278,6 +280,7 @@ public final class PushManager {
             Log.d(LOG_TAG, "## getFcmRegistrationToken() : undefined token -> getting a new one");
             registrationToken = FcmHelper.getFcmToken(mContext);
         }
+
         return registrationToken;
     }
 
@@ -506,7 +509,6 @@ public final class PushManager {
         // - the user let the app run in background to fetch the event content from the homeserver
         // - or, if the app cannot run in background, the user does not want to send event content to FCM
         boolean eventIdOnlyPushes = isBackgroundSyncAllowed() || !isContentSendingAllowed();
-
         session.getPushersRestClient().addHttpPusher(mRegistrationToken,
                 DEFAULT_PUSHER_APP_ID,
                 computePushTag(session),
