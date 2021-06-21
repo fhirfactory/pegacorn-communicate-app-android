@@ -1645,4 +1645,6 @@ Why choose Riot.im?
     <string name="role_name">Role: %s</string>
     <string name="role_location">Location: %s</string>
     <string name="role_category">Category: %s</string>
+
+    <string name="FCM_token_error">Notifications failing, please reinstall the app.</string>
 </resources>

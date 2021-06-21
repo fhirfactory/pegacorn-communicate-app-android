@@ -43,7 +43,7 @@ import im.vector.R;
 public class FcmHelper {
     private static final String LOG_TAG = FcmHelper.class.getSimpleName();
 
-    private static final String PREFS_KEY_FCM_TOKEN = "FCM_TOKEN";
+    public static final String PREFS_KEY_FCM_TOKEN = "FCM_TOKEN";
 
     /**
      * Retrieves the FCM registration token.
@@ -76,38 +76,7 @@ public class FcmHelper {
      */
     public static void ensureFcmTokenIsRetrieved(final Activity activity) {
         if (TextUtils.isEmpty(getFcmToken(activity))) {
-
-
-            //vfe: according to firebase doc
-            //'app should always check the device for a compatible Google Play services APK before accessing Google Play services features'
-            if (checkPlayServices(activity)) {
-                try {
-                    FirebaseInstallations.getInstance().getToken(true)
-                            .addOnSuccessListener(activity, new OnSuccessListener<InstallationTokenResult>() {
-                                @Override
-                                public void onSuccess(InstallationTokenResult installationTokenResult) {
-                                    storeFcmToken(activity,installationTokenResult.getToken());
-                                }
-                            })
-//                            .addOnSuccessListener(activity, new OnSuccessListener<String>() {
-//                                @Override
-//                                public void onSuccess(String instanceIdResult) {
-//                                    storeFcmToken(activity, instanceIdResult);
-//                                }
-//                            })
-                            .addOnFailureListener(activity, new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.e(LOG_TAG, "## ensureFcmTokenIsRetrieved() : failed " + e.getMessage(), e);
-                                }
-                            });
-                } catch (Throwable e) {
-                    Log.e(LOG_TAG, "## ensureFcmTokenIsRetrieved() : failed " + e.getMessage(), e);
-                }
-            } else {
-                Toast.makeText(activity, R.string.no_valid_google_play_services_apk, Toast.LENGTH_SHORT).show();
-                Log.e(LOG_TAG, "No valid Google Play Services found. Cannot use FCM.");
-            }
+            Toast.makeText(activity, R.string.FCM_token_error, Toast.LENGTH_SHORT).show();
         }
     }
 

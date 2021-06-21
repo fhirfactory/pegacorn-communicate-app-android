@@ -18,6 +18,8 @@
  */
 package im.vector.util;
 
+import static im.vector.push.fcm.FcmHelper.PREFS_KEY_FCM_TOKEN;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -242,7 +244,9 @@ public class PreferencesManager {
             SETTINGS_USE_RAGE_SHAKE_KEY,
 
             // Technical keys
-            VERSION_BUILD
+            VERSION_BUILD,
+
+            PREFS_KEY_FCM_TOKEN
     );
 
 
