@@ -59,6 +59,8 @@ class PeopleDetailActivity : MXCActionBarActivity(), MessagingSupport, FragmentM
             displayError(it)
         }
 
+        statusTextView.text = if (people.GetOnlineStatus()) getString(R.string.online) else getString(R.string.offline)
+        statusIndicator.setImageResource(if (people.GetOnlineStatus() && people.GetActiveStatus()) R.drawable.avatar_indicator_online else if (people.GetOnlineStatus()) R.drawable.avatar_indicator_busy else R.drawable.avatar_indicator_offline)
 
 
         callIcon.setOnClickListener {

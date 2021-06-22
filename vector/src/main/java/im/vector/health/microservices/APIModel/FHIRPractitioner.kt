@@ -26,5 +26,7 @@ data class FHIRPractitioner (
         @JvmField
         var organisationStructure: List<FHIROrganizationItem>,
         @JvmField
-        var mainJobTitle: String?
+        var mainJobTitle: String?,
+        @JvmField
+        var practitionerStatus: FHIRStatus
 ) : Parcelable

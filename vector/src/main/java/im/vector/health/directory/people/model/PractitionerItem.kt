@@ -16,4 +16,6 @@ class PractitionerItem (val practitioner: IPractitioner, var expanded: Boolean) 
     override fun GetRoles(callback: (List<IPractitionerRole>) -> Unit) = practitioner.GetRoles(callback)
     override fun GetEmailAddress(): String? = practitioner.GetEmailAddress()
     override fun GetPhoneNumber(): String? = practitioner.GetPhoneNumber()
+    override fun GetOnlineStatus(): Boolean = practitioner.GetOnlineStatus()
+    override fun GetActiveStatus(): Boolean = practitioner.GetActiveStatus()
 }

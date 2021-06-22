@@ -307,11 +307,6 @@ public class VectorUtils {
      */
     public static String getInitials(String name){
         if(name != null) {
-            if (name.contains(",")) {
-                List<String> split = Arrays.asList((String[]) name.split(","));
-                Collections.reverse(split);
-                name = TextUtils.join(" ", split).trim();
-            }
             String[] names = name.split(" ");
             String initials = "";
             int namePosition = names.length - 1;

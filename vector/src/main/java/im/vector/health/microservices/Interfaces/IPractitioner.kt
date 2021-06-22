@@ -11,5 +11,7 @@ interface IPractitioner: Parcelable, MatrixItem {
     fun GetID():String
     fun GetPhoneNumber(): String?
     fun GetEmailAddress(): String?
+    fun GetOnlineStatus(): Boolean
+    fun GetActiveStatus(): Boolean = GetOnlineStatus()
     override fun GetDisplayName(): String = GetName()
 }

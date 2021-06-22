@@ -1,7 +1,6 @@
 package im.vector.health.directory.people
 
 import android.content.Context
-import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.Matrix
 import im.vector.R
-import im.vector.activity.VectorAppCompatActivity
 import im.vector.adapters.ParticipantAdapterItem
 import im.vector.adapters.VectorParticipantsAdapter
 import im.vector.health.directory.people.model.PractitionerItem
@@ -34,7 +32,7 @@ import kotlinx.android.synthetic.main.item_directory_people.view.voiceCallIcon a
 import kotlinx.android.synthetic.main.item_directory_people.view.videoCallIcon as beginVideoCallIcon
 
 
-class PeopleDirectoryAdapter(val context: Context, private val onClickListener: PeopleClickListener, private val selectable: Boolean = false, private val matrixHandler: MatrixChatActionHandler, private val l18n: ILocalisationProvider) :
+class PeopleDirectoryAdapter(val context: Context, private val onClickListener: PeopleClickListener, private val selectable: Boolean = false, private val matrixHandler: MatrixChatActionHandler, internal val l11n: ILocalisationProvider) :
         RecyclerView.Adapter<PeopleDirectoryAdapter.PeopleViewHolder>(), OnDataSetChange, IStandardDirectoryAdapter<PractitionerItem>, HandlesAPIErrors {
     private val people = mutableListOf<PractitionerItem>()
     var mSession: MXSession? = null
@@ -71,6 +69,8 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
         var voiceCallIcon: ImageView? = null
         var videoCallIcon: ImageView? = null
 
+        var statusIndicator: ImageView? = null
+
         init {
             avatar = itemView.avatar
             favouriteButton = itemView.favoriteIcon
@@ -85,7 +85,7 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
             chatIcon = itemView.beginChatIcon
             voiceCallIcon = itemView.beginVoiceCallIcon
             videoCallIcon = itemView.beginVideoCallIcon
-
+            statusIndicator = itemView.status_indicator
         }
 
         fun updateFavourite() {
@@ -101,10 +101,11 @@ class PeopleDirectoryAdapter(val context: Context, private val onClickListener: 
             selectionRadioImageView?.setImageResource(if (selection == true) R.drawable.ic_radio_button_checked else R.drawable.ic_radio_button_unchecked)
             officialName?.text = people.GetName()
             jobTitle?.text = people.GetJobTitle()
-            organisationText?.text = String.format(l18n.getStringRes(R.string.organisation) ?: "organisationText: %s",people.GetOrganization())
-            businessUnitText?.text = String.format(l18n.getStringRes(R.string.business_unit) ?: "businessUnitText: %s", people.GetBusinessUnit())
-            //roleText?.text = "Role: some role"
-            statusText?.text = "online"
+            organisationText?.text = String.format(l11n.getStringRes(R.string.organisation) ?: "organisationText: %s",people.GetOrganization())
+            businessUnitText?.text = String.format(l11n.getStringRes(R.string.business_unit) ?: "businessUnitText: %s", people.GetBusinessUnit())
+
+            statusText?.text = if (people.GetOnlineStatus()) l11n.getStringRes(R.string.online) else l11n.getStringRes(R.string.offline)
+            statusIndicator?.setImageResource(if (people.GetOnlineStatus() && people.GetActiveStatus()) R.drawable.avatar_indicator_online else if (people.GetOnlineStatus()) R.drawable.avatar_indicator_busy else R.drawable.avatar_indicator_offline)
 
             if (people.expanded) {
                 expandableIcon?.animate()?.setDuration(200)?.rotation(180F)

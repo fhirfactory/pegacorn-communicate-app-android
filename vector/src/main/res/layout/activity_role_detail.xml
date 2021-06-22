@@ -52,11 +52,27 @@
                 tools:layout_editor_absoluteY="124dp" />
 
 
+            <TextView
+                android:id="@+id/roleStatus"
+                style="@style/TextAppearance.AppCompat.Medium"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/layout_horizontal_margin"
+                android:layout_marginTop="@dimen/layout_vertical_margin_half"
+                android:layout_marginRight="@dimen/layout_horizontal_margin"
+                android:gravity="center"
+                android:text="@string/short_text"
+                android:textSize="@dimen/sub_title_text_size"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/secondaryName" />
+
             <ImageView
                 android:id="@+id/callIcon"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:background="@drawable/button_circle_background"
                 android:foreground="?attr/selectableItemBackground"
                 android:padding="@dimen/detail_button_padding"
@@ -64,14 +80,14 @@
                 android:tint="@color/act_gradient_color1"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/secondaryName" />
+                app:layout_constraintTop_toBottomOf="@+id/roleStatus" />
 
 
             <ImageView
                 android:id="@+id/chatIcon"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:layout_marginEnd="@dimen/layout_horizontal_margin"
                 android:layout_marginRight="@dimen/layout_horizontal_margin"
                 android:background="@drawable/button_circle_background"
@@ -80,7 +96,7 @@
                 android:src="@drawable/ic_material_message_black"
                 android:tint="@color/act_gradient_color1"
                 app:layout_constraintRight_toLeftOf="@+id/callIcon"
-                app:layout_constraintTop_toBottomOf="@+id/secondaryName" />
+                app:layout_constraintTop_toBottomOf="@+id/roleStatus" />
 
 
             <ImageView
@@ -89,14 +105,14 @@
                 android:layout_height="36dp"
                 android:layout_marginStart="@dimen/layout_horizontal_margin"
                 android:layout_marginLeft="@dimen/layout_horizontal_margin"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="@dimen/layout_vertical_margin"
                 android:background="@drawable/button_circle_background"
                 android:foreground="?attr/selectableItemBackground"
                 android:padding="@dimen/detail_button_padding"
                 android:src="@drawable/video_call_black"
                 android:tint="@color/act_gradient_color1"
                 app:layout_constraintLeft_toRightOf="@+id/callIcon"
-                app:layout_constraintTop_toBottomOf="@+id/secondaryName" />
+                app:layout_constraintTop_toBottomOf="@+id/roleStatus" />
 
             <View
                 android:id="@+id/line"

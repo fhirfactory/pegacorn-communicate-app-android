@@ -24,4 +24,6 @@ open class Practitioner(var innerPractitioner: FHIRPractitioner): IPractitioner,
     override fun GetMatrixID(): String = innerPractitioner.matrixId
     override fun GetEmailAddress(): String? = innerPractitioner.identifiers.find { x -> x.type == "EmailAddress" }?.value
     override fun GetPhoneNumber(): String? = innerPractitioner.contactPoints.find { x -> x.type == "MOBILE" }?.value
+    override fun GetOnlineStatus(): Boolean = innerPractitioner.practitionerStatus.loggedIn
+    override fun GetActiveStatus(): Boolean = innerPractitioner.practitionerStatus.active
 }
