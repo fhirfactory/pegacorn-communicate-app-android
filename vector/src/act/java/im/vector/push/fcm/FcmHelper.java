@@ -75,7 +75,7 @@ public class FcmHelper {
      * @param activity the first launch Activity
      */
     public static void ensureFcmTokenIsRetrieved(final Activity activity) {
-        if (TextUtils.isEmpty(getFcmToken(activity))) {
+        if (TextUtils.isEmpty(getFcmToken(activity)) && getFcmToken(activity) != null) {
             Toast.makeText(activity, R.string.FCM_token_error, Toast.LENGTH_SHORT).show();
         }
     }
