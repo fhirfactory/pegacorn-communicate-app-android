@@ -62,6 +62,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -627,6 +628,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
     @Override
     protected void onResume() {
+        if (mSearchView != null) mSearchView.setOnQueryTextListener(null);
         super.onResume();
         MyPresenceManager.createPresenceManager(this, Matrix.getInstance(this).getSessions());
         MyPresenceManager.advertiseAllOnline();
@@ -816,6 +818,10 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             MenuItem searchMenuItem = menu.findItem(R.id.action_search);
             mSearchView = (SearchView) searchMenuItem.getActionView();
             setUpSearchView();
+            if (!(searchText == null || searchText.isEmpty())) {
+                searchMenuItem.expandActionView();
+                mSearchView.setQuery(searchText, false);
+            }
         }
 
         int inviteCount = getRoomInvitations().size();
@@ -1006,6 +1012,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             return;
         }
 
+        searchText = "";
+
         Fragment fragment = null;
 
         switch (item.getItemId()) {
@@ -1039,7 +1047,16 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
                         this.setQueryHint(x,y);
                         return null;
                     });
+                    df.setReloadQueryText(() -> {
+                        searchText = "";
+                        return null;
+                    });
                     fragment = df;
+                }
+                if (searchText == null || searchText.isEmpty()) {
+                    ((DirectoryFragment)fragment).onResetFilter();
+                } else {
+                    ((DirectoryFragment)fragment).applyFilter(searchText);
                 }
                 mCurrentFragmentTag = TAG_FRAGMENT_PEOPLE;
                 mSearchView.setVisibility(View.GONE);
@@ -1326,6 +1343,8 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
         }
     }
 
+    String searchText = "";
+
     /*
      * *********************************************************************************************
      * User action management
@@ -1351,6 +1370,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
 
             // display if the pattern matched
             if (TextUtils.equals(currentFilter, filter)) {
+                searchText = queryText;
                 applyFilter(queryText);
             }
         }, 500);

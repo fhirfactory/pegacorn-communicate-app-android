@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.fragment_view_pager_tab.*
 class DirectoryFragment : BaseActFragment() {
     var favouriteEnable = false
     var changeQueryText: ((id: Int, id2: Int)->Unit)? = null
+    var reloadQueryText: (()->Unit)? = null
     private val fragments = mutableMapOf(DIRECTORY_FRAGMENTS.ROLE to DirectoryRoleFragment(), DIRECTORY_FRAGMENTS.PEOPLE to DirectoryPeopleFragment(), DIRECTORY_FRAGMENTS.SERVICE to DirectoryServiceFragment(), DIRECTORY_FRAGMENTS.PATIENTS to DirectoryPatientFragment())
 
     override fun getLayoutResId() = R.layout.fragment_view_pager_tab
@@ -66,7 +67,7 @@ class DirectoryFragment : BaseActFragment() {
         listener?.onFilterDone(0)
     }
 
-    override fun onResetFilter() {
+    public override fun onResetFilter() {
         //TODO("Not yet implemented")
         fragments.forEach { fragment ->
             fragment.value.filter(null)
@@ -80,6 +81,8 @@ class DirectoryFragment : BaseActFragment() {
 
         override fun getPageTitle(position: Int) = DIRECTORY_FRAGMENTS.values()[position].title
 
+        var lastItem = -1
+
         override fun finishUpdate(container: ViewGroup) {
             super.finishUpdate(container)
             changeQueryText?.let {
@@ -89,6 +92,10 @@ class DirectoryFragment : BaseActFragment() {
                     DIRECTORY_FRAGMENTS.SERVICE -> it(R.string.home_filter_placeholder_roles, R.string.search_directory_services)
                     DIRECTORY_FRAGMENTS.PATIENTS -> it(R.string.home_filter_placeholder_patients, R.string.search_directory_patients)
                 }
+            }
+            if (pager.currentItem != lastItem) {
+                reloadQueryText?.let { it() }
+                lastItem = pager.currentItem
             }
         }
     }

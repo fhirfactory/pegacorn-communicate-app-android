@@ -73,6 +73,7 @@ abstract class StandardDirectoryFragment<Adapter,ViewHolder : RecyclerView.ViewH
     }
 
     fun initializeList(callback: ((Int) -> Unit)? = null) {
+        if (listView == null) return;
         listView.scrollToPosition(0)
 
         loadNumber = 0
@@ -91,7 +92,6 @@ abstract class StandardDirectoryFragment<Adapter,ViewHolder : RecyclerView.ViewH
 
     override fun onResume() {
         super.onResume()
-        reloadList()
     }
 
     abstract fun constructAdapter(context: Context, selectable: Boolean):Adapter
