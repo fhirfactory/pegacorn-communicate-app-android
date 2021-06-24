@@ -546,8 +546,12 @@ object NotificationUtils {
     }
 
     private fun buildOpenRoomIntent(context: Context, roomId: String): PendingIntent? {
-        val roomIntentTap = Intent(context, VectorRoomActivity::class.java)
+        val roomIntentTap = Intent(context, VectorHomeActivity::class.java)
+
+        //Notification Intent is Here
         roomIntentTap.putExtra(VectorRoomActivity.EXTRA_ROOM_ID, roomId)
+        roomIntentTap.putExtra(VectorHomeActivity.NEW_LOGIN,false)
+
         roomIntentTap.action = TAP_TO_VIEW_ACTION
         //pending intent get reused by system, this will mess up the extra params, so put unique info to avoid that
         roomIntentTap.data = Uri.parse("foobar://openRoom?$roomId")
@@ -587,7 +591,11 @@ object NotificationUtils {
             if (!LockScreenActivity.isDisplayingALockScreenActivity()) {
                 // start your activity for Android M and below
                 val quickReplyIntent = Intent(context, LockScreenActivity::class.java)
+
+
                 quickReplyIntent.putExtra(LockScreenActivity.EXTRA_ROOM_ID, roomId)
+
+
                 quickReplyIntent.putExtra(LockScreenActivity.EXTRA_SENDER_NAME, senderName ?: "")
 
                 // the action must be unique else the parameters are ignored

@@ -612,6 +612,12 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             startActivityForResult(i, ROLE_SELECTION_REQUEST);
         }
 
+        if (intent.hasExtra(VectorRoomActivity.EXTRA_ROOM_ID)) {
+            Intent i = new Intent(getApplicationContext(), VectorRoomActivity.class);
+            i.putExtra(VectorRoomActivity.EXTRA_ROOM_ID,intent.getStringExtra(VectorRoomActivity.EXTRA_ROOM_ID));
+            startActivity(i);
+        }
+
         initViews();
     }
 
