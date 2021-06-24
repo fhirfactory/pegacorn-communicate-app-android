@@ -2445,28 +2445,7 @@ public class VectorHomeActivity extends VectorAppCompatActivity implements Searc
             // use a map because contains is faster
             Set<String> filteredRoomIdsSet = new HashSet<>();
 
-            if (id == R.id.bottom_action_favourites) {
-                filterFavoriteRoomSet(filteredRoomIdsSet);
-            } else if (id == R.id.bottom_action_people) {
-                filteredRoomIdsSet.addAll(mSession.getDataHandler().getDirectChatRoomIdsList());
-                // Add direct chat invitations
-                for (Room room : roomSummaryByRoom.keySet()) {
-                    if (room.isDirectChatInvitation() && !room.isConferenceUserRoom()) {
-                        filteredRoomIdsSet.add(room.getRoomId());
-                    }
-                }
-
-                // remove the low priority rooms
-                List<Room> lowPriorRooms = mSession.roomsWithTag(RoomTag.ROOM_TAG_LOW_PRIORITY);
-                for (Room room : lowPriorRooms) {
-                    filteredRoomIdsSet.remove(room.getRoomId());
-                }
-            } else if (id == R.id.bottom_action_rooms) {
-                filterNormalRoomSet(filteredRoomIdsSet, directChatInvitations, roomSummaryByRoom);
-            } else if (id == R.id.bottom_action_codes) {
-                // Display number of groups invitation in the badge of groups
-                roomCount = mSession.getGroupsManager().getInvitedGroups().size();
-            } else if (id == R.id.bottom_action_home) {
+            if (id == R.id.bottom_action_home) {
                 for (Room room : roomSummaryByRoom.keySet()) {
                     if (!room.isInvited()) {
                         filteredRoomIdsSet.add(room.getRoomId());
